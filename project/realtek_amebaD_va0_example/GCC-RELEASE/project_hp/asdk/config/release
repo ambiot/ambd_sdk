@@ -1,0 +1,249 @@
+#! /bin/sh
+################################################################################
+# 	
+# Description:
+#    This script is used to preprocess source code of rtk_11nRouter_linux26_sdk
+#  before code-release. 
+#
+#   The code-release must be done step by step:
+#   Step1: check out the tagged/tested source code from cvs server.
+#   Step2: use the default settings and built Linux/Rootfs Image.
+#   Step3: remove confidential source code and refine Makefile.
+#   Step4: make mrproper to clean the sdk, ADD var directory, del CVS directory.
+#   Step5: refine the release notes/README files, SDK version, del this scripts.
+#   Step6: pack the source code and toolchain into a tarball.
+#   Step7: unpack the tarball in a clean directory and test the source code.
+#   
+#   This script takes charge the Step3 and Step4.
+#	
+################################################################################
+
+################################################################################
+# Get the release version number
+RELEASE_VERSION="$1"
+
+################################################################################
+# Set the global Parameters
+TOP_DIR=`pwd`
+LINUX_DIR="$TOP_DIR/linux-2.6.x"
+AP_DIR="$TOP_DIR/AP"
+
+# Set the List of the Applications to be pruned.
+APP_DEL_LIST="11g bkin bpalogin-2.0.2 busybox-1.00-pre8 ez-ipupdate gmp-4.1.2 iproute2 iptables-1.2.6a l2tpd Makefile-11g mkimg-11g mkimg-tr openswan-1.0.1 squashfs-tools tnet wireless_tools.29 zebra-0.92a"                     
+# Set the List of the CONFIDENTIAL Applications
+APP_REF_LIST="makefiles auth discover IAPP lltdd miniigd mini_upnp wsc"
+# Refine subroutines for the confidential Applications
+makefiles( )
+{
+mv -f $AP_DIR/Makefile.Release $AP_DIR/Makefile
+mv -f $AP_DIR/mkimg.Release $AP_DIR/mkimg
+chmod -f 775 $AP_DIR/mkimg
+}
+
+auth( )
+{
+rm -fr $AP_DIR/auth/include $AP_DIR/auth/src/xsup_src
+rm -f  $AP_DIR/auth/src/*.h $AP_DIR/auth/src/*.c $AP_DIR/auth/src/*.o $AP_DIR/auth/src/Makefile*
+rm -f  $AP_DIR/auth/src/dlisten/*.h $AP_DIR/auth/src/dlisten/*.c $AP_DIR/auth/src/dlisten/*.o $AP_DIR/auth/src/dlisten/Makefile*
+}
+ 
+discover( )
+{
+rm -f $AP_DIR/discover/*.h $AP_DIR/discover/*.c $AP_DIR/discover/*.o $AP_DIR/discover/Makefile*
+}
+ 
+IAPP( )
+{
+rm -f $AP_DIR/IAPP/*.h $AP_DIR/IAPP/*.c $AP_DIR/IAPP/*.o $AP_DIR/IAPP/Makefile* $AP_DIR/IAPP/ChangeLog
+}
+ 
+lltdd( )
+{
+rm -f  $AP_DIR/lltdd/*.txt
+mv -f  $AP_DIR/lltdd/src/wrt54g.large.ico $AP_DIR/lltdd/.
+rm -fr $AP_DIR/lltdd/src
+mkdir  -p $AP_DIR/lltdd/src
+mv -f  $AP_DIR/lltdd/wrt54g.large.ico $AP_DIR/lltdd/src/.
+rm -f  $AP_DIR/lltdd/native-linux/*.o $AP_DIR/lltdd/native-linux/Makefile $AP_DIR/lltdd/native-linux/lld2test
+}
+ 
+miniigd( )
+{
+rm -fr $AP_DIR/miniigd/linux $AP_DIR/miniigd/openbsd $AP_DIR/miniigd/tr
+rm -f  $AP_DIR/miniigd/*.h   $AP_DIR/miniigd/*.c     $AP_DIR/miniigd/*.o
+rm -f  $AP_DIR/miniigd/Makefile* $AP_DIR/miniigd/README* 
+rm -f  $AP_DIR/miniigd/Changelog* $AP_DIR/miniigd/INSTALL $AP_DIR/miniigd/LICENCE
+}
+ 
+mini_upnp( )
+{
+rm -f $AP_DIR/mini_upnp/*.h $AP_DIR/mini_upnp/*.c $AP_DIR/mini_upnp/*.o $AP_DIR/mini_upnp/Makefile 
+}
+ 
+wsc( )
+{
+rm -fr $AP_DIR/wsc/Makefile $AP_DIR/wsc/portingssl
+mv -f  $AP_DIR/wsc/src/wscd $AP_DIR/wsc/. 
+mv -f  $AP_DIR/wsc/src/wscd.conf $AP_DIR/wsc/.
+rm -fr $AP_DIR/wsc/src/*
+mv -f  $AP_DIR/wsc/wscd* $AP_DIR/wsc/src/.
+}
+
+# Set the List of the CONFIDENTIAL modules in linux kernel
+KER_REF_LIST="rtl8190 re865x arch_mips"
+# Refine subroutines for the confidential modules in linux kernel
+rtl8190( )
+{
+RTL8190_DIR="$LINUX_DIR/drivers/net/wireless/rtl8190"
+RTL8190_BAK_DIR="$LINUX_DIR/drivers/net/wireless/rtl8190_bak"
+mkdir -p $RTL8190_BAK_DIR
+cp -f    $RTL8190_DIR/Kconfig           $RTL8190_BAK_DIR/Kconfig
+cp -f    $RTL8190_DIR/built-in.o        $RTL8190_BAK_DIR/rtl8190.obj
+cp -f    $RTL8190_DIR/Makefile.Release  $RTL8190_BAK_DIR/Makefile
+cp -f    $RTL8190_DIR/ieee802_mib.h     $RTL8190_BAK_DIR/ieee802_mib.h
+rm -fr   $RTL8190_DIR 
+mv -f    $RTL8190_BAK_DIR $RTL8190_DIR
+}
+ 
+re865x( )
+{
+RE865X_DIR="$LINUX_DIR/drivers/net/re865x"
+mv -f  $RE865X_DIR/built-in.o       $RE865X_DIR/re865x.obj
+mv -f  $RE865X_DIR/Makefile.Release $RE865X_DIR/Makefile
+rm -f  $RE865X_DIR/*.o $RE865X_DIR/*.c 
+rm -fr $RE865X_DIR/AsicDriver $RE865X_DIR/cle $RE865X_DIR/rtl865x
+rm -f  $RE865X_DIR/common/*.c $RE865X_DIR/common/*.o $RE865X_DIR/common/Makefile
+rm -f  $RE865X_DIR/l2Driver/*.c $RE865X_DIR/l2Driver/*.o $RE865X_DIR/l2Driver/Makefile
+rm -f  $RE865X_DIR/l3Driver/*.c $RE865X_DIR/l3Driver/*.o $RE865X_DIR/l3Driver/Makefile
+rm -f  $RE865X_DIR/l4Driver/*.c $RE865X_DIR/l4Driver/*.o $RE865X_DIR/l4Driver/Makefile
+}
+
+arch_mips( )
+{
+MIPS_DIR="$LINUX_DIR/arch/mips"
+mv -f  $MIPS_DIR/Makefile.RTL8652 $MIPS_DIR/Makefile
+rm -fr $MIPS_DIR/realtek/rtl8389 $MIPS_DIR/realtek/rtl865xb  $MIPS_DIR/realtek/cle
+rm -f  $MIPS_DIR/defconfig $MIPS_DIR/GWSDKconfig $MIPS_DIR/LDRconfig 
+rm -f  $MIPS_DIR/RTKconfig $MIPS_DIR/RTL865xC-RTL8190 $MIPS_DIR/SDKconfig 
+rm -f  $MIPS_DIR/config/rtl8652_defconfig $MIPS_DIR/config/rtl8652_defconfig-ap 
+rm -f  $MIPS_DIR/config/rtl8652_defconfig-gw $MIPS_DIR/config/rtl865xc_defconfig
+}
+
+################################################################################
+# Before anythings, we should make sure Step1/Step2 have been DONE correctly!
+prompt( )
+{
+echo " "
+echo "====> Please check the following steps:"
+echo "      Step1: check out the tagged/tested source code from cvs server."
+echo "      Step2: use the default settings and built Linux/Rootfs Image."
+echo "   "
+}
+
+# check the .config for linux kernel 
+if [ -f $TOP_DIR/.config ] && [ -f $LINUX_DIR/.config ]; then
+	echo "====> SDK has been configured!"
+else
+	echo "====> SDK has NOT been configured correctly!"
+	prompt
+	exit 0
+fi
+
+# check the Rootfs/Linux Image
+if [ -f $AP_DIR/root.bin ] && [ -f $LINUX_DIR/rtkload/linux.bin ]; then
+        echo "====> SDK has been built correctly!"
+	echo " "
+	echo "====> Start to preprocess source code for releasing:"
+	echo " "
+else
+	echo "====> SDK has NOT been built correctly!"
+        prompt
+        exit 0
+fi
+
+################################################################################
+# At first: Remove the unsed Applications in $PRUNE_LIST
+echo "====> Remove the unused applications:"
+
+for APP in $APP_DEL_LIST; do
+rm -fr  $AP_DIR/$APP
+done
+
+echo "====> Done "
+echo
+
+################################################################################
+# And then: Refine the confidential applications in $APP_REF_LIST 
+echo "====> Refine the confidential applications:"
+#echo "      $APP_REF_LIST"
+
+for APP in $APP_REF_LIST; do
+	$APP
+done
+
+echo "====> Done "
+echo
+
+################################################################################
+# After that: Refine the confidential modules in $KER_REF_LIST
+echo "====> Refine the confidential modules in linux kernel:"
+#echo "      $KER_REF_LIST"
+
+for MODULE in $KER_REF_LIST; do
+        $MODULE
+done
+
+echo "====> Done "
+echo
+
+################################################################################
+# At last: clean the whole sdk, ADD var dir, del CVS dir, all will be ok!!!
+
+# make mrproper in linux directory and make clean in AP directory
+echo "====> Clean the whole sdk:"
+make -C AP clean >& APclean.log
+make mrproper >& mrproper.log
+rm -f mrproper.log APclean.log
+echo "====> Done "
+echo
+
+# make var directory in AP
+echo "====> Add the var dirctory in AP:"
+mkdir -p $AP_DIR/var
+mkdir -p $AP_DIR/var/var
+mkdir -p $AP_DIR/var/var/etc
+mkdir -p $AP_DIR/var/var/log
+mkdir -p $AP_DIR/var/var/run
+mkdir -p $AP_DIR/var/var/state
+mkdir -p $AP_DIR/var/var/state/dhcp
+echo "====> Done "
+echo
+
+# delete all CVS dirctory
+echo "====> Delete all CVS dirctory in the whole sdk:"
+find $TOP_DIR -name CVS | xargs rm -fr 
+echo "====> Done "
+echo
+
+# display all confidential dirctory to double-check .
+#echo "====> Double-Check all confidential directory/files:"
+#for APP in $APP_REF_LIST; do
+#	find $AP_DIR/$APP * | xargs ls -al
+#done
+
+#for MODULE in $KER_REF_LIST; do
+#        find $LINUX_DIR -name $MODULE | xargs ls -al
+#done
+
+################################################################################
+# echo prompt information
+echo "====> All PreProcess has been done!"
+echo "         "
+echo "====> Do NOT forget to do the following steps:"
+echo "      Step5: refine the release notes/README files, SDK version, del this scripts."
+echo "      Step6: pack the source code and toolchain into a tarball. "
+echo "      Step7: unpack the tarball in a clean directory and test the source code."
+echo "   "
+echo " ================================= Good Luck ================================= "
+echo " "
+exit 0

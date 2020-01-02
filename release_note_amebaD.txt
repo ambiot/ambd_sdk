@@ -1,0 +1,65 @@
+
+/*
+ * Release Note
+ */
+
+	sdk-amebad-beta_v5.1
+	1. Modify memory layout, please refer to the latest application note
+	   for memory layout and use the latest Image_Tool to download images
+	2. Modify OTA code
+	3. Fix some issues
+	-----------------------------------------------------------------------
+	sdk-amebad-beta_v5.2
+	1. add new make cmd for MP & RCU
+	2. Fix some issues
+	-----------------------------------------------------------------------
+	sdk-amebad-beta_v5.3
+	1. add BT coexist and BT example
+	2. Swtich shell to KM4 by default
+	3. add psram heap API
+	-----------------------------------------------------------------------
+	sdk-amebad-beta_v6.0
+	1. add support for rtl probe(debug tools)
+	2. add code analysis python script
+	3. reimplement use control power save mechanism
+	4. reimplement all ADC related examples(modify convert formula)
+	5. add k-free,DPK functions and revise radio parameters
+	6. reimplement FTL(Flash Translation Layer) function
+ 	7. revise standard output(printf sprintf) link library(reference GCC Standard Library of Application Note)
+	8. revise BT config and BLE function
+ 	9. add OTA select hook function	
+	-----------------------------------------------------------------------
+	sdk-amebad-beta_v6.1
+	1. fix BT config Compatibility issues
+	2. add IAR project
+	3. adjust GCC project folder path
+	4. Fix NVIC bugs (bitmask define error issue)
+	5. update ImageTool
+	6. update BT debug tool
+ 	7. add BT MP API (for customer factory mass production)
+	8. revise BT stack and BLE function
+ 	9. fix Dcache operate error
+	10. update wifi channel plan
+	11. add API to adjust BT tx power
+	12. revise sleep and wakeup flow
+	13. update MMF API
+	14. add mbed API of keyscan LCDC and captouch
+	-----------------------------------------------------------------------
+	sdk-amebad_v6.2b_rc
+	1. update freertos to 10.0.2
+	2. update lwip to 2.0.2
+	3. add opus codec related code
+	4. adjust the arch of USB driver
+	5. enable hw floatpoint
+	6. add support for IAR IDE
+ 	7. add example of protecting SSL private key using trustzone
+	8. add support for BT scatternet 
+ 	9. add support for WPA3
+	10. add support for airsync(config wifi thoungh BLE using wechat)
+	11. add generate RSIP script to generate encrypt image using make command
+	12. revise psram malloc function
+	13. adjust BT coexist related code
+	14. upate iamge download tools
+	15. move RDP configuration to menuconfig
+	16. fix some wifi related bugs
+	-----------------------------------------------------------------------

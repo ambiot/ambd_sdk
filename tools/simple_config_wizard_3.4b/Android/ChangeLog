@@ -1,0 +1,45 @@
+                        ChangeLog
+----------------------------------------------------------------
+2016/06/13
+	- Refined PacketSendTimeIntervalMs
+
+2016/02/16
+	- Refined wifi connection for Android 6
+
+2015/12/29
+	- Fixed ssid is empty when ap is hidden SSID 
+
+2015/11/18
+	- Refined simple config Lib about other charset issue
+
+2015/11/09
+	- refined connection and refined sending packet method
+
+2015/07/23
+	- device type : 0xff00~0xffff for customer
+
+2015/04/22
+	- Show one AP of the same SSID multiple APs on AP List by site survey
+
+2015/02/11
+	- Bug fixed: Reconnection WiFi AP issue.
+	- Bug fixed: Type transformation for Encryption WiFi profile.
+	- Re-fine time interval(ms) between sending two packets
+
+2014/10/20
+	- Re-fine configure flow when DUT receives first UDP packet. 
+
+2014/10/01
+	- Refined if the profile length>127, configure will fail issue.
+
+2014/08/13
+	- Add Hidden SSID Support
+	
+2014/08/04
+	- Re-fine configure flow 
+	- Re-fine control flow 
+	- Re-fine discovery flow 
+	- Add descriptions of the delay about sending packet
+
+2014/06/19 
+	- Initial Release

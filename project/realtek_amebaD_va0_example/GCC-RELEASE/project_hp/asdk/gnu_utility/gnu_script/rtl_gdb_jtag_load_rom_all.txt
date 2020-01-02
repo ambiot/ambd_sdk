@@ -1,0 +1,91 @@
+# GDB script for loading ram.bin process
+
+source gnu_utility/gnu_script/rtl_gdb_jtag_boot_com_p2335.txt
+
+#===============================================================================
+# GDB script for loading ram.bin process
+#===============================================================================
+#Macro define
+set $BUFSIZE = 0x400
+
+set $ROM_DATA = 0x001
+set $ROM_TEXT = 0x002
+
+set $ROM_DATA_ADDR = 0x101C0000
+set $ROM_TEXT_ADDR = 0x10100000
+#===============================================================================
+
+#===============================================================================
+#Load flash download file
+printf "Load mem loader.\n"
+
+#===============================================================================
+#flash write function
+define flash_write
+	printf "mem_write FileName:%x \n", $arg0
+	printf "mem_write FileSize:%d \n", $arg1
+
+	set $FileName = $arg0
+	set $FileSize = $arg1
+
+	if( $FileName ==  $ROM_DATA )
+		set $MEMADDR = $ROM_DATA_ADDR
+	end
+	if( $FileName ==  $ROM_TEXT )
+		set $MEMADDR = $ROM_TEXT_ADDR
+	end
+
+	set $Loopnumber = ($FileSize / $BUFSIZE)
+	set $TailSize = ($FileSize % $BUFSIZE)
+
+	printf "global variables\n"
+	printf "FileSize: %x\n",$FileSize
+	printf "Loopnumber = %d\n", $Loopnumber
+	printf "TailSize = %d\n", $TailSize
+	printf "FileAddr:%x\n", $MEMADDR
+
+	set $FILESTARTADDR = 0
+
+	printf  "Flash write start...\n"
+	set $Loop = 0
+	while  ($Loop < $Loopnumber)
+		set $FILESTARTADDR = $BUFSIZE * $Loop
+
+		if( $FileName ==  $ROM_DATA )
+			restore ./lib/rom_acut/km4_drom_all.bin binary $MEMADDR $FILESTARTADDR ($FILESTARTADDR + $BUFSIZE)
+		end
+		if( $FileName ==  $ROM_TEXT )
+			restore ./lib/rom_acut/km4_irom_all.bin binary $MEMADDR $FILESTARTADDR ($FILESTARTADDR + $BUFSIZE)
+		end
+
+
+
+		set $Loop = $Loop + 0x01
+	end
+
+	if ( $TailSize > 0)
+		set $FILESTARTADDR = $BUFSIZE * $Loop
+
+		if( $FileName ==  $ROM_DATA )
+			restore ./lib/rom_acut/km4_drom_all.bin binary $MEMADDR $FILESTARTADDR ($FILESTARTADDR + $TailSize)
+		end
+		if( $FileName ==  $ROM_TEXT )
+			restore ./lib/rom_acut/km4_irom_all.bin binary $MEMADDR $FILESTARTADDR ($FILESTARTADDR + $TailSize)
+		end
+
+
+	end
+end
+
+#=============================================================================== 
+#mem write
+set $AllCODESize =192240
+flash_write $ROM_TEXT $AllCODESize 
+
+set $AllDATASize =87097
+flash_write $ROM_DATA $AllDATASize 
+
+#=============================================================================== 
+#===============================================================================
+quit
+

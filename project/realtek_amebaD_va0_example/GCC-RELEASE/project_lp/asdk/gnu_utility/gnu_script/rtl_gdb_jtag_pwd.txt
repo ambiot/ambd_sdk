@@ -1,0 +1,183 @@
+# GDB script for loading ram.bin process
+
+#===============================================================================
+#set GDB connection 
+set remotetimeout 100000
+target remote : 2340
+
+#===============================================================================
+
+#===============================================================================
+set verbose off
+set complaints 0
+set confirm off
+set exec-done-display off
+show exec-done-display
+set trace-commands off
+set debug displaced off 
+set debug expression 0
+set debug frame 0
+set debug infrun 0
+set debug observer 0
+set debug overload 0
+set pagination off
+set print address off
+set print symbol-filename off
+set print symbol off
+set print pretty off
+set print object off
+set debug parser off
+set debug remote 0
+
+#===============================================================================
+#SPEC:
+#0x0000	SWD_PRTET_CTRL	
+#	Bit [0]: EFUSE SWD protection enable, Auto-load from EFUSE SWD_Protection_Enable bit. (Read Only)
+#	Bit [1]: Load SWD key & Compare Enable, Hardware clear this bit after compare complete.
+#	Bit [2]: Reserved
+#	Bit [3]: Compare Result (Read Only)
+#	Bit [4]: Lock bit (Read Only)
+#		Hardware set this bit after password mismatch 4 times.
+#		Compare cannot be enabled again after lock bit is set.
+#		You should reset chip, and enter password again.
+#	bit[31:5]: Reserved
+#0x0004	SWD_PRTET_KEY0	RW	SWD_PRTET_KEY: B15~B12, user input from Jlink
+#	/* 0x18F: key[15] -> 0x04 */
+#	/* 0x18E: key[14] -> 0x05 */
+#	/* 0x18D: key[13] -> 0x06 */
+#	/* 0x18C: key[12] -> 0x07 */
+#0x0008	SWD_PRTET_KEY1	RW	SWD_PRTET_KEY: B11~B8 , user input from Jlink
+#	/* 0x18B: key[11] -> 0x08 */
+#	/* 0x18A: key[10] -> 0x09 */
+#	/* 0x189: key[19] -> 0x0A */
+#	/* 0x188: key[8] -> 0x0B */
+#0x000C	SWD_PRTET_KEY2	RW	SWD_PRTET_KEY: B7~B4 , user input from Jlink
+#	/* 0x187: key[7] -> 0x0C */
+#	/* 0x186: key[6] -> 0x0D */
+#	/* 0x185: key[5] -> 0x0E */
+#	/* 0x184: key[4] -> 0x0F */
+#0x0010	SWD_PRTET_KEY3	RW	SWD_PRTET_KEY: B3~B0 , user input from Jlink
+#	/* 0x183: key[3] -> 0x10 */
+#	/* 0x182: key[2] -> 0x11 */
+#	/* 0x181: key[1] -> 0x12 */
+#	/* 0x180: key[0] -> 0x13 */
+#===============================================================================
+
+#close register dumpp
+define swd_pwd_dump
+end
+
+define swd_pwd_dump_none
+	if ($arg0 == 0)
+		printf "dump register before input passwrod \n"
+	else
+		printf "dump register after input passwrod \n"
+	end
+		
+
+	printf "0x00:%x\n", {int}(0x000)
+	printf "0x04:%x\n", {int}(0x004)
+	printf "0x08:%x\n", {int}(0x008)
+	printf "0x0C:%x\n", {int}(0x00C)
+	printf "0x10:%x\n", {int}(0x010)
+end
+
+define swd_pwd_write_right
+	printf "\nswd_pwd_write_righ: \n"
+	swd_pwd_dump 0
+
+	set {int}(0x004) = 0x04030201
+	set {int}(0x008) = 0x14131211
+	set {int}(0x00C) = 0x24232221
+	set {int}(0x010) = 0x34333231
+
+	swd_pwd_dump 1
+end
+
+define swd_pwd_write_wrong
+	printf "\nswd_pwd_write_wrong: \n"
+	swd_pwd_dump 0
+
+	set {int}(0x004) = 0x04030201
+	set {int}(0x008) = 0x14131211
+	set {int}(0x00C) = 0x24232221
+	set {int}(0x010) = 0x34333230
+
+	swd_pwd_dump 1
+end
+
+define swd_pwd_compare_enable
+	printf "enable compare \n"
+	set $ctrl = 0x0
+	set $ctrl = {int}(0x000)
+	set $ctrl = ($ctrl | (1 << 1))
+	set {int}(0x000) = $ctrl
+
+	while  ($ctrl & (1 << 1))
+		set $ctrl = {int}(0x000)
+		printf "0x00:%x\n", $ctrl
+	end
+
+	set $ctrl = {int}(0x000)
+	if ($ctrl & (1 << 3))
+		printf "password right\n"
+	else
+		printf "password wrong\n"
+
+		set $ctrl = ($ctrl | (1 << 3))
+		printf "try to set bit3 %x\n", $ctrl
+		set {int}(0x000) = $ctrl
+		set $ctrl = {int}(0x000)
+		printf "bit3 changed?? %x\n", $ctrl
+	end
+
+	if ($ctrl & (1 << 4))
+		printf "password locked\n"
+
+		set $ctrl = ($ctrl & ~(1 << 4))
+		printf "password locked try to clear lockbit bit4 %x\n", $ctrl
+		set {int}(0x000) = $ctrl
+		set $ctrl = {int}(0x000)
+		printf "password locked changed?? %x\n", $ctrl
+		
+	end
+
+	swd_pwd_dump 1
+end
+
+set $Loop = 5
+while  ($Loop < 5)
+	printf "\n&&&&&&&&&&&&&&&& %x &&&&&&&&&&&&&&&&\n",$Loop
+	swd_pwd_write_right
+	swd_pwd_compare_enable
+
+	swd_pwd_write_wrong
+	swd_pwd_compare_enable
+ 
+	set $Loop = $Loop + 0x01
+end
+
+set $Loop = 5
+while  ($Loop < 5)
+	printf "\n&&&&&&&&&&&&&&&& %x &&&&&&&&&&&&&&&&\n",$Loop
+	swd_pwd_write_wrong
+	swd_pwd_compare_enable
+ 
+	set $Loop = $Loop + 0x01
+end
+
+set $Loop = 0
+while  ($Loop < 5)
+	printf "\n&&&&&&&&&&&&&&&& %x &&&&&&&&&&&&&&&&\n",$Loop
+
+	set $ctrl = {int}(0x000)
+	set $ctrl = ($ctrl | (1 << 0))
+	printf "try to close protection %x\n", $ctrl
+	set {int}(0x000) = $ctrl
+	set $ctrl = {int}(0x000)
+	printf "protection closed?? %x\n", $ctrl
+
+	set $Loop = $Loop + 0x01
+end
+
+quit

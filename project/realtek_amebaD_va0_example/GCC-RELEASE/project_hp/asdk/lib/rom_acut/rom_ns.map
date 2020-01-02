@@ -1,0 +1,2699 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+IROM             0x10100000         0x0000a000         xr
+IROM_NS          0x1010a000         0x00036000         xr
+DROM_NS          0x101c0000         0x00014000         xr
+DROM             0x101d4000         0x00004000         xr
+ROMBSS_RAM_COM   0x10000000         0x00001000         rw
+ROMBSS_RAM_NS    0x10001000         0x00001000         rw
+RSVD_RAM_NS      0x10002000         0x00002000         rw
+MSP_RAM_NS       0x10004000         0x00001000         rw
+BD_RAM_NS        0x10005000         0x0006a000         xrw
+PRINT_RAM        0x1006f000         0x00001000         xrw
+BD_RAM_S         0x10070000         0x0000a000         xrw
+BD_RAM_NSC       0x1007a000         0x00002000         xrw
+ROMBSS_RAM_S     0x1007c000         0x00001000         xrw
+BOOTLOADER_RAM_S 0x1007d000         0x00002000         xrw
+MSP_RAM_S        0x1007f000         0x00001000         xrw
+EXTENTION_SRAM   0x100e0000         0x00020000         xrw
+KM0_BOOT         0x08000020         0x00003fe0         xr
+KM4_BOOT         0x08004020         0x00003fe0         xr
+BACKUP           0x08008000         0x00001000         r
+XIPSYS           0x08009000         0x00001000         r
+RESVD            0x0800a000         0x00001000         r
+KM0_IMG2         0x0800b020         0x0001ffe0         xr
+KM4_IMG2         0x0802b020         0x00064fe0         xr
+KM4_IMG2_OTA2    0x08090020         0x00064fe0         xr
+KM4_IMG3         0x080f5020         0x0000afe0         xr
+BTRACE           0x08800000         0x00400000         xr
+KM0_SRAM         0x00080000         0x00010000         xrw
+RETENTION_RAM    0x000c0000         0x00000400         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+
+.rom.text       0x1010a000    0x24ef0
+ *(.vectors_table)
+ .vectors_table
+                0x1010a000       0x20 ./build/rom_ns/8721dhp_vectors.o
+                0x1010a000                __vectors_table
+ *(.vectors_table_text)
+ *fill*         0x1010a020       0xe0 
+ .vectors_table_text
+                0x1010a100       0x2c ./build/rom_ns/8721dhp_vectors.o
+                0x1010a100                Reset_Handler
+                0x1010a110                NMI_Handler
+                0x1010a114                HardFault_Handler
+                0x1010a118                MemManage_Handler
+                0x1010a11c                BusFault_Handler
+                0x1010a120                UsageFault_Handler
+                0x1010a124                SecureFault_Handler
+ *(.hal.rom.text*)
+ .hal.rom.text  0x1010a12c      0x638 ./build/rom_ns/diag.o
+                0x1010a12c                DiagVSprintf
+                0x1010a3f4                DiagPrintf
+                0x1010a444                DiagPrintfD
+                0x1010a470                DiagSPrintf
+                0x1010a49c                DiagSnPrintf
+ .hal.rom.text  0x1010a764      0x10c ./build/rom_ns/rand.o
+                0x1010a764                Rand
+                0x1010a7f0                Rand_Arc4
+                0x1010a824                RandBytes_Get
+ .hal.rom.text  0x1010a870       0x20 ./build/rom_ns/rtl8721d_assert_rom.o
+                0x1010a870                io_assert_failed
+ .hal.rom.text  0x1010a890       0xa8 ./build/rom_ns/rtl8721d_backup_reg.o
+                0x1010a890                BKUP_Write
+                0x1010a8b4                BKUP_Read
+                0x1010a8d4                BKUP_Set
+                0x1010a8fc                BKUP_Clear
+                0x1010a928                BOOT_Reason
+ .hal.rom.text  0x1010a938       0x70 ./build/rom_ns/rtl8721d_delay_rom.o
+                0x1010a938                DelayNop
+                0x1010a948                DelayUs
+                0x1010a994                DelayMs
+ .hal.rom.text  0x1010a9a8      0x7ec ./build/rom_ns/rtl8721d_efuse_rom.o
+                0x1010a9a8                EFUSEPowerSwitch
+                0x1010aa30                EFUSERead8
+                0x1010ab1c                EFUSEWrite8
+                0x1010ac20                EFUSE_PG_Packet
+                0x1010ae98                EFUSE_LogicalMap_Read
+                0x1010afac                EFUSE_LogicalMap_Write
+ .hal.rom.text  0x1010b194      0xa90 ./build/rom_ns/rtl8721d_flash_rom.o
+                0x1010b194                FLASH_RxData
+                0x1010b29c                FLASH_TxCmd
+                0x1010b328                FLASH_SW_CS_Control
+                0x1010b37c                FLASH_SetSpiMode
+                0x1010b414                FLASH_RxCmd
+                0x1010b478                FLASH_WaitBusy
+                0x1010b4f8                FLASH_WriteEn
+                0x1010b51c                FLASH_TxData256B
+                0x1010b60c                FLASH_TxData12B
+                0x1010b6ec                FLASH_SetStatus
+                0x1010b70c                FLASH_Erase
+                0x1010b7b8                FLASH_DeepPowerDown
+                0x1010b808                FLASH_SetStatusBits
+                0x1010b8dc                FLASH_StructInit_Micron
+                0x1010b98c                FLASH_StructInit_MXIC
+                0x1010ba38                FLASH_StructInit_GD
+                0x1010baec                FLASH_StructInit
+                0x1010bba0                FLASH_Init
+ .hal.rom.text  0x1010bc24      0x984 ./build/rom_ns/rtl8721d_gdma_rom.o
+                0x1010bc24                GDMA_StructInit
+                0x1010bc44                GDMA_SetLLP
+                0x1010bcd8                GDMA_ClearINTPendingBit
+                0x1010bda4                GDMA_ClearINT
+                0x1010be74                GDMA_INTConfig
+                0x1010bf90                GDMA_Cmd
+                0x1010bff8                GDMA_Init
+                0x1010c14c                GDMA_ChCleanAutoReload
+                0x1010c1d0                GDMA_SetSrcAddr
+                0x1010c220                GDMA_GetSrcAddr
+                0x1010c26c                GDMA_GetDstAddr
+                0x1010c2b8                GDMA_SetDstAddr
+                0x1010c308                GDMA_SetBlkSize
+                0x1010c368                GDMA_GetBlkSize
+                0x1010c3b8                GDMA_ChnlRegister
+                0x1010c400                GDMA_ChnlUnRegister
+                0x1010c43c                GDMA_ChnlAlloc
+                0x1010c4d8                GDMA_ChnlFree
+                0x1010c564                GDMA_GetIrqNum
+ .hal.rom.text  0x1010c5a8      0x37c ./build/rom_ns/rtl8721d_gpio_rom.o
+                0x1010c5a8                GPIO_INTMode
+                0x1010c640                GPIO_INTConfig
+                0x1010c678                GPIO_INTHandler
+                0x1010c720                GPIO_Direction
+                0x1010c754                GPIO_Init
+                0x1010c7e0                GPIO_DeInit
+                0x1010c84c                GPIO_ReadDataBit
+                0x1010c870                GPIO_WriteBit
+                0x1010c8a0                GPIO_PortDirection
+                0x1010c8c4                GPIO_PortRead
+                0x1010c8d4                GPIO_PortWrite
+                0x1010c8ec                GPIO_UserRegIrq
+ .hal.rom.text  0x1010c924      0x178 ./build/rom_ns/rtl8721d_ipc_rom.o
+                0x1010c924                IPC_INTConfig
+                0x1010c938                IPC_IERSet
+                0x1010c93c                IPC_IERGet
+                0x1010c940                IPC_INTRequest
+                0x1010c94c                IPC_INTClear
+                0x1010c958                IPC_INTGet
+                0x1010c95c                IPC_CPUID
+                0x1010c968                IPC_SEMGet
+                0x1010c9b8                IPC_SEMFree
+                0x1010ca20                IPC_INTHandler
+                0x1010ca60                IPC_INTUserHandler
+ .hal.rom.text  0x1010ca9c      0x138 ./build/rom_ns/rtl8721d_loguart_rom.o
+                0x1010ca9c                LOGUART_StructInit
+                0x1010cab4                LOGUART_Init
+                0x1010caf4                LOGUART_PutChar
+                0x1010cb28                LOGUART_GetChar
+                0x1010cb44                LOGUART_Readable
+                0x1010cb58                LOGUART_GetIMR
+                0x1010cb64                LOGUART_SetIMR
+                0x1010cb70                LOGUART_WaitBusy
+                0x1010cb90                LOGUART_SetBaud
+ .hal.rom.text  0x1010cbd4      0x214 ./build/rom_ns/rtl8721d_mpu_rom.o
+                0x1010cbd4                mpu_enable
+                0x1010cbec                mpu_disable
+                0x1010cc00                mpu_init
+                0x1010cc3c                mpu_set_mem_attr
+                0x1010ccb0                mpu_region_cfg
+                0x1010cdb4                mpu_entry_free
+                0x1010cdc0                mpu_entry_alloc
+ .hal.rom.text  0x1010cde8      0x168 ./build/rom_ns/rtl8721d_otf_rom.o
+                0x1010cde8                RSIP_Cmd
+                0x1010ce04                RSIP_OTF_init
+                0x1010ce6c                RSIP_OTF_Cmd
+                0x1010ce80                RSIP_OTF_Mask
+                0x1010cec8                RSIP_KEY_Request
+                0x1010cf0c                RSIP_MMU_Config
+                0x1010cf30                RSIP_MMU_Cmd
+ .hal.rom.text  0x1010cf50      0x230 ./build/rom_ns/rtl8721d_pinmux_rom.o
+                0x1010cf50                PAD_DrvStrength
+                0x1010cf6c                PAD_PullCtrl
+                0x1010cf98                PAD_CMD
+                0x1010cfb8                Pinmux_Config
+                0x1010cfd8                Pinmux_ConfigGet
+                0x1010cfe8                Pinmux_UartLogCtrl
+                0x1010d03c                Pinmux_SpicCtrl
+ .hal.rom.text  0x1010d180       0x44 ./build/rom_ns/rtl8721d_simulation_rom.o
+                0x1010d180                simulation_bit_index
+                0x1010d198                simulation_stage_set
+ .hal.rom.text  0x1010d1c4       0x90 ./build/rom_ns/rtl8721d_systimer_rom.o
+                0x1010d1c4                SYSTIMER_Init
+                0x1010d214                SYSTIMER_TickGet
+                0x1010d224                SYSTIMER_GetPassTime
+ .hal.rom.text  0x1010d254      0x5e8 ./build/rom_ns/rtl8721d_tim_rom.o
+                0x1010d254                RTIM_TimeBaseStructInit
+                0x1010d26c                RTIM_Cmd
+                0x1010d2f4                RTIM_GetCount
+                0x1010d360                RTIM_INTConfig
+                0x1010d3f0                RTIM_INTClear
+                0x1010d45c                RTIM_TimeBaseInit
+                0x1010d594                RTIM_DeInit
+                0x1010d610                RTIM_INTClearPendingBit
+                0x1010d684                RTIM_GetFlagStatus
+                0x1010d75c                RTIM_GetINTStatus
+ .hal.rom.text  0x1010d83c      0x3f4 ./build/rom_ns/rtl8721d_uart_rom.o
+                0x1010d83c                UART_DeInit
+                0x1010d844                UART_StructInit
+                0x1010d860                UART_BaudParaGetFull
+                0x1010d898                UART_BaudParaGet
+                0x1010d8bc                UART_SetBaud
+                0x1010d954                UART_SetBaudExt
+                0x1010d9cc                UART_SetRxLevel
+                0x1010d9f4                UART_RxCmd
+                0x1010da08                UART_Writable
+                0x1010da10                UART_Readable
+                0x1010da18                UART_CharPut
+                0x1010da1c                UART_CharGet
+                0x1010da24                UART_ReceiveData
+                0x1010da4c                UART_SendData
+                0x1010da74                UART_ReceiveDataTO
+                0x1010dab4                UART_SendDataTO
+                0x1010daf4                UART_RxByteCntClear
+                0x1010db00                UART_RxByteCntGet
+                0x1010db08                UART_BreakCtl
+                0x1010db1c                UART_ClearRxFifo
+                0x1010db3c                UART_Init
+                0x1010dbe4                UART_ClearTxFifo
+                0x1010dbf0                UART_INTConfig
+                0x1010dc00                UART_IntStatus
+                0x1010dc04                UART_ModemStatusGet
+                0x1010dc08                UART_LineStatusGet
+                0x1010dc0c                UART_WaitBusy
+ .hal.rom.text  0x1010dc30      0x578 ./build/rom_ns/rtl8721dhp_aes_rom.o
+                0x1010dc30                rtl_crypto_aes_cbc_init
+                0x1010dc80                rtl_crypto_aes_cbc_encrypt
+                0x1010dccc                rtl_crypto_aes_cbc_decrypt
+                0x1010dd18                rtl_crypto_aes_ecb_init
+                0x1010dd68                rtl_crypto_aes_ecb_encrypt
+                0x1010dda0                rtl_crypto_aes_ecb_decrypt
+                0x1010ddd8                rtl_crypto_aes_ctr_init
+                0x1010de28                rtl_crypto_aes_ctr_encrypt
+                0x1010de6c                rtl_crypto_aes_ctr_decrypt
+                0x1010deb0                rtl_crypto_aes_cfb_init
+                0x1010df00                rtl_crypto_aes_cfb_encrypt
+                0x1010df44                rtl_crypto_aes_cfb_decrypt
+                0x1010df88                rtl_crypto_aes_ofb_init
+                0x1010dfdc                rtl_crypto_aes_ofb_encrypt
+                0x1010e020                rtl_crypto_aes_ofb_decrypt
+                0x1010e064                rtl_crypto_aes_gcm_init
+                0x1010e0b8                rtl_crypto_aes_gcm_encrypt
+                0x1010e130                rtl_crypto_aes_gcm_decrypt
+ .hal.rom.text  0x1010e1a8      0x320 ./build/rom_ns/rtl8721dhp_boot_rom.o
+                0x1010e1a8                BOOT_ROM_SignatureCheck
+                0x1010e280                BOOT_ROM_FromFlash
+                0x1010e38c                BOOT_ROM_InitDebugFlg
+                0x1010e3a8                BOOT_ROM_ResetVsr
+ .hal.rom.text  0x1010e4c8       0x70 ./build/rom_ns/rtl8721dhp_clk_rom.o
+                0x1010e4c8                EXT32K_Cmd
+                0x1010e4e8                XTAL_ClkGet
+                0x1010e500                CPU_ClkSet
+                0x1010e514                CPU_ClkGet
+ .hal.rom.text  0x1010e538     0x12e0 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+                0x1010e538                CRYPTO_MemDump
+                0x1010e600                CRYPTO_RegDump
+                0x1010e7c0                CRYPTO_CleanCmdOk
+                0x1010e7f8                CRYPTO_ClearAllINT
+                0x1010e828                CRYPTO_Reset
+                0x1010e86c                CRYPTO_SetSecurityModeAD
+                0x1010ea48                CRYPTO_Init
+                0x1010ea6c                CRYPTO_ProcessAD
+                0x1010f680                CRYPTO_SendSeqBuf
+                0x1010f798                CRYPTO_CipherInit
+                0x1010f7b8                CRYPTO_CipherEncryptAD
+                0x1010f7e8                CRYPTO_CipherDecryptAD
+ .hal.rom.text  0x1010f818      0x808 ./build/rom_ns/rtl8721dhp_des_rom.o
+                0x1010f818                rtl_crypto_3des_cbc_init
+                0x1010f868                rtl_crypto_3des_cbc_encrypt
+                0x1010f8b4                rtl_crypto_3des_cbc_decrypt
+                0x1010f900                rtl_crypto_3des_ecb_init
+                0x1010f950                rtl_crypto_3des_ecb_encrypt
+                0x1010f988                rtl_crypto_3des_ecb_decrypt
+                0x1010f9c0                rtl_crypto_3des_cfb_init
+                0x1010fa10                rtl_crypto_3des_cfb_encrypt
+                0x1010fa48                rtl_crypto_3des_cfb_decrypt
+                0x1010fa80                rtl_crypto_3des_ofb_init
+                0x1010fad0                rtl_crypto_3des_ofb_encrypt
+                0x1010fb08                rtl_crypto_3des_ofb_decrypt
+                0x1010fb40                rtl_crypto_3des_ctr_init
+                0x1010fb94                rtl_crypto_3des_ctr_encrypt
+                0x1010fbcc                rtl_crypto_3des_ctr_decrypt
+                0x1010fc04                rtl_crypto_des_cbc_init
+                0x1010fc58                rtl_crypto_des_cbc_encrypt
+                0x1010fcb4                rtl_crypto_des_cbc_decrypt
+                0x1010fd10                rtl_crypto_des_ecb_init
+                0x1010fd64                rtl_crypto_des_ecb_encrypt
+                0x1010fd9c                rtl_crypto_des_ecb_decrypt
+                0x1010fdd4                rtl_crypto_des_cfb_init
+                0x1010fe28                rtl_crypto_des_cfb_encrypt
+                0x1010fe60                rtl_crypto_des_cfb_decrypt
+                0x1010fe98                rtl_crypto_des_ofb_init
+                0x1010feec                rtl_crypto_des_ofb_encrypt
+                0x1010ff24                rtl_crypto_des_ofb_decrypt
+                0x1010ff5c                rtl_crypto_des_ctr_init
+                0x1010ffb0                rtl_crypto_des_ctr_encrypt
+                0x1010ffe8                rtl_crypto_des_ctr_decrypt
+ .hal.rom.text  0x10110020       0x18 ./build/rom_ns/rtl8721dhp_ns_entry.o
+                0x10110020                clear_ns_rom_bss
+ .hal.rom.text  0x10110038      0x198 ./build/rom_ns/rtl8721dhp_rcc_rom.o
+                0x10110038                RCC_PeriphClockCmd
+                0x101100d0                RCC_PeriphClockSource_RTC
+                0x1011011c                RCC_PeriphClockSource_I2C
+                0x1011013c                RCC_PeriphClockSource_QDEC
+                0x1011015c                RCC_PeriphClockSource_UART
+ .hal.rom.text  0x101101d0        0xc ./build/rom_ns/rtl8721dhp_syscfg_rom.o
+                0x101101d0                SYSCFG_GetChipInfo
+ .hal.rom.text  0x101101dc      0x950 ./build/rom_ns/rtl8721dhp_vector_rom.o
+                0x101101dc                INT_HardFault
+                0x101101fc                INT_MemManage
+                0x1011021c                INT_BusFault
+                0x1011023c                INT_UsageFault
+                0x1011025c                INT_SecureFault
+                0x1011027c                INT_HardFault_C
+                0x1011064c                INT_NMI
+                0x10110794                irq_table_init
+                0x101109d0                irq_enable
+                0x101109ec                irq_disable
+                0x10110a10                irq_set_priority
+                0x10110a3c                irq_get_priority
+                0x10110a64                irq_set_pending
+                0x10110a80                irq_get_pending
+                0x10110aa4                irq_clear_pending
+                0x10110ac0                irq_register
+                0x10110b0c                irq_unregister
+ *(.libc.rom.text*)
+ .libc.rom.text
+                0x10110b2c      0x10c ./build/rom_ns/char2num.o
+                0x10110b2c                _char2num
+                0x10110b5c                _2char2dec
+                0x10110bd0                _2char2hex
+ .libc.rom.text
+                0x10110c38       0x90 ./build/rom_ns/memchr.o
+                0x10110c38                _memchr
+ .libc.rom.text
+                0x10110cc8       0x64 ./build/rom_ns/memcmp.o
+                0x10110cc8                _memcmp
+ .libc.rom.text
+                0x10110d2c       0xac ./build/rom_ns/memcpy.o
+                0x10110d2c                _memcpy
+ .libc.rom.text
+                0x10110dd8       0xc8 ./build/rom_ns/memmove.o
+                0x10110dd8                _memmove
+ .libc.rom.text
+                0x10110ea0       0x9c ./build/rom_ns/memset.o
+                0x10110ea0                _memset
+ .libc.rom.text
+                0x10110f3c      0x6a4 ./build/rom_ns/sscanf.o
+                0x10110ffc                _vsscanf
+                0x101115c0                _sscanf
+ .libc.rom.text
+                0x101115e0       0x54 ./build/rom_ns/stratoi.o
+                0x101115e0                _stratoi
+ .libc.rom.text
+                0x10111634       0x40 ./build/rom_ns/strcat.o
+                0x10111634                _strcat
+ .libc.rom.text
+                0x10111674       0xd0 ./build/rom_ns/strchr.o
+                0x10111674                _strchr
+ .libc.rom.text
+                0x10111744       0x74 ./build/rom_ns/strcmp.o
+                0x10111744                _strcmp
+ .libc.rom.text
+                0x101117b8       0x4c ./build/rom_ns/strcpy.o
+                0x101117b8                _strcpy
+ .libc.rom.text
+                0x10111804       0x34 ./build/rom_ns/stricmp.o
+                0x10111804                _stricmp
+ .libc.rom.text
+                0x10111838       0x64 ./build/rom_ns/strlen.o
+                0x10111838                _strlen
+ .libc.rom.text
+                0x1011189c       0x5c ./build/rom_ns/strncat.o
+                0x1011189c                _strncat
+ .libc.rom.text
+                0x101118f8       0xa4 ./build/rom_ns/strncmp.o
+                0x101118f8                _strncmp
+ .libc.rom.text
+                0x1011199c       0x68 ./build/rom_ns/strncpy.o
+                0x1011199c                _strncpy
+ .libc.rom.text
+                0x10111a04       0x34 ./build/rom_ns/strnlen.o
+                0x10111a04                _strnlen
+ .libc.rom.text
+                0x10111a38       0x2c ./build/rom_ns/strpbrk.o
+                0x10111a38                _strpbrk
+ .libc.rom.text
+                0x10111a64        0xc ./build/rom_ns/strsep.o
+                0x10111a64                _strsep
+ .libc.rom.text
+                0x10111a70      0x4cc ./build/rom_ns/strstr.o
+                0x10111d24                _strstr
+ .libc.rom.text
+                0x10111f3c       0xe0 ./build/rom_ns/strtod.o
+                0x10111f3c                _strtoull
+                0x10111ffc                _strtoll
+ .libc.rom.text
+                0x1011201c        0xc ./build/rom_ns/strtok.o
+                0x1011201c                _strtok
+ .libc.rom.text
+                0x10112028       0x6c ./build/rom_ns/strtok_r.o
+                0x10112028                __strtok_r
+                0x1011208c                _strtok_r
+ .libc.rom.text
+                0x10112094      0x120 ./build/rom_ns/strtol.o
+                0x10112094                _strtol_r
+                0x101121b0                _strtol
+ .libc.rom.text
+                0x101121b4      0x138 ./build/rom_ns/strtoul.o
+                0x101121b4                _strtoul_r
+                0x101122e8                _strtoul
+ .libc.rom.text
+                0x101122ec       0x1c ./build/rom_ns/strupr.o
+                0x101122ec                _strupr
+ *(.apple.rom.text*)
+ .apple.rom.text
+                0x10112308      0x2bc ./build/rom_ns/rom_homekit_chacha_enc.o
+                0x10112308                CRYPTO_chacha_20
+ .apple.rom.text
+                0x101125c4       0x1e ./build/rom_ns/rom_homekit_ed25519.o
+                0x101125c4                rom_ed25519_gen_keypair
+                0x101125c8                rom_ed25519_gen_signature
+                0x101125de                rom_ed25519_verify_signature
+ *fill*         0x101125e2        0x2 
+ .apple.rom.text
+                0x101125e4     0x226c ./build/rom_ns/rom_homekit_ed25519_ge_fe.o
+                0x10113e88                rom_ed25519_ge_double_scalarmult_vartime
+                0x10114194                rom_ed25519_ge_frombytes_negate_vartime
+                0x10114694                rom_ed25519_ge_p3_tobytes
+                0x101146de                rom_ed25519_ge_scalarmult_base
+                0x10114806                rom_ed25519_ge_tobytes
+ .apple.rom.text
+                0x10114850       0x58 ./build/rom_ns/rom_homekit_ed25519_keypair.o
+                0x10114850                rom_ed25519_crypto_sign_seed_keypair
+ .apple.rom.text
+                0x101148a8      0x204 ./build/rom_ns/rom_homekit_ed25519_open.o
+                0x101148a8                rom_ed25519_crypto_sign_verify_detached
+ .apple.rom.text
+                0x10114aac     0x7c30 ./build/rom_ns/rom_homekit_ed25519_sc.o
+                0x10114ad4                rom_ed25519_sc_muladd
+                0x1011b264                rom_ed25519_sc_reduce
+ .apple.rom.text
+                0x1011c6dc       0xe0 ./build/rom_ns/rom_homekit_ed25519_sign.o
+                0x1011c6dc                rom_ed25519_crypto_sign_detached
+ .apple.rom.text
+                0x1011c7bc      0x58e ./build/rom_ns/rom_homekit_poly1305.o
+                0x1011ca98                CRYPTO_poly1305_init
+                0x1011cb30                CRYPTO_poly1305_update
+                0x1011cba6                CRYPTO_poly1305_finish
+ *fill*         0x1011cd4a        0x2 
+ .apple.rom.text
+                0x1011cd4c      0x22c ./build/rom_ns/rom_homekit_sha512.o
+                0x1011cd4c                rom_sha512_starts
+                0x1011cd50                rom_sha512_update
+                0x1011cd54                rom_sha512_finish
+                0x1011cd58                rom_sha512
+                0x1011cd5c                rom_sha512_hmac_starts
+                0x1011cdf0                rom_sha512_hmac_update
+                0x1011cdf4                rom_sha512_hmac_finish
+                0x1011ce48                rom_sha512_hmac_reset
+                0x1011ce64                rom_sha512_hmac
+                0x1011cea0                rom_sha512_hkdf
+ .apple.rom.text
+                0x1011cf78     0x15f0 ./build/rom_ns/rom_wac_curve25519-donna.o
+                0x1011dce4                curve25519_donna
+ *(.ssl.rom.text*)
+ .ssl.rom.text  0x1011e568      0xfac ./build/rom_ns/mbedtls_rom_aes.o
+                0x1011e568                mbedtls_aes_init
+                0x1011e578                mbedtls_aes_free
+                0x1011e58c                mbedtls_aes_setkey_enc
+                0x1011e7a4                mbedtls_aes_setkey_dec
+                0x1011e8c0                mbedtls_aes_encrypt
+                0x1011ecf8                mbedtls_aes_decrypt
+                0x1011f144                mbedtls_aes_crypt_ecb
+                0x1011f1c8                mbedtls_aes_crypt_cbc
+                0x1011f3d4                mbedtls_aes_crypt_cfb128
+                0x1011f44a                mbedtls_aes_crypt_cfb8
+                0x1011f4b0                mbedtls_aes_crypt_ctr
+ .ssl.rom.text  0x1011f514       0xb0 ./build/rom_ns/mbedtls_rom_arc4.o
+                0x1011f514                mbedtls_arc4_init
+                0x1011f524                mbedtls_arc4_free
+                0x1011f538                mbedtls_arc4_setup
+                0x1011f57e                mbedtls_arc4_crypt
+ .ssl.rom.text  0x1011f5c4      0x3a8 ./build/rom_ns/mbedtls_rom_asn1parse.o
+                0x1011f5c4                mbedtls_asn1_get_len
+                0x1011f660                mbedtls_asn1_get_tag
+                0x1011f688                mbedtls_asn1_get_bool
+                0x1011f6b8                mbedtls_asn1_get_int
+                0x1011f6fe                mbedtls_asn1_get_mpi
+                0x1011f724                mbedtls_asn1_get_bitstring
+                0x1011f76c                mbedtls_asn1_get_bitstring_null
+                0x1011f794                mbedtls_asn1_get_sequence_of
+                0x1011f81c                mbedtls_asn1_get_alg
+                0x1011f8a8                mbedtls_asn1_get_alg_null
+                0x1011f8ec                mbedtls_asn1_free_named_data
+                0x1011f91c                mbedtls_asn1_free_named_data_list
+                0x1011f940                mbedtls_asn1_find_named_data
+ .ssl.rom.text  0x1011f96c      0x4bc ./build/rom_ns/mbedtls_rom_asn1write.o
+                0x1011f96c                mbedtls_asn1_write_len
+                0x1011fa54                mbedtls_asn1_write_tag
+                0x1011fa70                mbedtls_asn1_write_raw_buffer
+                0x1011faa0                mbedtls_asn1_write_mpi
+                0x1011fb12                mbedtls_asn1_write_null
+                0x1011fb38                mbedtls_asn1_write_oid
+                0x1011fb6c                mbedtls_asn1_write_algorithm_identifier
+                0x1011fbbc                mbedtls_asn1_write_bool
+                0x1011fbfe                mbedtls_asn1_write_int
+                0x1011fc60                mbedtls_asn1_write_printable_string
+                0x1011fc94                mbedtls_asn1_write_ia5_string
+                0x1011fcc8                mbedtls_asn1_write_bitstring
+                0x1011fd3c                mbedtls_asn1_write_octet_string
+                0x1011fd70                mbedtls_asn1_store_named_data
+ .ssl.rom.text  0x1011fe28      0x24c ./build/rom_ns/mbedtls_rom_base64.o
+                0x1011fe28                mbedtls_base64_encode
+                0x1011ff2c                mbedtls_base64_decode
+ .ssl.rom.text  0x10120074     0x28dc ./build/rom_ns/mbedtls_rom_bignum.o
+                0x10120b18                mbedtls_mpi_init
+                0x10120b26                mbedtls_mpi_free
+                0x10120b5c                mbedtls_mpi_grow
+                0x10120bc0                mbedtls_mpi_shrink
+                0x10120c40                mbedtls_mpi_copy
+                0x10120c9c                mbedtls_mpi_swap
+                0x10120cc4                mbedtls_mpi_safe_cond_assign
+                0x10120d30                mbedtls_mpi_safe_cond_swap
+                0x10120db2                mbedtls_mpi_lset
+                0x10120df0                mbedtls_mpi_get_bit
+                0x10120e10                mbedtls_mpi_set_bit
+                0x10120e60                mbedtls_mpi_lsb
+                0x10120e92                mbedtls_mpi_bitlen
+                0x10120ed2                mbedtls_mpi_size
+                0x10120ede                mbedtls_mpi_read_binary
+                0x10120f46                mbedtls_mpi_write_binary
+                0x10120f90                mbedtls_mpi_shift_l
+                0x1012102c                mbedtls_mpi_shift_r
+                0x101210aa                mbedtls_mpi_cmp_abs
+                0x101211ec                mbedtls_mpi_cmp_mpi
+                0x10121276                mbedtls_mpi_cmp_int
+                0x101212a2                mbedtls_mpi_add_abs
+                0x10121356                mbedtls_mpi_sub_abs
+                0x101213d4                mbedtls_mpi_add_mpi
+                0x10121416                mbedtls_mpi_sub_mpi
+                0x1012145a                mbedtls_mpi_add_int
+                0x10121486                mbedtls_mpi_sub_int
+                0x101214b2                mbedtls_mpi_mul_mpi
+                0x1012158e                mbedtls_mpi_mul_int
+                0x101215a8                mbedtls_mpi_read_string
+                0x101216c8                mbedtls_mpi_div_mpi
+                0x10121aea                mbedtls_mpi_div_int
+                0x10121b14                mbedtls_mpi_mod_mpi
+                0x10121b74                mbedtls_mpi_mod_int
+                0x10121c14                mbedtls_mpi_write_string
+                0x10121d6c                mbedtls_mpi_exp_mod
+                0x101221a4                mbedtls_mpi_gcd
+                0x101222ae                mbedtls_mpi_fill_random
+                0x101224f8                mbedtls_mpi_inv_mod
+                0x101227b4                mbedtls_mpi_is_prime
+                0x10122808                mbedtls_mpi_gen_prime
+ .ssl.rom.text  0x10122950      0x3b0 ./build/rom_ns/mbedtls_rom_ctr_drbg.o
+                0x10122ae8                mbedtls_ctr_drbg_init
+                0x10122af8                mbedtls_ctr_drbg_free
+                0x10122b16                mbedtls_ctr_drbg_set_prediction_resistance
+                0x10122b1a                mbedtls_ctr_drbg_set_entropy_len
+                0x10122b1e                mbedtls_ctr_drbg_set_reseed_interval
+                0x10122b22                mbedtls_ctr_drbg_update
+                0x10122b46                mbedtls_ctr_drbg_reseed
+                0x10122bc4                mbedtls_ctr_drbg_seed_entropy_len
+                0x10122c18                mbedtls_ctr_drbg_seed
+                0x10122c2a                mbedtls_ctr_drbg_random_with_add
+                0x10122cf0                mbedtls_ctr_drbg_random
+ .ssl.rom.text  0x10122d00     0x1070 ./build/rom_ns/mbedtls_rom_des.o
+                0x10122d10                mbedtls_des_init
+                0x10122d1c                mbedtls_des_free
+                0x10122d24                mbedtls_des3_init
+                0x10122d34                mbedtls_des3_free
+                0x10122d3e                mbedtls_des_key_set_parity
+                0x10122d58                mbedtls_des_key_check_key_parity
+                0x10122d7c                mbedtls_des_key_check_weak
+                0x10122da8                mbedtls_des_setkey
+                0x101231ba                mbedtls_des_setkey_enc
+                0x101231e4                mbedtls_des_setkey_dec
+                0x10123238                mbedtls_des3_set2key_enc
+                0x1012327c                mbedtls_des3_set2key_dec
+                0x101232c0                mbedtls_des3_set3key_enc
+                0x101232fc                mbedtls_des3_set3key_dec
+                0x10123338                mbedtls_des_crypt_ecb
+                0x10123540                mbedtls_des_crypt_cbc
+                0x10123730                mbedtls_des3_crypt_ecb
+                0x10123b80                mbedtls_des3_crypt_cbc
+ .ssl.rom.text  0x10123d70      0x650 ./build/rom_ns/mbedtls_rom_dhm.o
+                0x10123e00                mbedtls_dhm_init
+                0x10123e0c                mbedtls_dhm_read_params
+                0x10123e58                mbedtls_dhm_make_params
+                0x10123f90                mbedtls_dhm_read_public
+                0x10123fb4                mbedtls_dhm_make_public
+                0x1012406c                mbedtls_dhm_calc_secret
+                0x1012426c                mbedtls_dhm_free
+                0x101242ce                mbedtls_dhm_parse_dhm
+ .ssl.rom.text  0x101243c0      0x27c ./build/rom_ns/mbedtls_rom_ecdh.o
+                0x101243c0                mbedtls_ecdh_gen_public
+                0x101243c4                mbedtls_ecdh_compute_shared
+                0x10124424                mbedtls_ecdh_init
+                0x10124434                mbedtls_ecdh_free
+                0x1012447c                mbedtls_ecdh_make_params
+                0x101244ec                mbedtls_ecdh_read_params
+                0x10124514                mbedtls_ecdh_get_params
+                0x10124560                mbedtls_ecdh_make_public
+                0x101245b0                mbedtls_ecdh_read_public
+                0x101245dc                mbedtls_ecdh_calc_secret
+ .ssl.rom.text  0x1012463c      0x588 ./build/rom_ns/mbedtls_rom_ecdsa.o
+                0x10124692                mbedtls_ecdsa_sign
+                0x10124814                mbedtls_ecdsa_sign_det
+                0x101248bc                mbedtls_ecdsa_verify
+                0x101249f8                mbedtls_ecdsa_write_signature
+                0x10124a9c                mbedtls_ecdsa_write_signature_det
+                0x10124aba                mbedtls_ecdsa_read_signature
+                0x10124b54                mbedtls_ecdsa_genkey
+                0x10124b82                mbedtls_ecdsa_from_keypair
+                0x10124bba                mbedtls_ecdsa_init
+                0x10124bbe                mbedtls_ecdsa_free
+ .ssl.rom.text  0x10124bc4      0x9bc ./build/rom_ns/mbedtls_rom_ecjpake.o
+                0x10124ff4                mbedtls_ecjpake_init
+                0x1012504e                mbedtls_ecjpake_free
+                0x101250a4                mbedtls_ecjpake_setup
+                0x101250e8                mbedtls_ecjpake_check
+                0x10125108                mbedtls_ecjpake_read_round_one
+                0x10125184                mbedtls_ecjpake_write_round_one
+                0x101252ac                mbedtls_ecjpake_read_round_two
+                0x10125364                mbedtls_ecjpake_write_round_two
+                0x101254a0                mbedtls_ecjpake_derive_secret
+ .ssl.rom.text  0x10125580     0x1f4c ./build/rom_ns/mbedtls_rom_ecp.o
+                0x10125de8                mbedtls_ecp_curve_list
+                0x10125df0                mbedtls_ecp_curve_info_from_grp_id
+                0x10125e0c                mbedtls_ecp_curve_info_from_tls_id
+                0x10125e28                mbedtls_ecp_curve_info_from_name
+                0x10125e50                mbedtls_ecp_point_init
+                0x10125e70                mbedtls_ecp_group_init
+                0x10125e80                mbedtls_ecp_keypair_init
+                0x10125ea0                mbedtls_ecp_point_free
+                0x10125ec0                mbedtls_ecp_group_free
+                0x10125f30                mbedtls_ecp_keypair_free
+                0x10125f50                mbedtls_ecp_copy
+                0x10125f7c                mbedtls_ecp_group_copy
+                0x10125f82                mbedtls_ecp_set_zero
+                0x10126838                mbedtls_ecp_is_zero
+                0x1012684a                mbedtls_ecp_point_cmp
+                0x1012687c                mbedtls_ecp_point_read_string
+                0x101268a8                mbedtls_ecp_point_write_binary
+                0x1012694c                mbedtls_ecp_point_read_binary
+                0x101269b8                mbedtls_ecp_tls_read_point
+                0x101269e8                mbedtls_ecp_tls_write_point
+                0x10126a18                mbedtls_ecp_tls_read_group
+                0x10126a60                mbedtls_ecp_tls_write_group
+                0x10126a98                mbedtls_ecp_check_pubkey
+                0x10126c2c                mbedtls_ecp_check_privkey
+                0x10126c9c                mbedtls_ecp_mul
+                0x1012726e                mbedtls_ecp_muladd
+                0x101272d8                mbedtls_ecp_gen_keypair_base
+                0x101273d8                mbedtls_ecp_gen_keypair
+                0x101273f0                mbedtls_ecp_gen_key
+                0x10127418                mbedtls_ecp_check_pub_priv
+ .ssl.rom.text  0x101274cc     0x1470 ./build/rom_ns/mbedtls_rom_ecp_curves.o
+                0x10128518                mbedtls_ecp_group_load
+ .ssl.rom.text  0x1012893c      0x2cc ./build/rom_ns/mbedtls_rom_hmac_drbg.o
+                0x1012893c                mbedtls_hmac_drbg_init
+                0x10128948                mbedtls_hmac_drbg_update
+                0x101289e4                mbedtls_hmac_drbg_seed_buf
+                0x10128a34                mbedtls_hmac_drbg_reseed
+                0x10128aac                mbedtls_hmac_drbg_seed
+                0x10128b1c                mbedtls_hmac_drbg_set_prediction_resistance
+                0x10128b20                mbedtls_hmac_drbg_set_entropy_len
+                0x10128b24                mbedtls_hmac_drbg_set_reseed_interval
+                0x10128b28                mbedtls_hmac_drbg_random_with_add
+                0x10128bdc                mbedtls_hmac_drbg_random
+                0x10128bec                mbedtls_hmac_drbg_free
+ .ssl.rom.text  0x10128c08      0x40c ./build/rom_ns/mbedtls_rom_md.o
+                0x10128c08                mbedtls_md_list
+                0x10128c10                mbedtls_md_info_from_string
+                0x10128ca8                mbedtls_md_info_from_type
+                0x10128cec                mbedtls_md_init
+                0x10128cf8                mbedtls_md_free
+                0x10128d44                mbedtls_md_clone
+                0x10128d6c                mbedtls_md_setup
+                0x10128db4                mbedtls_md_init_ctx
+                0x10128dba                mbedtls_md_starts
+                0x10128dd4                mbedtls_md_update
+                0x10128df0                mbedtls_md_finish
+                0x10128e0c                mbedtls_md
+                0x10128e28                mbedtls_md_hmac_starts
+                0x10128eec                mbedtls_md_hmac_update
+                0x10128f0c                mbedtls_md_hmac_finish
+                0x10128f64                mbedtls_md_hmac_reset
+                0x10128f90                mbedtls_md_hmac
+                0x10128fe4                mbedtls_md_process
+                0x10129000                mbedtls_md_get_size
+                0x10129008                mbedtls_md_get_type
+                0x1012900e                mbedtls_md_get_name
+ .ssl.rom.text  0x10129014      0x168 ./build/rom_ns/mbedtls_rom_md_wrap.o
+ .ssl.rom.text  0x1012917c      0x84c ./build/rom_ns/mbedtls_rom_md5.o
+                0x1012917c                mbedtls_md5_init
+                0x10129188                mbedtls_md5_free
+                0x1012919c                mbedtls_md5_clone
+                0x101291a8                mbedtls_md5_starts
+                0x101291d4                mbedtls_md5_process
+                0x101298dc                mbedtls_md5_update
+                0x101298e2                mbedtls_md5_finish
+                0x10129994                mbedtls_md5
+ .ssl.rom.text  0x101299c8      0x2e0 ./build/rom_ns/mbedtls_rom_oid.o
+                0x101299fc                mbedtls_oid_get_attr_short_name
+                0x10129a34                mbedtls_oid_get_x509_ext_type
+                0x10129a6c                mbedtls_oid_get_extended_key_usage
+                0x10129aa4                mbedtls_oid_get_sig_alg_desc
+                0x10129abc                mbedtls_oid_get_sig_alg
+                0x10129ada                mbedtls_oid_get_oid_by_sig_alg
+                0x10129b08                mbedtls_oid_get_pk_alg
+                0x10129b40                mbedtls_oid_get_oid_by_pk_alg
+                0x10129b68                mbedtls_oid_get_ec_grp
+                0x10129ba0                mbedtls_oid_get_oid_by_ec_grp
+                0x10129bc8                mbedtls_oid_get_cipher_alg
+                0x10129c00                mbedtls_oid_get_md_alg
+                0x10129c38                mbedtls_oid_get_oid_by_md
+                0x10129c60                mbedtls_oid_get_pkcs12_pbe_alg
+ .ssl.rom.text  0x10129ca8      0x5d0 ./build/rom_ns/mbedtls_rom_pem.o
+                0x10129e5e                mbedtls_pem_init
+                0x10129e6c                mbedtls_pem_read_buffer
+                0x1012a160                mbedtls_pem_free
+                0x1012a184                mbedtls_pem_write_buffer
+ .ssl.rom.text  0x1012a278      0x350 ./build/rom_ns/mbedtls_rom_pk.o
+                0x1012a278                mbedtls_pk_init
+                0x1012a282                mbedtls_pk_free
+                0x1012a2a4                mbedtls_pk_info_from_type
+                0x1012a2d8                mbedtls_pk_setup
+                0x1012a304                mbedtls_pk_setup_rsa_alt
+                0x1012a350                mbedtls_pk_can_do
+                0x1012a360                mbedtls_pk_verify
+                0x1012a3bc                mbedtls_pk_sign
+                0x1012a424                mbedtls_pk_decrypt
+                0x1012a450                mbedtls_pk_encrypt
+                0x1012a47c                mbedtls_pk_check_pair
+                0x1012a4bc                mbedtls_pk_get_bitlen
+                0x1012a4cc                mbedtls_pk_verify_ext
+                0x1012a584                mbedtls_pk_debug
+                0x1012a5a8                mbedtls_pk_get_name
+                0x1012a5bc                mbedtls_pk_get_type
+ .ssl.rom.text  0x1012a5c8      0x3ec ./build/rom_ns/mbedtls_rom_pk_wrap.o
+ .ssl.rom.text  0x1012a9b4      0x488 ./build/rom_ns/mbedtls_rom_pkwrite.o
+                0x1012aa22                mbedtls_pk_write_pubkey
+                0x1012aaac                mbedtls_pk_write_pubkey_der
+                0x1012ab7c                mbedtls_pk_write_key_der
+                0x1012ad78                mbedtls_pk_write_pubkey_pem
+                0x1012adc0                mbedtls_pk_write_key_pem
+ .ssl.rom.text  0x1012ae3c     0x1528 ./build/rom_ns/mbedtls_rom_rsa.o
+                0x1012aecc                mbedtls_rsa_init
+                0x1012aeec                mbedtls_rsa_set_padding
+                0x1012aef6                mbedtls_rsa_check_pubkey
+                0x1012af4c                mbedtls_rsa_check_privkey
+                0x1012b168                mbedtls_rsa_check_pub_priv
+                0x1012b1a0                mbedtls_rsa_public
+                0x1012b20e                mbedtls_rsa_private
+                0x1012b464                mbedtls_rsa_rsaes_oaep_encrypt
+                0x1012b58c                mbedtls_rsa_rsaes_pkcs1_v15_encrypt
+                0x1012b674                mbedtls_rsa_pkcs1_encrypt
+                0x1012b6b4                mbedtls_rsa_rsaes_oaep_decrypt
+                0x1012b820                mbedtls_rsa_rsaes_pkcs1_v15_decrypt
+                0x1012b92c                mbedtls_rsa_pkcs1_decrypt
+                0x1012b974                mbedtls_rsa_rsassa_pss_sign
+                0x1012badc                mbedtls_rsa_rsassa_pkcs1_v15_sign
+                0x1012bc84                mbedtls_rsa_pkcs1_sign
+                0x1012bcc8                mbedtls_rsa_rsassa_pss_verify_ext
+                0x1012be74                mbedtls_rsa_rsassa_pss_verify
+                0x1012bea6                mbedtls_rsa_rsassa_pkcs1_v15_verify
+                0x1012c008                mbedtls_rsa_pkcs1_verify
+                0x1012c04c                mbedtls_rsa_free
+                0x1012c0ba                mbedtls_rsa_gen_key
+                0x1012c260                mbedtls_rsa_copy
+ .ssl.rom.text  0x1012c364     0x112c ./build/rom_ns/mbedtls_rom_sha1.o
+                0x1012c364                mbedtls_sha1_init
+                0x1012c370                mbedtls_sha1_free
+                0x1012c384                mbedtls_sha1_clone
+                0x1012c390                mbedtls_sha1_starts
+                0x1012c3c4                mbedtls_sha1_process
+                0x1012d390                mbedtls_sha1_update
+                0x1012d396                mbedtls_sha1_finish
+                0x1012d45c                mbedtls_sha1
+ .ssl.rom.text  0x1012d490      0x938 ./build/rom_ns/mbedtls_rom_sha256.o
+                0x1012d490                mbedtls_sha256_init
+                0x1012d49c                mbedtls_sha256_free
+                0x1012d4b0                mbedtls_sha256_clone
+                0x1012d4bc                mbedtls_sha256_starts
+                0x1012d55c                mbedtls_sha256_process
+                0x1012dc88                mbedtls_sha256_update
+                0x1012dc8e                mbedtls_sha256_finish
+                0x1012dd90                mbedtls_sha256
+ .ssl.rom.text  0x1012ddc8     0x1128 ./build/rom_ns/mbedtls_rom_sha512.o
+                0x1012ddc8                mbedtls_sha512_init
+                0x1012ddd4                mbedtls_sha512_free
+                0x1012dde8                mbedtls_sha512_clone
+                0x1012ddf4                mbedtls_sha512_starts
+                0x1012df28                mbedtls_sha512_process
+                0x1012ec7c                mbedtls_sha512_update
+                0x1012ec82                mbedtls_sha512_finish
+                0x1012eeb8                mbedtls_sha512
+
+.rom.rodata     0x101c0000    0x1107d
+                0x101c0000                __rom_entry_ns_start__ = .
+ *(.hal.rom.entryns.rodata*)
+ .hal.rom.entryns.rodata
+                0x101c0000        0x8 ./build/rom_ns/rtl8721dhp_ns_entry.o
+                0x101c0000                rom_sec_call_ns_entry
+                0x101c0008                __rom_entry_ns_end__ = .
+ *(.hal.rom.rodata*)
+ .hal.rom.rodata
+                0x101c0008        0x8 ./build/rom_ns/rtl8721d_flash_rom.o
+                0x101c0008                SPIC_CALIB_PATTERN
+ .hal.rom.rodata
+                0x101c0010       0x12 ./build/rom_ns/rtl8721d_gdma_rom.o
+ *fill*         0x101c0022        0x2 
+ .hal.rom.rodata
+                0x101c0024        0x8 ./build/rom_ns/rtl8721d_gpio_rom.o
+                0x101c0024                PORT_AB
+ *fill*         0x101c002c       0x14 
+ .hal.rom.rodata
+                0x101c0040        0x4 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .hal.rom.rodata
+                0x101c0044        0x8 ./build/rom_ns/rtl8721dhp_boot_rom.o
+ .hal.rom.rodata
+                0x101c004c     0x2e10 ./build/rom_ns/rtl8721dhp_faac_tables.o
+                0x101c004c                armBitRevIndexTable1024
+                0x101c0e5c                twiddleCoef_1024
+ *(.libc.rom.rodata*)
+ *(.apple.rom.rodata*)
+ .apple.rom.rodata
+                0x101c2e5c     0x7c38 ./build/rom_ns/rom_homekit_ed25519_ge_fe.o
+ .apple.rom.rodata
+                0x101caa94       0x20 ./build/rom_ns/rom_wac_curve25519-donna.o
+ *(.ssl.rom.rodata*)
+ .ssl.rom.rodata
+                0x101caab4     0x2228 ./build/rom_ns/mbedtls_rom_aes.o
+ .ssl.rom.rodata
+                0x101cccdc       0xc0 ./build/rom_ns/mbedtls_rom_base64.o
+ .ssl.rom.rodata
+                0x101ccd9c      0x2a0 ./build/rom_ns/mbedtls_rom_bignum.o
+ .ssl.rom.rodata
+                0x101cd03c      0x980 ./build/rom_ns/mbedtls_rom_des.o
+ .ssl.rom.rodata
+                0x101cd9bc        0x8 ./build/rom_ns/mbedtls_rom_ecjpake.o
+ .ssl.rom.rodata
+                0x101cd9c4       0x90 ./build/rom_ns/mbedtls_rom_ecp.o
+ .ssl.rom.rodata
+                0x101cda54      0x8d4 ./build/rom_ns/mbedtls_rom_ecp_curves.o
+ .ssl.rom.rodata
+                0x101ce328       0x1c ./build/rom_ns/mbedtls_rom_md.o
+ .ssl.rom.rodata
+                0x101ce344      0x120 ./build/rom_ns/mbedtls_rom_md_wrap.o
+                0x101ce344                mbedtls_sha512_info
+                0x101ce374                mbedtls_sha384_info
+                0x101ce3a4                mbedtls_sha256_info
+                0x101ce3d4                mbedtls_sha224_info
+                0x101ce404                mbedtls_sha1_info
+                0x101ce434                mbedtls_md5_info
+ .ssl.rom.rodata
+                0x101ce464       0x40 ./build/rom_ns/mbedtls_rom_md5.o
+ .ssl.rom.rodata
+                0x101ce4a4      0x5d4 ./build/rom_ns/mbedtls_rom_oid.o
+ .ssl.rom.rodata
+                0x101cea78       0xf0 ./build/rom_ns/mbedtls_rom_pk_wrap.o
+                0x101cea78                mbedtls_rsa_alt_info
+                0x101ceaa8                mbedtls_ecdsa_info
+                0x101cead8                mbedtls_eckeydh_info
+                0x101ceb08                mbedtls_eckey_info
+                0x101ceb38                mbedtls_rsa_info
+ .ssl.rom.rodata
+                0x101ceb68       0x40 ./build/rom_ns/mbedtls_rom_sha1.o
+ .ssl.rom.rodata
+                0x101ceba8      0x140 ./build/rom_ns/mbedtls_rom_sha256.o
+ .ssl.rom.rodata
+                0x101cece8      0x300 ./build/rom_ns/mbedtls_rom_sha512.o
+ *(.rom.rodata*)
+ .rom.rodata.str1.4
+                0x101cefe8       0x11 ./build/rom_ns/diag.o
+ .rom.rodata.str1.1
+                0x101ceff9       0x11 ./build/rom_ns/mbedtls_rom_bignum.o
+ .rom.rodata.str1.1
+                0x101cf00a       0x3a ./build/rom_ns/mbedtls_rom_dhm.o
+ .rom.rodata.str1.1
+                0x101cf044        0xe ./build/rom_ns/mbedtls_rom_ecjpake.o
+ .rom.rodata.str1.1
+                0x101cf052       0x80 ./build/rom_ns/mbedtls_rom_ecp.o
+ .rom.rodata.str1.1
+                0x101cf0d2        0x7 ./build/rom_ns/mbedtls_rom_ecp_curves.o
+ .rom.rodata.str1.1
+                0x101cf0d9       0x29 ./build/rom_ns/mbedtls_rom_md.o
+ .rom.rodata.str1.1
+                0x101cf102       0x25 ./build/rom_ns/mbedtls_rom_md_wrap.o
+ .rom.rodata    0x101cf127       0x24 ./build/rom_ns/mbedtls_rom_oid.o
+ .rom.rodata.str1.1
+                0x101cf14b      0x9d5 ./build/rom_ns/mbedtls_rom_oid.o
+ .rom.rodata.str1.1
+                0x101cfb20       0x96 ./build/rom_ns/mbedtls_rom_pem.o
+ .rom.rodata.str1.1
+                0x101cfbb6        0xb ./build/rom_ns/mbedtls_rom_pk.o
+ .rom.rodata.str1.1
+                0x101cfbc1       0x2f ./build/rom_ns/mbedtls_rom_pk_wrap.o
+ .rom.rodata.str1.1
+                0x101cfbf0       0xb4 ./build/rom_ns/mbedtls_rom_pkwrite.o
+ .rom.rodata.str1.4
+                0x101cfca4       0x35 ./build/rom_ns/rtl8721d_assert_rom.o
+ *fill*         0x101cfcd9        0x3 
+ .rom.rodata.str1.4
+                0x101cfcdc      0x2e2 ./build/rom_ns/rtl8721d_efuse_rom.o
+ *fill*         0x101cffbe        0x2 
+ .rom.rodata.str1.4
+                0x101cffc0       0x40 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .rom.rodata.str1.4
+                0x101d0000       0xca ./build/rom_ns/rtl8721d_ipc_rom.o
+ *fill*         0x101d00ca        0x2 
+ .rom.rodata.str1.4
+                0x101d00cc      0x138 ./build/rom_ns/rtl8721d_mpu_rom.o
+ .rom.rodata.str1.4
+                0x101d0204       0xeb ./build/rom_ns/rtl8721dhp_boot_rom.o
+ *fill*         0x101d02ef        0x1 
+ .rom.rodata.str1.4
+                0x101d02f0      0x4e2 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+ *fill*         0x101d07d2        0x2 
+ .rom.rodata.str1.4
+                0x101d07d4      0x3b6 ./build/rom_ns/rtl8721dhp_vector_rom.o
+ *(.rodata*)
+ *fill*         0x101d0b8a        0x2 
+ .rodata.__FUNCTION__.9954
+                0x101d0b8c        0xb ./build/rom_ns/rtl8721d_backup_reg.o
+ *fill*         0x101d0b97        0x1 
+ .rodata.__FUNCTION__.9958
+                0x101d0b98        0xa ./build/rom_ns/rtl8721d_backup_reg.o
+ *fill*         0x101d0ba2        0x2 
+ .rodata.__FUNCTION__.9968
+                0x101d0ba4        0xb ./build/rom_ns/rtl8721d_backup_reg.o
+ *fill*         0x101d0baf        0x1 
+ .rodata.__FUNCTION__.9963
+                0x101d0bb0        0x9 ./build/rom_ns/rtl8721d_backup_reg.o
+ *fill*         0x101d0bb9        0x3 
+ .rodata.__func__.10010
+                0x101d0bbc       0x10 ./build/rom_ns/rtl8721d_efuse_rom.o
+ .rodata.__FUNCTION__.10048
+                0x101d0bcc        0xc ./build/rom_ns/rtl8721d_flash_rom.o
+ .rodata.__FUNCTION__.10012
+                0x101d0bd8       0x11 ./build/rom_ns/rtl8721d_flash_rom.o
+ *fill*         0x101d0be9        0x3 
+ .rodata.__FUNCTION__.9995
+                0x101d0bec        0xc ./build/rom_ns/rtl8721d_flash_rom.o
+ .rodata.__FUNCTION__.10025
+                0x101d0bf8       0x10 ./build/rom_ns/rtl8721d_flash_rom.o
+ .rodata.__FUNCTION__.10096
+                0x101d0c08        0xe ./build/rom_ns/rtl8721d_gdma_rom.o
+ *fill*         0x101d0c16        0x2 
+ .rodata.__FUNCTION__.10036
+                0x101d0c18       0x10 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.10042
+                0x101d0c28       0x10 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.10049
+                0x101d0c38       0x10 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.9967
+                0x101d0c48        0xa ./build/rom_ns/rtl8721d_gdma_rom.o
+ *fill*         0x101d0c52        0x2 
+ .rodata.__FUNCTION__.10103
+                0x101d0c54        0xf ./build/rom_ns/rtl8721d_gdma_rom.o
+ *fill*         0x101d0c63        0x1 
+ .rodata.__FUNCTION__.10057
+                0x101d0c64       0x10 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.10064
+                0x101d0c74       0x10 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.9978
+                0x101d0c84        0xc ./build/rom_ns/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.9990
+                0x101d0c90       0x18 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.10069
+                0x101d0ca8       0x12 ./build/rom_ns/rtl8721d_gdma_rom.o
+ *fill*         0x101d0cba        0x2 
+ .rodata.__FUNCTION__.10030
+                0x101d0cbc       0x10 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.10015
+                0x101d0ccc        0x9 ./build/rom_ns/rtl8721d_gdma_rom.o
+ *fill*         0x101d0cd5        0x3 
+ .rodata.__FUNCTION__.10007
+                0x101d0cd8        0xf ./build/rom_ns/rtl8721d_gdma_rom.o
+ *fill*         0x101d0ce7        0x1 
+ .rodata.__FUNCTION__.10023
+                0x101d0ce8       0x17 ./build/rom_ns/rtl8721d_gdma_rom.o
+ *fill*         0x101d0cff        0x1 
+ .rodata.__FUNCTION__.10085
+                0x101d0d00        0xf ./build/rom_ns/rtl8721d_gdma_rom.o
+ *fill*         0x101d0d0f        0x1 
+ .rodata.__FUNCTION__.9998
+                0x101d0d10        0xe ./build/rom_ns/rtl8721d_gdma_rom.o
+ *fill*         0x101d0d1e        0x2 
+ .rodata.__FUNCTION__.10074
+                0x101d0d20       0x14 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.9999
+                0x101d0d34        0xa ./build/rom_ns/rtl8721d_gpio_rom.o
+ *fill*         0x101d0d3e        0x2 
+ .rodata.__FUNCTION__.9974
+                0x101d0d40       0x11 ./build/rom_ns/rtl8721d_mpu_rom.o
+ *fill*         0x101d0d51        0x3 
+ .rodata.__FUNCTION__.9980
+                0x101d0d54        0xf ./build/rom_ns/rtl8721d_mpu_rom.o
+ *fill*         0x101d0d63        0x1 
+ .rodata.__FUNCTION__.9973
+                0x101d0d64        0xe ./build/rom_ns/rtl8721d_otf_rom.o
+ *fill*         0x101d0d72        0x2 
+ .rodata.__FUNCTION__.9979
+                0x101d0d74       0x13 ./build/rom_ns/rtl8721d_pinmux_rom.o
+ *fill*         0x101d0d87        0x1 
+ .rodata.__FUNCTION__.9961
+                0x101d0d88       0x12 ./build/rom_ns/rtl8721d_tim_rom.o
+ *fill*         0x101d0d9a        0x2 
+ .rodata.__FUNCTION__.10000
+                0x101d0d9c       0x18 ./build/rom_ns/rtl8721d_tim_rom.o
+ .rodata.__FUNCTION__.9968
+                0x101d0db4        0x9 ./build/rom_ns/rtl8721d_tim_rom.o
+ *fill*         0x101d0dbd        0x3 
+ .rodata.__FUNCTION__.9976
+                0x101d0dc0        0xc ./build/rom_ns/rtl8721d_tim_rom.o
+ .rodata.__FUNCTION__.9983
+                0x101d0dcc        0xe ./build/rom_ns/rtl8721d_tim_rom.o
+ *fill*         0x101d0dda        0x2 
+ .rodata.__FUNCTION__.10006
+                0x101d0ddc       0x13 ./build/rom_ns/rtl8721d_tim_rom.o
+ *fill*         0x101d0def        0x1 
+ .rodata.__FUNCTION__.9990
+                0x101d0df0        0xf ./build/rom_ns/rtl8721d_tim_rom.o
+ *fill*         0x101d0dff        0x1 
+ .rodata.__FUNCTION__.10014
+                0x101d0e00       0x12 ./build/rom_ns/rtl8721d_tim_rom.o
+ *fill*         0x101d0e12        0x2 
+ .rodata.__FUNCTION__.9995
+                0x101d0e14        0xe ./build/rom_ns/rtl8721d_tim_rom.o
+ *fill*         0x101d0e22        0x2 
+ .rodata.__FUNCTION__.9962
+                0x101d0e24        0xa ./build/rom_ns/rtl8721d_uart_rom.o
+ *fill*         0x101d0e2e        0x2 
+ .rodata.__FUNCTION__.9999
+                0x101d0e30       0x10 ./build/rom_ns/rtl8721d_uart_rom.o
+ .rodata.__FUNCTION__.9956
+                0x101d0e40       0x18 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .rodata.__FUNCTION__.10000
+                0x101d0e58       0x18 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .rodata.__FUNCTION__.10044
+                0x101d0e70       0x18 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .rodata.__FUNCTION__.10066
+                0x101d0e88       0x18 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .rodata.__FUNCTION__.9978
+                0x101d0ea0       0x18 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .rodata.__FUNCTION__.10022
+                0x101d0eb8       0x18 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .rodata.XTAL_CLK
+                0x101d0ed0       0x40 ./build/rom_ns/rtl8721dhp_clk_rom.o
+ .rodata.CpkClkTbl_ASIC
+                0x101d0f10       0x14 ./build/rom_ns/rtl8721dhp_clk_rom.o
+ .rodata.__FUNCTION__.10046
+                0x101d0f24       0x19 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+ *fill*         0x101d0f3d        0x3 
+ .rodata.__FUNCTION__.10087
+                0x101d0f40       0x11 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+ *fill*         0x101d0f51        0x3 
+ .rodata.__FUNCTION__.10153
+                0x101d0f54       0x18 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .rodata.__FUNCTION__.9955
+                0x101d0f6c       0x19 ./build/rom_ns/rtl8721dhp_des_rom.o
+ *fill*         0x101d0f85        0x3 
+ .rodata.__FUNCTION__.10087
+                0x101d0f88       0x18 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .rodata.__FUNCTION__.10043
+                0x101d0fa0       0x19 ./build/rom_ns/rtl8721dhp_des_rom.o
+ *fill*         0x101d0fb9        0x3 
+ .rodata.__FUNCTION__.10065
+                0x101d0fbc       0x18 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .rodata.__FUNCTION__.10109
+                0x101d0fd4       0x18 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .rodata.__FUNCTION__.9977
+                0x101d0fec       0x19 ./build/rom_ns/rtl8721dhp_des_rom.o
+ *fill*         0x101d1005        0x3 
+ .rodata.__FUNCTION__.10131
+                0x101d1008       0x18 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .rodata.__FUNCTION__.10021
+                0x101d1020       0x19 ./build/rom_ns/rtl8721dhp_des_rom.o
+ *fill*         0x101d1039        0x3 
+ .rodata.__FUNCTION__.9999
+                0x101d103c       0x19 ./build/rom_ns/rtl8721dhp_des_rom.o
+ *fill*         0x101d1055        0x3 
+ .rodata.__FUNCTION__.9981
+                0x101d1058       0x1b ./build/rom_ns/rtl8721dhp_rcc_rom.o
+ *fill*         0x101d1073        0x1 
+ .rodata.__FUNCTION__.10052
+                0x101d1074        0x9 ./build/rom_ns/sscanf.o
+
+.hal.rom.bss    0x10000000      0x564
+                0x10000000                __rom_bss_start__ = .
+ *(.hal.rom.bss*)
+ .hal.rom.bss   0x10000000       0x1c ./build/rom_ns/diag.o
+                0x10000000                ConfigDebugClose
+                0x10000004                ConfigDebugBuffer
+                0x10000008                ConfigDebugBufferGet
+                0x1000000c                ConfigDebug
+ .hal.rom.bss   0x1000001c       0x18 ./build/rom_ns/rand.o
+                0x1000001c                rand_first
+                0x10000020                rand_seed
+ .hal.rom.bss   0x10000034        0x4 ./build/rom_ns/rtl8721d_delay_rom.o
+                0x10000034                RBSS_UDELAY_DIV
+ .hal.rom.bss   0x10000038       0x60 ./build/rom_ns/rtl8721d_flash_rom.o
+                0x10000038                flash_init_para
+ .hal.rom.bss   0x10000098        0x1 ./build/rom_ns/rtl8721d_gdma_rom.o
+                0x10000098                GDMA_Reg
+ *fill*         0x10000099        0x3 
+ .hal.rom.bss   0x1000009c      0x200 ./build/rom_ns/rtl8721d_gpio_rom.o
+                0x1000009c                PortA_IrqHandler
+                0x1000011c                PortA_IrqData
+                0x1000019c                PortB_IrqHandler
+                0x1000021c                PortB_IrqData
+ .hal.rom.bss   0x1000029c      0x100 ./build/rom_ns/rtl8721d_ipc_rom.o
+                0x1000029c                IPC_IrqHandler
+                0x1000031c                IPC_IrqData
+ .hal.rom.bss   0x1000039c        0x4 ./build/rom_ns/rtl8721dhp_boot_rom.o
+                0x1000039c                IS_FPGA_VERIF
+ .hal.rom.bss   0x100003a0      0x1c0 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+                0x100003a0                crypto_engine
+ .hal.rom.bss   0x10000560        0x4 ./build/rom_ns/strtok.o
+                0x10000564                __rom_bss_end__ = .
+
+.hal.ns_rom.bss
+                0x10001000      0x38c
+                0x10001000                __rom_bss_start_ns__ = .
+ *(.ram_vector_table1)
+ .ram_vector_table1
+                0x10001000      0x140 ./build/rom_ns/rtl8721dhp_vector_rom.o
+                0x10001000                NewVectorTable
+ *(.ram_vector_table2)
+ .ram_vector_table2
+                0x10001140      0x100 ./build/rom_ns/rtl8721dhp_vector_rom.o
+                0x10001140                UserIrqFunTable
+ *(.ram_vector_table3)
+ .ram_vector_table3
+                0x10001240      0x100 ./build/rom_ns/rtl8721dhp_vector_rom.o
+                0x10001240                UserIrqDataTable
+ *(.hal.rom.bank.bss*)
+ .hal.rom.bank.bss
+                0x10001340        0x8 ./build/rom_ns/rtl8721d_mpu_rom.o
+                0x10001340                mpu_entry_register
+ *(.ssl_ram_map*)
+ .ssl_ram_map   0x10001348       0x44 ./build/rom_ns/rom_ssl_ram_map.o
+                0x10001348                p_rom_ssl_ram_map
+                0x1000134c                rom_ssl_ram_map
+                0x1000138c                __rom_bss_end_ns__ = .
+
+.hal.s_rom.bss  0x1007c000        0x0
+                0x1007c000                __rom_bss_start_s__ = ABSOLUTE (.)
+                0x1007d000                __rom_bss_end_s__ = (__rom_bss_start_s__ + LENGTH (ROMBSS_RAM_S))
+
+.ram_image1.entry
+                0x1007d000        0x0
+                0x1007d000                __ram_start_table_start__ = .
+ *(SORT(.image1.entry.data*))
+ *(.image1.validate.rodata*)
+
+.ram.data       0x10005000        0x0
+ *(.data*)
+ .data          0x10005000        0x0 ./build/rom_ns/8721dhp_vectors.o
+ .data          0x10005000        0x0 ./build/rom_ns/char2num.o
+ .data          0x10005000        0x0 ./build/rom_ns/diag.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_aes.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_arc4.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_asn1parse.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_asn1write.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_base64.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_bignum.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_ctr_drbg.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_des.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_dhm.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_ecdh.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_ecdsa.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_ecjpake.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_ecp.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_ecp_curves.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_hmac_drbg.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_md.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_md_wrap.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_md5.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_oid.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_pem.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_pk.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_pk_wrap.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_pkwrite.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_rsa.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_sha1.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_sha256.o
+ .data          0x10005000        0x0 ./build/rom_ns/mbedtls_rom_sha512.o
+ .data          0x10005000        0x0 ./build/rom_ns/memchr.o
+ .data          0x10005000        0x0 ./build/rom_ns/memcmp.o
+ .data          0x10005000        0x0 ./build/rom_ns/memcpy.o
+ .data          0x10005000        0x0 ./build/rom_ns/memmove.o
+ .data          0x10005000        0x0 ./build/rom_ns/memset.o
+ .data          0x10005000        0x0 ./build/rom_ns/rand.o
+ .data          0x10005000        0x0 ./build/rom_ns/rom_homekit_chacha_enc.o
+ .data          0x10005000        0x0 ./build/rom_ns/rom_homekit_ed25519.o
+ .data          0x10005000        0x0 ./build/rom_ns/rom_homekit_ed25519_ge_fe.o
+ .data          0x10005000        0x0 ./build/rom_ns/rom_homekit_ed25519_keypair.o
+ .data          0x10005000        0x0 ./build/rom_ns/rom_homekit_ed25519_open.o
+ .data          0x10005000        0x0 ./build/rom_ns/rom_homekit_ed25519_sc.o
+ .data          0x10005000        0x0 ./build/rom_ns/rom_homekit_ed25519_sign.o
+ .data          0x10005000        0x0 ./build/rom_ns/rom_homekit_poly1305.o
+ .data          0x10005000        0x0 ./build/rom_ns/rom_homekit_sha512.o
+ .data          0x10005000        0x0 ./build/rom_ns/rom_ssl_ram_map.o
+ .data          0x10005000        0x0 ./build/rom_ns/rom_wac_curve25519-donna.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_assert_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_backup_reg.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_cache_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_delay_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_efuse_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_flash_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_gpio_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_ipc_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_loguart_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_mpu_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_otf_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_pinmux_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_simulation_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_systimer_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_tim_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721d_uart_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721dhp_boot_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721dhp_clk_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721dhp_faac_tables.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721dhp_ns_entry.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721dhp_rcc_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721dhp_syscfg_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/rtl8721dhp_vector_rom.o
+ .data          0x10005000        0x0 ./build/rom_ns/sscanf.o
+ .data          0x10005000        0x0 ./build/rom_ns/stratoi.o
+ .data          0x10005000        0x0 ./build/rom_ns/strcat.o
+ .data          0x10005000        0x0 ./build/rom_ns/strchr.o
+ .data          0x10005000        0x0 ./build/rom_ns/strcmp.o
+ .data          0x10005000        0x0 ./build/rom_ns/strcpy.o
+ .data          0x10005000        0x0 ./build/rom_ns/stricmp.o
+ .data          0x10005000        0x0 ./build/rom_ns/strlen.o
+ .data          0x10005000        0x0 ./build/rom_ns/strncat.o
+ .data          0x10005000        0x0 ./build/rom_ns/strncmp.o
+ .data          0x10005000        0x0 ./build/rom_ns/strncpy.o
+ .data          0x10005000        0x0 ./build/rom_ns/strnlen.o
+ .data          0x10005000        0x0 ./build/rom_ns/strpbrk.o
+ .data          0x10005000        0x0 ./build/rom_ns/strsep.o
+ .data          0x10005000        0x0 ./build/rom_ns/strstr.o
+ .data          0x10005000        0x0 ./build/rom_ns/strtod.o
+ .data          0x10005000        0x0 ./build/rom_ns/strtok.o
+ .data          0x10005000        0x0 ./build/rom_ns/strtok_r.o
+ .data          0x10005000        0x0 ./build/rom_ns/strtol.o
+ .data          0x10005000        0x0 ./build/rom_ns/strtoul.o
+ .data          0x10005000        0x0 ./build/rom_ns/strupr.o
+
+.ram.bss        0x10005000        0x0
+ *(.bss*)
+ .bss           0x10005000        0x0 ./build/rom_ns/8721dhp_vectors.o
+ .bss           0x10005000        0x0 ./build/rom_ns/char2num.o
+ .bss           0x10005000        0x0 ./build/rom_ns/diag.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_aes.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_arc4.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_asn1parse.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_asn1write.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_base64.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_bignum.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_ctr_drbg.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_des.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_dhm.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_ecdh.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_ecdsa.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_ecjpake.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_ecp.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_ecp_curves.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_hmac_drbg.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_md.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_md_wrap.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_md5.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_oid.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_pem.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_pk.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_pk_wrap.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_pkwrite.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_rsa.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_sha1.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_sha256.o
+ .bss           0x10005000        0x0 ./build/rom_ns/mbedtls_rom_sha512.o
+ .bss           0x10005000        0x0 ./build/rom_ns/memchr.o
+ .bss           0x10005000        0x0 ./build/rom_ns/memcmp.o
+ .bss           0x10005000        0x0 ./build/rom_ns/memcpy.o
+ .bss           0x10005000        0x0 ./build/rom_ns/memmove.o
+ .bss           0x10005000        0x0 ./build/rom_ns/memset.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rand.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rom_homekit_chacha_enc.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rom_homekit_ed25519.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rom_homekit_ed25519_ge_fe.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rom_homekit_ed25519_keypair.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rom_homekit_ed25519_open.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rom_homekit_ed25519_sc.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rom_homekit_ed25519_sign.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rom_homekit_poly1305.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rom_homekit_sha512.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rom_ssl_ram_map.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rom_wac_curve25519-donna.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_assert_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_backup_reg.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_cache_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_delay_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_efuse_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_flash_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_gpio_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_ipc_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_loguart_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_mpu_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_otf_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_pinmux_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_simulation_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_systimer_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_tim_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721d_uart_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721dhp_boot_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721dhp_clk_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721dhp_faac_tables.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721dhp_ns_entry.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721dhp_rcc_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721dhp_syscfg_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/rtl8721dhp_vector_rom.o
+ .bss           0x10005000        0x0 ./build/rom_ns/sscanf.o
+ .bss           0x10005000        0x0 ./build/rom_ns/stratoi.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strcat.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strchr.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strcmp.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strcpy.o
+ .bss           0x10005000        0x0 ./build/rom_ns/stricmp.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strlen.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strncat.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strncmp.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strncpy.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strnlen.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strpbrk.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strsep.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strstr.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strtod.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strtok.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strtok_r.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strtol.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strtoul.o
+ .bss           0x10005000        0x0 ./build/rom_ns/strupr.o
+
+.rom.text.libgcc
+                0x1012eef0        0x0
+ *(.text*)
+ .text          0x1012eef0        0x0 ./build/rom_ns/8721dhp_vectors.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/char2num.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/diag.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_aes.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_arc4.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_asn1parse.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_asn1write.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_base64.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_bignum.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_ctr_drbg.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_des.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_dhm.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_ecdh.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_ecdsa.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_ecjpake.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_ecp.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_ecp_curves.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_hmac_drbg.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_md.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_md_wrap.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_md5.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_oid.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_pem.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_pk.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_pk_wrap.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_pkwrite.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_rsa.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_sha1.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_sha256.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/mbedtls_rom_sha512.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/memchr.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/memcmp.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/memcpy.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/memmove.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/memset.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rand.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rom_homekit_chacha_enc.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rom_homekit_ed25519.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rom_homekit_ed25519_ge_fe.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rom_homekit_ed25519_keypair.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rom_homekit_ed25519_open.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rom_homekit_ed25519_sc.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rom_homekit_ed25519_sign.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rom_homekit_poly1305.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rom_homekit_sha512.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rom_ssl_ram_map.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rom_wac_curve25519-donna.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_assert_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_backup_reg.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_cache_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_delay_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_efuse_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_flash_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_gpio_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_ipc_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_loguart_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_mpu_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_otf_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_pinmux_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_simulation_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_systimer_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_tim_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721d_uart_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721dhp_boot_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721dhp_clk_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721dhp_faac_tables.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721dhp_ns_entry.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721dhp_rcc_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721dhp_syscfg_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/rtl8721dhp_vector_rom.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/sscanf.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/stratoi.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strcat.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strchr.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strcmp.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strcpy.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/stricmp.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strlen.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strncat.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strncmp.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strncpy.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strnlen.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strpbrk.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strsep.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strstr.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strtod.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strtok.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strtok_r.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strtol.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strtoul.o
+ .text          0x1012eef0        0x0 ./build/rom_ns/strupr.o
+LOAD ./build/rom_ns/8721dhp_vectors.o
+LOAD ./build/rom_ns/char2num.o
+LOAD ./build/rom_ns/diag.o
+LOAD ./build/rom_ns/mbedtls_rom_aes.o
+LOAD ./build/rom_ns/mbedtls_rom_arc4.o
+LOAD ./build/rom_ns/mbedtls_rom_asn1parse.o
+LOAD ./build/rom_ns/mbedtls_rom_asn1write.o
+LOAD ./build/rom_ns/mbedtls_rom_base64.o
+LOAD ./build/rom_ns/mbedtls_rom_bignum.o
+LOAD ./build/rom_ns/mbedtls_rom_ctr_drbg.o
+LOAD ./build/rom_ns/mbedtls_rom_des.o
+LOAD ./build/rom_ns/mbedtls_rom_dhm.o
+LOAD ./build/rom_ns/mbedtls_rom_ecdh.o
+LOAD ./build/rom_ns/mbedtls_rom_ecdsa.o
+LOAD ./build/rom_ns/mbedtls_rom_ecjpake.o
+LOAD ./build/rom_ns/mbedtls_rom_ecp.o
+LOAD ./build/rom_ns/mbedtls_rom_ecp_curves.o
+LOAD ./build/rom_ns/mbedtls_rom_hmac_drbg.o
+LOAD ./build/rom_ns/mbedtls_rom_md.o
+LOAD ./build/rom_ns/mbedtls_rom_md_wrap.o
+LOAD ./build/rom_ns/mbedtls_rom_md5.o
+LOAD ./build/rom_ns/mbedtls_rom_oid.o
+LOAD ./build/rom_ns/mbedtls_rom_pem.o
+LOAD ./build/rom_ns/mbedtls_rom_pk.o
+LOAD ./build/rom_ns/mbedtls_rom_pk_wrap.o
+LOAD ./build/rom_ns/mbedtls_rom_pkwrite.o
+LOAD ./build/rom_ns/mbedtls_rom_rsa.o
+LOAD ./build/rom_ns/mbedtls_rom_sha1.o
+LOAD ./build/rom_ns/mbedtls_rom_sha256.o
+LOAD ./build/rom_ns/mbedtls_rom_sha512.o
+LOAD ./build/rom_ns/memchr.o
+LOAD ./build/rom_ns/memcmp.o
+LOAD ./build/rom_ns/memcpy.o
+LOAD ./build/rom_ns/memmove.o
+LOAD ./build/rom_ns/memset.o
+LOAD ./build/rom_ns/rand.o
+LOAD ./build/rom_ns/rom_homekit_chacha_enc.o
+LOAD ./build/rom_ns/rom_homekit_ed25519.o
+LOAD ./build/rom_ns/rom_homekit_ed25519_ge_fe.o
+LOAD ./build/rom_ns/rom_homekit_ed25519_keypair.o
+LOAD ./build/rom_ns/rom_homekit_ed25519_open.o
+LOAD ./build/rom_ns/rom_homekit_ed25519_sc.o
+LOAD ./build/rom_ns/rom_homekit_ed25519_sign.o
+LOAD ./build/rom_ns/rom_homekit_poly1305.o
+LOAD ./build/rom_ns/rom_homekit_sha512.o
+LOAD ./build/rom_ns/rom_ssl_ram_map.o
+LOAD ./build/rom_ns/rom_wac_curve25519-donna.o
+LOAD ./build/rom_ns/rtl8721d_assert_rom.o
+LOAD ./build/rom_ns/rtl8721d_backup_reg.o
+LOAD ./build/rom_ns/rtl8721d_cache_rom.o
+LOAD ./build/rom_ns/rtl8721d_delay_rom.o
+LOAD ./build/rom_ns/rtl8721d_efuse_rom.o
+LOAD ./build/rom_ns/rtl8721d_flash_rom.o
+LOAD ./build/rom_ns/rtl8721d_gdma_rom.o
+LOAD ./build/rom_ns/rtl8721d_gpio_rom.o
+LOAD ./build/rom_ns/rtl8721d_ipc_rom.o
+LOAD ./build/rom_ns/rtl8721d_loguart_rom.o
+LOAD ./build/rom_ns/rtl8721d_mpu_rom.o
+LOAD ./build/rom_ns/rtl8721d_otf_rom.o
+LOAD ./build/rom_ns/rtl8721d_pinmux_rom.o
+LOAD ./build/rom_ns/rtl8721d_simulation_rom.o
+LOAD ./build/rom_ns/rtl8721d_systimer_rom.o
+LOAD ./build/rom_ns/rtl8721d_tim_rom.o
+LOAD ./build/rom_ns/rtl8721d_uart_rom.o
+LOAD ./build/rom_ns/rtl8721dhp_aes_rom.o
+LOAD ./build/rom_ns/rtl8721dhp_boot_rom.o
+LOAD ./build/rom_ns/rtl8721dhp_clk_rom.o
+LOAD ./build/rom_ns/rtl8721dhp_crypto_rom.o
+LOAD ./build/rom_ns/rtl8721dhp_des_rom.o
+LOAD ./build/rom_ns/rtl8721dhp_faac_tables.o
+LOAD ./build/rom_ns/rtl8721dhp_ns_entry.o
+LOAD ./build/rom_ns/rtl8721dhp_rcc_rom.o
+LOAD ./build/rom_ns/rtl8721dhp_syscfg_rom.o
+LOAD ./build/rom_ns/rtl8721dhp_vector_rom.o
+LOAD ./build/rom_ns/sscanf.o
+LOAD ./build/rom_ns/stratoi.o
+LOAD ./build/rom_ns/strcat.o
+LOAD ./build/rom_ns/strchr.o
+LOAD ./build/rom_ns/strcmp.o
+LOAD ./build/rom_ns/strcpy.o
+LOAD ./build/rom_ns/stricmp.o
+LOAD ./build/rom_ns/strlen.o
+LOAD ./build/rom_ns/strncat.o
+LOAD ./build/rom_ns/strncmp.o
+LOAD ./build/rom_ns/strncpy.o
+LOAD ./build/rom_ns/strnlen.o
+LOAD ./build/rom_ns/strpbrk.o
+LOAD ./build/rom_ns/strsep.o
+LOAD ./build/rom_ns/strstr.o
+LOAD ./build/rom_ns/strtod.o
+LOAD ./build/rom_ns/strtok.o
+LOAD ./build/rom_ns/strtok_r.o
+LOAD ./build/rom_ns/strtol.o
+LOAD ./build/rom_ns/strtoul.o
+LOAD ./build/rom_ns/strupr.o
+OUTPUT(rom_ns.o elf32-littlearm)
+
+.ARM.attributes
+                0x00000000       0x34
+ .ARM.attributes
+                0x00000000       0x22 ./build/rom_ns/8721dhp_vectors.o
+ .ARM.attributes
+                0x00000022       0x38 ./build/rom_ns/char2num.o
+ .ARM.attributes
+                0x0000005a       0x38 ./build/rom_ns/diag.o
+ .ARM.attributes
+                0x00000092       0x38 ./build/rom_ns/mbedtls_rom_aes.o
+ .ARM.attributes
+                0x000000ca       0x38 ./build/rom_ns/mbedtls_rom_arc4.o
+ .ARM.attributes
+                0x00000102       0x38 ./build/rom_ns/mbedtls_rom_asn1parse.o
+ .ARM.attributes
+                0x0000013a       0x38 ./build/rom_ns/mbedtls_rom_asn1write.o
+ .ARM.attributes
+                0x00000172       0x38 ./build/rom_ns/mbedtls_rom_base64.o
+ .ARM.attributes
+                0x000001aa       0x38 ./build/rom_ns/mbedtls_rom_bignum.o
+ .ARM.attributes
+                0x000001e2       0x38 ./build/rom_ns/mbedtls_rom_ctr_drbg.o
+ .ARM.attributes
+                0x0000021a       0x38 ./build/rom_ns/mbedtls_rom_des.o
+ .ARM.attributes
+                0x00000252       0x38 ./build/rom_ns/mbedtls_rom_dhm.o
+ .ARM.attributes
+                0x0000028a       0x38 ./build/rom_ns/mbedtls_rom_ecdh.o
+ .ARM.attributes
+                0x000002c2       0x38 ./build/rom_ns/mbedtls_rom_ecdsa.o
+ .ARM.attributes
+                0x000002fa       0x38 ./build/rom_ns/mbedtls_rom_ecjpake.o
+ .ARM.attributes
+                0x00000332       0x38 ./build/rom_ns/mbedtls_rom_ecp.o
+ .ARM.attributes
+                0x0000036a       0x38 ./build/rom_ns/mbedtls_rom_ecp_curves.o
+ .ARM.attributes
+                0x000003a2       0x38 ./build/rom_ns/mbedtls_rom_hmac_drbg.o
+ .ARM.attributes
+                0x000003da       0x38 ./build/rom_ns/mbedtls_rom_md.o
+ .ARM.attributes
+                0x00000412       0x38 ./build/rom_ns/mbedtls_rom_md_wrap.o
+ .ARM.attributes
+                0x0000044a       0x38 ./build/rom_ns/mbedtls_rom_md5.o
+ .ARM.attributes
+                0x00000482       0x38 ./build/rom_ns/mbedtls_rom_oid.o
+ .ARM.attributes
+                0x000004ba       0x38 ./build/rom_ns/mbedtls_rom_pem.o
+ .ARM.attributes
+                0x000004f2       0x38 ./build/rom_ns/mbedtls_rom_pk.o
+ .ARM.attributes
+                0x0000052a       0x38 ./build/rom_ns/mbedtls_rom_pk_wrap.o
+ .ARM.attributes
+                0x00000562       0x38 ./build/rom_ns/mbedtls_rom_pkwrite.o
+ .ARM.attributes
+                0x0000059a       0x38 ./build/rom_ns/mbedtls_rom_rsa.o
+ .ARM.attributes
+                0x000005d2       0x38 ./build/rom_ns/mbedtls_rom_sha1.o
+ .ARM.attributes
+                0x0000060a       0x38 ./build/rom_ns/mbedtls_rom_sha256.o
+ .ARM.attributes
+                0x00000642       0x38 ./build/rom_ns/mbedtls_rom_sha512.o
+ .ARM.attributes
+                0x0000067a       0x38 ./build/rom_ns/memchr.o
+ .ARM.attributes
+                0x000006b2       0x38 ./build/rom_ns/memcmp.o
+ .ARM.attributes
+                0x000006ea       0x38 ./build/rom_ns/memcpy.o
+ .ARM.attributes
+                0x00000722       0x38 ./build/rom_ns/memmove.o
+ .ARM.attributes
+                0x0000075a       0x38 ./build/rom_ns/memset.o
+ .ARM.attributes
+                0x00000792       0x38 ./build/rom_ns/rand.o
+ .ARM.attributes
+                0x000007ca       0x38 ./build/rom_ns/rom_homekit_chacha_enc.o
+ .ARM.attributes
+                0x00000802       0x38 ./build/rom_ns/rom_homekit_ed25519.o
+ .ARM.attributes
+                0x0000083a       0x38 ./build/rom_ns/rom_homekit_ed25519_ge_fe.o
+ .ARM.attributes
+                0x00000872       0x38 ./build/rom_ns/rom_homekit_ed25519_keypair.o
+ .ARM.attributes
+                0x000008aa       0x38 ./build/rom_ns/rom_homekit_ed25519_open.o
+ .ARM.attributes
+                0x000008e2       0x38 ./build/rom_ns/rom_homekit_ed25519_sc.o
+ .ARM.attributes
+                0x0000091a       0x38 ./build/rom_ns/rom_homekit_ed25519_sign.o
+ .ARM.attributes
+                0x00000952       0x38 ./build/rom_ns/rom_homekit_poly1305.o
+ .ARM.attributes
+                0x0000098a       0x38 ./build/rom_ns/rom_homekit_sha512.o
+ .ARM.attributes
+                0x000009c2       0x38 ./build/rom_ns/rom_ssl_ram_map.o
+ .ARM.attributes
+                0x000009fa       0x38 ./build/rom_ns/rom_wac_curve25519-donna.o
+ .ARM.attributes
+                0x00000a32       0x38 ./build/rom_ns/rtl8721d_assert_rom.o
+ .ARM.attributes
+                0x00000a6a       0x38 ./build/rom_ns/rtl8721d_backup_reg.o
+ .ARM.attributes
+                0x00000aa2       0x38 ./build/rom_ns/rtl8721d_cache_rom.o
+ .ARM.attributes
+                0x00000ada       0x38 ./build/rom_ns/rtl8721d_delay_rom.o
+ .ARM.attributes
+                0x00000b12       0x38 ./build/rom_ns/rtl8721d_efuse_rom.o
+ .ARM.attributes
+                0x00000b4a       0x38 ./build/rom_ns/rtl8721d_flash_rom.o
+ .ARM.attributes
+                0x00000b82       0x38 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .ARM.attributes
+                0x00000bba       0x38 ./build/rom_ns/rtl8721d_gpio_rom.o
+ .ARM.attributes
+                0x00000bf2       0x38 ./build/rom_ns/rtl8721d_ipc_rom.o
+ .ARM.attributes
+                0x00000c2a       0x38 ./build/rom_ns/rtl8721d_loguart_rom.o
+ .ARM.attributes
+                0x00000c62       0x38 ./build/rom_ns/rtl8721d_mpu_rom.o
+ .ARM.attributes
+                0x00000c9a       0x38 ./build/rom_ns/rtl8721d_otf_rom.o
+ .ARM.attributes
+                0x00000cd2       0x38 ./build/rom_ns/rtl8721d_pinmux_rom.o
+ .ARM.attributes
+                0x00000d0a       0x38 ./build/rom_ns/rtl8721d_simulation_rom.o
+ .ARM.attributes
+                0x00000d42       0x38 ./build/rom_ns/rtl8721d_systimer_rom.o
+ .ARM.attributes
+                0x00000d7a       0x38 ./build/rom_ns/rtl8721d_tim_rom.o
+ .ARM.attributes
+                0x00000db2       0x38 ./build/rom_ns/rtl8721d_uart_rom.o
+ .ARM.attributes
+                0x00000dea       0x38 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .ARM.attributes
+                0x00000e22       0x38 ./build/rom_ns/rtl8721dhp_boot_rom.o
+ .ARM.attributes
+                0x00000e5a       0x38 ./build/rom_ns/rtl8721dhp_clk_rom.o
+ .ARM.attributes
+                0x00000e92       0x38 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+ .ARM.attributes
+                0x00000eca       0x38 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .ARM.attributes
+                0x00000f02       0x38 ./build/rom_ns/rtl8721dhp_faac_tables.o
+ .ARM.attributes
+                0x00000f3a       0x38 ./build/rom_ns/rtl8721dhp_ns_entry.o
+ .ARM.attributes
+                0x00000f72       0x38 ./build/rom_ns/rtl8721dhp_rcc_rom.o
+ .ARM.attributes
+                0x00000faa       0x38 ./build/rom_ns/rtl8721dhp_syscfg_rom.o
+ .ARM.attributes
+                0x00000fe2       0x38 ./build/rom_ns/rtl8721dhp_vector_rom.o
+ .ARM.attributes
+                0x0000101a       0x38 ./build/rom_ns/sscanf.o
+ .ARM.attributes
+                0x00001052       0x38 ./build/rom_ns/stratoi.o
+ .ARM.attributes
+                0x0000108a       0x38 ./build/rom_ns/strcat.o
+ .ARM.attributes
+                0x000010c2       0x38 ./build/rom_ns/strchr.o
+ .ARM.attributes
+                0x000010fa       0x38 ./build/rom_ns/strcmp.o
+ .ARM.attributes
+                0x00001132       0x38 ./build/rom_ns/strcpy.o
+ .ARM.attributes
+                0x0000116a       0x38 ./build/rom_ns/stricmp.o
+ .ARM.attributes
+                0x000011a2       0x38 ./build/rom_ns/strlen.o
+ .ARM.attributes
+                0x000011da       0x38 ./build/rom_ns/strncat.o
+ .ARM.attributes
+                0x00001212       0x38 ./build/rom_ns/strncmp.o
+ .ARM.attributes
+                0x0000124a       0x38 ./build/rom_ns/strncpy.o
+ .ARM.attributes
+                0x00001282       0x38 ./build/rom_ns/strnlen.o
+ .ARM.attributes
+                0x000012ba       0x38 ./build/rom_ns/strpbrk.o
+ .ARM.attributes
+                0x000012f2       0x38 ./build/rom_ns/strsep.o
+ .ARM.attributes
+                0x0000132a       0x38 ./build/rom_ns/strstr.o
+ .ARM.attributes
+                0x00001362       0x38 ./build/rom_ns/strtod.o
+ .ARM.attributes
+                0x0000139a       0x38 ./build/rom_ns/strtok.o
+ .ARM.attributes
+                0x000013d2       0x38 ./build/rom_ns/strtok_r.o
+ .ARM.attributes
+                0x0000140a       0x38 ./build/rom_ns/strtol.o
+ .ARM.attributes
+                0x00001442       0x38 ./build/rom_ns/strtoul.o
+ .ARM.attributes
+                0x0000147a       0x38 ./build/rom_ns/strupr.o
+
+.comment        0x00000000     0x1432
+ .comment       0x00000000       0x37 ./build/rom_ns/char2num.o
+ .comment       0x00000037       0x37 ./build/rom_ns/diag.o
+ .comment       0x0000006e       0x37 ./build/rom_ns/mbedtls_rom_aes.o
+ .comment       0x000000a5       0x37 ./build/rom_ns/mbedtls_rom_arc4.o
+ .comment       0x000000dc       0x37 ./build/rom_ns/mbedtls_rom_asn1parse.o
+ .comment       0x00000113       0x37 ./build/rom_ns/mbedtls_rom_asn1write.o
+ .comment       0x0000014a       0x37 ./build/rom_ns/mbedtls_rom_base64.o
+ .comment       0x00000181       0x37 ./build/rom_ns/mbedtls_rom_bignum.o
+ .comment       0x000001b8       0x37 ./build/rom_ns/mbedtls_rom_ctr_drbg.o
+ .comment       0x000001ef       0x37 ./build/rom_ns/mbedtls_rom_des.o
+ .comment       0x00000226       0x37 ./build/rom_ns/mbedtls_rom_dhm.o
+ .comment       0x0000025d       0x37 ./build/rom_ns/mbedtls_rom_ecdh.o
+ .comment       0x00000294       0x37 ./build/rom_ns/mbedtls_rom_ecdsa.o
+ .comment       0x000002cb       0x37 ./build/rom_ns/mbedtls_rom_ecjpake.o
+ .comment       0x00000302       0x37 ./build/rom_ns/mbedtls_rom_ecp.o
+ .comment       0x00000339       0x37 ./build/rom_ns/mbedtls_rom_ecp_curves.o
+ .comment       0x00000370       0x37 ./build/rom_ns/mbedtls_rom_hmac_drbg.o
+ .comment       0x000003a7       0x37 ./build/rom_ns/mbedtls_rom_md.o
+ .comment       0x000003de       0x37 ./build/rom_ns/mbedtls_rom_md_wrap.o
+ .comment       0x00000415       0x37 ./build/rom_ns/mbedtls_rom_md5.o
+ .comment       0x0000044c       0x37 ./build/rom_ns/mbedtls_rom_oid.o
+ .comment       0x00000483       0x37 ./build/rom_ns/mbedtls_rom_pem.o
+ .comment       0x000004ba       0x37 ./build/rom_ns/mbedtls_rom_pk.o
+ .comment       0x000004f1       0x37 ./build/rom_ns/mbedtls_rom_pk_wrap.o
+ .comment       0x00000528       0x37 ./build/rom_ns/mbedtls_rom_pkwrite.o
+ .comment       0x0000055f       0x37 ./build/rom_ns/mbedtls_rom_rsa.o
+ .comment       0x00000596       0x37 ./build/rom_ns/mbedtls_rom_sha1.o
+ .comment       0x000005cd       0x37 ./build/rom_ns/mbedtls_rom_sha256.o
+ .comment       0x00000604       0x37 ./build/rom_ns/mbedtls_rom_sha512.o
+ .comment       0x0000063b       0x37 ./build/rom_ns/memchr.o
+ .comment       0x00000672       0x37 ./build/rom_ns/memcmp.o
+ .comment       0x000006a9       0x37 ./build/rom_ns/memcpy.o
+ .comment       0x000006e0       0x37 ./build/rom_ns/memmove.o
+ .comment       0x00000717       0x37 ./build/rom_ns/memset.o
+ .comment       0x0000074e       0x37 ./build/rom_ns/rand.o
+ .comment       0x00000785       0x37 ./build/rom_ns/rom_homekit_chacha_enc.o
+ .comment       0x000007bc       0x37 ./build/rom_ns/rom_homekit_ed25519.o
+ .comment       0x000007f3       0x37 ./build/rom_ns/rom_homekit_ed25519_ge_fe.o
+ .comment       0x0000082a       0x37 ./build/rom_ns/rom_homekit_ed25519_keypair.o
+ .comment       0x00000861       0x37 ./build/rom_ns/rom_homekit_ed25519_open.o
+ .comment       0x00000898       0x37 ./build/rom_ns/rom_homekit_ed25519_sc.o
+ .comment       0x000008cf       0x37 ./build/rom_ns/rom_homekit_ed25519_sign.o
+ .comment       0x00000906       0x37 ./build/rom_ns/rom_homekit_poly1305.o
+ .comment       0x0000093d       0x37 ./build/rom_ns/rom_homekit_sha512.o
+ .comment       0x00000974       0x37 ./build/rom_ns/rom_ssl_ram_map.o
+ .comment       0x000009ab       0x37 ./build/rom_ns/rom_wac_curve25519-donna.o
+ .comment       0x000009e2       0x37 ./build/rom_ns/rtl8721d_assert_rom.o
+ .comment       0x00000a19       0x37 ./build/rom_ns/rtl8721d_backup_reg.o
+ .comment       0x00000a50       0x37 ./build/rom_ns/rtl8721d_cache_rom.o
+ .comment       0x00000a87       0x37 ./build/rom_ns/rtl8721d_delay_rom.o
+ .comment       0x00000abe       0x37 ./build/rom_ns/rtl8721d_efuse_rom.o
+ .comment       0x00000af5       0x37 ./build/rom_ns/rtl8721d_flash_rom.o
+ .comment       0x00000b2c       0x37 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .comment       0x00000b63       0x37 ./build/rom_ns/rtl8721d_gpio_rom.o
+ .comment       0x00000b9a       0x37 ./build/rom_ns/rtl8721d_ipc_rom.o
+ .comment       0x00000bd1       0x37 ./build/rom_ns/rtl8721d_loguart_rom.o
+ .comment       0x00000c08       0x37 ./build/rom_ns/rtl8721d_mpu_rom.o
+ .comment       0x00000c3f       0x37 ./build/rom_ns/rtl8721d_otf_rom.o
+ .comment       0x00000c76       0x37 ./build/rom_ns/rtl8721d_pinmux_rom.o
+ .comment       0x00000cad       0x37 ./build/rom_ns/rtl8721d_simulation_rom.o
+ .comment       0x00000ce4       0x37 ./build/rom_ns/rtl8721d_systimer_rom.o
+ .comment       0x00000d1b       0x37 ./build/rom_ns/rtl8721d_tim_rom.o
+ .comment       0x00000d52       0x37 ./build/rom_ns/rtl8721d_uart_rom.o
+ .comment       0x00000d89       0x37 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .comment       0x00000dc0       0x37 ./build/rom_ns/rtl8721dhp_boot_rom.o
+ .comment       0x00000df7       0x37 ./build/rom_ns/rtl8721dhp_clk_rom.o
+ .comment       0x00000e2e       0x37 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+ .comment       0x00000e65       0x37 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .comment       0x00000e9c       0x37 ./build/rom_ns/rtl8721dhp_faac_tables.o
+ .comment       0x00000ed3       0x37 ./build/rom_ns/rtl8721dhp_ns_entry.o
+ .comment       0x00000f0a       0x37 ./build/rom_ns/rtl8721dhp_rcc_rom.o
+ .comment       0x00000f41       0x37 ./build/rom_ns/rtl8721dhp_syscfg_rom.o
+ .comment       0x00000f78       0x37 ./build/rom_ns/rtl8721dhp_vector_rom.o
+ .comment       0x00000faf       0x37 ./build/rom_ns/sscanf.o
+ .comment       0x00000fe6       0x37 ./build/rom_ns/stratoi.o
+ .comment       0x0000101d       0x37 ./build/rom_ns/strcat.o
+ .comment       0x00001054       0x37 ./build/rom_ns/strchr.o
+ .comment       0x0000108b       0x37 ./build/rom_ns/strcmp.o
+ .comment       0x000010c2       0x37 ./build/rom_ns/strcpy.o
+ .comment       0x000010f9       0x37 ./build/rom_ns/stricmp.o
+ .comment       0x00001130       0x37 ./build/rom_ns/strlen.o
+ .comment       0x00001167       0x37 ./build/rom_ns/strncat.o
+ .comment       0x0000119e       0x37 ./build/rom_ns/strncmp.o
+ .comment       0x000011d5       0x37 ./build/rom_ns/strncpy.o
+ .comment       0x0000120c       0x37 ./build/rom_ns/strnlen.o
+ .comment       0x00001243       0x37 ./build/rom_ns/strpbrk.o
+ .comment       0x0000127a       0x37 ./build/rom_ns/strsep.o
+ .comment       0x000012b1       0x37 ./build/rom_ns/strstr.o
+ .comment       0x000012e8       0x37 ./build/rom_ns/strtod.o
+ .comment       0x0000131f       0x37 ./build/rom_ns/strtok.o
+ .comment       0x00001356       0x37 ./build/rom_ns/strtok_r.o
+ .comment       0x0000138d       0x37 ./build/rom_ns/strtol.o
+ .comment       0x000013c4       0x37 ./build/rom_ns/strtoul.o
+ .comment       0x000013fb       0x37 ./build/rom_ns/strupr.o
+
+.debug_line     0x00000000    0x183c7
+ .debug_line    0x00000000       0xd8 ./build/rom_ns/8721dhp_vectors.o
+ .debug_line    0x000000d8      0x229 ./build/rom_ns/char2num.o
+ .debug_line    0x00000301      0x6b1 ./build/rom_ns/diag.o
+ .debug_line    0x000009b2      0x785 ./build/rom_ns/mbedtls_rom_aes.o
+ .debug_line    0x00001137      0x23a ./build/rom_ns/mbedtls_rom_arc4.o
+ .debug_line    0x00001371      0x498 ./build/rom_ns/mbedtls_rom_asn1parse.o
+ .debug_line    0x00001809      0x521 ./build/rom_ns/mbedtls_rom_asn1write.o
+ .debug_line    0x00001d2a      0x3f4 ./build/rom_ns/mbedtls_rom_base64.o
+ .debug_line    0x0000211e      0xe68 ./build/rom_ns/mbedtls_rom_bignum.o
+ .debug_line    0x00002f86      0x4a6 ./build/rom_ns/mbedtls_rom_ctr_drbg.o
+ .debug_line    0x0000342c      0x765 ./build/rom_ns/mbedtls_rom_des.o
+ .debug_line    0x00003b91      0x494 ./build/rom_ns/mbedtls_rom_dhm.o
+ .debug_line    0x00004025      0x3d0 ./build/rom_ns/mbedtls_rom_ecdh.o
+ .debug_line    0x000043f5      0x476 ./build/rom_ns/mbedtls_rom_ecdsa.o
+ .debug_line    0x0000486b      0x52a ./build/rom_ns/mbedtls_rom_ecjpake.o
+ .debug_line    0x00004d95      0xa7e ./build/rom_ns/mbedtls_rom_ecp.o
+ .debug_line    0x00005813      0x7e5 ./build/rom_ns/mbedtls_rom_ecp_curves.o
+ .debug_line    0x00005ff8      0x2d5 ./build/rom_ns/mbedtls_rom_hmac_drbg.o
+ .debug_line    0x000062cd      0x4d9 ./build/rom_ns/mbedtls_rom_md.o
+ .debug_line    0x000067a6      0x46b ./build/rom_ns/mbedtls_rom_md_wrap.o
+ .debug_line    0x00006c11      0x3e5 ./build/rom_ns/mbedtls_rom_md5.o
+ .debug_line    0x00006ff6      0x2f6 ./build/rom_ns/mbedtls_rom_oid.o
+ .debug_line    0x000072ec      0x538 ./build/rom_ns/mbedtls_rom_pem.o
+ .debug_line    0x00007824      0x477 ./build/rom_ns/mbedtls_rom_pk.o
+ .debug_line    0x00007c9b      0x4dd ./build/rom_ns/mbedtls_rom_pk_wrap.o
+ .debug_line    0x00008178      0x4e6 ./build/rom_ns/mbedtls_rom_pkwrite.o
+ .debug_line    0x0000865e      0x902 ./build/rom_ns/mbedtls_rom_rsa.o
+ .debug_line    0x00008f60      0x4c6 ./build/rom_ns/mbedtls_rom_sha1.o
+ .debug_line    0x00009426      0x4de ./build/rom_ns/mbedtls_rom_sha256.o
+ .debug_line    0x00009904      0x46e ./build/rom_ns/mbedtls_rom_sha512.o
+ .debug_line    0x00009d72      0x2d2 ./build/rom_ns/memchr.o
+ .debug_line    0x0000a044      0x186 ./build/rom_ns/memcmp.o
+ .debug_line    0x0000a1ca      0x196 ./build/rom_ns/memcpy.o
+ .debug_line    0x0000a360      0x19f ./build/rom_ns/memmove.o
+ .debug_line    0x0000a4ff      0x2d4 ./build/rom_ns/memset.o
+ .debug_line    0x0000a7d3      0x2f7 ./build/rom_ns/rand.o
+ .debug_line    0x0000aaca      0x362 ./build/rom_ns/rom_homekit_chacha_enc.o
+ .debug_line    0x0000ae2c      0x150 ./build/rom_ns/rom_homekit_ed25519.o
+ .debug_line    0x0000af7c      0xb0a ./build/rom_ns/rom_homekit_ed25519_ge_fe.o
+ .debug_line    0x0000ba86      0x331 ./build/rom_ns/rom_homekit_ed25519_keypair.o
+ .debug_line    0x0000bdb7      0x42d ./build/rom_ns/rom_homekit_ed25519_open.o
+ .debug_line    0x0000c1e4      0x6ca ./build/rom_ns/rom_homekit_ed25519_sc.o
+ .debug_line    0x0000c8ae      0x36b ./build/rom_ns/rom_homekit_ed25519_sign.o
+ .debug_line    0x0000cc19      0x46f ./build/rom_ns/rom_homekit_poly1305.o
+ .debug_line    0x0000d088      0x43b ./build/rom_ns/rom_homekit_sha512.o
+ .debug_line    0x0000d4c3      0x27f ./build/rom_ns/rom_ssl_ram_map.o
+ .debug_line    0x0000d742      0x619 ./build/rom_ns/rom_wac_curve25519-donna.o
+ .debug_line    0x0000dd5b      0x33c ./build/rom_ns/rtl8721d_assert_rom.o
+ .debug_line    0x0000e097      0x341 ./build/rom_ns/rtl8721d_backup_reg.o
+ .debug_line    0x0000e3d8      0x229 ./build/rom_ns/rtl8721d_cache_rom.o
+ .debug_line    0x0000e601      0x309 ./build/rom_ns/rtl8721d_delay_rom.o
+ .debug_line    0x0000e90a      0x705 ./build/rom_ns/rtl8721d_efuse_rom.o
+ .debug_line    0x0000f00f      0x731 ./build/rom_ns/rtl8721d_flash_rom.o
+ .debug_line    0x0000f740      0x7be ./build/rom_ns/rtl8721d_gdma_rom.o
+ .debug_line    0x0000fefe      0x430 ./build/rom_ns/rtl8721d_gpio_rom.o
+ .debug_line    0x0001032e      0x3f1 ./build/rom_ns/rtl8721d_ipc_rom.o
+ .debug_line    0x0001071f      0x3a0 ./build/rom_ns/rtl8721d_loguart_rom.o
+ .debug_line    0x00010abf      0x464 ./build/rom_ns/rtl8721d_mpu_rom.o
+ .debug_line    0x00010f23      0x365 ./build/rom_ns/rtl8721d_otf_rom.o
+ .debug_line    0x00011288      0x3b9 ./build/rom_ns/rtl8721d_pinmux_rom.o
+ .debug_line    0x00011641      0x30b ./build/rom_ns/rtl8721d_simulation_rom.o
+ .debug_line    0x0001194c      0x33e ./build/rom_ns/rtl8721d_systimer_rom.o
+ .debug_line    0x00011c8a      0x6bb ./build/rom_ns/rtl8721d_tim_rom.o
+ .debug_line    0x00012345      0x497 ./build/rom_ns/rtl8721d_uart_rom.o
+ .debug_line    0x000127dc      0x417 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .debug_line    0x00012bf3      0x49d ./build/rom_ns/rtl8721dhp_boot_rom.o
+ .debug_line    0x00013090      0x2ef ./build/rom_ns/rtl8721dhp_clk_rom.o
+ .debug_line    0x0001337f      0xa76 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+ .debug_line    0x00013df5      0x4a9 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .debug_line    0x0001429e      0x2c9 ./build/rom_ns/rtl8721dhp_faac_tables.o
+ .debug_line    0x00014567      0x2e8 ./build/rom_ns/rtl8721dhp_ns_entry.o
+ .debug_line    0x0001484f      0x3ab ./build/rom_ns/rtl8721dhp_rcc_rom.o
+ .debug_line    0x00014bfa      0x2d8 ./build/rom_ns/rtl8721dhp_syscfg_rom.o
+ .debug_line    0x00014ed2      0x7c1 ./build/rom_ns/rtl8721dhp_vector_rom.o
+ .debug_line    0x00015693      0x628 ./build/rom_ns/sscanf.o
+ .debug_line    0x00015cbb      0x2e8 ./build/rom_ns/stratoi.o
+ .debug_line    0x00015fa3       0xcd ./build/rom_ns/strcat.o
+ .debug_line    0x00016070       0xee ./build/rom_ns/strchr.o
+ .debug_line    0x0001615e       0xe6 ./build/rom_ns/strcmp.o
+ .debug_line    0x00016244       0xd3 ./build/rom_ns/strcpy.o
+ .debug_line    0x00016317      0x2d4 ./build/rom_ns/stricmp.o
+ .debug_line    0x000165eb      0x173 ./build/rom_ns/strlen.o
+ .debug_line    0x0001675e      0x179 ./build/rom_ns/strncat.o
+ .debug_line    0x000168d7      0x1ca ./build/rom_ns/strncmp.o
+ .debug_line    0x00016aa1      0x18c ./build/rom_ns/strncpy.o
+ .debug_line    0x00016c2d      0x381 ./build/rom_ns/strnlen.o
+ .debug_line    0x00016fae      0x2e3 ./build/rom_ns/strpbrk.o
+ .debug_line    0x00017291       0xbd ./build/rom_ns/strsep.o
+ .debug_line    0x0001734e      0x35b ./build/rom_ns/strstr.o
+ .debug_line    0x000176a9      0x380 ./build/rom_ns/strtod.o
+ .debug_line    0x00017a29       0xbd ./build/rom_ns/strtok.o
+ .debug_line    0x00017ae6       0xf7 ./build/rom_ns/strtok_r.o
+ .debug_line    0x00017bdd      0x28a ./build/rom_ns/strtol.o
+ .debug_line    0x00017e67      0x294 ./build/rom_ns/strtoul.o
+ .debug_line    0x000180fb      0x2cc ./build/rom_ns/strupr.o
+
+.debug_info     0x00000000    0x45473
+ .debug_info    0x00000000      0x118 ./build/rom_ns/8721dhp_vectors.o
+ .debug_info    0x00000118      0x1f9 ./build/rom_ns/char2num.o
+ .debug_info    0x00000311      0x6b2 ./build/rom_ns/diag.o
+ .debug_info    0x000009c3     0x10d4 ./build/rom_ns/mbedtls_rom_aes.o
+ .debug_info    0x00001a97      0x2d6 ./build/rom_ns/mbedtls_rom_arc4.o
+ .debug_info    0x00001d6d      0xb20 ./build/rom_ns/mbedtls_rom_asn1parse.o
+ .debug_info    0x0000288d      0xde4 ./build/rom_ns/mbedtls_rom_asn1write.o
+ .debug_info    0x00003671      0x267 ./build/rom_ns/mbedtls_rom_base64.o
+ .debug_info    0x000038d8     0x4185 ./build/rom_ns/mbedtls_rom_bignum.o
+ .debug_info    0x00007a5d      0xc51 ./build/rom_ns/mbedtls_rom_ctr_drbg.o
+ .debug_info    0x000086ae     0x14bc ./build/rom_ns/mbedtls_rom_des.o
+ .debug_info    0x00009b6a     0x11e4 ./build/rom_ns/mbedtls_rom_dhm.o
+ .debug_info    0x0000ad4e      0xcf3 ./build/rom_ns/mbedtls_rom_ecdh.o
+ .debug_info    0x0000ba41     0x17dc ./build/rom_ns/mbedtls_rom_ecdsa.o
+ .debug_info    0x0000d21d     0x2438 ./build/rom_ns/mbedtls_rom_ecjpake.o
+ .debug_info    0x0000f655     0x55d1 ./build/rom_ns/mbedtls_rom_ecp.o
+ .debug_info    0x00014c26     0x3d5c ./build/rom_ns/mbedtls_rom_ecp_curves.o
+ .debug_info    0x00018982      0xa43 ./build/rom_ns/mbedtls_rom_hmac_drbg.o
+ .debug_info    0x000193c5      0xe07 ./build/rom_ns/mbedtls_rom_md.o
+ .debug_info    0x0001a1cc     0x1281 ./build/rom_ns/mbedtls_rom_md_wrap.o
+ .debug_info    0x0001b44d      0x63c ./build/rom_ns/mbedtls_rom_md5.o
+ .debug_info    0x0001ba89      0xf2b ./build/rom_ns/mbedtls_rom_oid.o
+ .debug_info    0x0001c9b4     0x1325 ./build/rom_ns/mbedtls_rom_pem.o
+ .debug_info    0x0001dcd9      0xf58 ./build/rom_ns/mbedtls_rom_pk.o
+ .debug_info    0x0001ec31     0x19a0 ./build/rom_ns/mbedtls_rom_pk_wrap.o
+ .debug_info    0x000205d1      0xf6b ./build/rom_ns/mbedtls_rom_pkwrite.o
+ .debug_info    0x0002153c     0x35f7 ./build/rom_ns/mbedtls_rom_rsa.o
+ .debug_info    0x00024b33      0x663 ./build/rom_ns/mbedtls_rom_sha1.o
+ .debug_info    0x00025196      0x6a3 ./build/rom_ns/mbedtls_rom_sha256.o
+ .debug_info    0x00025839      0x6f9 ./build/rom_ns/mbedtls_rom_sha512.o
+ .debug_info    0x00025f32      0x14b ./build/rom_ns/memchr.o
+ .debug_info    0x0002607d      0x11d ./build/rom_ns/memcmp.o
+ .debug_info    0x0002619a      0x145 ./build/rom_ns/memcpy.o
+ .debug_info    0x000262df      0x13b ./build/rom_ns/memmove.o
+ .debug_info    0x0002641a      0x137 ./build/rom_ns/memset.o
+ .debug_info    0x00026551      0x256 ./build/rom_ns/rand.o
+ .debug_info    0x000267a7      0x285 ./build/rom_ns/rom_homekit_chacha_enc.o
+ .debug_info    0x00026a2c      0x22a ./build/rom_ns/rom_homekit_ed25519.o
+ .debug_info    0x00026c56     0x518e ./build/rom_ns/rom_homekit_ed25519_ge_fe.o
+ .debug_info    0x0002bde4      0x21d ./build/rom_ns/rom_homekit_ed25519_keypair.o
+ .debug_info    0x0002c001      0x500 ./build/rom_ns/rom_homekit_ed25519_open.o
+ .debug_info    0x0002c501      0xe18 ./build/rom_ns/rom_homekit_ed25519_sc.o
+ .debug_info    0x0002d319      0x4d4 ./build/rom_ns/rom_homekit_ed25519_sign.o
+ .debug_info    0x0002d7ed      0x6fe ./build/rom_ns/rom_homekit_poly1305.o
+ .debug_info    0x0002deeb      0xe5a ./build/rom_ns/rom_homekit_sha512.o
+ .debug_info    0x0002ed45      0x320 ./build/rom_ns/rom_ssl_ram_map.o
+ .debug_info    0x0002f065     0x1972 ./build/rom_ns/rom_wac_curve25519-donna.o
+ .debug_info    0x000309d7      0x295 ./build/rom_ns/rtl8721d_assert_rom.o
+ .debug_info    0x00030c6c      0x365 ./build/rom_ns/rtl8721d_backup_reg.o
+ .debug_info    0x00030fd1      0x110 ./build/rom_ns/rtl8721d_cache_rom.o
+ .debug_info    0x000310e1      0x21b ./build/rom_ns/rtl8721d_delay_rom.o
+ .debug_info    0x000312fc      0xe51 ./build/rom_ns/rtl8721d_efuse_rom.o
+ .debug_info    0x0003214d     0x12ae ./build/rom_ns/rtl8721d_flash_rom.o
+ .debug_info    0x000333fb     0x2144 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .debug_info    0x0003553f      0xa36 ./build/rom_ns/rtl8721d_gpio_rom.o
+ .debug_info    0x00035f75      0x6ae ./build/rom_ns/rtl8721d_ipc_rom.o
+ .debug_info    0x00036623      0x5c8 ./build/rom_ns/rtl8721d_loguart_rom.o
+ .debug_info    0x00036beb      0x753 ./build/rom_ns/rtl8721d_mpu_rom.o
+ .debug_info    0x0003733e      0x4b6 ./build/rom_ns/rtl8721d_otf_rom.o
+ .debug_info    0x000377f4      0x7fe ./build/rom_ns/rtl8721d_pinmux_rom.o
+ .debug_info    0x00037ff2      0x1ae ./build/rom_ns/rtl8721d_simulation_rom.o
+ .debug_info    0x000381a0      0x34b ./build/rom_ns/rtl8721d_systimer_rom.o
+ .debug_info    0x000384eb      0x8b3 ./build/rom_ns/rtl8721d_tim_rom.o
+ .debug_info    0x00038d9e      0xbdc ./build/rom_ns/rtl8721d_uart_rom.o
+ .debug_info    0x0003997a     0x1081 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .debug_info    0x0003a9fb      0xd2d ./build/rom_ns/rtl8721dhp_boot_rom.o
+ .debug_info    0x0003b728      0x265 ./build/rom_ns/rtl8721dhp_clk_rom.o
+ .debug_info    0x0003b98d     0x3521 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+ .debug_info    0x0003eeae     0x1813 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .debug_info    0x000406c1      0x188 ./build/rom_ns/rtl8721dhp_faac_tables.o
+ .debug_info    0x00040849      0x1f2 ./build/rom_ns/rtl8721dhp_ns_entry.o
+ .debug_info    0x00040a3b      0x49f ./build/rom_ns/rtl8721dhp_rcc_rom.o
+ .debug_info    0x00040eda      0x134 ./build/rom_ns/rtl8721dhp_syscfg_rom.o
+ .debug_info    0x0004100e     0x1d2b ./build/rom_ns/rtl8721dhp_vector_rom.o
+ .debug_info    0x00042d39      0x6b3 ./build/rom_ns/sscanf.o
+ .debug_info    0x000433ec      0x19b ./build/rom_ns/stratoi.o
+ .debug_info    0x00043587      0x11b ./build/rom_ns/strcat.o
+ .debug_info    0x000436a2      0x120 ./build/rom_ns/strchr.o
+ .debug_info    0x000437c2       0xe7 ./build/rom_ns/strcmp.o
+ .debug_info    0x000438a9      0x118 ./build/rom_ns/strcpy.o
+ .debug_info    0x000439c1      0x1ae ./build/rom_ns/stricmp.o
+ .debug_info    0x00043b6f       0xe7 ./build/rom_ns/strlen.o
+ .debug_info    0x00043c56      0x117 ./build/rom_ns/strncat.o
+ .debug_info    0x00043d6d       0xff ./build/rom_ns/strncmp.o
+ .debug_info    0x00043e6c      0x13c ./build/rom_ns/strncpy.o
+ .debug_info    0x00043fa8      0x179 ./build/rom_ns/strnlen.o
+ .debug_info    0x00044121      0x182 ./build/rom_ns/strpbrk.o
+ .debug_info    0x000442a3       0xfe ./build/rom_ns/strsep.o
+ .debug_info    0x000443a1      0x4c7 ./build/rom_ns/strstr.o
+ .debug_info    0x00044868      0x43f ./build/rom_ns/strtod.o
+ .debug_info    0x00044ca7      0x110 ./build/rom_ns/strtok.o
+ .debug_info    0x00044db7      0x190 ./build/rom_ns/strtok_r.o
+ .debug_info    0x00044f47      0x1dc ./build/rom_ns/strtol.o
+ .debug_info    0x00045123      0x1ce ./build/rom_ns/strtoul.o
+ .debug_info    0x000452f1      0x182 ./build/rom_ns/strupr.o
+
+.debug_abbrev   0x00000000     0xaca5
+ .debug_abbrev  0x00000000       0x14 ./build/rom_ns/8721dhp_vectors.o
+ .debug_abbrev  0x00000014      0x107 ./build/rom_ns/char2num.o
+ .debug_abbrev  0x0000011b      0x25b ./build/rom_ns/diag.o
+ .debug_abbrev  0x00000376      0x2f3 ./build/rom_ns/mbedtls_rom_aes.o
+ .debug_abbrev  0x00000669      0x178 ./build/rom_ns/mbedtls_rom_arc4.o
+ .debug_abbrev  0x000007e1      0x27a ./build/rom_ns/mbedtls_rom_asn1parse.o
+ .debug_abbrev  0x00000a5b      0x249 ./build/rom_ns/mbedtls_rom_asn1write.o
+ .debug_abbrev  0x00000ca4       0xc2 ./build/rom_ns/mbedtls_rom_base64.o
+ .debug_abbrev  0x00000d66      0x4aa ./build/rom_ns/mbedtls_rom_bignum.o
+ .debug_abbrev  0x00001210      0x2d1 ./build/rom_ns/mbedtls_rom_ctr_drbg.o
+ .debug_abbrev  0x000014e1      0x286 ./build/rom_ns/mbedtls_rom_des.o
+ .debug_abbrev  0x00001767      0x2ed ./build/rom_ns/mbedtls_rom_dhm.o
+ .debug_abbrev  0x00001a54      0x252 ./build/rom_ns/mbedtls_rom_ecdh.o
+ .debug_abbrev  0x00001ca6      0x2f7 ./build/rom_ns/mbedtls_rom_ecdsa.o
+ .debug_abbrev  0x00001f9d      0x3f3 ./build/rom_ns/mbedtls_rom_ecjpake.o
+ .debug_abbrev  0x00002390      0x40d ./build/rom_ns/mbedtls_rom_ecp.o
+ .debug_abbrev  0x0000279d      0x317 ./build/rom_ns/mbedtls_rom_ecp_curves.o
+ .debug_abbrev  0x00002ab4      0x2ba ./build/rom_ns/mbedtls_rom_hmac_drbg.o
+ .debug_abbrev  0x00002d6e      0x363 ./build/rom_ns/mbedtls_rom_md.o
+ .debug_abbrev  0x000030d1      0x20e ./build/rom_ns/mbedtls_rom_md_wrap.o
+ .debug_abbrev  0x000032df      0x257 ./build/rom_ns/mbedtls_rom_md5.o
+ .debug_abbrev  0x00003536      0x29e ./build/rom_ns/mbedtls_rom_oid.o
+ .debug_abbrev  0x000037d4      0x37f ./build/rom_ns/mbedtls_rom_pem.o
+ .debug_abbrev  0x00003b53      0x345 ./build/rom_ns/mbedtls_rom_pk.o
+ .debug_abbrev  0x00003e98      0x3a9 ./build/rom_ns/mbedtls_rom_pk_wrap.o
+ .debug_abbrev  0x00004241      0x2b8 ./build/rom_ns/mbedtls_rom_pkwrite.o
+ .debug_abbrev  0x000044f9      0x44c ./build/rom_ns/mbedtls_rom_rsa.o
+ .debug_abbrev  0x00004945      0x273 ./build/rom_ns/mbedtls_rom_sha1.o
+ .debug_abbrev  0x00004bb8      0x291 ./build/rom_ns/mbedtls_rom_sha256.o
+ .debug_abbrev  0x00004e49      0x291 ./build/rom_ns/mbedtls_rom_sha512.o
+ .debug_abbrev  0x000050da       0xab ./build/rom_ns/memchr.o
+ .debug_abbrev  0x00005185       0x7f ./build/rom_ns/memcmp.o
+ .debug_abbrev  0x00005204       0xb2 ./build/rom_ns/memcpy.o
+ .debug_abbrev  0x000052b6       0xab ./build/rom_ns/memmove.o
+ .debug_abbrev  0x00005361       0x9f ./build/rom_ns/memset.o
+ .debug_abbrev  0x00005400      0x105 ./build/rom_ns/rand.o
+ .debug_abbrev  0x00005505      0x161 ./build/rom_ns/rom_homekit_chacha_enc.o
+ .debug_abbrev  0x00005666       0xc9 ./build/rom_ns/rom_homekit_ed25519.o
+ .debug_abbrev  0x0000572f      0x307 ./build/rom_ns/rom_homekit_ed25519_ge_fe.o
+ .debug_abbrev  0x00005a36      0x112 ./build/rom_ns/rom_homekit_ed25519_keypair.o
+ .debug_abbrev  0x00005b48      0x1d4 ./build/rom_ns/rom_homekit_ed25519_open.o
+ .debug_abbrev  0x00005d1c      0x111 ./build/rom_ns/rom_homekit_ed25519_sc.o
+ .debug_abbrev  0x00005e2d      0x14b ./build/rom_ns/rom_homekit_ed25519_sign.o
+ .debug_abbrev  0x00005f78      0x233 ./build/rom_ns/rom_homekit_poly1305.o
+ .debug_abbrev  0x000061ab      0x293 ./build/rom_ns/rom_homekit_sha512.o
+ .debug_abbrev  0x0000643e       0x97 ./build/rom_ns/rom_ssl_ram_map.o
+ .debug_abbrev  0x000064d5      0x289 ./build/rom_ns/rom_wac_curve25519-donna.o
+ .debug_abbrev  0x0000675e       0xec ./build/rom_ns/rtl8721d_assert_rom.o
+ .debug_abbrev  0x0000684a      0x11d ./build/rom_ns/rtl8721d_backup_reg.o
+ .debug_abbrev  0x00006967       0x5d ./build/rom_ns/rtl8721d_cache_rom.o
+ .debug_abbrev  0x000069c4      0x104 ./build/rom_ns/rtl8721d_delay_rom.o
+ .debug_abbrev  0x00006ac8      0x2d2 ./build/rom_ns/rtl8721d_efuse_rom.o
+ .debug_abbrev  0x00006d9a      0x365 ./build/rom_ns/rtl8721d_flash_rom.o
+ .debug_abbrev  0x000070ff      0x33c ./build/rom_ns/rtl8721d_gdma_rom.o
+ .debug_abbrev  0x0000743b      0x254 ./build/rom_ns/rtl8721d_gpio_rom.o
+ .debug_abbrev  0x0000768f      0x23c ./build/rom_ns/rtl8721d_ipc_rom.o
+ .debug_abbrev  0x000078cb      0x18c ./build/rom_ns/rtl8721d_loguart_rom.o
+ .debug_abbrev  0x00007a57      0x22d ./build/rom_ns/rtl8721d_mpu_rom.o
+ .debug_abbrev  0x00007c84      0x16b ./build/rom_ns/rtl8721d_otf_rom.o
+ .debug_abbrev  0x00007def      0x1c1 ./build/rom_ns/rtl8721d_pinmux_rom.o
+ .debug_abbrev  0x00007fb0       0xac ./build/rom_ns/rtl8721d_simulation_rom.o
+ .debug_abbrev  0x0000805c      0x176 ./build/rom_ns/rtl8721d_systimer_rom.o
+ .debug_abbrev  0x000081d2      0x21b ./build/rom_ns/rtl8721d_tim_rom.o
+ .debug_abbrev  0x000083ed      0x219 ./build/rom_ns/rtl8721d_uart_rom.o
+ .debug_abbrev  0x00008606      0x1c6 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .debug_abbrev  0x000087cc      0x32a ./build/rom_ns/rtl8721dhp_boot_rom.o
+ .debug_abbrev  0x00008af6       0xdc ./build/rom_ns/rtl8721dhp_clk_rom.o
+ .debug_abbrev  0x00008bd2      0x559 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+ .debug_abbrev  0x0000912b      0x1a9 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .debug_abbrev  0x000092d4       0x8f ./build/rom_ns/rtl8721dhp_faac_tables.o
+ .debug_abbrev  0x00009363      0x101 ./build/rom_ns/rtl8721dhp_ns_entry.o
+ .debug_abbrev  0x00009464      0x15f ./build/rom_ns/rtl8721dhp_rcc_rom.o
+ .debug_abbrev  0x000095c3       0x7d ./build/rom_ns/rtl8721dhp_syscfg_rom.o
+ .debug_abbrev  0x00009640      0x3ce ./build/rom_ns/rtl8721dhp_vector_rom.o
+ .debug_abbrev  0x00009a0e      0x2ca ./build/rom_ns/sscanf.o
+ .debug_abbrev  0x00009cd8       0xdf ./build/rom_ns/stratoi.o
+ .debug_abbrev  0x00009db7       0xb2 ./build/rom_ns/strcat.o
+ .debug_abbrev  0x00009e69       0x83 ./build/rom_ns/strchr.o
+ .debug_abbrev  0x00009eec       0x74 ./build/rom_ns/strcmp.o
+ .debug_abbrev  0x00009f60       0x92 ./build/rom_ns/strcpy.o
+ .debug_abbrev  0x00009ff2       0xcc ./build/rom_ns/stricmp.o
+ .debug_abbrev  0x0000a0be       0x81 ./build/rom_ns/strlen.o
+ .debug_abbrev  0x0000a13f       0xa0 ./build/rom_ns/strncat.o
+ .debug_abbrev  0x0000a1df       0x81 ./build/rom_ns/strncmp.o
+ .debug_abbrev  0x0000a260       0xa6 ./build/rom_ns/strncpy.o
+ .debug_abbrev  0x0000a306       0xbc ./build/rom_ns/strnlen.o
+ .debug_abbrev  0x0000a3c2       0xbc ./build/rom_ns/strpbrk.o
+ .debug_abbrev  0x0000a47e       0x91 ./build/rom_ns/strsep.o
+ .debug_abbrev  0x0000a50f      0x1d2 ./build/rom_ns/strstr.o
+ .debug_abbrev  0x0000a6e1      0x1b7 ./build/rom_ns/strtod.o
+ .debug_abbrev  0x0000a898       0xaf ./build/rom_ns/strtok.o
+ .debug_abbrev  0x0000a947       0xed ./build/rom_ns/strtok_r.o
+ .debug_abbrev  0x0000aa34       0xd1 ./build/rom_ns/strtol.o
+ .debug_abbrev  0x0000ab05       0xe4 ./build/rom_ns/strtoul.o
+ .debug_abbrev  0x0000abe9       0xbc ./build/rom_ns/strupr.o
+
+.debug_aranges  0x00000000     0x22e8
+ .debug_aranges
+                0x00000000       0x20 ./build/rom_ns/8721dhp_vectors.o
+ .debug_aranges
+                0x00000020       0x30 ./build/rom_ns/char2num.o
+ .debug_aranges
+                0x00000050       0x40 ./build/rom_ns/diag.o
+ .debug_aranges
+                0x00000090       0x70 ./build/rom_ns/mbedtls_rom_aes.o
+ .debug_aranges
+                0x00000100       0x38 ./build/rom_ns/mbedtls_rom_arc4.o
+ .debug_aranges
+                0x00000138       0x80 ./build/rom_ns/mbedtls_rom_asn1parse.o
+ .debug_aranges
+                0x000001b8       0x88 ./build/rom_ns/mbedtls_rom_asn1write.o
+ .debug_aranges
+                0x00000240       0x28 ./build/rom_ns/mbedtls_rom_base64.o
+ .debug_aranges
+                0x00000268      0x1a0 ./build/rom_ns/mbedtls_rom_bignum.o
+ .debug_aranges
+                0x00000408       0x80 ./build/rom_ns/mbedtls_rom_ctr_drbg.o
+ .debug_aranges
+                0x00000488       0xc0 ./build/rom_ns/mbedtls_rom_des.o
+ .debug_aranges
+                0x00000548       0x68 ./build/rom_ns/mbedtls_rom_dhm.o
+ .debug_aranges
+                0x000005b0       0x68 ./build/rom_ns/mbedtls_rom_ecdh.o
+ .debug_aranges
+                0x00000618       0x70 ./build/rom_ns/mbedtls_rom_ecdsa.o
+ .debug_aranges
+                0x00000688       0x90 ./build/rom_ns/mbedtls_rom_ecjpake.o
+ .debug_aranges
+                0x00000718      0x158 ./build/rom_ns/mbedtls_rom_ecp.o
+ .debug_aranges
+                0x00000870       0x90 ./build/rom_ns/mbedtls_rom_ecp_curves.o
+ .debug_aranges
+                0x00000900       0x70 ./build/rom_ns/mbedtls_rom_hmac_drbg.o
+ .debug_aranges
+                0x00000970       0xc0 ./build/rom_ns/mbedtls_rom_md.o
+ .debug_aranges
+                0x00000a30      0x128 ./build/rom_ns/mbedtls_rom_md_wrap.o
+ .debug_aranges
+                0x00000b58       0x60 ./build/rom_ns/mbedtls_rom_md5.o
+ .debug_aranges
+                0x00000bb8       0x90 ./build/rom_ns/mbedtls_rom_oid.o
+ .debug_aranges
+                0x00000c48       0x60 ./build/rom_ns/mbedtls_rom_pem.o
+ .debug_aranges
+                0x00000ca8       0x98 ./build/rom_ns/mbedtls_rom_pk.o
+ .debug_aranges
+                0x00000d40      0x110 ./build/rom_ns/mbedtls_rom_pk_wrap.o
+ .debug_aranges
+                0x00000e50       0x50 ./build/rom_ns/mbedtls_rom_pkwrite.o
+ .debug_aranges
+                0x00000ea0       0xd8 ./build/rom_ns/mbedtls_rom_rsa.o
+ .debug_aranges
+                0x00000f78       0x60 ./build/rom_ns/mbedtls_rom_sha1.o
+ .debug_aranges
+                0x00000fd8       0x60 ./build/rom_ns/mbedtls_rom_sha256.o
+ .debug_aranges
+                0x00001038       0x60 ./build/rom_ns/mbedtls_rom_sha512.o
+ .debug_aranges
+                0x00001098       0x20 ./build/rom_ns/memchr.o
+ .debug_aranges
+                0x000010b8       0x20 ./build/rom_ns/memcmp.o
+ .debug_aranges
+                0x000010d8       0x20 ./build/rom_ns/memcpy.o
+ .debug_aranges
+                0x000010f8       0x20 ./build/rom_ns/memmove.o
+ .debug_aranges
+                0x00001118       0x20 ./build/rom_ns/memset.o
+ .debug_aranges
+                0x00001138       0x30 ./build/rom_ns/rand.o
+ .debug_aranges
+                0x00001168       0x20 ./build/rom_ns/rom_homekit_chacha_enc.o
+ .debug_aranges
+                0x00001188       0x30 ./build/rom_ns/rom_homekit_ed25519.o
+ .debug_aranges
+                0x000011b8       0xf0 ./build/rom_ns/rom_homekit_ed25519_ge_fe.o
+ .debug_aranges
+                0x000012a8       0x20 ./build/rom_ns/rom_homekit_ed25519_keypair.o
+ .debug_aranges
+                0x000012c8       0x20 ./build/rom_ns/rom_homekit_ed25519_open.o
+ .debug_aranges
+                0x000012e8       0x38 ./build/rom_ns/rom_homekit_ed25519_sc.o
+ .debug_aranges
+                0x00001320       0x20 ./build/rom_ns/rom_homekit_ed25519_sign.o
+ .debug_aranges
+                0x00001340       0x40 ./build/rom_ns/rom_homekit_poly1305.o
+ .debug_aranges
+                0x00001380       0x60 ./build/rom_ns/rom_homekit_sha512.o
+ .debug_aranges
+                0x000013e0       0x18 ./build/rom_ns/rom_ssl_ram_map.o
+ .debug_aranges
+                0x000013f8       0x60 ./build/rom_ns/rom_wac_curve25519-donna.o
+ .debug_aranges
+                0x00001458       0x20 ./build/rom_ns/rtl8721d_assert_rom.o
+ .debug_aranges
+                0x00001478       0x40 ./build/rom_ns/rtl8721d_backup_reg.o
+ .debug_aranges
+                0x000014b8       0x18 ./build/rom_ns/rtl8721d_cache_rom.o
+ .debug_aranges
+                0x000014d0       0x30 ./build/rom_ns/rtl8721d_delay_rom.o
+ .debug_aranges
+                0x00001500       0x48 ./build/rom_ns/rtl8721d_efuse_rom.o
+ .debug_aranges
+                0x00001548       0xa8 ./build/rom_ns/rtl8721d_flash_rom.o
+ .debug_aranges
+                0x000015f0       0xb0 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .debug_aranges
+                0x000016a0       0x78 ./build/rom_ns/rtl8721d_gpio_rom.o
+ .debug_aranges
+                0x00001718       0x70 ./build/rom_ns/rtl8721d_ipc_rom.o
+ .debug_aranges
+                0x00001788       0x60 ./build/rom_ns/rtl8721d_loguart_rom.o
+ .debug_aranges
+                0x000017e8       0x50 ./build/rom_ns/rtl8721d_mpu_rom.o
+ .debug_aranges
+                0x00001838       0x50 ./build/rom_ns/rtl8721d_otf_rom.o
+ .debug_aranges
+                0x00001888       0x50 ./build/rom_ns/rtl8721d_pinmux_rom.o
+ .debug_aranges
+                0x000018d8       0x28 ./build/rom_ns/rtl8721d_simulation_rom.o
+ .debug_aranges
+                0x00001900       0x30 ./build/rom_ns/rtl8721d_systimer_rom.o
+ .debug_aranges
+                0x00001930       0x68 ./build/rom_ns/rtl8721d_tim_rom.o
+ .debug_aranges
+                0x00001998       0xf0 ./build/rom_ns/rtl8721d_uart_rom.o
+ .debug_aranges
+                0x00001a88       0xa8 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .debug_aranges
+                0x00001b30       0x38 ./build/rom_ns/rtl8721dhp_boot_rom.o
+ .debug_aranges
+                0x00001b68       0x38 ./build/rom_ns/rtl8721dhp_clk_rom.o
+ .debug_aranges
+                0x00001ba0       0x78 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+ .debug_aranges
+                0x00001c18      0x108 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .debug_aranges
+                0x00001d20       0x18 ./build/rom_ns/rtl8721dhp_faac_tables.o
+ .debug_aranges
+                0x00001d38       0x20 ./build/rom_ns/rtl8721dhp_ns_entry.o
+ .debug_aranges
+                0x00001d58       0x40 ./build/rom_ns/rtl8721dhp_rcc_rom.o
+ .debug_aranges
+                0x00001d98       0x20 ./build/rom_ns/rtl8721dhp_syscfg_rom.o
+ .debug_aranges
+                0x00001db8      0x250 ./build/rom_ns/rtl8721dhp_vector_rom.o
+ .debug_aranges
+                0x00002008       0x30 ./build/rom_ns/sscanf.o
+ .debug_aranges
+                0x00002038       0x20 ./build/rom_ns/stratoi.o
+ .debug_aranges
+                0x00002058       0x20 ./build/rom_ns/strcat.o
+ .debug_aranges
+                0x00002078       0x20 ./build/rom_ns/strchr.o
+ .debug_aranges
+                0x00002098       0x20 ./build/rom_ns/strcmp.o
+ .debug_aranges
+                0x000020b8       0x20 ./build/rom_ns/strcpy.o
+ .debug_aranges
+                0x000020d8       0x20 ./build/rom_ns/stricmp.o
+ .debug_aranges
+                0x000020f8       0x20 ./build/rom_ns/strlen.o
+ .debug_aranges
+                0x00002118       0x20 ./build/rom_ns/strncat.o
+ .debug_aranges
+                0x00002138       0x20 ./build/rom_ns/strncmp.o
+ .debug_aranges
+                0x00002158       0x20 ./build/rom_ns/strncpy.o
+ .debug_aranges
+                0x00002178       0x20 ./build/rom_ns/strnlen.o
+ .debug_aranges
+                0x00002198       0x20 ./build/rom_ns/strpbrk.o
+ .debug_aranges
+                0x000021b8       0x20 ./build/rom_ns/strsep.o
+ .debug_aranges
+                0x000021d8       0x30 ./build/rom_ns/strstr.o
+ .debug_aranges
+                0x00002208       0x28 ./build/rom_ns/strtod.o
+ .debug_aranges
+                0x00002230       0x20 ./build/rom_ns/strtok.o
+ .debug_aranges
+                0x00002250       0x28 ./build/rom_ns/strtok_r.o
+ .debug_aranges
+                0x00002278       0x28 ./build/rom_ns/strtol.o
+ .debug_aranges
+                0x000022a0       0x28 ./build/rom_ns/strtoul.o
+ .debug_aranges
+                0x000022c8       0x20 ./build/rom_ns/strupr.o
+
+.debug_loc      0x00000000    0x52839
+ .debug_loc     0x00000000      0x27a ./build/rom_ns/char2num.o
+ .debug_loc     0x0000027a      0xf95 ./build/rom_ns/diag.o
+ .debug_loc     0x0000120f     0x18f4 ./build/rom_ns/mbedtls_rom_aes.o
+ .debug_loc     0x00002b03      0x1a1 ./build/rom_ns/mbedtls_rom_arc4.o
+ .debug_loc     0x00002ca4      0x844 ./build/rom_ns/mbedtls_rom_asn1parse.o
+ .debug_loc     0x000034e8      0xfcb ./build/rom_ns/mbedtls_rom_asn1write.o
+ .debug_loc     0x000044b3      0x5a0 ./build/rom_ns/mbedtls_rom_base64.o
+ .debug_loc     0x00004a53     0x69a4 ./build/rom_ns/mbedtls_rom_bignum.o
+ .debug_loc     0x0000b3f7      0xa0c ./build/rom_ns/mbedtls_rom_ctr_drbg.o
+ .debug_loc     0x0000be03     0x6165 ./build/rom_ns/mbedtls_rom_des.o
+ .debug_loc     0x00011f68      0xde3 ./build/rom_ns/mbedtls_rom_dhm.o
+ .debug_loc     0x00012d4b      0xb4c ./build/rom_ns/mbedtls_rom_ecdh.o
+ .debug_loc     0x00013897      0xf95 ./build/rom_ns/mbedtls_rom_ecdsa.o
+ .debug_loc     0x0001482c     0x1b7a ./build/rom_ns/mbedtls_rom_ecjpake.o
+ .debug_loc     0x000163a6     0x3ed6 ./build/rom_ns/mbedtls_rom_ecp.o
+ .debug_loc     0x0001a27c     0x1e10 ./build/rom_ns/mbedtls_rom_ecp_curves.o
+ .debug_loc     0x0001c08c      0x6c1 ./build/rom_ns/mbedtls_rom_hmac_drbg.o
+ .debug_loc     0x0001c74d      0xa10 ./build/rom_ns/mbedtls_rom_md.o
+ .debug_loc     0x0001d15d      0x876 ./build/rom_ns/mbedtls_rom_md_wrap.o
+ .debug_loc     0x0001d9d3     0x1271 ./build/rom_ns/mbedtls_rom_md5.o
+ .debug_loc     0x0001ec44      0x9d2 ./build/rom_ns/mbedtls_rom_oid.o
+ .debug_loc     0x0001f616      0xc1d ./build/rom_ns/mbedtls_rom_pem.o
+ .debug_loc     0x00020233     0x104f ./build/rom_ns/mbedtls_rom_pk.o
+ .debug_loc     0x00021282     0x137a ./build/rom_ns/mbedtls_rom_pk_wrap.o
+ .debug_loc     0x000225fc      0xd4f ./build/rom_ns/mbedtls_rom_pkwrite.o
+ .debug_loc     0x0002334b     0x31b3 ./build/rom_ns/mbedtls_rom_rsa.o
+ .debug_loc     0x000264fe     0x46e7 ./build/rom_ns/mbedtls_rom_sha1.o
+ .debug_loc     0x0002abe5      0xa04 ./build/rom_ns/mbedtls_rom_sha256.o
+ .debug_loc     0x0002b5e9      0xb23 ./build/rom_ns/mbedtls_rom_sha512.o
+ .debug_loc     0x0002c10c      0x1df ./build/rom_ns/memchr.o
+ .debug_loc     0x0002c2eb      0x166 ./build/rom_ns/memcmp.o
+ .debug_loc     0x0002c451      0x1e8 ./build/rom_ns/memcpy.o
+ .debug_loc     0x0002c639      0x292 ./build/rom_ns/memmove.o
+ .debug_loc     0x0002c8cb      0x1bd ./build/rom_ns/memset.o
+ .debug_loc     0x0002ca88      0x150 ./build/rom_ns/rand.o
+ .debug_loc     0x0002cbd8      0x27d ./build/rom_ns/rom_homekit_chacha_enc.o
+ .debug_loc     0x0002ce55      0x14e ./build/rom_ns/rom_homekit_ed25519.o
+ .debug_loc     0x0002cfa3     0xa94a ./build/rom_ns/rom_homekit_ed25519_ge_fe.o
+ .debug_loc     0x000378ed       0x9a ./build/rom_ns/rom_homekit_ed25519_keypair.o
+ .debug_loc     0x00037987      0x165 ./build/rom_ns/rom_homekit_ed25519_open.o
+ .debug_loc     0x00037aec     0x9019 ./build/rom_ns/rom_homekit_ed25519_sc.o
+ .debug_loc     0x00040b05       0xc4 ./build/rom_ns/rom_homekit_ed25519_sign.o
+ .debug_loc     0x00040bc9     0x126c ./build/rom_ns/rom_homekit_poly1305.o
+ .debug_loc     0x00041e35      0xba0 ./build/rom_ns/rom_homekit_sha512.o
+ .debug_loc     0x000429d5      0xffd ./build/rom_ns/rom_wac_curve25519-donna.o
+ .debug_loc     0x000439d2       0x8a ./build/rom_ns/rtl8721d_assert_rom.o
+ .debug_loc     0x00043a5c      0x160 ./build/rom_ns/rtl8721d_backup_reg.o
+ .debug_loc     0x00043bbc       0xcd ./build/rom_ns/rtl8721d_delay_rom.o
+ .debug_loc     0x00043c89      0xc9c ./build/rom_ns/rtl8721d_efuse_rom.o
+ .debug_loc     0x00044925      0xef3 ./build/rom_ns/rtl8721d_flash_rom.o
+ .debug_loc     0x00045818     0x14e3 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .debug_loc     0x00046cfb      0xa17 ./build/rom_ns/rtl8721d_gpio_rom.o
+ .debug_loc     0x00047712      0x30b ./build/rom_ns/rtl8721d_ipc_rom.o
+ .debug_loc     0x00047a1d       0xe5 ./build/rom_ns/rtl8721d_loguart_rom.o
+ .debug_loc     0x00047b02      0x1de ./build/rom_ns/rtl8721d_mpu_rom.o
+ .debug_loc     0x00047ce0      0x29b ./build/rom_ns/rtl8721d_otf_rom.o
+ .debug_loc     0x00047f7b      0x65f ./build/rom_ns/rtl8721d_pinmux_rom.o
+ .debug_loc     0x000485da       0xf0 ./build/rom_ns/rtl8721d_simulation_rom.o
+ .debug_loc     0x000486ca       0x81 ./build/rom_ns/rtl8721d_systimer_rom.o
+ .debug_loc     0x0004874b      0x44e ./build/rom_ns/rtl8721d_tim_rom.o
+ .debug_loc     0x00048b99      0x94a ./build/rom_ns/rtl8721d_uart_rom.o
+ .debug_loc     0x000494e3     0x128a ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .debug_loc     0x0004a76d      0x314 ./build/rom_ns/rtl8721dhp_boot_rom.o
+ .debug_loc     0x0004aa81      0x10c ./build/rom_ns/rtl8721dhp_clk_rom.o
+ .debug_loc     0x0004ab8d     0x2578 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+ .debug_loc     0x0004d105     0x1cf2 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .debug_loc     0x0004edf7      0x5b1 ./build/rom_ns/rtl8721dhp_rcc_rom.o
+ .debug_loc     0x0004f3a8      0x895 ./build/rom_ns/rtl8721dhp_vector_rom.o
+ .debug_loc     0x0004fc3d      0x867 ./build/rom_ns/sscanf.o
+ .debug_loc     0x000504a4       0x70 ./build/rom_ns/stratoi.o
+ .debug_loc     0x00050514       0x95 ./build/rom_ns/strcat.o
+ .debug_loc     0x000505a9      0x224 ./build/rom_ns/strchr.o
+ .debug_loc     0x000507cd      0x17d ./build/rom_ns/strcmp.o
+ .debug_loc     0x0005094a       0xdf ./build/rom_ns/strcpy.o
+ .debug_loc     0x00050a29       0x63 ./build/rom_ns/stricmp.o
+ .debug_loc     0x00050a8c       0xf0 ./build/rom_ns/strlen.o
+ .debug_loc     0x00050b7c       0xc2 ./build/rom_ns/strncat.o
+ .debug_loc     0x00050c3e      0x1b0 ./build/rom_ns/strncmp.o
+ .debug_loc     0x00050dee      0x155 ./build/rom_ns/strncpy.o
+ .debug_loc     0x00050f43       0xf9 ./build/rom_ns/strnlen.o
+ .debug_loc     0x0005103c       0x6e ./build/rom_ns/strpbrk.o
+ .debug_loc     0x000510aa       0x4d ./build/rom_ns/strsep.o
+ .debug_loc     0x000510f7      0xafb ./build/rom_ns/strstr.o
+ .debug_loc     0x00051bf2      0x2b6 ./build/rom_ns/strtod.o
+ .debug_loc     0x00051ea8       0x42 ./build/rom_ns/strtok.o
+ .debug_loc     0x00051eea      0x257 ./build/rom_ns/strtok_r.o
+ .debug_loc     0x00052141      0x397 ./build/rom_ns/strtol.o
+ .debug_loc     0x000524d8      0x336 ./build/rom_ns/strtoul.o
+ .debug_loc     0x0005280e       0x2b ./build/rom_ns/strupr.o
+
+.debug_ranges   0x00000000     0x35a8
+ .debug_ranges  0x00000000       0x80 ./build/rom_ns/char2num.o
+ .debug_ranges  0x00000080      0x148 ./build/rom_ns/diag.o
+ .debug_ranges  0x000001c8       0xa0 ./build/rom_ns/mbedtls_rom_aes.o
+ .debug_ranges  0x00000268       0x28 ./build/rom_ns/mbedtls_rom_arc4.o
+ .debug_ranges  0x00000290       0x70 ./build/rom_ns/mbedtls_rom_asn1parse.o
+ .debug_ranges  0x00000300       0x78 ./build/rom_ns/mbedtls_rom_asn1write.o
+ .debug_ranges  0x00000378       0x18 ./build/rom_ns/mbedtls_rom_base64.o
+ .debug_ranges  0x00000390      0x360 ./build/rom_ns/mbedtls_rom_bignum.o
+ .debug_ranges  0x000006f0       0x70 ./build/rom_ns/mbedtls_rom_ctr_drbg.o
+ .debug_ranges  0x00000760       0xc8 ./build/rom_ns/mbedtls_rom_des.o
+ .debug_ranges  0x00000828       0x70 ./build/rom_ns/mbedtls_rom_dhm.o
+ .debug_ranges  0x00000898       0x70 ./build/rom_ns/mbedtls_rom_ecdh.o
+ .debug_ranges  0x00000908       0x78 ./build/rom_ns/mbedtls_rom_ecdsa.o
+ .debug_ranges  0x00000980      0x120 ./build/rom_ns/mbedtls_rom_ecjpake.o
+ .debug_ranges  0x00000aa0      0x250 ./build/rom_ns/mbedtls_rom_ecp.o
+ .debug_ranges  0x00000cf0      0x8a0 ./build/rom_ns/mbedtls_rom_ecp_curves.o
+ .debug_ranges  0x00001590       0x78 ./build/rom_ns/mbedtls_rom_hmac_drbg.o
+ .debug_ranges  0x00001608       0xc8 ./build/rom_ns/mbedtls_rom_md.o
+ .debug_ranges  0x000016d0      0x118 ./build/rom_ns/mbedtls_rom_md_wrap.o
+ .debug_ranges  0x000017e8       0x50 ./build/rom_ns/mbedtls_rom_md5.o
+ .debug_ranges  0x00001838       0x80 ./build/rom_ns/mbedtls_rom_oid.o
+ .debug_ranges  0x000018b8       0x68 ./build/rom_ns/mbedtls_rom_pem.o
+ .debug_ranges  0x00001920       0xa0 ./build/rom_ns/mbedtls_rom_pk.o
+ .debug_ranges  0x000019c0      0x100 ./build/rom_ns/mbedtls_rom_pk_wrap.o
+ .debug_ranges  0x00001ac0       0x90 ./build/rom_ns/mbedtls_rom_pkwrite.o
+ .debug_ranges  0x00001b50       0xf8 ./build/rom_ns/mbedtls_rom_rsa.o
+ .debug_ranges  0x00001c48       0x50 ./build/rom_ns/mbedtls_rom_sha1.o
+ .debug_ranges  0x00001c98       0x50 ./build/rom_ns/mbedtls_rom_sha256.o
+ .debug_ranges  0x00001ce8       0x50 ./build/rom_ns/mbedtls_rom_sha512.o
+ .debug_ranges  0x00001d38       0x10 ./build/rom_ns/memchr.o
+ .debug_ranges  0x00001d48       0x10 ./build/rom_ns/memcmp.o
+ .debug_ranges  0x00001d58       0x10 ./build/rom_ns/memcpy.o
+ .debug_ranges  0x00001d68       0x10 ./build/rom_ns/memmove.o
+ .debug_ranges  0x00001d78       0x10 ./build/rom_ns/memset.o
+ .debug_ranges  0x00001d88       0x20 ./build/rom_ns/rand.o
+ .debug_ranges  0x00001da8       0x28 ./build/rom_ns/rom_homekit_chacha_enc.o
+ .debug_ranges  0x00001dd0       0x20 ./build/rom_ns/rom_homekit_ed25519.o
+ .debug_ranges  0x00001df0      0x2a0 ./build/rom_ns/rom_homekit_ed25519_ge_fe.o
+ .debug_ranges  0x00002090       0x10 ./build/rom_ns/rom_homekit_ed25519_keypair.o
+ .debug_ranges  0x000020a0       0x10 ./build/rom_ns/rom_homekit_ed25519_open.o
+ .debug_ranges  0x000020b0       0x28 ./build/rom_ns/rom_homekit_ed25519_sc.o
+ .debug_ranges  0x000020d8       0x10 ./build/rom_ns/rom_homekit_ed25519_sign.o
+ .debug_ranges  0x000020e8       0xd0 ./build/rom_ns/rom_homekit_poly1305.o
+ .debug_ranges  0x000021b8       0x88 ./build/rom_ns/rom_homekit_sha512.o
+ .debug_ranges  0x00002240      0x1d8 ./build/rom_ns/rom_wac_curve25519-donna.o
+ .debug_ranges  0x00002418       0x10 ./build/rom_ns/rtl8721d_assert_rom.o
+ .debug_ranges  0x00002428       0x30 ./build/rom_ns/rtl8721d_backup_reg.o
+ .debug_ranges  0x00002458       0x20 ./build/rom_ns/rtl8721d_delay_rom.o
+ .debug_ranges  0x00002478       0xa0 ./build/rom_ns/rtl8721d_efuse_rom.o
+ .debug_ranges  0x00002518       0xd0 ./build/rom_ns/rtl8721d_flash_rom.o
+ .debug_ranges  0x000025e8       0xa0 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .debug_ranges  0x00002688       0x68 ./build/rom_ns/rtl8721d_gpio_rom.o
+ .debug_ranges  0x000026f0       0x60 ./build/rom_ns/rtl8721d_ipc_rom.o
+ .debug_ranges  0x00002750       0x50 ./build/rom_ns/rtl8721d_loguart_rom.o
+ .debug_ranges  0x000027a0       0x88 ./build/rom_ns/rtl8721d_mpu_rom.o
+ .debug_ranges  0x00002828       0x40 ./build/rom_ns/rtl8721d_otf_rom.o
+ .debug_ranges  0x00002868       0x40 ./build/rom_ns/rtl8721d_pinmux_rom.o
+ .debug_ranges  0x000028a8       0x18 ./build/rom_ns/rtl8721d_simulation_rom.o
+ .debug_ranges  0x000028c0       0x20 ./build/rom_ns/rtl8721d_systimer_rom.o
+ .debug_ranges  0x000028e0       0x58 ./build/rom_ns/rtl8721d_tim_rom.o
+ .debug_ranges  0x00002938       0xe0 ./build/rom_ns/rtl8721d_uart_rom.o
+ .debug_ranges  0x00002a18       0x98 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .debug_ranges  0x00002ab0       0x50 ./build/rom_ns/rtl8721dhp_boot_rom.o
+ .debug_ranges  0x00002b00       0x28 ./build/rom_ns/rtl8721dhp_clk_rom.o
+ .debug_ranges  0x00002b28      0x3a0 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+ .debug_ranges  0x00002ec8       0xf8 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .debug_ranges  0x00002fc0       0x10 ./build/rom_ns/rtl8721dhp_ns_entry.o
+ .debug_ranges  0x00002fd0       0x30 ./build/rom_ns/rtl8721dhp_rcc_rom.o
+ .debug_ranges  0x00003000       0x10 ./build/rom_ns/rtl8721dhp_syscfg_rom.o
+ .debug_ranges  0x00003010      0x2b0 ./build/rom_ns/rtl8721dhp_vector_rom.o
+ .debug_ranges  0x000032c0       0x50 ./build/rom_ns/sscanf.o
+ .debug_ranges  0x00003310       0x10 ./build/rom_ns/stratoi.o
+ .debug_ranges  0x00003320       0x10 ./build/rom_ns/strcat.o
+ .debug_ranges  0x00003330       0x10 ./build/rom_ns/strchr.o
+ .debug_ranges  0x00003340       0x10 ./build/rom_ns/strcmp.o
+ .debug_ranges  0x00003350       0x10 ./build/rom_ns/strcpy.o
+ .debug_ranges  0x00003360       0x28 ./build/rom_ns/stricmp.o
+ .debug_ranges  0x00003388       0x10 ./build/rom_ns/strlen.o
+ .debug_ranges  0x00003398       0x10 ./build/rom_ns/strncat.o
+ .debug_ranges  0x000033a8       0x10 ./build/rom_ns/strncmp.o
+ .debug_ranges  0x000033b8       0x10 ./build/rom_ns/strncpy.o
+ .debug_ranges  0x000033c8       0x10 ./build/rom_ns/strnlen.o
+ .debug_ranges  0x000033d8       0x10 ./build/rom_ns/strpbrk.o
+ .debug_ranges  0x000033e8       0x10 ./build/rom_ns/strsep.o
+ .debug_ranges  0x000033f8       0xa0 ./build/rom_ns/strstr.o
+ .debug_ranges  0x00003498       0xa8 ./build/rom_ns/strtod.o
+ .debug_ranges  0x00003540       0x10 ./build/rom_ns/strtok.o
+ .debug_ranges  0x00003550       0x18 ./build/rom_ns/strtok_r.o
+ .debug_ranges  0x00003568       0x18 ./build/rom_ns/strtol.o
+ .debug_ranges  0x00003580       0x18 ./build/rom_ns/strtoul.o
+ .debug_ranges  0x00003598       0x10 ./build/rom_ns/strupr.o
+
+.debug_str      0x00000000    0x1dfd9
+ .debug_str     0x00000000      0x1d2 ./build/rom_ns/char2num.o
+ .debug_str     0x000001d2      0x3e4 ./build/rom_ns/diag.o
+ .debug_str     0x000005b6      0x605 ./build/rom_ns/mbedtls_rom_aes.o
+ .debug_str     0x00000bbb      0x2d5 ./build/rom_ns/mbedtls_rom_arc4.o
+ .debug_str     0x00000e90      0x614 ./build/rom_ns/mbedtls_rom_asn1parse.o
+ .debug_str     0x000014a4      0x66d ./build/rom_ns/mbedtls_rom_asn1write.o
+ .debug_str     0x00001b11      0x2ba ./build/rom_ns/mbedtls_rom_base64.o
+ .debug_str     0x00001dcb      0x8e3 ./build/rom_ns/mbedtls_rom_bignum.o
+ .debug_str     0x000026ae      0x54c ./build/rom_ns/mbedtls_rom_ctr_drbg.o
+ .debug_str     0x00002bfa      0x6cb ./build/rom_ns/mbedtls_rom_des.o
+ .debug_str     0x000032c5      0x5a3 ./build/rom_ns/mbedtls_rom_dhm.o
+ .debug_str     0x00003868      0x725 ./build/rom_ns/mbedtls_rom_ecdh.o
+ .debug_str     0x00003f8d      0xa26 ./build/rom_ns/mbedtls_rom_ecdsa.o
+ .debug_str     0x000049b3      0x9e7 ./build/rom_ns/mbedtls_rom_ecjpake.o
+ .debug_str     0x0000539a      0xdb6 ./build/rom_ns/mbedtls_rom_ecp.o
+ .debug_str     0x00006150      0x9e7 ./build/rom_ns/mbedtls_rom_ecp_curves.o
+ .debug_str     0x00006b37      0x560 ./build/rom_ns/mbedtls_rom_hmac_drbg.o
+ .debug_str     0x00007097      0x7da ./build/rom_ns/mbedtls_rom_md.o
+ .debug_str     0x00007871      0xae3 ./build/rom_ns/mbedtls_rom_md_wrap.o
+ .debug_str     0x00008354      0x365 ./build/rom_ns/mbedtls_rom_md5.o
+ .debug_str     0x000086b9      0xe71 ./build/rom_ns/mbedtls_rom_oid.o
+ .debug_str     0x0000952a      0xd12 ./build/rom_ns/mbedtls_rom_pem.o
+ .debug_str     0x0000a23c      0x88d ./build/rom_ns/mbedtls_rom_pk.o
+ .debug_str     0x0000aac9      0xd05 ./build/rom_ns/mbedtls_rom_pk_wrap.o
+ .debug_str     0x0000b7ce      0x73d ./build/rom_ns/mbedtls_rom_pkwrite.o
+ .debug_str     0x0000bf0b      0xb93 ./build/rom_ns/mbedtls_rom_rsa.o
+ .debug_str     0x0000ca9e      0x375 ./build/rom_ns/mbedtls_rom_sha1.o
+ .debug_str     0x0000ce13      0x398 ./build/rom_ns/mbedtls_rom_sha256.o
+ .debug_str     0x0000d1ab      0x398 ./build/rom_ns/mbedtls_rom_sha512.o
+ .debug_str     0x0000d543      0x1e9 ./build/rom_ns/memchr.o
+ .debug_str     0x0000d72c      0x1bb ./build/rom_ns/memcmp.o
+ .debug_str     0x0000d8e7      0x1e2 ./build/rom_ns/memcpy.o
+ .debug_str     0x0000dac9      0x1ee ./build/rom_ns/memmove.o
+ .debug_str     0x0000dcb7      0x1e3 ./build/rom_ns/memset.o
+ .debug_str     0x0000de9a      0x2bd ./build/rom_ns/rand.o
+ .debug_str     0x0000e157      0x25b ./build/rom_ns/rom_homekit_chacha_enc.o
+ .debug_str     0x0000e3b2      0x299 ./build/rom_ns/rom_homekit_ed25519.o
+ .debug_str     0x0000e64b      0x9d9 ./build/rom_ns/rom_homekit_ed25519_ge_fe.o
+ .debug_str     0x0000f024      0x2c7 ./build/rom_ns/rom_homekit_ed25519_keypair.o
+ .debug_str     0x0000f2eb      0x3be ./build/rom_ns/rom_homekit_ed25519_open.o
+ .debug_str     0x0000f6a9      0x301 ./build/rom_ns/rom_homekit_ed25519_sc.o
+ .debug_str     0x0000f9aa      0x37a ./build/rom_ns/rom_homekit_ed25519_sign.o
+ .debug_str     0x0000fd24      0x2fc ./build/rom_ns/rom_homekit_poly1305.o
+ .debug_str     0x00010020      0x438 ./build/rom_ns/rom_homekit_sha512.o
+ .debug_str     0x00010458      0x3a9 ./build/rom_ns/rom_ssl_ram_map.o
+ .debug_str     0x00010801      0x44e ./build/rom_ns/rom_wac_curve25519-donna.o
+ .debug_str     0x00010c4f      0x45d ./build/rom_ns/rtl8721d_assert_rom.o
+ .debug_str     0x000110ac      0x32b ./build/rom_ns/rtl8721d_backup_reg.o
+ .debug_str     0x000113d7      0x28d ./build/rom_ns/rtl8721d_cache_rom.o
+ .debug_str     0x00011664      0x2d2 ./build/rom_ns/rtl8721d_delay_rom.o
+ .debug_str     0x00011936      0x6e5 ./build/rom_ns/rtl8721d_efuse_rom.o
+ .debug_str     0x0001201b      0x958 ./build/rom_ns/rtl8721d_flash_rom.o
+ .debug_str     0x00012973     0x1232 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .debug_str     0x00013ba5      0x583 ./build/rom_ns/rtl8721d_gpio_rom.o
+ .debug_str     0x00014128      0x5bb ./build/rom_ns/rtl8721d_ipc_rom.o
+ .debug_str     0x000146e3      0x4a2 ./build/rom_ns/rtl8721d_loguart_rom.o
+ .debug_str     0x00014b85      0x5c2 ./build/rom_ns/rtl8721d_mpu_rom.o
+ .debug_str     0x00015147      0x46b ./build/rom_ns/rtl8721d_otf_rom.o
+ .debug_str     0x000155b2      0x3a7 ./build/rom_ns/rtl8721d_pinmux_rom.o
+ .debug_str     0x00015959      0x2e0 ./build/rom_ns/rtl8721d_simulation_rom.o
+ .debug_str     0x00015c39      0x387 ./build/rom_ns/rtl8721d_systimer_rom.o
+ .debug_str     0x00015fc0      0x4a3 ./build/rom_ns/rtl8721d_tim_rom.o
+ .debug_str     0x00016463      0x66d ./build/rom_ns/rtl8721d_uart_rom.o
+ .debug_str     0x00016ad0      0x693 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .debug_str     0x00017163      0x8a7 ./build/rom_ns/rtl8721dhp_boot_rom.o
+ .debug_str     0x00017a0a      0x318 ./build/rom_ns/rtl8721dhp_clk_rom.o
+ .debug_str     0x00017d22     0x1007 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+ .debug_str     0x00018d29      0x7c2 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .debug_str     0x000194eb      0x2cc ./build/rom_ns/rtl8721dhp_faac_tables.o
+ .debug_str     0x000197b7      0x31d ./build/rom_ns/rtl8721dhp_ns_entry.o
+ .debug_str     0x00019ad4      0x45c ./build/rom_ns/rtl8721dhp_rcc_rom.o
+ .debug_str     0x00019f30      0x29f ./build/rom_ns/rtl8721dhp_syscfg_rom.o
+ .debug_str     0x0001a1cf      0xef3 ./build/rom_ns/rtl8721dhp_vector_rom.o
+ .debug_str     0x0001b0c2      0x405 ./build/rom_ns/sscanf.o
+ .debug_str     0x0001b4c7      0x28a ./build/rom_ns/stratoi.o
+ .debug_str     0x0001b751      0x1c7 ./build/rom_ns/strcat.o
+ .debug_str     0x0001b918      0x1c6 ./build/rom_ns/strchr.o
+ .debug_str     0x0001bade      0x1b4 ./build/rom_ns/strcmp.o
+ .debug_str     0x0001bc92      0x1d6 ./build/rom_ns/strcpy.o
+ .debug_str     0x0001be68      0x29d ./build/rom_ns/stricmp.o
+ .debug_str     0x0001c105      0x1ce ./build/rom_ns/strlen.o
+ .debug_str     0x0001c2d3      0x1c8 ./build/rom_ns/strncat.o
+ .debug_str     0x0001c49b      0x1bd ./build/rom_ns/strncmp.o
+ .debug_str     0x0001c658      0x1e5 ./build/rom_ns/strncpy.o
+ .debug_str     0x0001c83d      0x292 ./build/rom_ns/strnlen.o
+ .debug_str     0x0001cacf      0x285 ./build/rom_ns/strpbrk.o
+ .debug_str     0x0001cd54      0x1d0 ./build/rom_ns/strsep.o
+ .debug_str     0x0001cf24      0x29f ./build/rom_ns/strstr.o
+ .debug_str     0x0001d1c3      0x310 ./build/rom_ns/strtod.o
+ .debug_str     0x0001d4d3      0x1d2 ./build/rom_ns/strtok.o
+ .debug_str     0x0001d6a5      0x1ed ./build/rom_ns/strtok_r.o
+ .debug_str     0x0001d892      0x24f ./build/rom_ns/strtol.o
+ .debug_str     0x0001dae1      0x252 ./build/rom_ns/strtoul.o
+ .debug_str     0x0001dd33      0x2a6 ./build/rom_ns/strupr.o
+
+.debug_frame    0x00000000     0x66b8
+ .debug_frame   0x00000000       0x40 ./build/rom_ns/char2num.o
+ .debug_frame   0x00000040      0x160 ./build/rom_ns/diag.o
+ .debug_frame   0x000001a0      0x198 ./build/rom_ns/mbedtls_rom_aes.o
+ .debug_frame   0x00000338       0x70 ./build/rom_ns/mbedtls_rom_arc4.o
+ .debug_frame   0x000003a8      0x1a0 ./build/rom_ns/mbedtls_rom_asn1parse.o
+ .debug_frame   0x00000548      0x198 ./build/rom_ns/mbedtls_rom_asn1write.o
+ .debug_frame   0x000006e0       0x58 ./build/rom_ns/mbedtls_rom_base64.o
+ .debug_frame   0x00000738      0x648 ./build/rom_ns/mbedtls_rom_bignum.o
+ .debug_frame   0x00000d80      0x188 ./build/rom_ns/mbedtls_rom_ctr_drbg.o
+ .debug_frame   0x00000f08      0x25c ./build/rom_ns/mbedtls_rom_des.o
+ .debug_frame   0x00001164      0x15c ./build/rom_ns/mbedtls_rom_dhm.o
+ .debug_frame   0x000012c0      0x17c ./build/rom_ns/mbedtls_rom_ecdh.o
+ .debug_frame   0x0000143c      0x190 ./build/rom_ns/mbedtls_rom_ecdsa.o
+ .debug_frame   0x000015cc      0x260 ./build/rom_ns/mbedtls_rom_ecjpake.o
+ .debug_frame   0x0000182c      0x57c ./build/rom_ns/mbedtls_rom_ecp.o
+ .debug_frame   0x00001da8      0x1bc ./build/rom_ns/mbedtls_rom_ecp_curves.o
+ .debug_frame   0x00001f64      0x140 ./build/rom_ns/mbedtls_rom_hmac_drbg.o
+ .debug_frame   0x000020a4      0x208 ./build/rom_ns/mbedtls_rom_md.o
+ .debug_frame   0x000022ac      0x280 ./build/rom_ns/mbedtls_rom_md_wrap.o
+ .debug_frame   0x0000252c      0x100 ./build/rom_ns/mbedtls_rom_md5.o
+ .debug_frame   0x0000262c      0x1d0 ./build/rom_ns/mbedtls_rom_oid.o
+ .debug_frame   0x000027fc      0x13c ./build/rom_ns/mbedtls_rom_pem.o
+ .debug_frame   0x00002938      0x1fc ./build/rom_ns/mbedtls_rom_pk.o
+ .debug_frame   0x00002b34      0x340 ./build/rom_ns/mbedtls_rom_pk_wrap.o
+ .debug_frame   0x00002e74      0x114 ./build/rom_ns/mbedtls_rom_pkwrite.o
+ .debug_frame   0x00002f88      0x400 ./build/rom_ns/mbedtls_rom_rsa.o
+ .debug_frame   0x00003388      0x100 ./build/rom_ns/mbedtls_rom_sha1.o
+ .debug_frame   0x00003488      0x100 ./build/rom_ns/mbedtls_rom_sha256.o
+ .debug_frame   0x00003588      0x110 ./build/rom_ns/mbedtls_rom_sha512.o
+ .debug_frame   0x00003698       0x34 ./build/rom_ns/memchr.o
+ .debug_frame   0x000036cc       0x38 ./build/rom_ns/memcmp.o
+ .debug_frame   0x00003704       0x30 ./build/rom_ns/memcpy.o
+ .debug_frame   0x00003734       0x30 ./build/rom_ns/memmove.o
+ .debug_frame   0x00003764       0x34 ./build/rom_ns/memset.o
+ .debug_frame   0x00003798       0x70 ./build/rom_ns/rand.o
+ .debug_frame   0x00003808       0x40 ./build/rom_ns/rom_homekit_chacha_enc.o
+ .debug_frame   0x00003848       0x4c ./build/rom_ns/rom_homekit_ed25519.o
+ .debug_frame   0x00003894      0x3f4 ./build/rom_ns/rom_homekit_ed25519_ge_fe.o
+ .debug_frame   0x00003c88       0x34 ./build/rom_ns/rom_homekit_ed25519_keypair.o
+ .debug_frame   0x00003cbc       0x38 ./build/rom_ns/rom_homekit_ed25519_open.o
+ .debug_frame   0x00003cf4       0xa4 ./build/rom_ns/rom_homekit_ed25519_sc.o
+ .debug_frame   0x00003d98       0x3c ./build/rom_ns/rom_homekit_ed25519_sign.o
+ .debug_frame   0x00003dd4       0xc0 ./build/rom_ns/rom_homekit_poly1305.o
+ .debug_frame   0x00003e94      0x11c ./build/rom_ns/rom_homekit_sha512.o
+ .debug_frame   0x00003fb0      0x178 ./build/rom_ns/rom_wac_curve25519-donna.o
+ .debug_frame   0x00004128       0x28 ./build/rom_ns/rtl8721d_assert_rom.o
+ .debug_frame   0x00004150       0x8c ./build/rom_ns/rtl8721d_backup_reg.o
+ .debug_frame   0x000041dc       0x50 ./build/rom_ns/rtl8721d_delay_rom.o
+ .debug_frame   0x0000422c      0x100 ./build/rom_ns/rtl8721d_efuse_rom.o
+ .debug_frame   0x0000432c      0x2bc ./build/rom_ns/rtl8721d_flash_rom.o
+ .debug_frame   0x000045e8      0x258 ./build/rom_ns/rtl8721d_gdma_rom.o
+ .debug_frame   0x00004840      0x148 ./build/rom_ns/rtl8721d_gpio_rom.o
+ .debug_frame   0x00004988      0x108 ./build/rom_ns/rtl8721d_ipc_rom.o
+ .debug_frame   0x00004a90       0xd0 ./build/rom_ns/rtl8721d_loguart_rom.o
+ .debug_frame   0x00004b60       0xb8 ./build/rom_ns/rtl8721d_mpu_rom.o
+ .debug_frame   0x00004c18       0xbc ./build/rom_ns/rtl8721d_otf_rom.o
+ .debug_frame   0x00004cd4       0x98 ./build/rom_ns/rtl8721d_pinmux_rom.o
+ .debug_frame   0x00004d6c       0x30 ./build/rom_ns/rtl8721d_simulation_rom.o
+ .debug_frame   0x00004d9c       0x5c ./build/rom_ns/rtl8721d_systimer_rom.o
+ .debug_frame   0x00004df8      0x124 ./build/rom_ns/rtl8721d_tim_rom.o
+ .debug_frame   0x00004f1c      0x278 ./build/rom_ns/rtl8721d_uart_rom.o
+ .debug_frame   0x00005194      0x2c0 ./build/rom_ns/rtl8721dhp_aes_rom.o
+ .debug_frame   0x00005454       0x90 ./build/rom_ns/rtl8721dhp_boot_rom.o
+ .debug_frame   0x000054e4       0x50 ./build/rom_ns/rtl8721dhp_clk_rom.o
+ .debug_frame   0x00005534      0x1e0 ./build/rom_ns/rtl8721dhp_crypto_rom.o
+ .debug_frame   0x00005714      0x478 ./build/rom_ns/rtl8721dhp_des_rom.o
+ .debug_frame   0x00005b8c       0x20 ./build/rom_ns/rtl8721dhp_ns_entry.o
+ .debug_frame   0x00005bac       0x9c ./build/rom_ns/rtl8721dhp_rcc_rom.o
+ .debug_frame   0x00005c48       0x20 ./build/rom_ns/rtl8721dhp_syscfg_rom.o
+ .debug_frame   0x00005c68      0x4cc ./build/rom_ns/rtl8721dhp_vector_rom.o
+ .debug_frame   0x00006134       0x94 ./build/rom_ns/sscanf.o
+ .debug_frame   0x000061c8       0x34 ./build/rom_ns/stratoi.o
+ .debug_frame   0x000061fc       0x28 ./build/rom_ns/strcat.o
+ .debug_frame   0x00006224       0x4c ./build/rom_ns/strchr.o
+ .debug_frame   0x00006270       0x3c ./build/rom_ns/strcmp.o
+ .debug_frame   0x000062ac       0x30 ./build/rom_ns/strcpy.o
+ .debug_frame   0x000062dc       0x38 ./build/rom_ns/stricmp.o
+ .debug_frame   0x00006314       0x34 ./build/rom_ns/strlen.o
+ .debug_frame   0x00006348       0x30 ./build/rom_ns/strncat.o
+ .debug_frame   0x00006378       0x54 ./build/rom_ns/strncmp.o
+ .debug_frame   0x000063cc       0x34 ./build/rom_ns/strncpy.o
+ .debug_frame   0x00006400       0x30 ./build/rom_ns/strnlen.o
+ .debug_frame   0x00006430       0x2c ./build/rom_ns/strpbrk.o
+ .debug_frame   0x0000645c       0x20 ./build/rom_ns/strsep.o
+ .debug_frame   0x0000647c       0xd8 ./build/rom_ns/strstr.o
+ .debug_frame   0x00006554       0x54 ./build/rom_ns/strtod.o
+ .debug_frame   0x000065a8       0x20 ./build/rom_ns/strtok.o
+ .debug_frame   0x000065c8       0x48 ./build/rom_ns/strtok_r.o
+ .debug_frame   0x00006610       0x44 ./build/rom_ns/strtol.o
+ .debug_frame   0x00006654       0x44 ./build/rom_ns/strtoul.o
+ .debug_frame   0x00006698       0x20 ./build/rom_ns/strupr.o

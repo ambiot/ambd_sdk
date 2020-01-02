@@ -1,0 +1,45 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "fdc2a819-843d-4c83-959e-a509fb0dc083++2235+++FFDBFF8",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "fdc2a819-843d-4c83-959e-a509fb0dc083++2235+++171D77D" : {
+
+    },
+    "fdc2a819-843d-4c83-959e-a509fb0dc083++2235+++134092F" : {
+
+    },
+    "fdc2a819-843d-4c83-959e-a509fb0dc083++2235+++FFDBFF8" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "fdc2a819-843d-4c83-959e-a509fb0dc083++2235+++171D77D" : 0,
+    "fdc2a819-843d-4c83-959e-a509fb0dc083++2235+++134092F" : 0,
+    "fdc2a819-843d-4c83-959e-a509fb0dc083++2235+++FFDBFF8" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "92213F44-D50A-48C6-9DDC-206FA6ED9B9C",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "fdc2a819-843d-4c83-959e-a509fb0dc083++2235+++171D77D" : "SCW\/",
+    "fdc2a819-843d-4c83-959e-a509fb0dc083++2235+++134092F" : "SCW\/",
+    "fdc2a819-843d-4c83-959e-a509fb0dc083++2235+++FFDBFF8" : "SCW_R3\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "SimpleConfig",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "SimpleConfig.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/cadinfo.realtek.com.tw\/svn\/CN\/jungle",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "fdc2a819-843d-4c83-959e-a509fb0dc083++2235+++134092F"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/cadinfo.realtek.com.tw\/svn\/CN\/jungle",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "fdc2a819-843d-4c83-959e-a509fb0dc083++2235+++171D77D"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/cadinfo.realtek.com.tw\/svn\/CN\/jungle",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "fdc2a819-843d-4c83-959e-a509fb0dc083++2235+++FFDBFF8"
+    }
+  ]
+}

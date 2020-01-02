@@ -1,0 +1,8 @@
+# GDB script for loading ram.bin process
+
+source gnu_utility/gnu_script/rtl_gdb_jtag_boot_com_p2335.txt
+source gnu_utility/gnu_script/rtl_gdb_mem_write.txt
+
+#===============================================================================
+quit
+

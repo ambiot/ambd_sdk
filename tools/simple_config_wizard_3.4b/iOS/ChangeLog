@@ -1,0 +1,20 @@
+                        ChangeLog
+----------------------------------------------------------------
+2016/03/08
+	- Using CocoaAsyncSocket framework to instead of AsyncUdpSocket
+	- Adjust AsyncSocket releated code
+	
+2015/10/23
+	- Support iOS 9.
+
+2015/08/24
+	- Re-fine simple config
+	
+2015/05/26
+	- Support iOS 8.
+	
+2014/10/20
+	- Re-fine configure flow when DUT receives first UDP packet.
+	
+2014/03/27
+	- Initial Release

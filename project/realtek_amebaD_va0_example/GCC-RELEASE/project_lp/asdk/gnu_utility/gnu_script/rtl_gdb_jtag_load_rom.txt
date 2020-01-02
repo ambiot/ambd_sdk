@@ -1,0 +1,15 @@
+# GDB script for loading ram.bin process
+
+source gnu_utility/gnu_script/rtl_gdb_jtag_boot_com.txt
+
+#===============================================================================
+#Load the file
+#file ./image/target.axf
+restore ./lib/rom_acut/km0_irom.bin binary 0x0
+restore ./lib/rom_acut/km0_drom.bin binary 0x00020000
+
+#dump binary memory  dump.bin 0x00000000 0x00080000
+
+#===============================================================================
+quit
+

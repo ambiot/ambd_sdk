@@ -1,0 +1,507 @@
+
+#*****************************************************************************#
+#                                Variable Definition                          #
+#*****************************************************************************#
+CONFIGDIR		= $(ABS_ROOTDIR)/config
+SCRIPTSDIR		= $(CONFIGDIR)/scripts
+MENU_CONFIG		= $(CONFIGDIR)/.config
+include $(MENU_CONFIG)
+
+ifneq ($(CONFIG_TOOLCHAIN_ARM_GCC), y)
+ROOTDIR		= $(ABS_ROOTDIR)
+else
+CURRENT_PATH	:= $(shell pwd)
+ROOTDIR		:= $(shell realpath --relative-to=$(CURRENT_PATH) $(ABS_ROOTDIR))
+endif
+
+#gcc release
+SRCDIR		=$(ROOTDIR)/../../../src/src_hp
+INCDIR		=$(ROOTDIR)/../../../inc/inc_hp
+BASEDIR		= $(ROOTDIR)/../../../../..
+KM0_BUILDDIR	= $(ROOTDIR)/../../project_lp
+KM4_BUILDDIR	= $(ROOTDIR)/../../project_hp
+
+TARGETDIR	=$(BASEDIR)/component/soc/realtek/amebad
+BOOTLOADER	=$(BASEDIR)/component/soc/realtek/amebad/bootloader
+UTILITYDIR	= $(ROOTDIR)/gnu_utility
+FLASHDLDIR	= $(UTILITYDIR)/flash_download
+GNU_SCRIPT	= $(UTILITYDIR)/gnu_script
+FLASHDLIMGDIR	= $(GNU_SCRIPT)/acut_loader
+FLASHDLIMGDIR_KM0	= $(KM0_BUILDDIR)/asdk/gnu_utility/gnu_script/acut_loader
+
+TOOLCHAINDIR	= $(ROOTDIR)/../toolchain
+
+OSDIR		= $(BASEDIR)/component/os
+FREERTOSDIR	= $(BASEDIR)/component/os/freertos/freertos_v10.2.0/Source
+SSLDIR		 = $(BASEDIR)/component/common/network/ssl/polarssl-1.3.8
+MBEDTLSDIR	 = $(BASEDIR)/component/common/network/ssl/mbedtls-2.4.0
+
+#ROM code folder
+CMSISMATHLIBDIR  = $(BASEDIR)/component/soc/realtek/8711b/fwlib/test/ft_test/cmsis_math
+
+BUILDDIR	= $(ROOTDIR)/build
+PHERIEXAMPLE	= $(ROOTDIR)/../example/demo_peripheral
+# -----------------------------------------------------------------------------
+PREPENDTOOL		= $(UTILITYDIR)/prepend_header.sh
+LXDIALOG_CYGWIN_STATIC 	= $(UTILITYDIR)/lxdialog_prebuilt/lxdialog_cygwin_x86_static.exe
+COMPILEOS		= $(shell uname -o)
+COMPILEOS_CYGWIN	= $(shell uname -o | cut -c 1-6)
+LINUX_OS		= GNU/Linux
+HOSTCC			= cc
+MAKE			= make
+
+#*****************************************************************************#
+#                              Compile Flag                                #
+#*****************************************************************************#
+#AmebaZ should fix following config
+CONFIG_RELEASE_BUILD_RAM_ALL=y
+CONFIG_IMAGE_ALL=y
+CONFIG_SEPERATE_MAKEFILE=y
+
+#*****************************************************************************#
+#                              Build Directory                                #
+#*****************************************************************************#
+
+BUILD_TARGET_FOLDER     = $(ROOTDIR)/build
+BUILD_TARGET_RAM_FOLDER = $(ROOTDIR)/build/ram
+BUILD_TARGET_ROM_FOLDER = $(ROOTDIR)/build/rom
+BUILD_TARGET_ROM_FOLDER_NS = $(ROOTDIR)/build/rom_ns
+
+IMAGE_TARGET_FOLDER     = $(ROOTDIR)/image
+
+ifeq ($(COMPILEOS),$(LINUX_OS))
+ASDK_TOOLCHAIN = $(TOOLCHAINDIR)/linux/asdk-6.4.1/linux/newlib
+ASDK_TOOLCHAIN_R = ../toolchain/linux/asdk-6.4.1/linux/newlib
+else
+ASDK_TOOLCHAIN = $(TOOLCHAINDIR)/cygwin/asdk-6.4.1/cygwin/newlib
+ASDK_TOOLCHAIN_R = ../toolchain/cygwin/asdk-6.4.1/cygwin/newlib
+endif
+
+tool_dir = $(ASDK_TOOLCHAIN)/bin
+
+DEPS = $(patsubst %.o, %.d, $(OBJS))
+
+#****************************************************************************#
+#                             ARM TOOLS DEFINITION                           #
+#****************************************************************************#
+CONFIG_TOOLCHAIN_LD_GCC=y
+
+#TOOL_PREFIX = arm-elf-eabi-
+TOOL_PREFIX = arm-none-eabi-
+
+CC = $(tool_dir)/$(TOOL_PREFIX)gcc
+AS = $(tool_dir)/$(TOOL_PREFIX)as
+AR = $(tool_dir)/$(TOOL_PREFIX)ar
+#LD = $(tool_dir)/$(TOOL_PREFIX)ld
+LD = $(tool_dir)/$(TOOL_PREFIX)gcc
+LD_ROM = $(tool_dir)/$(TOOL_PREFIX)ld
+
+CC_SIZE = $(tool_dir)/$(TOOL_PREFIX)size
+OBJDUMP = $(tool_dir)/$(TOOL_PREFIX)objdump
+FROMELF = $(tool_dir)/$(TOOL_PREFIX)objcopy
+STRIP   = $(tool_dir)/$(TOOL_PREFIX)strip
+NM	= $(tool_dir)/$(TOOL_PREFIX)nm
+
+#GDB = $(tool_dir)/asdk-elf-gdb
+#READELF =  $(tool_dir)/asdk-elf-readelf
+GDB = $(tool_dir)/arm-none-eabi-gdb
+GDBR = $(ASDK_TOOLCHAIN_R)/bin/arm-none-eabi-gdb
+READELF = $(tool_dir)/arm-none-eabi-readelf
+
+REMOVE    = -rm -f
+REMOVEDIR = rm -rf
+MKDIR     = mkdir
+MAKE      = make
+CD        = cd
+COPY      = cp
+MOVE      = mv
+
+
+#*****************************************************************************#
+#                              Include Directories
+#*****************************************************************************#
+
+IFLAGS               = -I.
+IFLAGS               += -I$(OSDIR)/
+IFLAGS               += -I$(OSDIR)/freertos
+IFLAGS               += -I$(FREERTOSDIR)/include/
+IFLAGS               += -I$(FREERTOSDIR)/portable/GCC/RTL8721D_HP/non_secure
+IFLAGS               += -I$(FREERTOSDIR)/portable/GCC/RTL8721D_HP/secure
+
+IFLAGS               += -I$(TARGETDIR)/cmsis/
+IFLAGS               += -I$(TARGETDIR)/cmsis/device
+IFLAGS               += -I$(TARGETDIR)/cmsis-dsp/Source
+IFLAGS               += -I$(TARGETDIR)/fwlib/include
+IFLAGS               += -I$(TARGETDIR)/fwlib/rom_map_hp
+IFLAGS               += -I$(TARGETDIR)/app/monitor/include
+IFLAGS               += -I$(TARGETDIR)/app/xmodem
+IFLAGS               += -I$(TARGETDIR)/swlib/include
+IFLAGS               += -I$(TARGETDIR)/swlib/string
+IFLAGS               += -I$(TARGETDIR)/misc
+IFLAGS               += -I$(TARGETDIR)/swlib/os_dep/include/
+IFLAGS               += -I$(TARGETDIR)/swlib/os_dep/../
+IFLAGS               += -I$(TARGETDIR)/swlib/string
+IFLAGS               += -I$(TARGETDIR)/fwlib/usb_otg
+
+IFLAGS               += -I$(INCDIR)
+IFLAGS               += -I$(BASEDIR)/component/common/api
+IFLAGS               += -I$(BASEDIR)/component/common/api/platform
+IFLAGS               += -I$(BASEDIR)/component/common/api/wifi
+IFLAGS               += -I$(BASEDIR)/component/common/api/network
+IFLAGS               += -I$(BASEDIR)/component/common/api/network/include
+IFLAGS               += -I$(BASEDIR)/component/common/audio
+IFLAGS               += -I$(BASEDIR)/component/common/test
+IFLAGS               += -I$(BASEDIR)/component/common/example
+IFLAGS               += -I$(BASEDIR)/component/common/utilities
+IFLAGS				 += -I$(BASEDIR)/component/common/drivers/si
+
+#AUDIO
+IFLAGS               += -I$(BASEDIR)/component/common/audio
+IFLAGS               += -I$(BASEDIR)/component/common/audio/faac/include
+IFLAGS               += -I$(BASEDIR)/component/common/audio/faac/libfaac
+IFLAGS               += -I$(BASEDIR)/component/common/audio/faac
+IFLAGS				 += -I$(BASEDIR)/component/common/audio/haac
+IFLAGS				 += -I$(BASEDIR)/component/common/audio/hmp3
+IFLAGS				 += -I$(BASEDIR)/component/common/audio/g711
+IFLAGS				 += -I$(BASEDIR)/component/common/audio/speex
+IFLAGS				 += -I$(BASEDIR)/component/common/audio/speex/speex
+IFLAGS				 += -I$(BASEDIR)/component/common/audio/fdk-aac
+#IFLAGS				 += -I$(BASEDIR)/component/common/audio/libav
+IFLAGS				 += -I$(BASEDIR)/component/common/audio/fdk-aac/libSYS/include
+
+#MMF
+IFLAGS               += -I$(BASEDIR)/component/common/example/media_framework
+IFLAGS               += -I$(BASEDIR)/component/common/media
+IFLAGS               += -I$(BASEDIR)/component/common/media/samples
+IFLAGS               += -I$(BASEDIR)/component/common/media/mmfv2
+IFLAGS               += -I$(BASEDIR)/component/common/media/rtp_codec
+
+#WIFI
+IFLAGS               += -I$(BASEDIR)/component/common/drivers/wlan/realtek/include
+IFLAGS               += -I$(BASEDIR)/component/common/drivers/wlan/realtek/src/hci
+IFLAGS               += -I$(BASEDIR)/component/common/drivers/wlan/realtek/src/osdep
+IFLAGS               += -I$(BASEDIR)/component/common/drivers/wlan/realtek/src/hal
+IFLAGS               += -I$(BASEDIR)/component/common/drivers/wlan/realtek/src/hal/phydm
+IFLAGS               += -I$(BASEDIR)/component/common/drivers/wlan/realtek/src/hal/rtl8721d
+IFLAGS               += -I$(BASEDIR)/component/common/drivers/wlan/realtek/wlan_ram_map/rom
+IFLAGS               += -I$(BASEDIR)/component/common/drivers/wlan/realtek/src/core/option
+IFLAGS               += -I$(BASEDIR)/component/common/network
+IFLAGS               += -I$(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/src/include
+IFLAGS               += -I$(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/src/include/lwip
+IFLAGS               += -I$(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/src/include/netif
+#IFLAGS               += -I$(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/src/include/ipv4
+IFLAGS               += -I$(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/port/realtek
+IFLAGS               += -I$(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/port/realtek/freertos
+IFLAGS               += -I$(BASEDIR)/component/common/api
+IFLAGS               += -I$(BASEDIR)/component/common/api/at_cmd
+IFLAGS               += -I$(BASEDIR)/component/common/api/wifi/rtw_wpa_supplicant/src
+IFLAGS               += -I$(BASEDIR)/component/common/api/wifi/rtw_wpa_supplicant/src/crypto
+IFLAGS               += -I$(BASEDIR)/component/os/os_dep/include/
+
+#INIC
+IFLAGS               += -I$(BASEDIR)/component/common/drivers/inic/rtl8721d
+
+#RTSP
+IFLAGS               += -I$(BASEDIR)/component/common/network/rtsp
+
+#SSL
+IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/polarssl-1.3.8/include
+IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/ssl_ram_map/rom
+
+#MBEDTLS
+IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/mbedtls-2.4.0/include
+IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/mbedtls_ram_map/rom
+IFLAGS               += -I$(BASEDIR)/component/common/application/amazon/amazon-freertos/lib/include/private
+
+#temp for git server code
+IFLAGS               += -I$(BASEDIR)/component/common/mbed/targets/hal/rtl8721d/
+IFLAGS               += -I$(BASEDIR)/component/common/mbed/targets/hal/rtl8721d/include
+IFLAGS               += -I$(BASEDIR)/component/common/mbed/api/
+IFLAGS               += -I$(BASEDIR)/component/common/mbed/hal/
+IFLAGS               += -I$(BASEDIR)/component/common/mbed/hal_ext/
+
+#baidu
+IFLAGS               += -I$(BASEDIR)/component/common/application/baidu/libduer-device/external/mbedtls-port \
+#apple
+IFLAGS               += -I$(BASEDIR)/component/common/application/apple/WACServer/External/Curve25519 \
+			-I$(BASEDIR)/component/common/application/apple/WACServer/External/GladmanAES \
+			-I$(BASEDIR)/component/common/application/apple/homekit/crypto/chacha \
+			-I$(BASEDIR)/component/common/application/apple/homekit/crypto/poly1305 \
+			-I$(BASEDIR)/component/common/application/apple/homekit/crypto/ed25519 \
+			-I$(BASEDIR)/component/common/application/apple/homekit/crypto/ed25519/core \
+			-I$(BASEDIR)/component/common/application/apple/homekit/crypto/sha512
+
+IFLAGS               += -I$(BASEDIR)/component/common/file_system/fatfs/r0.10c/include \
+			-I$(BASEDIR)/component/common/file_system/fatfs \
+			-I$(BASEDIR)/component/common/file_system/ftl \
+			-I$(BASEDIR)/component/common/file_system/dct
+
+IFLAGS               += -I$(BASEDIR)/component/common/application/baidu/libduer-device/framework/core \
+			-I$(BASEDIR)/component/common/application/baidu/libduer-device/framework/include \
+			-I$(BASEDIR)/component/common/application/baidu/duerapp/include
+
+IFLAGS               += -I$(BASEDIR)/component/common/ui/emwin/emWinLibrary/include \
+			-I$(BASEDIR)/component/common/ui/emwin/Sample/rtl8721d/Config \
+			-I$(BASEDIR)/component/common/ui/emwin/Sample/rtl8721d/hal \
+#bluetooth
+ifeq ($(CONFIG_BT_EN), y) 
+include  $(ABS_ROOTDIR)/Makefile.include.bt.gen
+endif 
+#BT config
+IFLAGS               += -I$(BASEDIR)/component/common/bluetooth/realtek/sdk/example/bt_config
+
+
+#*****************************************************************************#
+#                             ARM ASSEMBLER FLAGS
+#*****************************************************************************#
+ASM_FLAGS = -g -march=armv8-m.main+dsp -mthumb -c
+
+ASM_FLAGS += $(IFLAGS)
+ifeq ($(CONFIG_TOOLCHAIN_ARM_GCC), y)
+ASM_FLAGS += $(MODULE_IFLAGS)
+endif
+
+
+#*****************************************************************************#
+#                           ARM COMPILATION FLAGS
+#*****************************************************************************#
+#"CCFlags": [
+#"-march=armv8-m.main+dsp",
+#"-mthumb",
+#"-mcmse",      
+#"-mfloat-abi=softfp",
+#"-mfpu=fpv5-sp-d16",
+#"-D__thumb2__",
+#"-g",
+#"-gdwarf-3",
+#"-nostartfiles",
+#"-nodefaultlibs",
+#"-nostdlib",
+#"-O2",
+#"-DCONFIG_PLATFORM_8195BHP",
+#"-D__FPU_PRESENT",
+#"-D__ARM_ARCH_7M__=0",
+#"-D__ARM_ARCH_7EM__=0",
+#"-D__ARM_ARCH_8M_MAIN__=1",
+#"-D__ARM_ARCH_8M_BASE__=0"
+#],
+#"CCFlags": [
+#"-gdwarf-3",
+#"-fstack-usage",
+#"-fdata-sections",
+#"-ffunction-sections",
+#"-nostartfiles",
+#"-nostdlib",
+#"-Wall",
+#"-Wpointer-arith",
+#"-Wstrict-prototypes",
+#"-Wundef",
+#"-Wno-write-strings",
+#"-Wno-maybe-uninitialized",
+#"--save-temps",
+#"-c",
+#"-MMD"
+#],
+
+GLOBAL_CFLAGS += -march=armv8-m.main+dsp 
+GLOBAL_CFLAGS += -mthumb 
+GLOBAL_CFLAGS += -mcmse 
+GLOBAL_CFLAGS += -mfloat-abi=hard
+GLOBAL_CFLAGS += -mfpu=fpv5-sp-d16
+
+GLOBAL_CFLAGS += -g
+GLOBAL_CFLAGS += -gdwarf-3
+GLOBAL_CFLAGS += -nostartfiles
+GLOBAL_CFLAGS += -nodefaultlibs
+GLOBAL_CFLAGS += -nostdlib
+GLOBAL_CFLAGS += -O2
+GLOBAL_CFLAGS += -D__FPU_PRESENT
+
+GLOBAL_CFLAGS += -gdwarf-3
+GLOBAL_CFLAGS += -fstack-usage
+GLOBAL_CFLAGS += -fdata-sections
+#GLOBAL_CFLAGS += -ffunction-sections
+GLOBAL_CFLAGS += -nostartfiles
+GLOBAL_CFLAGS += -nostdlib
+GLOBAL_CFLAGS += -Wall
+GLOBAL_CFLAGS += -Wpointer-arith
+GLOBAL_CFLAGS += -Wstrict-prototypes
+GLOBAL_CFLAGS += -Wundef
+GLOBAL_CFLAGS += -Wno-write-strings
+GLOBAL_CFLAGS += -Wno-maybe-uninitialized
+GLOBAL_CFLAGS += --save-temps
+GLOBAL_CFLAGS += -c
+GLOBAL_CFLAGS += -MMD
+
+#GLOBAL_CFLAGS += -specs nosys.specs 
+#GLOBAL_CFLAGS += -fno-short-enums
+GLOBAL_CFLAGS += -Wextra
+
+GLOBAL_CFLAGS += $(IFLAGS)
+GLOBAL_CFLAGS += -DCONFIG_PLATFORM_8721D
+GLOBAL_CFLAGS += -DCONFIG_USE_MBEDTLS_ROM_ALG
+GLOBAL_CFLAGS += -DCONFIG_FUNCION_O0_OPTIMIZE
+GLOBAL_CFLAGS += -DDM_ODM_SUPPORT_TYPE=32
+
+CPPFLAGS = $(GLOBAL_CFLAGS)
+CPPFLAGS += -std=c++11 -fno-use-cxa-atexit
+
+ifeq (${BUILD_TYPE},MFG)
+GLOBAL_CFLAGS += -DCONFIG_BT_MP
+GLOBAL_CFLAGS += -DCONFIG_MP_INCLUDED
+endif
+
+#*****************************************************************************#
+#                           ARM LD FLAGS
+#*****************************************************************************#
+#"LDFlags": [
+#"-O2",
+#"-march=armv8-m.main+dsp",
+#"-mthumb",
+#"-mcmse",      
+#"-mfloat-abi=softfp",
+#"-mfpu=fpv5-sp-d16"
+#],
+#"LDFlags": [
+#"-nostartfiles",
+#"-specs nosys.specs",
+#"-Wl,--gc-sections",
+#"-Wl,--warn-section-align",
+#"-Wl,-Map=./output/text.map",
+#"-Wl,--cref",
+#"-Wl,--build-id=none"
+#],
+
+LD_ARG = -L$(ASDK_TOOLCHAIN)/lib/
+LD_ARG += -L$(ROOTDIR)/lib/
+LD_ARG += -L$(ROOTDIR)/lib/application
+LD_ARG += -T$(BUILD_TARGET_FOLDER)/rlx8721d.ld 
+
+LD_ARG += -O2
+LD_ARG += -march=armv8-m.main+dsp
+LD_ARG += -mthumb
+LD_ARG += -mcmse
+LD_ARG += -mfloat-abi=hard
+LD_ARG += -mfpu=fpv5-sp-d16
+
+LD_ARG += -nostartfiles
+LD_ARG += -specs nosys.specs
+LD_ARG += -Wl,--gc-sections
+LD_ARG += -Wl,--warn-section-align
+LD_ARG += -Wl,-Map=text.map 
+LD_ARG += -Wl,--cref
+LD_ARG += -Wl,--build-id=none
+LD_ARG += -save-temps 
+
+#LD_ARG += -Wl,--entry=Reset_Handler
+LD_ARG += -Wl,--no-enum-size-warning 
+LD_ARG += -Wl,--warn-common -o
+
+#*****************************************************************************#
+#                           ARM LD Secure OUT FLAGS
+#*****************************************************************************#
+LD_SEC_OUT_ARG += -Wl,--out-implib=cmse_implib.lib
+LD_SEC_OUT_ARG += -Wl,--cmse-implib
+
+#*****************************************************************************#
+#                           ARM LD Secure IN FLAGS
+#*****************************************************************************#
+LD_SEC_IN_ARG += -Wl,--in-implib=$(IMAGE_TARGET_FOLDER)/cmse_implib.lib
+LD_SEC_IN_ARG += -Wl,--cmse-implib
+
+#*****************************************************************************#
+#                           ROM LD FLAGS
+#*****************************************************************************#
+ROM_LD_ARG += -march=armv8-m.main+dsp
+ROM_LD_ARG += -mthumb 
+ROM_LD_ARG += -mcmse 
+ROM_LD_ARG += -Wl,-Map=rom.map 
+ROM_LD_ARG += -Wl,--warn-common 
+ROM_LD_ARG += -Wl,--no-enum-size-warning 
+#*****************************************************************************#
+#              COPYING OBJECT FILES TO THE BUILD DIRECTORY                    #
+#*****************************************************************************#
+
+COPY_RAM_OBJS:
+	echo "=============================================================" \
+	       >> $(ROOTDIR)/ram_size.txt;\
+	$(CC_SIZE) -t $(OBJS) >> $(ROOTDIR)/ram_size.txt;\
+	for i in  $(OBJS) $(ASM_OBJS); do \
+		echo $$i >> $(ROOTDIR)/obj_list.txt;\
+		 $(COPY)  $$i $(BUILD_TARGET_RAM_FOLDER) -f;\
+		done \
+
+#*****************************************************************************#
+#              CLEAN OBJECT FILES FOR MAKE CLEAN                    	      #
+#*****************************************************************************#
+CLEAN_OBJS:
+	$(REMOVE) $(OBJS)
+	$(REMOVE) $(OBJS:.o=.d)
+	$(REMOVE) $(OBJS:.o=.i)
+	$(REMOVE) $(OBJS:.o=.s)
+	$(REMOVE) $(OBJS:.o=.su)
+
+#*****************************************************************************#
+#              COPYING OBJECT FILES TO THE BUILD APPL DIRECTORY               #
+#*****************************************************************************#
+
+COPY_ROM_OBJS:
+	echo "=============================================================" \
+	       >> $(ROOTDIR)/rom_size.txt;\
+	$(CC_SIZE) -t $(OBJS) $(ASM_OBJS) >> $(ROOTDIR)/rom_size.txt;\
+	for i in  $(OBJS) $(ASM_OBJS); do \
+		 $(COPY)  $$i $(BUILD_TARGET_ROM_FOLDER) -f;\
+		done \
+
+#	@-$(COPY) *.o $(BUILD_TARGET_ROM_FOLDER) -f
+#	$(REMOVE) *.o
+
+
+#*****************************************************************************#
+#              RENAME OBJECT FILES SECTION                                    #
+#*****************************************************************************#
+RENAME_ROM_OBJS:
+	OBJ_LIST=$(ls *.o)
+	for obj_file in $(OBJS) $(ASM_OBJS); do \
+		$(FROMELF) --rename-section .rodata.str1.4=.rom.rodata.str1.4 $$obj_file $$obj_file; \
+                $(FROMELF) --rename-section .rodata.str1.1=.rom.rodata.str1.1 $$obj_file $$obj_file; \
+                $(FROMELF) --rename-section .rodata=.rom.rodata $$obj_file $$obj_file; \
+	done \
+
+RENAME_LOADER_OBJS:
+	OBJ_LIST=$(ls *.o)
+	for obj_file in $(OBJS) $(ASM_OBJS); do \
+		$(FROMELF) --rename-section .rodata.str1.4=.boot.rodata.str1.4 $$obj_file $$obj_file; \
+	done \
+
+RENAME_CODE2SRAM:
+	OBJ_LIST=$(ls *.o)
+	for obj_file in $(OBJS) $(ASM_OBJS); do \
+		$(FROMELF) --rename-section .text=.image2.ram.text $$obj_file $$obj_file; \
+	done \
+
+NETWORK_RENAME_CODE2SRAM:
+	OBJ_LIST=$(ls *.o)
+	for obj_file in $(OBJS) $(ASM_OBJS); do \
+		$(FROMELF) --rename-section .text=.image2.net.ram.text $$obj_file $$obj_file; \
+	done \
+
+#*****************************************************************************#
+#              RULES TO GENERATE OBJECT FILE FROM .C FILE                     #
+#*****************************************************************************#
+
+%.o:%.c
+	$(CC) -ffunction-sections $(GLOBAL_CFLAGS) $(MODULE_IFLAGS) $<  -o $@
+
+#*****************************************************************************#
+#              RULES TO GENERATE OBJECT FILE FROM .CPP FILE                   #
+#*****************************************************************************#
+%.o:%.cpp
+	$(CC) -ffunction-sections $(CPPFLAGS) $(MODULE_IFLAGS) $< -o $@
+
+#*****************************************************************************#
+#              RULES TO GENERATE OBJECT FILE FROM .S FILE                     #
+#*****************************************************************************#
+
+%.o:%.S
+	$(CC) $(ASM_FLAGS) $< -o $@

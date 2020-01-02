@@ -1,0 +1,248 @@
+#! /bin/sh
+#############################################################################
+#
+#	Generate the vendor/product menu entries for the top level config
+#
+#############################################################################
+
+fix_name()
+{
+	echo $1 | tr '[\-\.\/\+a-z]' '[____A-Z]'
+}
+
+#############################################################################
+#
+# the header of the config
+#
+
+cat <<!EOF
+mainmenu_name 'RTL Bootcode Configuration'
+mainmenu_option next_comment
+comment 'Target Platform Selection'
+comment 'Choose a Vendor/Product combination.'
+!EOF
+
+#############################################################################
+#
+# Figure out the vendor/products dynamically, allows people to add there
+# own without messin with the config.in file
+#
+
+echo -n "choice 'Vendor/Product' \""
+
+#find vendors/*/*/config.arch -print | sed -e 's?/? ?g' | \
+#		sort | while read t1 v p t2
+#do
+#	[ "$v" = "config" ] && continue
+#	if [ -f "vendors/$v/$p/config.languages" ]
+#	then
+#		for i in `cat "vendors/$v/$p/config.languages"`
+#		do
+#		echo "Realtek/RTL8186  CONFIG_DEFAULTS_REALTEK_RTL8186  \\"
+		echo "RTL865X CONFIG_DEFAULTS_REALTEK_RTL865XC  \\"
+		echo "RTL8652_5G_AUTO_SCAN  CONFIG_DEFAULTS_REALTEK_RTL8652_5G  \\"
+		echo "RTL8196B CONFIG_DEFAULTS_REALTEK_RTL8196B  \\"
+		echo "RTL8197B CONFIG_DEFAULTS_REALTEK_RTL8197B  \\"
+#		done
+#	else
+#		echo "${v}/${p} CONFIG_DEFAULTS_`fix_name ${v}`_`fix_name ${p}` \\"
+#	fi
+#done
+
+echo "\" Realtek/RTL865XC"
+echo
+
+############################################################################
+#
+#  SDK Targeted for
+#
+#  For RTL8186 SoC Chip
+echo "if [ \"\$CONFIG_DEFAULTS_REALTEK_RTL8186\" = \"y\" ]; then"
+echo -n "choice 'is the target of SDK ' \""
+echo "11gRouter_GW    CONFIG_RTL8186_8186SDK_GW \\"
+echo "11gRouter_GW_8M CONFIG_RTL8186_8186SDK_GW_8M \\"
+echo "11gRouter_AP    CONFIG_RTL8186_8186SDK_AP \\"
+echo "\" 11nRouter_AP"
+echo "fi"
+echo
+# For RTL865XC SoC Chip
+echo "if [ \"\$CONFIG_DEFAULTS_REALTEK_RTL865XC\" = \"y\" ]; then"
+echo -n "choice 'is the target of HW Setting ' \""
+echo "Flash2M_Dram16M_8Mx2_32bit   CONFIG_F2_D16_32 \\"
+echo "Flash2M_Dram16M_16Mx1_16bit    CONFIG_F2_D16_16 \\"
+echo "Flash4M_Dram32M_16Mx2_32bit    CONFIG_F4_D32_32 \\"
+echo "Flash4M_Dram32M_32Mx1_16bit    CONFIG_F4_D32_16 \\"
+echo "Flash4M_Dram32M_32Mx2_32bit    CONFIG_F4_D64_32 \\"
+#echo "865xSDK_11nRouter  CONFIG_RTL865XC_865XSDK_11NROUTER \\"
+#echo "865xSDK_CommonPlat CONFIG_RTL865XC_865XSDK_COMMON \\"
+echo "\" Flash2M_Dram16M_8Mx2_32bit"
+echo "fi"
+echo
+
+# For RTL8652_5G_AUTO_SCAN SoC Chip
+echo "if [ \"\$CONFIG_DEFAULTS_REALTEK_RTL8652_5G\" = \"y\" ]; then"
+echo -n "choice 'is the target of HW Setting ' \""
+echo "Flash2M_Dram16M_8Mx2_32bit   CONFIG_F2_D16_32 \\"
+echo "Flash2M_Dram16M_16Mx1_16bit    CONFIG_F2_D16_16 \\"
+echo "Flash4M_Dram32M_16Mx2_32bit    CONFIG_F4_D32_32 \\"
+echo "Flash4M_Dram32M_32Mx1_16bit    CONFIG_F4_D32_16 \\"
+echo "Flash4M_Dram32M_32Mx2_32bit    CONFIG_F4_D64_32 \\"
+#echo "865xSDK_11nRouter  CONFIG_RTL865XC_865XSDK_11NROUTER \\"
+#echo "865xSDK_CommonPlat CONFIG_RTL865XC_865XSDK_COMMON \\"
+echo "\" Flash4M_Dram32M_16Mx2_32bit"
+echo "fi"
+echo
+echo "if [ \"\$CONFIG_DEFAULTS_REALTEK_RTL8196\" = \"y\" ]; then"
+ 
+echo -n "choice 'is the target of SDK ' \""
+echo "11nRouter_GW  CONFIG_RTL8196_8186SDK_GW \\"
+echo "11nRouter_AP  CONFIG_RTL8196_8186SDK_AP \\"
+echo "\" 11nRouter_AP"
+echo "fi"
+echo
+
+# For RTL8196B SoC Chip
+echo "if [ \"\$CONFIG_DEFAULTS_REALTEK_RTL8196B\" = \"y\" ]; then"
+echo -n "choice 'is the target of HW Setting ' \""
+echo "Dram8M_8Mx1_16bit    CONFIG_D8_16 \\"
+echo "Dram16M_16Mx1_16bit  CONFIG_D16_16 \\"
+echo "Dram32M_32Mx1_16bit  CONFIG_D32_16 \\"
+echo "Dram64M_64Mx1_16bit  CONFIG_D64_16 \\"
+echo "\" CONFIG_D32_16"
+echo "fi"
+echo
+# For RTL8196B SoC Chip
+echo "if [ \"\$CONFIG_DEFAULTS_REALTEK_RTL8196B\" = \"y\" ]; then"
+echo -n "choice 'is FLASH Type ' \""
+echo "NOR_FLASH  CONFIG_NOR_FLASH \\"
+echo "SPI_FLASH  CONFIG_SPI_FLASH \\"
+echo "\" NOR_FLASH"
+echo "fi"
+echo
+#for SDRAM and DDR support 
+echo "if [ \"\$CONFIG_DEFAULTS_REALTEK_RTL8196B\" = \"y\" ]; then"
+echo -n "choice 'is SDRAM Type ' \""
+echo "NORMAL  CONFIG_SDRAM \\"
+echo "DDR  CONFIG_DDR_SDRAM \\"
+echo "\" NORMAL"
+echo "fi"
+echo
+
+
+
+# For RTL8197B SoC Chip
+echo "if [ \"\$CONFIG_DEFAULTS_REALTEK_RTL8197B\" = \"y\" ]; then"
+echo -n "choice 'is the target of HW Setting ' \""
+echo "Dram8M_8Mx1_16bit    CONFIG_D8_16 \\"
+echo "Dram16M_16Mx1_16bit  CONFIG_D16_16 \\"
+echo "Dram32M_32Mx1_16bit  CONFIG_D32_16 \\"
+echo "\" CONFIG_D8_16"
+echo -n "choice 'is SDRAM Type ' \""
+echo "NORMAL  CONFIG_SDRAM \\"
+echo "DDR  CONFIG_DDR_SDRAM \\"
+echo "\" NORMAL"
+echo "fi"
+echo
+
+#for Switch support 
+echo "if [ \"\$CONFIG_DEFAULTS_REALTEK_RTL8196B\" = \"y\" ]; then"
+echo -n "choice 'is SWITCH Type ' \""
+echo "10M_100M  CONFIG_SW_100M \\"
+echo "8366_GIGA  CONFIG_SW_8366GIGA \\"
+echo "\" 10M_100M"
+echo "fi"
+echo
+
+# pkshih: add to easier editing 
+cat config/mkconfig-items
+
+#############################################################################
+#
+# Which kernel do they want,  if only one then just set it,  I don't
+# expect an explosion of kernels just yet ;-)
+#
+
+#KERNELS="`ls -d ../linux-* 2>/dev/null`"
+#NKERNELS="`echo ${KERNELS} | wc -w`"
+#if [ ${NKERNELS} -gt 1 ]; then
+#	echo -n "choice 'Kernel Version' \""
+#	echo "linux-2.4.18 CONFIG_DEFAULTS_KERNEL_2_4_18 \\"
+#	echo " linux-2.6.x CONFIG_DEFAULTS_KERNEL_2_6_x \\"
+#	echo "\" linux-2.6.x"
+#
+#elif [ ${NKERNELS} -eq 1 ]; then
+#	VER=${KERNELS##linux-}
+#	CFG="CONFIG_DEFAULTS_KERNEL_`echo ${VER%%.x}|sed -e 's/\./_/'`"
+#	echo "comment 'Kernel is linux-${VER}'"
+#	echo "define_bool ${CFG} y"
+#else
+#	echo "ERROR: you have no kernels available in this directory." >&2
+#	exit 1
+#fi
+
+#############################################################################
+#
+# Which libc do they want,  if only one then just set it,  I don't
+# expect an explosion of libc's just yet ;-)
+#
+
+#LIBCS="`ls -d lib/libc uClibc uClibc-* glibc glibc-* 2>/dev/null`"
+#NLIBCS="`echo ${LIBCS} | wc -w`"
+#if [ ${NLIBCS} -gt 1 ]; then
+#	echo -n "choice 'Libc Version' \""
+#	for i in ${LIBCS}; do
+#		[ "$i" = "lib/libc" ] && i=uC-libc
+#		CFG="CONFIG_DEFAULTS_LIBC_`fix_name ${i}`"
+#		DEF="${i}"
+#		echo "${DEF} ${CFG} \\"
+#	done
+#	echo "\" $DEF"
+#elif [ ${NLIBCS} -eq 1 ]; then
+#	[ "$LIBCS" = "lib/libc" ] && LIBCS=uC-libc
+#	CFG="CONFIG_DEFAULTS_LIBC_`fix_name ${LIBCS}`"
+#	echo "comment 'Libc is ${LIBCS}'"
+#	echo "define_bool ${CFG} y"
+#else
+#	echo "ERROR: you have no libc available in this directory." >&2
+#	exit 1
+#fi
+
+#############################################################################
+#
+# the rest of the config
+#
+
+#cat <<!EOF
+#bool 'Default all settings (lose changes)'	CONFIG_DEFAULTS_OVERRIDE
+#bool 'Customize Kernel Settings'			CONFIG_DEFAULTS_KERNEL
+#!EOF
+#[ -d modules ] &&
+#	echo "bool 'Customize Module Settings'			CONFIG_DEFAULTS_MODULES"
+cat <<!EOF
+bool 'LZMA Enable(Default GZip)'		CONFIG_LZMA_ENABLE
+bool 'Support DHCP Server'			CONFIG_DHCP_SERVER
+bool 'Support HTTP Update'			CONFIG_HTTP_SERVER
+bool 'Power On Self Test Enable'		CONFIG_POST_ENABLE
+bool 'Boot Code Debug Command Enable'		CONFIG_BOOT_DEBUG_ENABLE
+#bool 'Update Default Vendor Settings'		CONFIG_DEFAULTS_VENDOR_UPDATE
+#endmenu
+#!EOF
+
+############################################################################
+
+bool 'Enable Test Slave PCIE'	CONFIG_SPE_MODULE
+
+if [ "\$CONFIG_SPE_MODULE" = "y" ]; then
+
+choice 'Slave PCIE Port Type'	"SPE_EP_Host CONFIG_SPE_HOST \
+			SPE_EP_Slave CONFIG_SPE_DEVICE \					
+			" SPE_EP_Host			
+						
+fi
+
+############################################################################
+
+bool 'Support History Keyin'		CONFIG_HISTORY_KEYIN
+############################################################################
+endmenu
+!EOF

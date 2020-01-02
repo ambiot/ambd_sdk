@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent" android:layout_height="match_parent"
+	android:orientation="horizontal">
+
+	<LinearLayout android:id="@+id/linearLayout2"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:orientation="horizontal">
+
+	    <ImageView
+			android:layout_alignParentLeft="true"
+			android:layout_height="35dp"
+			android:layout_width="35dp"
+			android:layout_gravity="center_vertical|left"
+			android:padding="3dp"
+			android:id="@+id/signalImg">
+		</ImageView>
+    
+		<LinearLayout android:id="@+id/linearLayout1"
+			android:layout_width="0dp" 
+			android:layout_height="60dp"
+			android:orientation="horizontal"
+			android:layout_weight="9">
+			<TextView android:id="@+id/title_aplist"
+			    android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize = "20dp"
+				android:layout_gravity="center_vertical|left"
+  				android:gravity="center_vertical|left"
+  				android:layout_weight="6"></TextView>
+
+			<TextView android:id="@+id/info_aplist"
+			    android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize = "15dp"
+				android:textColor="#3333ff"
+				android:layout_gravity="center_vertical|right"
+  				android:gravity="center_vertical|left"
+  				android:layout_weight="1"></TextView>
+			<RadioGroup
+		        android:id="@+id/radioButton1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center_vertical|right"
+  				android:gravity="center_vertical|left"
+		        android:text="" />
+			
+
+		</LinearLayout>
+
+
+	</LinearLayout>
+</LinearLayout>

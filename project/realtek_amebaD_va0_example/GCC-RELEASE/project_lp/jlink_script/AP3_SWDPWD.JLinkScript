@@ -1,0 +1,203 @@
+/*********************************************************************
+*                    SEGGER Microcontroller GmbH                     *
+*        Solutions for real time microcontroller applications        *
+**********************************************************************
+*                                                                    *
+*            (c) 1995 - 2018 SEGGER Microcontroller GmbH             *
+*                                                                    *
+* Internet: www.segger.com Support: support@segger.com               *
+*                                                                    *
+**********************************************************************
+----------------------------------------------------------------------
+Purpose : 
+---------------------------END-OF-HEADER------------------------------
+*/
+
+/*********************************************************************
+*
+*       ConfigTargetSettings
+*/
+int ConfigTargetSettings(void) {
+  CORESIGHT_AHBAPCSWDefaultSettings = 0x03000002; // default secure if SPIDEN = 1
+  //CORESIGHT_AHBAPCSWDefaultSettings = 0x43000002; // default nonsecure if SPIDEN = 0
+}
+
+/*********************************************************************
+*
+*       SetupTarget
+*/
+void SetupTarget(void) {
+  Report("******************************************************");
+  Report("J-Link script: SetupTarget()");
+  Report("******************************************************");
+  //MEM_WriteU32(0xE6151010, 0x00000002);
+  //MEM_WriteU32(0xE6160044, 0x5A5A0003);
+}
+
+/*********************************************************************
+*
+*       SWDPWD_Write_Right
+*/
+void SWDPWD_Write_Right(void) {
+  Report("******************************************************");
+  Report("J-Link script: SWDPWD_Write_Right()");
+  Report("******************************************************");
+
+  //  SWDPWD write right
+  JLINK_CORESIGHT_WriteAP(1, 0x0004); // target address of PASSWORD
+  JLINK_CORESIGHT_WriteAP(3, 0x04030201);
+  JLINK_CORESIGHT_WriteAP(1, 0x0008); // target address of PASSWORD
+  JLINK_CORESIGHT_WriteAP(3, 0x14131211);
+  JLINK_CORESIGHT_WriteAP(1, 0x000c); // target address of PASSWORD
+  JLINK_CORESIGHT_WriteAP(3, 0x24232221);
+  JLINK_CORESIGHT_WriteAP(1, 0x0010); // target address of PASSWORD
+  JLINK_CORESIGHT_WriteAP(3, 0x34333231);
+}
+
+/*********************************************************************
+*
+*       SWDPWD_Write_Wrong
+*/
+void SWDPWD_Write_Wrong(void) {
+	Report("******************************************************");
+	Report("J-Link script: SWDPWD_Write_Wrong()");
+	Report("******************************************************");
+
+	//  SWDPWD write wrong
+	JLINK_CORESIGHT_WriteAP(1, 0x0004); // target address of PASSWORD
+	JLINK_CORESIGHT_WriteAP(3, 0x04030201);
+	JLINK_CORESIGHT_WriteAP(1, 0x0008); // target address of PASSWORD
+	JLINK_CORESIGHT_WriteAP(3, 0x14131211);
+	JLINK_CORESIGHT_WriteAP(1, 0x000c); // target address of PASSWORD
+	JLINK_CORESIGHT_WriteAP(3, 0x24232221);
+	JLINK_CORESIGHT_WriteAP(1, 0x0010); // target address of PASSWORD
+	JLINK_CORESIGHT_WriteAP(3, 0x34333230);
+}
+
+/*********************************************************************
+*
+*       SWDPWD_Compare_Enable
+*/
+void SWDPWD_Compare_Enable(void) {
+	int tmp;
+	int tmp1;
+
+	Report("******************************************************");
+	Report("J-Link script: SWDPWD_Compare_Enable()");
+	Report("******************************************************");
+
+	JLINK_CORESIGHT_WriteAP(1, 0x0000); // PASSWORD compare enable
+	JLINK_CORESIGHT_WriteAP(3, (1<<1));
+
+	JLINK_CORESIGHT_WriteAP(1, 0x0000);
+	tmp=JLINK_CORESIGHT_ReadAP(3);
+	Report("******************ctrl register check*****************");
+	Report1("ctrl reg value:",tmp);
+  
+	while(tmp&(1<<1)){
+		Report("compare enable!");
+		JLINK_CORESIGHT_WriteAP(1, 0x0000);
+		tmp=JLINK_CORESIGHT_ReadAP(3);
+		if ((tmp&(1<<1))==0){
+			break;
+		}
+	}
+
+	if (tmp&(1<<3)) {
+		Report("Password right!");
+	} else {
+		Report("Password wrong!");
+		
+		/* try to set ctrl reg bit3 */
+		JLINK_CORESIGHT_WriteAP(1, 0x0000);
+		JLINK_CORESIGHT_WriteAP(3, (1<<3));
+		JLINK_CORESIGHT_WriteAP(1, 0x0000);
+		tmp=JLINK_CORESIGHT_ReadAP(3);
+		Report1("try to set bit3, changed??? ctrl=",tmp);
+	}
+  
+	if (tmp&(1<<4)){
+		Report("SWD password locked!");
+		Report1("lock bit, ctrl_tmp=",tmp);
+		
+		/* try to clear lockbit */
+		JLINK_CORESIGHT_WriteAP(1, 0x0000);
+		JLINK_CORESIGHT_WriteAP(3, (0<<4));
+		JLINK_CORESIGHT_WriteAP(1, 0x0000);
+		tmp=JLINK_CORESIGHT_ReadAP(3);
+		Report1("try to clear lockbit, bit4 changed??? ctrl=",tmp);
+	}
+	
+  Report("**********************check end**********************");
+}
+
+/*********************************************************************
+*
+*       ResetTarget
+*/
+void ResetTarget(void) {
+	int v;
+  int Speed;
+  int Ctrl;
+  int loop;
+
+  Report("******************************************************");
+  Report("J-Link script: ResetTarget()");
+  Report("******************************************************");
+  Speed = JTAG_Speed;
+  JTAG_Speed = 3000;
+  JTAG_WriteClocks(1);
+
+  //
+  // Select CTRL_AP(APB-AP, AP3) and set authentication interface
+  //
+  JLINK_CORESIGHT_WriteDP(2, (3 << 24) | (0 << 4));  // Select AP[3], bank 0
+  Ctrl = 0x23800052; // AP3.CSW  //NO PWD compare enable
+  JLINK_CORESIGHT_WriteAP(0, Ctrl);
+
+  loop=0;
+  while (loop<1){
+	SWDPWD_Write_Right();
+	SWDPWD_Compare_Enable();
+	loop=loop+1;
+  }
+  
+  loop=5;
+  while (loop<5){
+	SWDPWD_Write_Wrong();
+    SWDPWD_Compare_Enable();
+	loop=loop+1;
+  }
+
+  // Change AP selection to KM0 CPU AP(AP[1])
+  // Control KM0(AHB-AP, AP1)
+  JLINK_CORESIGHT_WriteDP(2, (1 << 24) | (0 << 4));  // Select AP[1], bank 0
+  Ctrl = 0x23800052; // AP1.CSW
+  JLINK_CORESIGHT_WriteAP(0, Ctrl);
+}
+
+/*********************************************************************
+*
+*       InitTarget
+*
+*  Notes
+*    (1) High-level functions like MEM_xxx functions must not be used here.
+*        They may only be used in SetupTarget() which is called later in the connect process.
+*/
+void InitTarget(void) {
+  Report("******************************************************");
+  Report("J-Link script: AmebaD KM0(Cortex-M23 CPU) J-Link script");
+  Report("******************************************************");
+
+  // Manually configured AP map
+  CORESIGHT_AddAP(0, CORESIGHT_APB_AP);
+  CORESIGHT_AddAP(1, CORESIGHT_AHB_AP);
+  CORESIGHT_AddAP(2, CORESIGHT_AHB_AP);
+  CORESIGHT_AddAP(3, CORESIGHT_APB_AP);
+  
+  CORESIGHT_IndexAHBAPToUse = 1; // <= where the target CPU locates
+  JTAG_WriteClocks(1);                // Make sure that JTAG buffers are empty
+  JTAG_Speed = 1000;
+  ResetTarget();  // Reset and Halt Core
+}
+

@@ -1,0 +1,70 @@
+
+=============================================================
+   text	   data	    bss	    dec	    hex	filename
+      0	      0	      0	      0	      0	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/vector/8721dhp_vectors.o
+      0	      0	      0	      0	      0	(TOTALS)
+=============================================================
+   text	   data	    bss	    dec	    hex	filename
+   1043	      4	      0	   1047	    417	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/rtl8721dhp_boot_rom.o
+    196	      0	      0	    196	     c4	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/rtl8721dhp_clk_rom.o
+   6124	    448	      0	   6572	   19ac	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/rtl8721dhp_crypto_rom.o
+    435	      0	      0	    435	    1b3	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/rtl8721dhp_rcc_rom.o
+     12	      0	      0	     12	      c	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/rtl8721dhp_syscfg_rom.o
+   3334	    832	      0	   4166	   1046	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/rtl8721dhp_vector_rom.o
+    112	      4	      0	    116	     74	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_delay_rom.o
+   1038	      0	      0	   1038	    40e	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_uart_rom.o
+    209	      0	      0	    209	     d1	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_backup_reg.o
+    374	      0	      0	    374	    176	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_otf_rom.o
+   1655	      0	      0	   1655	    677	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_tim_rom.o
+    144	      0	      0	    144	     90	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_systimer_rom.o
+    876	      8	      0	    884	    374	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_mpu_rom.o
+     85	      0	      0	     85	     55	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_assert_rom.o
+    578	    256	      0	    834	    342	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_ipc_rom.o
+   2761	    104	      0	   2865	    b31	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_flash_rom.o
+      0	      0	      0	      0	      0	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_cache_rom.o
+   2785	     19	      0	   2804	    af4	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_gdma_rom.o
+   2782	      0	      0	   2782	    ade	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_efuse_rom.o
+    579	      0	      0	    579	    243	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_pinmux_rom.o
+     68	      0	      0	     68	     44	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_simulation_rom.o
+    312	      0	      0	    312	    138	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_loguart_rom.o
+    902	    520	      0	   1422	    58e	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/rom_hp/../rom_common/rtl8721d_gpio_rom.o
+  26404	   2195	      0	  28599	   6fb7	(TOTALS)
+=============================================================
+   text	   data	    bss	    dec	    hex	filename
+   1548	      0	      0	   1548	    60c	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/crypto/rtl8721dhp_aes_rom.o
+   2301	      0	      0	   2301	    8fd	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/fwlib/crypto/rtl8721dhp_des_rom.o
+   3849	      0	      0	   3849	    f09	(TOTALS)
+=============================================================
+      0	      0	      0	      0	      0	(TOTALS)
+=============================================================
+   text	   data	    bss	    dec	    hex	filename
+   1609	     28	      0	   1637	    665	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/diag.o
+    156	      0	      0	    156	     9c	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/memset.o
+   1709	      0	      0	   1709	    6ad	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/sscanf.o
+    268	     24	      0	    292	    124	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/rand.o
+    172	      0	      0	    172	     ac	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/memcpy.o
+    100	      0	      0	    100	     64	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/memcmp.o
+    144	      0	      0	    144	     90	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/memchr.o
+    200	      0	      0	    200	     c8	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/memmove.o
+     64	      0	      0	     64	     40	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strcat.o
+     92	      0	      0	     92	     5c	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strncat.o
+    208	      0	      0	    208	     d0	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strchr.o
+    116	      0	      0	    116	     74	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strcmp.o
+    164	      0	      0	    164	     a4	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strncmp.o
+    100	      0	      0	    100	     64	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strlen.o
+     76	      0	      0	     76	     4c	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strcpy.o
+    104	      0	      0	    104	     68	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strncpy.o
+     12	      0	      0	     12	      c	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strsep.o
+   1228	      0	      0	   1228	    4cc	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strstr.o
+     12	      4	      0	     16	     10	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strtok.o
+    108	      0	      0	    108	     6c	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strtok_r.o
+     52	      0	      0	     52	     34	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/stricmp.o
+     28	      0	      0	     28	     1c	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strupr.o
+     84	      0	      0	     84	     54	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/stratoi.o
+     52	      0	      0	     52	     34	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strnlen.o
+    288	      0	      0	    288	    120	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strtol.o
+    312	      0	      0	    312	    138	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strtoul.o
+    224	      0	      0	    224	     e0	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strtod.o
+     44	      0	      0	     44	     2c	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/strpbrk.o
+    268	      0	      0	    268	    10c	/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/../../../component/soc/realtek/amebad/swlib/string/char2num.o
+   7994	     56	      0	   8050	   1f72	(TOTALS)

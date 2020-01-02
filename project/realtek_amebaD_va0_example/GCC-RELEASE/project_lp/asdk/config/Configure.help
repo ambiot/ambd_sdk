@@ -1,0 +1,2089 @@
+#
+# Format of this file: description<nl>variable<nl>  helptext<nl>...<nl><nl>.
+# If the question being documented is of type "choice", we list
+# only the first occurring config variable. The help texts
+# must not contain empty lines. No variable should occur twice; if it
+# does, only the first occurrence will be used by Configure. The lines
+# in a help text should be indented two positions. Lines starting with
+# `#' are ignored. To be nice to menuconfig, limit your lines to 70
+# characters. Use emacs' kfill.el to edit this file or you lose.
+#
+
+Prompt to override the current config settings
+CONFIG_DEFAULTS_OVERRIDE
+  Set the defaults for building to the settings that are stored in the
+  vendors/Vendor/Board directory.  If you have previously changed/customised
+  the build your changes will be lost.  This setting always is always set
+  to 'N' when you run the config.
+
+Prompt to customize the kernel settings
+CONFIG_DEFAULTS_KERNEL
+  Do you want to fine tune the kernel config.  You should be aware that an
+  incorrect kernel config may stop your board from booting.
+
+Prompt to customise the externally built modules
+CONFIG_DEFAULTS_MODULES
+  Do you want to fine tune the additional modules that are built
+  for this target.
+
+Prompt to customize the final product configuration
+CONFIG_DEFAULTS_VENDOR
+  Do you want to fine tune the user programs and library settings that are
+  built/installed into your image.
+
+CONFIG_DEFAULTS_VENDOR_UPDATE
+  Do you want the configuration you have just selected to replace
+  the default configuration for this vendor.  You should only select this
+  if you have confirmed that your config good and that you board is
+  functioning as expected after the changes you have made.
+
+CONFIG_USER_INIT_INIT
+  Include the init executable (highly recommended).
+  Approx. binary size: 14k
+
+CONFIG_USER_RAMIMAGE_RAMFS64
+  Select the size of the RAM filesystem you will need for config files.
+
+CONFIG_USER_RAMIMAGE_RAMFS128
+  Select the size of the RAM filesystem you will need for config files.
+
+CONFIG_USER_RAMIMAGE_RAMFS256
+  Select the size of the RAM filesystem you will need for config files.
+
+CONFIG_USER_RAMIMAGE_RAMFS512
+  Select the size of the RAM filesystem you will need for config files.
+
+CONFIG_USER_CGI_GENERIC
+  A generic CGI demo program
+  Approx. binary size: 10k
+
+CONFIG_USER_CGI
+  The SnapGear/SecureEdge product web configuration CGI.
+  Approx. binary size: 150k
+
+CONFIG_USER_CGI_DISKTEL
+  The SecureEdge/DISKtel product web configuration CGI.
+  Approx. binary size: 150k
+
+CONFIG_USER_NEWCGI
+  The SnapGear/SecureEdge new experimental web configuration CGI.
+  Approx. binary size: 150k
+
+CONFIG_USER_FIREWALL_TOOLS
+  The SnapGear/SecureEdge firewall support tools.
+  Approx. binary size: 30k
+
+CONFIG_USER_IOD
+  The SnapGear IO daemon.  This daemon allows the SGIO kernel driver to
+  be accessed via ASCII commands.
+  Approx. binary size: 16k
+
+CONFIG_USER_DEMO_MORSE
+  The SnapGear Morse demo.  This demo program outputs a simple message
+  in morse code using the SGIO driver to drive a binary output.
+  Approx. binary size: 2k
+
+CONFIG_USER_DEMO_BUTTON
+  The SnapGear Button Daemon.  This daemon uses the SGIO driver to poll
+  the state of an input and to debounce and display the state whenever
+  it changes.
+  Approx. binary size: 1k
+
+CONFIG_USER_SASH_SH
+  The SASH Shell.
+  Approx. binary size: 44k
+
+CONFIG_USER_SASH_HISTORY
+  Support simple command history in SASH.
+
+CONFIG_USER_SH_SH
+  The Minix Shell.
+  Approx. binary size: 108k
+
+CONFIG_USER_BASH_BASH
+  The Bourne-Again Shell.
+
+CONFIG_USER_OTHER_SH
+  You will select a shell from somewhere else in the configuration.
+
+CONFIG_USER_AGETTY_AGETTY
+  Install "agetty" in /bin
+  Approx. binary size: 19k
+
+CONFIG_USER_CHAT_CHAT
+  The chat command is used for PPP and other processes that need
+  to talk to modems.
+  Approx. binary size: 29k
+
+CONFIG_USER_E2FSPROGS_E2FSCK_E2FSCK
+  Filesystem fsck,  for checking damaged filesystems.
+  Approx. binary size: 121k
+
+CONFIG_USER_GRE_GRE
+  Program for starting, stopping and configuring GRE interfaces.
+
+CONFIG_USER_BR_BR
+  Program for controlling the bridges on the SnapGear.
+
+CONFIG_USER_INIT_EXPAND
+  A simple filesystem decompressor.
+  Approx. binary size: 5k
+
+CONFIG_USER_INIT_EXPAND_NOZEROES
+  If your RAM disk or device you are expanding to assumes
+  that all blocks are initialised to zero,  you can enable
+  this option.  This is particularly good for the RAM disk
+  driver on 2.4.  With this option off it allocates the
+  maximum amount of memory for the filesystem because we
+  write every byte with zero initially.  Enabling this
+  option may save you a lot of memory on mostly empty ram disks.
+
+CONFIG_USER_FLASH_FLASH
+  A tool for simplifying the command lines necessary for
+  netflash and flashw.  This tool allows flash segments
+  to be specified symbolicly and the appropriate segment
+  offsets and other flags are automatically determined
+  and passed to the appropriate flashing program.
+  Approx. binary size: 6k
+
+CONFIG_USER_FLASHW_FLASHW
+  A tool for writing to the non-volatile FLASH chips.
+  Approx. binary size: 10k
+
+CONFIG_USER_FLATFSD_FLATFSD
+  This program saves RAM filesystems back to FLASH.
+  Approx. binary size: 12k
+
+CONFIG_USER_FLATFSD_USE_FLASH_FS
+  Use the existing FLASH (or other writable) filesystem, instead of creating a
+  flat FS.  Requires a writable FS (JFFS/JFFS2/DoC/ext2, etc.).
+
+CONFIG_USER_GETTYD_GETTYD
+  Another getty program.
+  Approx. binary size: 16k
+
+CONFIG_USER_LOGIN_LOGIN
+  A login program.
+  Approx. binary size: 8k
+
+CONFIG_USER_OLD_PASSWORDS
+  Support root password in /etc/config/config.  This option is for
+  backwards compatibility with older firmware.  New/changed passwords
+  still live in /etc/config/passwd.
+
+CONFIG_USER_E2FSPROGS_MISC_MKE2FS
+  Make a filesystem.
+  Approx. binary size: 62k
+
+CONFIG_USER_MOUNT_MOUNT
+  Mount a filesystem.  You need this to access NFS and SMB filesystems.
+  Approx. binary size: 63k
+
+CONFIG_USER_SASH_REBOOT
+  Command to reboot the system.
+  Approx. binary size: 8k
+
+CONFIG_USER_SASH_SHUTDOWN
+  Command to shutdown the system.
+  Approx. binary size: 5k
+
+CONFIG_USER_SETSERIAL_SETSERIAL
+  User level serial port configuration tool.
+  Approx binary size: 18k
+
+CONFIG_USER_STTY_STTY
+  Command to change the settings on serial devices.  For example
+  you can change the baud rate,  flow control and so on.
+  Approx. binary size: 29k
+
+CONFIG_USER_TIP_TIP
+  A small terminal emulator for connecting to modems and serial devices.
+  Approx. binary size: 11k
+
+CONFIG_USER_MOUNT_UMOUNT
+  Unmount a filesystem.
+
+CONFIG_USER_VERSION_VERSION
+  Print the version of the system software.
+  Approx. binary size: 6k
+
+CONFIG_USER_LEVEE_VI
+  A small version of 'vi' for editing files.
+
+CONFIG_USER_BOA_SRC_BOA
+  A small webserver.
+  Approx. binary size: 54k
+
+CONFIG_USER_BPALOGIN_BPALOGIN
+  Telstra Bigpond broadband internet authentication program.
+  Approx. binary size: 39k
+
+CONFIG_USER_BR2684CTL_BR2684CTL
+  ATM to ethernet bridging helper program.
+  Approx. binary size: 28k
+
+CONFIG_USER_DHCPCD_DHCPCD
+  The DHCP client daemon,  used to get an IP address from a DHCP server.
+  Approx. binary size: 37k
+
+CONFIG_USER_DHCPCD_LLIP
+  Compile in Link-local Auto IP configuration option, -A into dhcpcd. Auto IP addressing will take place if the client is unable to configure the interface with an address from a dhcp server. Auto IP addresses are used by win & mac machines for local area network application such as IrDA links and networks without dhcp servers.
+  If this option is not compiled in, dhcpcd will just ignore the -A command line option, noting that it was ignored in the system log.
+
+CONFIG_USER_DHCPCD_NEW_DHCPCD
+  The DHCP client daemon,  used to get an IP address from a DHCP server.
+  This version works on 2.0 and 2.4 kernels.
+
+CONFIG_USER_DHCPD_DHCPD
+  A small DHCP server,  suitable for small office networks.
+  Approx. binary size: 27k
+
+CONFIG_USER_DIALD_DIALD
+  The dial-on-demand daemon.
+  Approx. binary size: 80k
+
+CONFIG_USER_DISCARD_DISCARD
+  A utility which listens on the discard port,  suitable for testing
+  network performance.
+  Approx. binary size: 1k
+
+CONFIG_USER_GDBSERVER_GDBSERVER
+  gdbserver is used to remotely debug user applications running on the
+  server.
+  Approx. binary size: 14k
+
+CONFIG_USER_ROUTE_IFCONFIG
+  Required to configure network interfaces.
+  Approx. binary size: 28k
+
+CONFIG_USER_INETD_INETD
+  Starts network daemons as required.
+  Approx. binary size: 11k
+  
+CONFIG_USER_IPFWADM_IPFWADM
+  Tool for configuring forwarding/masquerading rules.
+  Approx. binary size: 38k
+
+CONFIG_USER_IPPORTFW_IPPORTFW
+  Tool for configuring port forwarding.
+  Approx. binary size: 13k
+
+CONFIG_USER_IPSEC_CONFIGURATOR
+  Tool to parse an ipsec.conf file and execute the required Freeswan
+  commands.  This command replaces the scripts that are missing from
+  the Freeswan installation.
+  Approx. binary size: 10k
+
+CONFIG_USER_NETFLASH_NETFLASH
+  Tool to upgrade the firmware of the server across the network.
+  Approx. binary size: 29k
+
+CONFIG_USER_NETFLASH_WITH_FTP
+  Add ftp to the mechanisms that netflash may use to download
+  new flash images.
+
+CONFIG_USER_NETFLASH_VERSION
+  Check the version information on the end of the image downloaded to the
+  device.
+
+CONFIG_USER_NETFLASH_VERSION_ALLOW_CURRENT
+  Allow upgrading to images where the version string matches that of the
+  currently running firmware.
+
+CONFIG_USER_NETFLASH_VERSION_ALLOW_OLDER
+  Allow upgrading to images where the version string is older than that
+  of the currently running firmware.
+
+CONFIG_USER_NETFLASH_DECOMPRESS
+  Add option to decompress images before writing them to flash.
+
+CONFIG_USER_NETFLASH_AUTODECOMPRESS
+  Netflash automatically decompresses images if they have a gzip header.
+
+CONFIG_USER_NETFLASH_CRYPTO
+  Netflash requires a public key authentication to be attached to an image
+  and won't commit an image without this or with an invalid authentication.
+
+CONFIG_USER_CRON_CRON
+  Daemon to execute scheduled commands
+  Approx. binary size: 27k
+
+CONFIG_USER_RTC_M41T11
+  Command line utility to support the M41T11 real time clock chip.
+  This command lets you set the system time from the clock chip, set
+  the time in the clock chip from the system clock and read and
+  write values into the battery backed RAM on the clock chip.
+  This utility requires the kernel to support MBUS.
+  Approx. binary size: 12k
+
+CONFIG_USER_OPENSSL_APPS
+  OpenSSL is a cryptography toolkit implementing the Secure Sockets Layer
+  (SSL v2/v3) and Transport Layer Security (TLS v1) network protocols and
+  related cryptography standards required by them.
+  The openssl program is a command line tool for using the various cryp-
+  tography functions of OpenSSL's crypto library from the shell.  It can
+  be used for
+   o  Creation of RSA, DH and DSA key parameters
+   o  Creation of X.509 certificates, CSRs and CRLs
+   o  Calculation of Message Digests
+   o  Encryption and Decryption with Ciphers
+   o  SSL/TLS Client and Server Tests
+   o  Handling of S/MIME signed or encrypted mail
+
+CONFIG_USER_PING_PING
+  Diagnostic tool for testing network connections.
+  Approx. binary size: 27k
+
+CONFIG_USER_PKTDELAY_PKTDELAY
+  Queue up packets from netfilter for the specified amount of time and then
+  release them.  Requires the netfilter user space packet queueing
+  (CONFIG_IP_NF_QUEUE)
+
+CONFIG_USER_PPPD_PPPD_PPPD
+  Dialup networking daemon.
+  Approx. binary size: 151k
+
+CONFIG_USER_PPTPD_PPTPCTRL
+  PPTP VPN controller.
+  Approx. binary size: 30k
+
+CONFIG_USER_PPTPD_PPTPD
+  PPTP VPN daemon.
+  Approx. binary size: 31k
+
+CONFIG_USER_PPTP_CLIENT_PPTP
+  PPTP Client for establishing VPN's.
+  Approx. binary size: 34k
+
+CONFIG_USER_PPTP_CLIENT_PPTP_CALLMGR
+  PPTP Call manager for the PPTP client.
+  Approx. binary size: 30k
+
+CONFIG_USER_RDATE_RDATE
+  Remote date print/set program.  Conforms to RFC 868.
+
+CONFIG_USER_PERL_PERL
+  The PERL scripting language.
+
+CONFIG_USER_PYTHON_PYTHON
+  The Python scripting language.
+
+CONFIG_USER_ROUTE_ROUTE
+  Configure routes to networks.
+  Approx. binary size: 29k
+
+CONFIG_USER_SMBMOUNT_SMBMOUNT
+  mount an SMB filesystem.
+  Approx. binary size: 22k
+
+CONFIG_USER_SMBMOUNT_SMBUMOUNT
+  un-mount  and SMB filesystem.
+  Approx. binary size: 6k
+
+CONFIG_USER_TELNETD_TELNETD
+  All remote users to login to the system using telnet.
+  Approx. binary size: 20k
+
+CONFIG_USER_TELNET_TELNET
+  A telnet client application.
+  Approx. binary size: 76k
+
+CONFIG_USER_TFTPD_TFTPD
+  A tftp server.
+  Approx. binary size: 19k
+
+CONFIG_USER_TRACEROUTE_TRACEROUTE
+  A tool for tracing the route packets take on the network.
+  Approx. binary size: 32k
+
+CONFIG_USER_SH_SH
+  A bigger shell than SASH (but more functional, scripting etc)
+  Approx. binary size: 44k
+
+CONFIG_USER_UPNPD
+  Universal Plug and Play Discovery daemon. Make sure that CONFIG_IP_MULTICAST is enabled in your kernel networking options.
+  Approx. binary size: 30k
+
+CONFIG_USER_PROTECT
+  Build the protect application which interfaces with the memory
+  protection loadable kernel module to provide user level memory
+  access protection.
+
+CONFIG_USER_DEBUG
+  Build all user application with debug symbols and reduced optimisation
+  levels.  See also debug build option in force library building.  Without
+  this option debug symbols are still included, however the optimisation
+  level is increased and this can lead to problematic debugging.
+
+CONFIG_LIB_DEBUG
+  Build all libraries with debug symbols and reduced optimisations.
+  See also debug build option in core applications.  Without this option
+  debug symbols are still included, however the optimisation level is
+  increased and this can lead to problematic debugging.
+
+CONFIG_LIB_LIBDES_FORCE
+  DESLite library.
+  Only enable this if you want to force the library to be built.  The
+  Config will make sure this library is built if it is needed.
+
+CONFIG_LIB_LIBAES_FORCE
+  AES library.
+  Only enable this if you want to force the library to be built.  The
+  Config will make sure this library is built if it is needed.
+
+CONFIG_LIB_LIBSSL_FORCE
+  SSL library.
+  Only enable this if you want to force the library to be built.  The
+  Config will make sure this library is built if it is needed.
+
+CONFIG_LIB_LIBGMP_FORCE
+  GMP LIbrary.
+  Only enable this if you want to force the library to be built.  The
+  Config will make sure this library is built if it is needed.
+
+CONFIG_LIB_ZLIB_FORCE
+  Data compression library.
+  Only enable this if you want to force the library to be built.  The
+  Config will make sure this library is built if it is needed.
+
+CONFIG_LIB_LIBATM_FORCE
+  ATM support library.
+  Only enable this if you want to force the library to be built.  The
+  Config will make sure this library is built if it is needed.
+
+CONFIG_LIB_NCURSES_FORCE
+  CRT screen handling library.
+  Only enable this if you want to force the library to be built.  The
+  Config will make sure this library is built if it is needed.
+
+CONFIG_LIB_UC_LIBC_TIMEZONE
+  Enable this if you want simpleinit to set the time zone environment
+  variables on system startup.  This option also forces uC-libc to
+  support time zone information.  Without this, UTC will be the assumed
+  time zone when using uC-libc.
+
+CONFIG_LIB_UC_LIBC_TZ_FROM_FILE
+  Enable this if you want uC-libc to always read the TZ file for its
+  itme zone information instead of relying on the environment variable
+  set up by init during system boot.  This means that changes to the
+  time zone take effect immediately instead of requiring a reboot.
+
+CONFIG_USER_BOA_WITH_SSL
+  Do you want BOA to use SSL for all connections.
+
+CONFIG_USER_FREESWAN
+  The FreeSwan tools and applications
+
+CONFIG_USER_FREESWAN_PLUTO_PLUTO
+  Freeswan pluto.
+  Approx. binary size: 255k
+
+CONFIG_USER_FREESWAN_PLUTO_WHACK
+  Freeswan whack.
+  Approx. binary size: 38k
+
+CONFIG_USER_FREESWAN_UTILS_RANBITS
+  Freeswan ranbits.
+  Approx. binary size: 12k
+
+CONFIG_USER_FREESWAN_UTILS_RSASIGKEY
+  Freeswan rsasigkey.
+  Approx. binary size: 71k
+
+CONFIG_USER_FREESWAN_KLIPS_EROUTE
+  Freeswan eroute.
+  Approx. binary size: 64k
+
+CONFIG_USER_FREESWAN_KLIPS_KLIPSDEBUG
+  Freeswan klipsdebug.
+  Approx. binary size: 43k
+
+CONFIG_USER_FREESWAN_KLIPS_SPI
+  Freeswan spi.
+  Approx. binary size: 68k
+
+CONFIG_USER_FREESWAN_KLIPS_SPIGRP
+  Freeswan spigrp.
+  Approx. binary size: 53k
+
+CONFIG_USER_FREESWAN_KLIPS_TNCFG
+  Freeswan tncfg.
+  Approx. binary size: 15k
+
+CONFIG_USER_FSWCERT_FSWCERT
+  Application to extract private keys from certificates for ipsec
+
+CONFIG_USER_PPPD_WITH_MPPE
+  If you want to run PPP/PPTP with encrypted connections, enable this.
+
+CONFIG_USER_RP_PPPOE_PPPOE
+  The Roaring Penguin PPPOE.
+  Approx. binary size: 38k
+
+CONFIG_USER_WGET
+  Web site downloading utility.
+  
+CONFIG_USER_ZEBRA_ZEBRA_ZEBRA
+  The GNU Zebra routing daemon server process.
+  Approx. binary size: 124k
+
+CONFIG_USER_ZEBRA_BGPD_BGPD
+  The GNU Zebra BGP daemon.
+  Approx. binary size: 329k
+
+CONFIG_USER_ZEBRA_OSPFD_OSPFD
+  The GNU Zebra OSPF daemon.
+  Approx. binary size: 270k
+
+CONFIG_USER_ZEBRA_RIPD_RIPD
+  The GNU Zebra RIP daemon.
+  Approx. binary size: 167k
+
+CONFIG_USER_CAL_CAL
+  Calender program
+  Approx. binary size: 10k
+
+CONFIG_USER_CAL_DATE
+  Print the date
+  Approx. binary size: 5k
+
+CONFIG_USER_CLOCK_CLOCK
+  Some kind of clock
+
+CONFIG_USER_CPU_CPU
+  cpu tool
+
+CONFIG_USER_DHCP_ISC_SERVER_DHCPD
+  A full featured DHCP daemon that can do almost anything.
+CONFIG_USER_DHCP_ISC_CLIENT_DHCLIENT
+  A DHCP client daemon that supports most everything.
+CONFIG_USER_DHCP_ISC_RELAY_DHCRELAY
+  A DHCP relay daemon.
+
+CONFIG_USER_DNSMASQ_DNSMASQ
+  DNS masquerading
+
+CONFIG_USER_E2FSPROGS_MISC_BADBLOCKS
+  A filesystem tool
+  Approx. binary size: 148k
+
+CONFIG_USER_E2FSPROGS_MISC_CHATTR
+  A filesystem tool
+  Approx. binary size: 11k
+
+CONFIG_USER_E2FSPROGS_MISC_DUMPE2FS
+  A filesystem tool
+  Approx. binary size: 42k
+
+CONFIG_USER_E2FSPROGS_MISC_E2LABEL
+  A filesystem tool
+  Approx. binary size: 6k
+
+CONFIG_USER_E2FSPROGS_MISC_FSCK
+  A filesystem tool
+  Approx. binary size: 18k
+
+CONFIG_USER_E2FSPROGS_MISC_LSATTR
+  A filesystem tool
+  Approx. binary size: 13k
+
+CONFIG_USER_E2FSPROGS_MISC_MKLOST_FOUND
+  A filesystem tool
+  Approx. binary size: 6k
+
+CONFIG_USER_E2FSPROGS_MISC_TUNE2FS
+  A filesystem tool
+  Approx. binary size: 36k
+
+CONFIG_USER_E2FSPROGS_MISC_UUIDGEN
+  A filesystem tool
+  Approx. binary size: 98k
+
+CONFIG_USER_ETHATTACH_ETHATTACH
+  A Network tool
+
+CONFIG_USER_FDISK_FDISK
+  Disk partitioning utility.
+  Approx. binary size: 70k
+
+CONFIG_USER_FILEUTILS_CAT
+  Print the contents of a file to the screen.
+  Approx. binary size: 5k
+
+CONFIG_USER_FILEUTILS_CHGRP
+  Change the group of a file
+  Approx. binary size: 7k
+
+CONFIG_USER_FILEUTILS_CHMOD
+  Change the permissions of a file
+  Approx. binary size: 5k
+
+CONFIG_USER_FILEUTILS_CHOWN
+  Change the owner of a file
+  Approx. binary size: 7k
+
+CONFIG_USER_FILEUTILS_CMP
+  compare two files
+  Approx. binary size: 6k
+
+CONFIG_USER_FILEUTILS_CP
+  copy files and directories
+  Approx. binary size: 6k
+
+CONFIG_USER_FILEUTILS_DD
+  dump files in various formats
+  Approx. binary size: 7k
+
+CONFIG_USER_FILEUTILS_GREP
+  find patterns in files
+  Approx. binary size: 8k
+
+CONFIG_USER_FILEUTILS_L
+  long file listing
+  Approx. binary size: 7k
+
+CONFIG_USER_FILEUTILS_LN
+  for linking files together
+  Approx. binary size: 3k
+
+CONFIG_USER_FILEUTILS_LS
+  list files
+  Approx. binary size: 14k
+
+CONFIG_USER_FILEUTILS_MKDIR
+  make directories
+  Approx. binary size: 2k
+
+CONFIG_USER_FILEUTILS_MKFIFO
+  make a FIFO
+  Approx. binary size: 1k
+
+CONFIG_USER_FILEUTILS_MKNOD
+  make a special file
+  Approx. binary size: 2k
+
+CONFIG_USER_FILEUTILS_MORE
+  a pager for looking at files
+  Approx. binary size: 4k
+
+CONFIG_USER_FILEUTILS_MV
+  move a file
+  Approx. binary size: 4k
+
+CONFIG_USER_FILEUTILS_RM
+  remove a file
+  Approx. binary size: 1k
+
+CONFIG_USER_FILEUTILS_RMDIR
+  remove a directory
+  Approx. binary size: 2k
+
+CONFIG_USER_FILEUTILS_SYNC
+  synchronise filesystem memory back to disk.
+  Approx. binary size: 1k
+
+CONFIG_USER_FILEUTILS_TOUCH
+  change the timestamp on a file
+  Approx. binary size: 1k
+
+CONFIG_USER_FTP_FTP_FTP
+  An ftp client
+  Approx. binary size: 8k
+
+CONFIG_USER_GDBSERVER_GDBREPLAY
+  The gdbserver replay client.
+  Approx. binary size: 13k
+
+CONFIG_USER_HTTPD_HTTPD
+  Another HTTPD
+
+CONFIG_USER_IDB_IDB
+  Intrusion Dection and Blocking tool.  This utility allows a number
+  of TCP and UDP ports to be monitored for connection attempts.
+  Optionally, the hosts making such attempts can be forcibly blocked.
+  This option adds about 21k to the image.
+
+CONFIG_USER_IFATTACH_IFATTACH
+  Network interface attach
+
+CONFIG_USER_IPREDIR_IPREDIR
+  IP port redirector
+  Approx. binary size: 23k
+
+CONFIG_USER_LCD_LCD
+  LCD program
+  Approx. binary size: 7k
+
+CONFIG_USER_L2TPD_L2TPD
+  Layer 2 Tunnelling Protocol Daemon
+  Approx. binary size: 70k
+
+CONFIG_USER_LISSA_LISSA
+  Lissa
+
+CONFIG_USER_LOATTACH_LOATTACH
+  Loopback attach
+
+CONFIG_USER_LOGIN_PASSWD
+  The passwd program (for changing passwords)
+
+CONFIG_USER_KLAXON_KLAXON
+  Klaxon is a utility that attempts to detect and log
+  probes against the host.  Only those services selected
+  will be detected.  Inetd must also be installed.
+  This option adds about 17.5k to the image.
+
+CONFIG_USER_KLAXON_RFC931
+  Use IDENT (RFC931) to attempt to find out the user
+  behind the probe.  This option adds an additional 3k to
+  the image.
+
+CONFIG_USER_KLAXON_CHARGEN
+  Configure klaxon to report connection attempts to the
+  CHARGEN (tcp & udp ports 19).
+
+CONFIG_USER_KLAXON_DISCARD
+  Configure klaxon to report connection attempts to the
+  DISCARD (tcp & udp ports 9).
+
+CONFIG_USER_KLAXON_ECHO
+  Configure klaxon to report connection attempts to the
+  ECHO (tcp & udp ports 7).
+
+CONFIG_USER_KLAXON_FTP
+  Configure klaxon to report connection attempts to the
+  FTP (tcp ports 20 & 21).
+
+CONFIG_USER_KLAXON_HTTP
+  Configure klaxon to report connection attempts to the
+  HTTP (tcp port 80).
+
+CONFIG_USER_KLAXON_SMTP
+  Configure klaxon to report connection attempts to the
+  SMTP (tcp port 25).
+
+CONFIG_USER_KLAXON_SNMP
+  Configure klaxon to report connection attempts to the
+  SNMP (tcp & udp ports 161).
+
+CONFIG_USER_KLAXON_SSH
+  Configure klaxon to report connection attempts to the
+  SSH (tcp port 22).
+
+CONFIG_USER_KLAXON_TELNET
+  Configure klaxon to report connection attempts to the
+  TELNET (tcp port 23).
+
+CONFIG_USER_KLAXON_TFTP
+  Configure klaxon to report connection attempts to the
+  TFTP (udp port 69).
+
+CONFIG_USER_MAIL_MAIL_IP
+  Some kind of mail proggy
+  Approx. binary size: 27k
+
+CONFIG_USER_MP3PLAY_MP3PLAY
+  Play MP3 files
+  
+CONFIG_USER_MUSICBOX_MUSICBOX
+  Front-end for mp3play and mixer
+
+CONFIG_USER_NULL_NULL
+  NULL
+  
+CONFIG_USER_NWSH_SH
+  The NEW shell
+  Approx. binary size: 25k
+
+CONFIG_USER_PLAY_PLAY
+  Plays .wav files
+
+CONFIG_USER_PLUG_PLUG
+  This daemon acts as a dumb proxy forwarding a TCP/IP stream
+  from a port on one host to a possibly different port
+  on a separate host.
+  Approx. binary size: 23k
+
+CONFIG_USER_READPROFILE_READPROFILE
+  Tools for use with kernel profiling
+  Approx. binary size: 16k
+
+CONFIG_USER_ROOTLOADER_ROOTLOADER
+  The root loader
+  Approx. binary size: 9k
+
+CONFIG_USER_ROUTE_ARP
+  print the ARP table
+  Approx. binary size: 28k
+
+CONFIG_USER_ROUTED_ROUTED
+  A RIPv1 routed
+
+CONFIG_USER_SHUTILS_BASENAME
+  SH utils
+  Approx. binary size: 1k
+
+CONFIG_USER_SHUTILS_DATE
+  SH utils
+  Approx. binary size: 52k
+
+CONFIG_USER_SHUTILS_DIRNAME
+  SH utils
+  Approx. binary size: 1k
+
+CONFIG_USER_SHUTILS_ECHO
+  SH utils
+  Approx. binary size: 1k
+
+CONFIG_USER_SHUTILS_FALSE
+  SH utils
+  Approx. binary size: 1k
+
+CONFIG_USER_SHUTILS_LOGNAME
+  SH utils
+  Approx. binary size: 3k
+
+CONFIG_USER_SHUTILS_PRINTENV
+  SH utils
+  Approx. binary size: 1k
+
+CONFIG_USER_SHUTILS_PWD
+  SH utils
+  Approx. binary size: 3k
+
+CONFIG_USER_SHUTILS_TRUE
+  SH utils
+  Approx. binary size: 1k
+
+CONFIG_USER_SHUTILS_UNAME
+  SH utils
+  Approx. binary size: 2k
+
+CONFIG_USER_SHUTILS_WHICH
+  SH utils
+  Approx. binary size: 44k
+
+CONFIG_USER_SHUTILS_WHOAMI
+  SH utils
+  Approx. binary size: 3k
+
+CONFIG_USER_SHUTILS_YES
+  SH utils
+  Approx. binary size: 1k
+
+CONFIG_USER_SLATTACH_SLATTACH
+  Slip attach
+
+CONFIG_USER_SMTP_SMTPCLIENT
+  Client which allows mail to be sent to other hosts that support SMTP
+
+CONFIG_USER_SNMPD_SNMPD
+  SNMP daemon
+  Approx. binary size: 20k with no modules
+
+CONFIG_USER_MGMT_MGMT
+  SnapGear Centralised Management Support
+  Requires SnapGear SNMP daemon and SnapGear private enterprise MIB
+
+CONFIG_USER_SGSNMPD_AGENT
+  SnapGear SNMP daemon. Provides the system tree from mib-II
+  Approx. binary size: 25k
+
+CONFIG_USER_SGSNMPD_SNAPGEAR
+  Implements the SnapGear private enterprise MIB.
+  Approx. binary size: 30k
+
+CONFIG_USER_STP_STP
+  simple network time daemon
+  Approx. binary size: 19k
+
+CONFIG_USER_SYSUTILS_DF
+  print filesystem usage
+  Approx. binary size: 5k
+
+CONFIG_USER_SYSUTILS_FREE
+  SYS utils
+  Approx. binary size: 5k
+
+CONFIG_USER_SYSUTILS_HOSTNAME
+  print the hostname of the system
+  Approx. binary size: 3k
+
+CONFIG_USER_SYSUTILS_KILL
+  kill processes
+  Approx. binary size: 4k
+
+CONFIG_USER_SYSUTILS_PS
+  Show process status
+  Approx. binary size: 12k
+
+CONFIG_USER_SYSUTILS_REBOOT
+  reboot the system
+
+CONFIG_USER_SYSUTILS_SHUTDOWN
+  shutdown the system
+
+CONFIG_USER_TCPDUMP_TCPDUMP
+  Monitor network traffic
+  Approx. binary size: 22k
+
+CONFIG_USER_THTTPD_THTTPD
+  Tiny HTTPD
+  Approx. binary size: 52k
+
+CONFIG_USER_TRIPWIRE_TRIPWIRE
+  The tripwire file modification detection utility.
+
+CONFIG_USER_TRIPWIRE_SIGGEN
+  Cryptographic file signature utility.
+
+CONFIG_USER_UCDSNMP_SNMPD
+  UCD SNMP daemon.
+  Approx. binary size: 140k
+
+CONFIG_USER_VPNLED_VPNLED
+  Control the VPN led.
+  Approx. binary size: 5k
+
+CONFIG_USER_LEDCON_LEDCON
+  Control all the leds.
+  Approx. binary size: 10k
+
+CONFIG_USER_WINSD_WS
+  A WINS server for small networks.
+  Approx. binary size: 57k
+
+CONFIG_USER_FACTORY_FACTTEST
+  A testing utility only used for factory images. Requires a client to 
+  connect and retrieve details
+  Approx. binary size: 27k
+
+CONFIG_USER_EMCTEST_EMCTEST
+  A testing utility only used for EMC testing and similar testing.
+  Approx. binary size: NA
+
+CONFIG_USER_MATH_TEST
+  A number of programs used to test the proper functioning of the maths
+  library.
+
+CONFIG_USER_MAWK_AWK
+  The mawk program is an interpreter for the AWK programming language.
+  The AWK language is useful for manipulation of data files, text
+  retrieval and provessing, for prototyping and experimenting with
+  algorithms and for general scripting.  The mawk program is installed
+  as /bin/awk.
+  Approx. binary size: 110k
+
+CONFIG_USER_SNORT_SNORT
+  Snort is a network intrusion detection system.  It is capable of
+  performing real-time traffic analysis and packet logging on IP
+  networks.  It can perform protocol analysis, content searching and
+  can be used to detect a variety of attacks and probes, such as
+  buffer overflows, stealth port scans, CGI attacks, SMB probes,
+  OS fingerprinting attempts and much more.
+  Approx. binary size: 800k
+
+CONFIG_USER_SSH_SSHD
+  A secure shell server.  This one is the openssh variant and supports ssh
+  v1 and ssh v2. You probably want to include the tinylogin stuff, and a
+  passwd and group file in /etc/config so that this works properly.
+  Approx. binary size: 580k
+
+CONFIG_USER_SSH_SSH
+  A secure shell client.  You can set up a vpn connection using both the
+  client and the server.
+  Approx. binary size: 610k
+
+CONFIG_USER_SSH_SSHKEYGEN
+  This program generates and manages authentication keys for ssh and sshd.
+  Approx. binary size: 480k
+
+CONFIG_USER_TCPWRAP_TCPD
+  The tcpd program can be set up to monitor incoming requests for
+  telnet, finger, ftp, exec, rsh, rlogin, tftp, talk, comsat and other
+  services that have a one-to-one mapping onto executable files.  It also
+  provides some access control facilities for any monitored services.
+
+CONFIG_USER_TCPWRAP_FINGER
+  A safe finger client wrapper that protects against nasty stuff from finger
+  servers.
+
+CONFIG_USER_TCPWRAP_TCPDMATCH
+  This utility will explain what tcpd would do in a specific case.  It
+  examines the tcpd access control tables and prints out is conclusion.
+
+CONFIG_UEER_TCPWRAP_TRYFROM
+  This program can be called via a remote shell command to find out if the
+  hostname and address are properly recognized, if username lookup works,
+  and (SysV only) if the TLI on top of IP heuristics work.
+
+CONFIG_USER_TCPWRAP_TCPDCHK
+  This utility examines your tcp wrapper configuration and reports all
+  potential and real problems that it can find.  The program examines
+  the tcpd access control files and compares the entries in these files
+  against entries in the inetd network configuration files.
+
+CONFIG_USER_IPCHAINS_IPCHAINS
+  An alternate method for configuring the firwall rules.  Note that you
+  must have ipchains configured in your kernel for this program to work.
+  Approx. binary size: 53k
+
+CONFIG_USER_IPMASQADM_IPMASQADM
+  Tool for configuring port forwarding for Linux 2.2.x kernels.  You
+  must have port forwarding enabled in your kernel for this program to
+  work.
+
+CONFIG_USER_GAMES_ADVENT4
+  The Colossal Cave Adventure game.  To play, telnet to port 8898 or run
+  advent4 from the command line.
+
+CONFIG_USER_GAMES_DUNGEON
+  The Dungeon Adventure game.  To play, telnet to port 8899 or run
+  dungeon from the command line.
+
+CONFIG_USER_PPPD_WITH_TACACS
+  TACACS+ authentication plugin for pppd.
+
+CONFIG_USER_PPPD_WITH_RADIUS
+  RADIUS authentication plugin for pppd.
+
+CONFIG_USER_PPPD_WITH_PPPOE
+  Allow kernel mode PPPOE support.
+
+CONFIG_USER_PALMBOT_PALMBOT
+  A half-baked app to drive the Palm Pilot robot.
+
+CONFIG_USER_BUSYBOX_BUSYBOX
+  BusyBox combines tiny versions of many common UNIX utilities into a single
+  small executable. It provides minimalist replacements for most of the utilities
+  you usually find in fileutils, shellutils, findutils, textutils, grep, gzip,
+  tar, etc.  Simply select those utilities and options you want.
+
+CONFIG_USER_BUSYBOX_ADJTIMEX
+  Reads and optionally sets system timebase parameters. See adjtimex(2).
+
+CONFIG_USER_BUSYBOX_AR
+  Extract or list files from an ar archive.
+
+CONFIG_USER_BUSYBOX_BASENAME
+  Strips directory path and suffixes from FILE. If specified, also
+  removes any trailing SUFFIX.
+
+CONFIG_USER_BUSYBOX_CAT
+  Concatenates FILE(s) and prints them to stdout.
+
+CONFIG_USER_BUSYBOX_CHMOD
+  Change the access permissions of files.
+
+CONFIG_USER_BUSYBOX_CHOWN
+  Change the owner of files.
+
+CONFIG_USER_BUSYBOX_CHGRP
+  Change the group owner of files.
+
+CONFIG_USER_BUSYBOX_CHROOT
+  Run command with root directory set elsewhere.
+
+CONFIG_USER_BUSYBOX_CHVT
+  Changes the foreground virtual terminal.
+
+CONFIG_USER_BUSYBOX_CLEAR
+  Clear screen.
+
+CONFIG_USER_BUSYBOX_CMP
+  Compare files.
+
+CONFIG_USER_BUSYBOX_CP
+  Copy files.
+
+CONFIG_USER_BUSYBOX_CPIO
+  Copy files to and from archives.
+
+CONFIG_USER_BUSYBOX_CUT
+  Prints selected fields from input file to standard out.
+
+CONFIG_USER_BUSYBOX_DATE
+  Displays the current time or sets the system date.
+
+CONFIG_USER_BUSYBOX_DC
+  This is a Tiny RPN calculator that understands the following
+  operations: +, -, /, *, and, or, not, eor.
+
+CONFIG_USER_BUSYBOX_DD
+  Copy a file with formatting and conversions.
+
+CONFIG_USER_BUSYBOX_DEALLOCVT
+  Deallocate unused virtual terminal.
+
+CONFIG_USER_BUSYBOX_DF
+  Print the filesystem space used and space available.
+
+CONFIG_USER_BUSYBOX_DIRNAME
+  Strips non-directory suffix from arguments.
+
+CONFIG_USER_BUSYBOX_DMESG
+  Prints or controls the kernel ring buffer.
+
+CONFIG_USER_BUSYBOX_DOS2UNIX
+  Converts a text file to/from dos format to unix format.
+
+CONFIG_USER_BUSYBOX_DPKG
+  WORK IN PROGRESS, only usefull for debian-installer.
+
+CONFIG_USER_BUSYBOX_DPKG_DEB
+  Perform actions on debian packages (.debs).
+
+CONFIG_USER_BUSYBOX_DUTMP
+  Dump utmp file format (pipe delimited).
+
+CONFIG_USER_BUSYBOX_DU
+  Summarizes disk space used for each file argument and/or directory. Disk
+  space is printed in units of 1024 bytes.
+
+CONFIG_USER_BUSYBOX_DUMPKMAP
+  Prints out a binary keyboard translation table to standard output.
+
+CONFIG_USER_BUSYBOX_ECHO
+  Prints arguments to stdout.
+
+CONFIG_USER_BUSYBOX_ENV
+  Prints the current environment or runs a program after setting up
+  the specified environment.
+
+CONFIG_USER_BUSYBOX_EXPR
+  Prints the value of an expression to standard output.
+
+CONFIG_USER_BUSYBOX_FBSET
+  Show and modify frame buffer settings.
+
+CONFIG_USER_BUSYBOX_FDFLUSH
+  Forces floppy disk drive to detect disk change
+
+CONFIG_USER_BUSYBOX_FIND
+  Search for files in a directory hierarchy.
+
+CONFIG_USER_BUSYBOX_FREE
+  Displays the amount of free and used system memory.
+
+CONFIG_USER_BUSYBOX_FREERAMDISK
+  Frees all memory used by the specified ramdisk.
+
+CONFIG_USER_BUSYBOX_FSCK_MINIX
+  Performs a consistency check for MINIX filesystems.
+
+CONFIG_USER_BUSYBOX_GETOPT
+  Parse command options.
+
+CONFIG_USER_BUSYBOX_GREP
+  Search for a pattern in each file or standard input.
+
+CONFIG_USER_BUSYBOX_GUNZIP
+  Uncompress files.
+
+CONFIG_USER_BUSYBOX_GZIP
+  Compress files.
+
+CONFIG_USER_BUSYBOX_HALT
+  Halt the system.
+
+CONFIG_USER_BUSYBOX_HEAD
+  Print first 10 lines of each file to standard output.
+
+CONFIG_USER_BUSYBOX_HOSTID
+  Print out a unique 32-bit identifier for the machine.
+
+CONFIG_USER_BUSYBOX_HOSTNAME
+  Get or set the hostname or DNS domain name.
+
+CONFIG_USER_BUSYBOX_ID
+  Print information for specific or current user.
+
+CONFIG_USER_BUSYBOX_IFCONFIG
+  Configure a network interface.
+
+CONFIG_USER_BUSYBOX_INIT
+  Init is the parent of all processes.
+
+CONFIG_USER_BUSYBOX_INSMOD
+  Loads the specified kernel modules into the kernel.
+
+CONFIG_USER_BUSYBOX_KILL
+  Send a signal to the specified process(es).
+
+CONFIG_USER_BUSYBOX_KILLALL
+  Send a signal to the specified process(es).
+
+CONFIG_USER_BUSYBOX_KLOGD
+  Kernel logger daemon.
+
+CONFIG_USER_BUSYBOX_LENGTH
+  Prints out the length of the specified string.
+
+CONFIG_USER_BUSYBOX_LN
+  Create a link between two files.
+
+CONFIG_USER_BUSYBOX_LOADACM
+  Loads an acm from standard input.
+
+CONFIG_USER_BUSYBOX_LOADFONT
+  Loads a console font from standard input.
+
+CONFIG_USER_BUSYBOX_LOADKMAP
+  Loads a binary keyboard translation table from standard input.
+
+CONFIG_USER_BUSYBOX_LOGGER
+  Write a message to the system log.
+
+CONFIG_USER_BUSYBOX_LOGNAME
+  Print the name of the current user.
+
+CONFIG_USER_BUSYBOX_LS
+  List directory contents.
+
+CONFIG_USER_BUSYBOX_LSMOD
+  List the currently loaded kernel modules.
+
+CONFIG_USER_BUSYBOX_MAKEDEVS
+  Creates a range of block or character special files.
+
+CONFIG_USER_BUSYBOX_MD5SUM
+  Print or check MD5 checksums.
+
+CONFIG_USER_BUSYBOX_MKDIR
+  Create directory(ies), if they do not already exist.
+
+CONFIG_USER_BUSYBOX_MKFIFO
+  Creates a named pipe.
+
+CONFIG_USER_BUSYBOX_MKFS_MINIX
+  Make a MINIX filesystem.
+
+CONFIG_USER_BUSYBOX_MKNOD
+  Create a special file (block, character, or pipe).
+
+CONFIG_USER_BUSYBOX_MKSWAP
+  Prepare a disk partition to be used as a swap partition.
+
+CONFIG_USER_BUSYBOX_MKTEMP
+  Creates a temporary file.
+
+CONFIG_USER_BUSYBOX_MODPROBE
+  High level handling of loadable modules.
+
+CONFIG_USER_BUSYBOX_MORE
+  More is a filter for viewing a file one screenful at a time.
+
+CONFIG_USER_BUSYBOX_MOUNT
+  Mount a filesystem.
+
+CONFIG_USER_BUSYBOX_MT
+  Control magnetic tape drive operation.
+
+CONFIG_USER_BUSYBOX_MV
+  Move (rename) files.
+
+CONFIG_USER_BUSYBOX_NC
+  Netcat opens a pipe to a socket.
+
+CONFIG_USER_BUSYBOX_NSLOOKUP
+  Queries the nameserver for the IP address of the given host.
+
+CONFIG_USER_BUSYBOX_PIDOF
+  Find the process ID of a running program.
+
+CONFIG_USER_BUSYBOX_PING
+  Send ICMP ECHO_REQUEST packets to network hosts.
+
+CONFIG_USER_BUSYBOX_PIVOT_ROOT
+  Move the current root file system to put_old and make new_root the
+  new root file system.
+
+CONFIG_USER_BUSYBOX_POWEROFF
+  Halt the system and request that the kernel shut off the power.
+
+CONFIG_USER_BUSYBOX_PRINTF
+  Formats and prints argument(s) according to format, Where format
+        controls the output exactly as in C printf.
+
+CONFIG_USER_BUSYBOX_PS
+  Report process status. This version of ps accepts no options.
+
+CONFIG_USER_BUSYBOX_PWD
+  Print the full filename of the current working directory.
+
+CONFIG_USER_BUSYBOX_RDATE
+  Get and possibly set the system date and time from a remote host.
+
+CONFIG_USER_BUSYBOX_READLINK
+  Read a symbolic link.
+
+CONFIG_USER_BUSYBOX_REBOOT
+  Reboot the system.
+
+CONFIG_USER_BUSYBOX_RENICE
+  Changes priority of running processes. Allowed priorities range from
+  20 (the process runs only when nothing else is running) to 0
+  (default priority) to -20 (almost nothing else ever gets to run).
+
+CONFIG_USER_BUSYBOX_RESET
+  Resets the screen.
+
+CONFIG_USER_BUSYBOX_RM
+  Remove (unlink) the file(s). You may use '--' to indicate that all
+  following arguments are non-options.
+
+CONFIG_USER_BUSYBOX_RMDIR
+  Remove the directory(ies), if they are empty.
+
+CONFIG_USER_BUSYBOX_RMMOD
+  Unloads the specified kernel modules from the kernel.
+
+CONFIG_USER_BUSYBOX_ROUTE
+  Edit the kernel's routing tables.
+
+CONFIG_USER_BUSYBOX_RPMUNPACK
+  Extracts an rpm archive.
+
+CONFIG_USER_BUSYBOX_RPM2CPIO
+  Convert an rpm archive to a cpio archive.
+
+CONFIG_USER_BUSYBOX_SED
+  Stream editor.
+
+CONFIG_USER_BUSYBOX_SETKEYCODES
+  Set entries into the kernel's scancode-to-keycode map, allowing
+  unusual keyboards to generate usable keycodes.
+
+CONFIG_USER_BUSYBOX_SHELL
+  Do you want to configure a busybox shell
+
+CONFIG_USER_BUSYBOX_ASH
+  The ASH shell (command interpreter)
+
+CONFIG_USER_BUSYBOX_SH_IS_ASH
+  /bin/sh will use the "ash" shell.
+
+CONFIG_USER_BUSYBOX_HUSH
+  The HUSH shell (command interpreter)
+
+CONFIG_USER_BUSYBOX_SH_IS_HUSH
+  /bin/sh will use the "hush" shell.
+
+CONFIG_USER_BUSYBOX_LASH
+  The BusyBox lame shell (command interpreter)
+
+CONFIG_USER_BUSYBOX_SH_IS_LASH
+  /bin/sh will use the "lash" shell.
+
+CONFIG_USER_BUSYBOX_MSH
+  The BusyBox Minix shell (command interpreter)
+
+CONFIG_USER_BUSYBOX_SH_IS_MSH
+  /bin/sh will use the "msh" shell.
+
+CONFIG_USER_BUSYBOX_SLEEP
+  Pause for a specified number of seconds.
+
+CONFIG_USER_BUSYBOX_SORT
+  Sorts lines of text in the specified files.
+
+CONFIG_USER_BUSYBOX_STTY
+  Print or modify prints baud rate, line discipline, and deviations
+  from stty sane.
+
+CONFIG_USER_BUSYBOX_SWAPONOFF
+  Stop swapping virtual memory pages on the given device.
+
+CONFIG_USER_BUSYBOX_SYNC
+  Write all buffered filesystem blocks to disk.
+
+CONFIG_USER_BUSYBOX_SYSLOGD
+  Linux system and kernel logging utility. Note that this version of
+  syslogd ignores /etc/syslog.conf.
+
+CONFIG_USER_BUSYBOX_TAIL
+  Print last 10 lines of each file to standard output. With more than
+  one file, precede each with a header giving the file name. With no
+  file, or when file is -, read standard input.
+
+CONFIG_USER_BUSYBOX_TAR
+  Create, extract, or list files from a tar file.
+
+CONFIG_USER_BUSYBOX_TEE
+  Copy standard input to each file, and also to standard output.
+
+CONFIG_USER_BUSYBOX_TELNET
+  Telnet is used to establish interactive communication with another
+  computer over a network using the TELNET protocol.
+
+CONFIG_USER_BUSYBOX_TEST
+  Checks file types and compares values returning an exit code
+  determined by the value of an expression.
+
+CONFIG_USER_BUSYBOX_TFTP
+  Transfers a file from/to a tftp server using "octet" mode.
+
+CONFIG_USER_BUSYBOX_TOUCH
+  Update the last-modified date on the given file[s].
+
+CONFIG_USER_BUSYBOX_TR
+  Translate, squeeze, and/or delete characters from standard input,
+  writing to standard output.
+
+CONFIG_USER_BUSYBOX_TRACEROUTE
+  Print the route packets take to a network host.
+
+CONFIG_USER_BUSYBOX_TRUE_FALSE
+  Return an exit code of TRUE (0) or FALSE (1).
+
+CONFIG_USER_BUSYBOX_TTY
+  Print the file name of the terminal connected to standard input.
+
+CONFIG_USER_BUSYBOX_UMOUNT
+  Unmount file systems.
+
+CONFIG_USER_BUSYBOX_UNAME
+  Print certain system information.
+
+CONFIG_USER_BUSYBOX_UNIQ
+  Discard all but one of successive identical lines from input (or
+  standard input), writing to output (or standard output).
+
+CONFIG_USER_BUSYBOX_UNIX2DOS
+  Convert files from unix format to DOS format.
+
+CONFIG_USER_BUSYBOX_UPDATE
+  Periodically flushes filesystem buffers.
+
+CONFIG_USER_BUSYBOX_UPTIME
+  Display the time since the last boot.
+
+CONFIG_USER_BUSYBOX_USLEEP
+  Pause for N microseconds.
+
+CONFIG_USER_BUSYBOX_UUDECODE
+  Uudecode a file that is uuencoded.
+
+CONFIG_USER_BUSYBOX_UUENCODE
+  Uuencode a file.
+
+CONFIG_USER_BUSYBOX_VI
+  Visual file editor.
+
+CONFIG_USER_BUSYBOX_WATCHDOG
+  Periodically write to watchdog device.
+
+CONFIG_USER_BUSYBOX_WC
+  Print line, word, and byte counts for each file, and a total line if
+  more than one file is specified. with no file, read standard input.
+
+CONFIG_USER_BUSYBOX_WGET
+  Retrieves files via HTTP or FTP.
+
+CONFIG_USER_BUSYBOX_WHICH
+  Locates a command.
+
+CONFIG_USER_BUSYBOX_WHOAMI
+  Prints the user name associated with the current effective user id.
+
+CONFIG_USER_BUSYBOX_XARGS
+  Executes a command on every item given by standard input.
+
+CONFIG_USER_BUSYBOX_YES
+  Repeatedly outputs a line with all specified string(s), or 'y'.
+
+CONFIG_USER_BUSYBOX_BUFFERS_GO_ON_STACK
+  BusyBox will, by default, malloc space for its buffers.  This costs code
+  size for the call to xmalloc.  You can use the following feature to have
+  them put on the stack.  For some very small machines with limited stack
+  space, this can be deadly.  For most folks, this works just fine...
+
+CONFIG_USER_BUSYBOX_BUFFERS_GO_IN_BSS
+  The third alternative for buffer allocation is to use BSS.  This works
+  beautifully for computers with a real MMU (and OS support), but wastes
+  runtime RAM for uCLinux.  This behavior was the only one available for
+  BusyBox versions 0.48 and earlier.
+
+CONFIG_USER_BUSYBOX_USE_DEVPS_PATCH
+  Turn this on to use Erik's very cool devps, and devmtab kernel drivers,
+  thereby eliminating the need for the /proc filesystem and thereby saving
+  lots and lots memory for more important things.  NOTE:  If you enable this
+  feature, you _must_ have patched the kernel to include the devps patch that
+  is included in the busybox/kernel-patches directory.  You will also need to
+  create some device special files in /dev on your embedded system:
+         mknod /dev/mtab c 10 22
+         mknod /dev/ps c 10 21
+  I emailed Linus and this patch will not be going into the stock kernel.
+
+CONFIG_USER_BUSYBOX_VERBOSE_USAGE
+  Show verbose usage messages.  This consumes extra memory.
+
+CONFIG_USER_BUSYBOX_USE_TERMIOS
+  Use termios to manipulate the screen ('more' is prettier with this on)
+
+CONFIG_USER_BUSYBOX_AUTOWIDTH
+  Calculate terminal & column widths (for more and ls).
+
+CONFIG_USER_BUSYBOX_LS_USERNAME
+  Show username/groupnames for ls.
+
+CONFIG_USER_BUSYBOX_LS_TIMESTAMPS
+  Show file time stamps in ls.
+  
+CONFIG_USER_BUSYBOX_LS_FILETYPES
+  Allow ls to know about file types.
+
+CONFIG_USER_BUSYBOX_LS_SORTFILES
+  Allow ls to sort the file names.
+
+CONFIG_USER_BUSYBOX_LS_RECURSIVE
+  Enable ls -R
+
+CONFIG_USER_BUSYBOX_LS_FOLLOWLINKS
+  Enable ls -L
+
+CONFIG_USER_BUSYBOX_FANCY_PING
+  Disable for a smaller (but less functional) ping.
+
+CONFIG_USER_BUSYBOX_USE_INITTAB
+  Make init use a simplified /etc/inittab file (recommended).
+
+CONFIG_USER_BUSYBOX_LINUXRC
+  Enable init being called as /linuxrc.
+
+CONFIG_USER_BUSYBOX_INIT_COREDUMPS
+  Have init enable core dumping for child processes (for debugging only).
+
+CONFIG_USER_BUSYBOX_EXTRA_QUIET
+  Make sure nothing is printed to the console on boot
+
+CONFIG_USER_BUSYBOX_REMOTE_LOG
+  Enable syslogd -R remotehost
+
+CONFIG_USER_BUSYBOX_IPC_SYSLOG
+  Enable syslogd -C
+
+CONFIG_USER_BUSYBOX_FANCY_TAIL
+  Fancy tail implementation.
+
+CONFIG_USER_BUSYBOX_MOUNT_LOOP
+  Enable support for loop devices in mount
+
+CONFIG_USER_BUSYBOX_MTAB_SUPPORT
+  Enable support for a real /etc/mtab file instead of /proc/mounts
+
+CONFIG_USER_BUSYBOX_NFSMOUNT
+  Enable support for mounting remote NFS volumes.
+  You may need to mount with "-o nolock" if you are
+  not running a local portmapper daemon...
+
+CONFIG_USER_BUSYBOX_MOUNT_FORCE
+  Enable support forced filesystem unmounting
+  (i.e. in case of an unreachable NFS system).
+
+CONFIG_USER_BUSYBOX_TAR_CREATE
+  Enable support for creation of tar files.
+
+CONFIG_USER_BUSYBOX_TAR_EXCLUDE
+  Enable support for "--exclude" and "-X" for excluding files
+
+CONFIG_USER_BUSYBOX_TAR_GZIP
+  Enable support for tar -z option (currently only works for inflating)
+
+CONFIG_USER_BUSYBOX_SORT_REVERSE
+  Enable reverse sort
+
+CONFIG_USER_BUSYBOX_SORT_UNIQUE
+  Enable unique sort
+
+CONFIG_USER_BUSYBOX_COMMAND_EDITING
+  Enable command line editing in the shell.
+
+CONFIG_USER_BUSYBOX_TAB_COMPLETION
+  Enable tab completion in the shell.
+  This feature adds a bit over 4k.
+
+CONFIG_USER_BUSYBOX_USERNAME_COMPLETION
+  Attempts to match usernames in a ~-prefixed path
+
+CONFIG_USER_BUSYBOX_SH_STANDALONE_SHELL
+  Allow the shell to invoke all the compiled in BusyBox applets as if they
+  were shell builtins.  Nice for staticly linking an emergency rescue shell,
+  among other things.
+
+CONFIG_USER_BUSYBOX_SH_APPLETS_ALWAYS_WIN
+  When this is enabled, busybox shell applets can be called using full path
+  names.  This causes applets (i.e., most busybox commands) to override
+  real commands on the filesystem.  For example, if you run run /bin/cat, it
+  will use BusyBox cat even if /bin/cat exists on the filesystem and is _not_
+  busybox.  Some systems want this, others do not.  Choose wisely.  :-)
+
+CONFIG_USER_BUSYBOX_SH_FANCY_PROMPT
+  Some deeply embedded systems don't have usernames or even hostnames,
+  and the fancy prompt can look rather hideous on them. Enable this option
+  for a fancy prompt.
+
+CONFIG_USER_BUSYBOX_FBSET_FANCY
+  Turn on extra fbset options.
+
+CONFIG_USER_BUSYBOX_FBSET_READMODE
+  Turn on fbset readmode support.
+
+CONFIG_USER_BUSYBOX_NEW_MODULE_INTERFACE
+  Support insmod/lsmod/rmmod for post 2.1 kernels.
+
+CONFIG_USER_BUSYBOX_OLD_MODULE_INTERFACE
+  Support insmod/lsmod/rmmod for pre 2.1 kernels.
+
+CONFIG_USER_BUSYBOX_INSMOD_VERSION_CHECKING
+  Support module version checking.
+
+CONFIG_USER_BUSYBOX_INSMOD_LOADINKMEM
+  Support for uClinux memory usage optimization, which will load the image
+  directly into the kernel memory.  This divides memory requrements by three.
+  If you are not running uClinux (i.e., your CPU has an MMU) leave this
+  disabled...
+
+CONFIG_USER_BUSYBOX_MINIX2
+  Support for Minix filesystem, version 2
+
+CONFIG_USER_BUSYBOX_IFCONFIG_STATUS
+  Enable ifconfig status reporting output -- this feature adds 12k.
+
+CONFIG_USER_BUSYBOX_IFCONFIG_SLIP
+  Enable ifconfig slip-specific options "keepalive" and "outfill"
+
+CONFIG_USER_BUSYBOX_IFCONFIG_MEMSTART_IOADDR_IRQ
+  Enable ifconfig options "mem_start", "io_addr", and "irq".
+
+CONFIG_USER_BUSYBOX_IFCONFIG_HW
+  Enable ifconfig option "hw".  Currently works for only with "ether".
+
+CONFIG_USER_BUSYBOX_INSTALLER
+  Enable busybox --install [-s]
+  to create links (or symlinks) for all the commands that are
+  compiled into the binary.  (needs /proc filesystem)
+
+CONFIG_USER_BUSYBOX_WGET_STATUSBAR
+  Enable a nifty progress meter in wget (adds just under 2k)
+
+CONFIG_USER_BUSYBOX_WGET_AUTHENTICATION
+  Enable HTTP authentication in wget
+
+CONFIG_USER_BUSYBOX_CLEAN_UP
+  Clean up all memory before exiting -- usually not needed
+  as the OS can clean up...  Don't enable this unless you
+  have a really good reason for cleaning things up manually.
+
+CONFIG_USER_BUSYBOX_HUMAN_READABLE
+  Support for human readable output by ls, du, etc.(example 13k, 23M, 235G)
+
+CONFIG_USER_BUSYBOX_FIND_TYPE
+  Support for the find -type option.
+
+CONFIG_USER_BUSYBOX_FIND_PERM
+  Support for the find -perm option.
+
+CONFIG_USER_BUSYBOX_FIND_MTIME
+  Support for the find -mtine option.
+
+CONFIG_USER_BUSYBOX_GREP_CONTEXT
+  Support for the -A -B and -C context flags in grep.
+
+CONFIG_USER_BUSYBOX_GREP_EGREP_ALIAS
+  Support for the EGREP applet (alias to the grep applet)
+
+CONFIG_USER_BUSYBOX_TFTP_PUT
+  Support the TFTP PUT command.
+
+CONFIG_USER_BUSYBOX_TFTP_GET
+  Support the TFTP GET command.
+
+CONFIG_USER_BUSYBOX_VI_COLON
+  ":" colon commands, no "ex" mode.
+
+CONFIG_USER_BUSYBOX_VI_YANKMARK
+  Yank/Put commands and Mark commands.
+
+CONFIG_USER_BUSYBOX_VI_SEARCH
+  Search and replace commands.
+
+CONFIG_USER_BUSYBOX_VI_USE_SIGNALS
+  Catch signals.
+
+CONFIG_USER_BUSYBOX_VI_DOT_CMD
+  Remember previous command and "." command.
+
+CONFIG_USER_BUSYBOX_VI_READONLY
+  Support "vi -r" and "view" mode.
+
+CONFIG_USER_BUSYBOX_VI_SETOPTS
+  Set-able options: ai ic showmatch.
+
+CONFIG_USER_BUSYBOX_VI_SET
+  Support :set
+
+CONFIG_USER_BUSYBOX_VI_WIN_RESIZE
+  Handle window resizes.
+
+CONFIG_USER_BUSYBOX_LOCALE_SUPPORT
+  Enable a if you system have setuped locale.
+
+CONFIG_USER_BUSYBOX_TELNET_TTYPE
+  Support for TELNET to pass TERM type to remote host.
+
+CONFIG_USER_MARADNS_MARADNS
+  The MaraDNS nameserver (UDP query daemon); see also zoneserver.
+  Approx. binary size: 55k
+
+CONFIG_USER_MARADNS_ZONESERVER
+  The MaraDNS TCP Zone Transfer daemon; see also maradns.
+  Approx. binary size: 41k
+
+CONFIG_USER_PORTMAP_PORTMAP
+  The portmapper service, needed for NFS under 2.4.
+  Approx. binary size: 49k
+
+CONFIG_USER_IPTABLES_IPTABLES
+  Iptables is the IP firewall administration tool for 2.4 linux.
+
+CONFIG_USER_CKSUM_CKSUM
+  Checksumming utility
+
+CONFIG_USER_PCMCIA_CS
+  PCMCIA Card Services package and all associated bits
+
+CONFIG_USER_LIRC
+  Build the LIRC (Linux Remote Control) tools/apps.
+
+CONFIG_USER_LIRC_LIRCD
+  The main LIRC daemon.
+
+CONFIG_USER_LIRC_IRRECORD
+  For creating new entries for a remote control.
+
+CONFIG_USER_LIRC_LIRCMD
+  Not sure.
+
+CONFIG_USER_LIRC_IREXEC
+  Run commands when you push a button on the remote.
+
+CONFIG_USER_LIRC_IRW
+  A test program.
+  
+CONFIG_USER_LIRC_MODE2
+  Not sure.
+
+CONFIG_USER_DESTEST_DESTEST
+  Include the destest executable that does some basic checks to ensure
+  you encryption library is working correctly.
+
+CONFIG_USER_DESTEST_DESPERF
+  A little program that can be used to measure DES/3DES/AES performance.
+  It will take over ports 8000 (DES), 8001 (3DES) and 8002 (AES) so you
+  can tcpblast the machine to find out how fast it can encrypt data.
+
+CONFIG_USER_AES_PERF
+  A not so little program for fine tuning AES crypto performance on a unit.
+  This prorgams sequentially runs through all possible permutations of
+  configuration options for the AES code and determinse the fastest.
+
+CONFIG_USER_INIT_CONSOLE_SH
+  Init will automatically spawn a shell on the console.
+
+CONFIG_USER_INIT_RUN_FIREWALL
+  Init will automatically run the firewall script on start up.
+
+CONFIG_USER_BOOTTOOLS_FLASHLOADER
+  The uCsimm/uCdimm flashloader
+
+CONFIG_USER_BOOTTOOLS_HIMEMLOADER
+  The uCsimm/uCdimm himem-loader
+
+CONFIG_USER_TINYLOGIN_ADDUSER
+  Add a user to the system
+
+CONFIG_USER_TINYLOGIN_ADDGROUP
+  Add a group to the system
+
+CONFIG_USER_TINYLOGIN_DELUSER
+  Delete a user from the system
+
+CONFIG_USER_TINYLOGIN_DELGROUP
+  Delete a group from the system
+
+CONFIG_USER_TINYLOGIN_LOGIN
+  Begin a new session on the system
+
+CONFIG_USER_TINYLOGIN_SU
+  Change user id or become root
+
+CONFIG_USER_TINYLOGIN_SULOGIN
+  Single user login
+
+CONFIG_USER_TINYLOGIN_PASSWD
+  Change a user password
+
+CONFIG_USER_TINYLOGIN_GETTY
+  Opens a tty, prompts for a login name, then invokes login
+
+CONFIG_USER_TINYLOGIN_VLOCK
+  Lock a virtual terminal
+
+CONFIG_USER_TINYLOGIN_SHADOWPASSWDS
+  Enable using shadow passwords
+
+CONFIG_USER_TINYLOGIN_SECURETTY
+  Enable checking of /etc/securetty by login
+
+CONFIG_USER_TINYLOGIN_MD5_PASSWORDS
+  Enable using md5 passwords
+
+CONFIG_USER_TINYLOGIN_SHA1_PASSWORDS
+  Enable using sha passwords
+
+CONFIG_USER_TINYLOGIN_TRIVIAL_HELP
+  This compiles out everything but the most 
+  trivial --help usage information (i.e. reduces binary size)
+
+CONFIG_USER_TINYLOGIN_INSTALLER
+  Enable 'tinylogin --install [-s]' to allow tinylogin
+  to create links (or symlinks) at runtime for all the 
+  commands that are compiled into the binary.  This needs 
+  the /proc filesystem to work properly...
+
+CONFIG_USER_ROUTE_NETSTAT
+  The netstat command,  prints info about network interfaces.
+
+CONFIG_USER_RECOVER_RECOVER
+  Recovery application to allow programming of a new flash image
+  when the current flash image cannot boot.
+
+CONFIG_USER_RECOVER_ETHERNET_INTERFACE
+  Specify the ethernet interface that the recover application uses.
+
+CONFIG_USER_RECOVER_USE_STATIC_SERVER
+  Enable use of a static recovery TFTP server.  The default is to use
+  the DHCP server.
+
+CONFIG_USER_RECOVER_STATIC_SERVER
+  The IP address of the static recovery TFTP server.
+
+CONFIG_USER_IFMOND_IFMOND
+  Monitors the status of a network interface using ping, and changes
+  routes when the ping fails.
+
+CONFIG_USER_IFMOND2_IFMOND
+  Monitors the status of a network connection using ping, and other stuff.
+  Allows for a lot more flexibility than new-ifmond, and also allows for
+  routing protocols and other cool stuff.
+
+CONFIG_USER_NEWIFMOND_IFMOND
+  Monitors the status of an internet connection (whether ppp, diald, or
+  simply an ethernet connection), and starts up a seperate internet
+  connection if the original connection fails.  We monitor the connection by
+  pinging a remote host, and by determining whether the daemon that controls
+  the internet connection thinks that the connection is established.
+
+CONFIG_USER_MSNTP_MSNTP
+  Simple Network Time Protocol utility.
+  Approx. binary size: 66k
+
+CONFIG_USER_FROB_LED_FROB_LED
+  Utility to send commands to the ledman driver.
+
+CONFIG_USER_MINI_HTTPD_MINI_HTTPD
+  A small HTTP server.
+
+CONFIG_USER_STRACE_STRACE
+  Trace system calls and signals.
+
+CONFIG_USER_NET_TOOLS_ARP
+  Manipulate the system ARP cache.
+
+CONFIG_USER_NET_TOOLS_HOSTNAME
+  Show or set the system's host name.
+
+CONFIG_USER_NET_TOOLS_IFCONFIG
+  Configure a network interface.
+
+CONFIG_USER_NET_TOOLS_NAMEIF
+  Name network interfaces based on MAC addresses.
+
+CONFIG_USER_NET_TOOLS_NETSTAT
+  Print  network  connections,  routing  tables,
+  interface statistics, masquerade connections,  and
+  multicast memberships.
+
+CONFIG_USER_NET_TOOLS_PLIPCONFIG
+  Fine tune PLIP device parameters.
+
+CONFIG_USER_NET_TOOLS_RARP
+  Manipulate the system RARP table.
+
+CONFIG_USER_NET_TOOLS_ROUTE
+  Show / manipulate the IP routing table.
+
+CONFIG_USER_NET_TOOLS_SLATTACH
+  Attach a network interface to a serial line.
+
+CONFIG_USER_NET_TOOLS_MII_TOOL
+  Manipulate media-independent interface status.
+
+CONFIG_USER_SQUID_SQUID
+  The Squid Web proxy cache.
+
+CONFIG_USER_DHRYSTONE_DHRYSTONE
+  The dhrystone CPU benchmark program.
+
+CONFIG_USER_WIRELESS_TOOLS
+  Enable building of the Wireless tools.
+  
+CONFIG_USER_WIRELESS_TOOLS_IWCONFIG
+  Wireless interface config tool
+
+CONFIG_USER_WIRELESS_TOOLS_IWGETID
+  Wireless getid
+
+CONFIG_USER_WIRELESS_TOOLS_IWLIST
+  List wireless interfaces.
+
+CONFIG_USER_WIRELESS_TOOLS_IWPRIV
+  Something cool.
+
+CONFIG_USER_WIRELESS_TOOLS_IWSPY
+  If its a spy tool it must be worth having.
+
+CONFIG_USER_IPROUTE2_TC_TC
+  Traffic shaper from iproute2 package.
+
+CONFIG_USER_IPROUTE2_IP_IFCFG
+  Prints interface configuration.  This script requires
+  advanced shell scripts and other iproute2 apps.
+
+CONFIG_USER_IPROUTE2_IP_IP
+  The core app for iproute2.
+
+CONFIG_USER_IPROUTE2_IP_ROUTEF
+  routef from the iproute2 package.
+
+CONFIG_USER_IPROUTE2_IP_ROUTEL
+  routel from the iproute2 package.
+
+CONFIG_USER_IPROUTE2_IP_RTACCT
+  rtacct from the iproute2 packe.
+
+CONFIG_USER_IPROUTE2_IP_RTMON
+  Route monitor.
+
+CONFIG_USER_IPROUTE2_IP_RTPR
+  Print routes.
+
+CONFIG_USER_LANG_A60
+  A relatively complete Algol 60 interpreter.  This
+  options adds about 99k to the image.
+
+CONFIG_USER_LANG_A60_EGS
+  Some example Algol 60 programs.  These will be installed
+  into /home/a60-examples.  This represents about 15k of text
+  files.
+
+CONFIG_USER_LAND_A60_TEST
+  A small test suite for the Algol 60 interpreter.
+  These will be installed into /home/a60-test.  This
+  represents about 45k of text files.
+
+CONFIG_USER_TCSH_TCSH
+  Enhanced C shell (csh).
+
+CONFIG_USER_EZIPUPDATE_EZIPUPDATE
+  Dynamic DNS IP update client.
+
+CONFIG_USER_TIMEPEG_TPT
+  Timepeg monitoring tool.  This utility presents the information
+  gathered by the timepeg code located in the kernel in a meaningful
+  manner.
+
+CONFIG_USER_CERBERIAN_CERBERIAN
+  The cerberian URL filtering proxy server
+  This option adds about 30K to the image.
+
+CONFIG_USER_CERBERIAN_CERBLITE
+  Use the cerberian supplied cerblite.a
+
+CONFIG_USER_CERBERIAN_MYLITE
+  Use our smaller C version of the cerberian library.
+
+CONFIG_USER_CERBERIAN_CERBTEST
+  A simple test program for testing encoding/decoding/library
+  functionality.  About 12K,  only for testing.
+
+CONFIG_USER_SETHDLC_SETHDLC
+  Small utility for configuring HDLC network interfaces.
+
+CONFIG_USER_MTDUTILS_ERASE
+  A tool for erasing MTD partitions.
+  This option adds approximately 40K to the image.
+
+CONFIG_USER_MTDUTILS_ERASEALL
+  A tool for erasing entire MTD partitions.
+  This option adds approximately 40K to the image.
+
+CONFIG_USER_MTDUTILS_FTL_CHECK
+  Check the Flash Translation Layer.
+  This option adds approximately 40K to the image.
+
+CONFIG_USER_MTDUTILS_FTL_FORMAT
+  Format a Flash Translation Layer.
+  This option adds approximately 40K to the image.
+
+CONFIG_USER_MTDUTILS_NFTLDUMP
+  Dump a NAND flash.
+  This option adds approximately 40K to the image.
+
+CONFIG_USER_MTDUTILS_NFTL_FORMAT
+  Format a Flash Translation Layer on NAND flash.
+  This option adds approximately 40K to the image.
+
+CONFIG_USER_MTDUTILS_NANDDUMP
+  Dump a NAND device.
+  This option adds approximately 40K to the image.
+
+CONFIG_USER_MTDUTILS_NANDTEST
+  Test a NAND device.
+  This option adds approximately 40K to the image.
+
+CONFIG_USER_MTDUTILS_NANDWRITE
+  Write to a NAND device.
+  This option adds approximately 40K to the image.
+
+CONFIG_USER_MTDUTILS_DOC_LOADBIOS
+  Load the BIOS portion of a Disk On Chip.
+  This option adds approximately 40K to the image.
+
+CONFIG_USER_MTDUTILS_DOC_LOADIPL
+  Load an IPL into a DoC Millennium Plus
+  This option adds approximately 45K to the image.
+
+CONFIG_USER_LILO_LILO
+  The lilo boot loader (C version).
+  This option adds approximately 120K to the image.
+
+CONFIG_USER_NETSTAT_NAT_NETSTAT_NAT
+  Pretty print the ipfilter NAT translations.
+
+CONFIG_USER_CRAMFS_CRAMFSCK
+  cramfs fsck program.
+
+CONFIG_USER_CRAMFS_MKCRAMFS
+  cramfs fsck program.
+
+CONFIG_SERIAL_SC16IS7X0
+  Support SC16IS7x0 I2C UART.
+
+CONFIG_SERIAL_SC16IS7X0_CONSOLE
+  Console on SC16IS7x0.
+
+CONFIG_SERIAL_SC16IS7X0_XTAL1_CLK_1843200
+  Decide crystal for XTAL1 is 1.84MHz or 14.7MHz.
+  Choose 14.7MHz for NXP demoboard.

@@ -1,0 +1,1596 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+IROM             0x10100000         0x0000a000         xr
+IROM_NS          0x1010a000         0x00036000         xr
+DROM_NS          0x101c0000         0x00014000         xr
+DROM             0x101d4000         0x00004000         xr
+ROMBSS_RAM_COM   0x10000000         0x00001000         rw
+ROMBSS_RAM_NS    0x10001000         0x00001000         rw
+RSVD_RAM_NS      0x10002000         0x00002000         rw
+MSP_RAM_NS       0x10004000         0x00001000         rw
+BD_RAM_NS        0x10005000         0x0006a000         xrw
+PRINT_RAM        0x1006f000         0x00001000         xrw
+BD_RAM_S         0x10070000         0x0000a000         xrw
+BD_RAM_NSC       0x1007a000         0x00002000         xrw
+ROMBSS_RAM_S     0x1007c000         0x00001000         xrw
+BOOTLOADER_RAM_S 0x1007d000         0x00002000         xrw
+MSP_RAM_S        0x1007f000         0x00001000         xrw
+EXTENTION_SRAM   0x100e0000         0x00020000         xrw
+KM0_BOOT         0x08000020         0x00003fe0         xr
+KM4_BOOT         0x08004020         0x00003fe0         xr
+BACKUP           0x08008000         0x00001000         r
+XIPSYS           0x08009000         0x00001000         r
+RESVD            0x0800a000         0x00001000         r
+KM0_IMG2         0x0800b020         0x0001ffe0         xr
+KM4_IMG2         0x0802b020         0x00064fe0         xr
+KM4_IMG2_OTA2    0x08090020         0x00064fe0         xr
+KM4_IMG3         0x080f5020         0x0000afe0         xr
+BTRACE           0x08800000         0x00400000         xr
+KM0_SRAM         0x00080000         0x00010000         xrw
+RETENTION_RAM    0x000c0000         0x00000400         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+
+.rom.text       0x10100000     0x82f0
+ *(.vectors_table)
+ .vectors_table
+                0x10100000       0x20 ./build/rom/8721dhp_vectors.o
+                0x10100000                __vectors_table
+ *(.vectors_table_text)
+ *fill*         0x10100020       0xe0 
+ .vectors_table_text
+                0x10100100       0x2c ./build/rom/8721dhp_vectors.o
+                0x10100100                Reset_Handler
+                0x10100110                NMI_Handler
+                0x10100114                HardFault_Handler
+                0x10100118                MemManage_Handler
+                0x1010011c                BusFault_Handler
+                0x10100120                UsageFault_Handler
+                0x10100124                SecureFault_Handler
+ *(.hal.rom.text*)
+ .hal.rom.text  0x1010012c      0x638 ./build/rom/diag.o
+                0x1010012c                DiagVSprintf
+                0x101003f4                DiagPrintf
+                0x10100444                DiagPrintfD
+                0x10100470                DiagSPrintf
+                0x1010049c                DiagSnPrintf
+ .hal.rom.text  0x10100764      0x10c ./build/rom/rand.o
+                0x10100764                Rand
+                0x101007f0                Rand_Arc4
+                0x10100824                RandBytes_Get
+ .hal.rom.text  0x10100870       0x20 ./build/rom/rtl8721d_assert_rom.o
+                0x10100870                io_assert_failed
+ .hal.rom.text  0x10100890       0xa8 ./build/rom/rtl8721d_backup_reg.o
+                0x10100890                BKUP_Write
+                0x101008b4                BKUP_Read
+                0x101008d4                BKUP_Set
+                0x101008fc                BKUP_Clear
+                0x10100928                BOOT_Reason
+ .hal.rom.text  0x10100938       0x70 ./build/rom/rtl8721d_delay_rom.o
+                0x10100938                DelayNop
+                0x10100948                DelayUs
+                0x10100994                DelayMs
+ .hal.rom.text  0x101009a8      0x7ec ./build/rom/rtl8721d_efuse_rom.o
+                0x101009a8                EFUSEPowerSwitch
+                0x10100a30                EFUSERead8
+                0x10100b1c                EFUSEWrite8
+                0x10100c20                EFUSE_PG_Packet
+                0x10100e98                EFUSE_LogicalMap_Read
+                0x10100fac                EFUSE_LogicalMap_Write
+ .hal.rom.text  0x10101194      0xa90 ./build/rom/rtl8721d_flash_rom.o
+                0x10101194                FLASH_RxData
+                0x1010129c                FLASH_TxCmd
+                0x10101328                FLASH_SW_CS_Control
+                0x1010137c                FLASH_SetSpiMode
+                0x10101414                FLASH_RxCmd
+                0x10101478                FLASH_WaitBusy
+                0x101014f8                FLASH_WriteEn
+                0x1010151c                FLASH_TxData256B
+                0x1010160c                FLASH_TxData12B
+                0x101016ec                FLASH_SetStatus
+                0x1010170c                FLASH_Erase
+                0x101017b8                FLASH_DeepPowerDown
+                0x10101808                FLASH_SetStatusBits
+                0x101018dc                FLASH_StructInit_Micron
+                0x1010198c                FLASH_StructInit_MXIC
+                0x10101a38                FLASH_StructInit_GD
+                0x10101aec                FLASH_StructInit
+                0x10101ba0                FLASH_Init
+ .hal.rom.text  0x10101c24      0x984 ./build/rom/rtl8721d_gdma_rom.o
+                0x10101c24                GDMA_StructInit
+                0x10101c44                GDMA_SetLLP
+                0x10101cd8                GDMA_ClearINTPendingBit
+                0x10101da4                GDMA_ClearINT
+                0x10101e74                GDMA_INTConfig
+                0x10101f90                GDMA_Cmd
+                0x10101ff8                GDMA_Init
+                0x1010214c                GDMA_ChCleanAutoReload
+                0x101021d0                GDMA_SetSrcAddr
+                0x10102220                GDMA_GetSrcAddr
+                0x1010226c                GDMA_GetDstAddr
+                0x101022b8                GDMA_SetDstAddr
+                0x10102308                GDMA_SetBlkSize
+                0x10102368                GDMA_GetBlkSize
+                0x101023b8                GDMA_ChnlRegister
+                0x10102400                GDMA_ChnlUnRegister
+                0x1010243c                GDMA_ChnlAlloc
+                0x101024d8                GDMA_ChnlFree
+                0x10102564                GDMA_GetIrqNum
+ .hal.rom.text  0x101025a8      0x37c ./build/rom/rtl8721d_gpio_rom.o
+                0x101025a8                GPIO_INTMode
+                0x10102640                GPIO_INTConfig
+                0x10102678                GPIO_INTHandler
+                0x10102720                GPIO_Direction
+                0x10102754                GPIO_Init
+                0x101027e0                GPIO_DeInit
+                0x1010284c                GPIO_ReadDataBit
+                0x10102870                GPIO_WriteBit
+                0x101028a0                GPIO_PortDirection
+                0x101028c4                GPIO_PortRead
+                0x101028d4                GPIO_PortWrite
+                0x101028ec                GPIO_UserRegIrq
+ .hal.rom.text  0x10102924      0x178 ./build/rom/rtl8721d_ipc_rom.o
+                0x10102924                IPC_INTConfig
+                0x10102938                IPC_IERSet
+                0x1010293c                IPC_IERGet
+                0x10102940                IPC_INTRequest
+                0x1010294c                IPC_INTClear
+                0x10102958                IPC_INTGet
+                0x1010295c                IPC_CPUID
+                0x10102968                IPC_SEMGet
+                0x101029b8                IPC_SEMFree
+                0x10102a20                IPC_INTHandler
+                0x10102a60                IPC_INTUserHandler
+ .hal.rom.text  0x10102a9c      0x138 ./build/rom/rtl8721d_loguart_rom.o
+                0x10102a9c                LOGUART_StructInit
+                0x10102ab4                LOGUART_Init
+                0x10102af4                LOGUART_PutChar
+                0x10102b28                LOGUART_GetChar
+                0x10102b44                LOGUART_Readable
+                0x10102b58                LOGUART_GetIMR
+                0x10102b64                LOGUART_SetIMR
+                0x10102b70                LOGUART_WaitBusy
+                0x10102b90                LOGUART_SetBaud
+ .hal.rom.text  0x10102bd4      0x214 ./build/rom/rtl8721d_mpu_rom.o
+                0x10102bd4                mpu_enable
+                0x10102bec                mpu_disable
+                0x10102c00                mpu_init
+                0x10102c3c                mpu_set_mem_attr
+                0x10102cb0                mpu_region_cfg
+                0x10102db4                mpu_entry_free
+                0x10102dc0                mpu_entry_alloc
+ .hal.rom.text  0x10102de8      0x168 ./build/rom/rtl8721d_otf_rom.o
+                0x10102de8                RSIP_Cmd
+                0x10102e04                RSIP_OTF_init
+                0x10102e6c                RSIP_OTF_Cmd
+                0x10102e80                RSIP_OTF_Mask
+                0x10102ec8                RSIP_KEY_Request
+                0x10102f0c                RSIP_MMU_Config
+                0x10102f30                RSIP_MMU_Cmd
+ .hal.rom.text  0x10102f50      0x230 ./build/rom/rtl8721d_pinmux_rom.o
+                0x10102f50                PAD_DrvStrength
+                0x10102f6c                PAD_PullCtrl
+                0x10102f98                PAD_CMD
+                0x10102fb8                Pinmux_Config
+                0x10102fd8                Pinmux_ConfigGet
+                0x10102fe8                Pinmux_UartLogCtrl
+                0x1010303c                Pinmux_SpicCtrl
+ .hal.rom.text  0x10103180       0x44 ./build/rom/rtl8721d_simulation_rom.o
+                0x10103180                simulation_bit_index
+                0x10103198                simulation_stage_set
+ .hal.rom.text  0x101031c4       0x90 ./build/rom/rtl8721d_systimer_rom.o
+                0x101031c4                SYSTIMER_Init
+                0x10103214                SYSTIMER_TickGet
+                0x10103224                SYSTIMER_GetPassTime
+ .hal.rom.text  0x10103254      0x5e8 ./build/rom/rtl8721d_tim_rom.o
+                0x10103254                RTIM_TimeBaseStructInit
+                0x1010326c                RTIM_Cmd
+                0x101032f4                RTIM_GetCount
+                0x10103360                RTIM_INTConfig
+                0x101033f0                RTIM_INTClear
+                0x1010345c                RTIM_TimeBaseInit
+                0x10103594                RTIM_DeInit
+                0x10103610                RTIM_INTClearPendingBit
+                0x10103684                RTIM_GetFlagStatus
+                0x1010375c                RTIM_GetINTStatus
+ .hal.rom.text  0x1010383c      0x3f4 ./build/rom/rtl8721d_uart_rom.o
+                0x1010383c                UART_DeInit
+                0x10103844                UART_StructInit
+                0x10103860                UART_BaudParaGetFull
+                0x10103898                UART_BaudParaGet
+                0x101038bc                UART_SetBaud
+                0x10103954                UART_SetBaudExt
+                0x101039cc                UART_SetRxLevel
+                0x101039f4                UART_RxCmd
+                0x10103a08                UART_Writable
+                0x10103a10                UART_Readable
+                0x10103a18                UART_CharPut
+                0x10103a1c                UART_CharGet
+                0x10103a24                UART_ReceiveData
+                0x10103a4c                UART_SendData
+                0x10103a74                UART_ReceiveDataTO
+                0x10103ab4                UART_SendDataTO
+                0x10103af4                UART_RxByteCntClear
+                0x10103b00                UART_RxByteCntGet
+                0x10103b08                UART_BreakCtl
+                0x10103b1c                UART_ClearRxFifo
+                0x10103b3c                UART_Init
+                0x10103be4                UART_ClearTxFifo
+                0x10103bf0                UART_INTConfig
+                0x10103c00                UART_IntStatus
+                0x10103c04                UART_ModemStatusGet
+                0x10103c08                UART_LineStatusGet
+                0x10103c0c                UART_WaitBusy
+ .hal.rom.text  0x10103c30      0x578 ./build/rom/rtl8721dhp_aes_rom.o
+                0x10103c30                rtl_crypto_aes_cbc_init
+                0x10103c80                rtl_crypto_aes_cbc_encrypt
+                0x10103ccc                rtl_crypto_aes_cbc_decrypt
+                0x10103d18                rtl_crypto_aes_ecb_init
+                0x10103d68                rtl_crypto_aes_ecb_encrypt
+                0x10103da0                rtl_crypto_aes_ecb_decrypt
+                0x10103dd8                rtl_crypto_aes_ctr_init
+                0x10103e28                rtl_crypto_aes_ctr_encrypt
+                0x10103e6c                rtl_crypto_aes_ctr_decrypt
+                0x10103eb0                rtl_crypto_aes_cfb_init
+                0x10103f00                rtl_crypto_aes_cfb_encrypt
+                0x10103f44                rtl_crypto_aes_cfb_decrypt
+                0x10103f88                rtl_crypto_aes_ofb_init
+                0x10103fdc                rtl_crypto_aes_ofb_encrypt
+                0x10104020                rtl_crypto_aes_ofb_decrypt
+                0x10104064                rtl_crypto_aes_gcm_init
+                0x101040b8                rtl_crypto_aes_gcm_encrypt
+                0x10104130                rtl_crypto_aes_gcm_decrypt
+ .hal.rom.text  0x101041a8      0x320 ./build/rom/rtl8721dhp_boot_rom.o
+                0x101041a8                BOOT_ROM_SignatureCheck
+                0x10104280                BOOT_ROM_FromFlash
+                0x1010438c                BOOT_ROM_InitDebugFlg
+                0x101043a8                BOOT_ROM_ResetVsr
+ .hal.rom.text  0x101044c8       0x70 ./build/rom/rtl8721dhp_clk_rom.o
+                0x101044c8                EXT32K_Cmd
+                0x101044e8                XTAL_ClkGet
+                0x10104500                CPU_ClkSet
+                0x10104514                CPU_ClkGet
+ .hal.rom.text  0x10104538     0x12e0 ./build/rom/rtl8721dhp_crypto_rom.o
+                0x10104538                CRYPTO_MemDump
+                0x10104600                CRYPTO_RegDump
+                0x101047c0                CRYPTO_CleanCmdOk
+                0x101047f8                CRYPTO_ClearAllINT
+                0x10104828                CRYPTO_Reset
+                0x1010486c                CRYPTO_SetSecurityModeAD
+                0x10104a48                CRYPTO_Init
+                0x10104a6c                CRYPTO_ProcessAD
+                0x10105680                CRYPTO_SendSeqBuf
+                0x10105798                CRYPTO_CipherInit
+                0x101057b8                CRYPTO_CipherEncryptAD
+                0x101057e8                CRYPTO_CipherDecryptAD
+ .hal.rom.text  0x10105818      0x808 ./build/rom/rtl8721dhp_des_rom.o
+                0x10105818                rtl_crypto_3des_cbc_init
+                0x10105868                rtl_crypto_3des_cbc_encrypt
+                0x101058b4                rtl_crypto_3des_cbc_decrypt
+                0x10105900                rtl_crypto_3des_ecb_init
+                0x10105950                rtl_crypto_3des_ecb_encrypt
+                0x10105988                rtl_crypto_3des_ecb_decrypt
+                0x101059c0                rtl_crypto_3des_cfb_init
+                0x10105a10                rtl_crypto_3des_cfb_encrypt
+                0x10105a48                rtl_crypto_3des_cfb_decrypt
+                0x10105a80                rtl_crypto_3des_ofb_init
+                0x10105ad0                rtl_crypto_3des_ofb_encrypt
+                0x10105b08                rtl_crypto_3des_ofb_decrypt
+                0x10105b40                rtl_crypto_3des_ctr_init
+                0x10105b94                rtl_crypto_3des_ctr_encrypt
+                0x10105bcc                rtl_crypto_3des_ctr_decrypt
+                0x10105c04                rtl_crypto_des_cbc_init
+                0x10105c58                rtl_crypto_des_cbc_encrypt
+                0x10105cb4                rtl_crypto_des_cbc_decrypt
+                0x10105d10                rtl_crypto_des_ecb_init
+                0x10105d64                rtl_crypto_des_ecb_encrypt
+                0x10105d9c                rtl_crypto_des_ecb_decrypt
+                0x10105dd4                rtl_crypto_des_cfb_init
+                0x10105e28                rtl_crypto_des_cfb_encrypt
+                0x10105e60                rtl_crypto_des_cfb_decrypt
+                0x10105e98                rtl_crypto_des_ofb_init
+                0x10105eec                rtl_crypto_des_ofb_encrypt
+                0x10105f24                rtl_crypto_des_ofb_decrypt
+                0x10105f5c                rtl_crypto_des_ctr_init
+                0x10105fb0                rtl_crypto_des_ctr_encrypt
+                0x10105fe8                rtl_crypto_des_ctr_decrypt
+ .hal.rom.text  0x10106020      0x198 ./build/rom/rtl8721dhp_rcc_rom.o
+                0x10106020                RCC_PeriphClockCmd
+                0x101060b8                RCC_PeriphClockSource_RTC
+                0x10106104                RCC_PeriphClockSource_I2C
+                0x10106124                RCC_PeriphClockSource_QDEC
+                0x10106144                RCC_PeriphClockSource_UART
+ .hal.rom.text  0x101061b8        0xc ./build/rom/rtl8721dhp_syscfg_rom.o
+                0x101061b8                SYSCFG_GetChipInfo
+ .hal.rom.text  0x101061c4      0x950 ./build/rom/rtl8721dhp_vector_rom.o
+                0x101061c4                INT_HardFault
+                0x101061e4                INT_MemManage
+                0x10106204                INT_BusFault
+                0x10106224                INT_UsageFault
+                0x10106244                INT_SecureFault
+                0x10106264                INT_HardFault_C
+                0x10106634                INT_NMI
+                0x1010677c                irq_table_init
+                0x101069b8                irq_enable
+                0x101069d4                irq_disable
+                0x101069f8                irq_set_priority
+                0x10106a24                irq_get_priority
+                0x10106a4c                irq_set_pending
+                0x10106a68                irq_get_pending
+                0x10106a8c                irq_clear_pending
+                0x10106aa8                irq_register
+                0x10106af4                irq_unregister
+ *(.libc.rom.text*)
+ .libc.rom.text
+                0x10106b14      0x10c ./build/rom/char2num.o
+                0x10106b14                _char2num
+                0x10106b44                _2char2dec
+                0x10106bb8                _2char2hex
+ .libc.rom.text
+                0x10106c20       0x90 ./build/rom/memchr.o
+                0x10106c20                _memchr
+ .libc.rom.text
+                0x10106cb0       0x64 ./build/rom/memcmp.o
+                0x10106cb0                _memcmp
+ .libc.rom.text
+                0x10106d14       0xac ./build/rom/memcpy.o
+                0x10106d14                _memcpy
+ .libc.rom.text
+                0x10106dc0       0xc8 ./build/rom/memmove.o
+                0x10106dc0                _memmove
+ .libc.rom.text
+                0x10106e88       0x9c ./build/rom/memset.o
+                0x10106e88                _memset
+ .libc.rom.text
+                0x10106f24      0x6a4 ./build/rom/sscanf.o
+                0x10106fe4                _vsscanf
+                0x101075a8                _sscanf
+ .libc.rom.text
+                0x101075c8       0x54 ./build/rom/stratoi.o
+                0x101075c8                _stratoi
+ .libc.rom.text
+                0x1010761c       0x40 ./build/rom/strcat.o
+                0x1010761c                _strcat
+ .libc.rom.text
+                0x1010765c       0xd0 ./build/rom/strchr.o
+                0x1010765c                _strchr
+ .libc.rom.text
+                0x1010772c       0x74 ./build/rom/strcmp.o
+                0x1010772c                _strcmp
+ .libc.rom.text
+                0x101077a0       0x4c ./build/rom/strcpy.o
+                0x101077a0                _strcpy
+ .libc.rom.text
+                0x101077ec       0x34 ./build/rom/stricmp.o
+                0x101077ec                _stricmp
+ .libc.rom.text
+                0x10107820       0x64 ./build/rom/strlen.o
+                0x10107820                _strlen
+ .libc.rom.text
+                0x10107884       0x5c ./build/rom/strncat.o
+                0x10107884                _strncat
+ .libc.rom.text
+                0x101078e0       0xa4 ./build/rom/strncmp.o
+                0x101078e0                _strncmp
+ .libc.rom.text
+                0x10107984       0x68 ./build/rom/strncpy.o
+                0x10107984                _strncpy
+ .libc.rom.text
+                0x101079ec       0x34 ./build/rom/strnlen.o
+                0x101079ec                _strnlen
+ .libc.rom.text
+                0x10107a20       0x2c ./build/rom/strpbrk.o
+                0x10107a20                _strpbrk
+ .libc.rom.text
+                0x10107a4c        0xc ./build/rom/strsep.o
+                0x10107a4c                _strsep
+ .libc.rom.text
+                0x10107a58      0x4cc ./build/rom/strstr.o
+                0x10107d0c                _strstr
+ .libc.rom.text
+                0x10107f24       0xe0 ./build/rom/strtod.o
+                0x10107f24                _strtoull
+                0x10107fe4                _strtoll
+ .libc.rom.text
+                0x10108004        0xc ./build/rom/strtok.o
+                0x10108004                _strtok
+ .libc.rom.text
+                0x10108010       0x6c ./build/rom/strtok_r.o
+                0x10108010                __strtok_r
+                0x10108074                _strtok_r
+ .libc.rom.text
+                0x1010807c      0x120 ./build/rom/strtol.o
+                0x1010807c                _strtol_r
+                0x10108198                _strtol
+ .libc.rom.text
+                0x1010819c      0x138 ./build/rom/strtoul.o
+                0x1010819c                _strtoul_r
+                0x101082d0                _strtoul
+ .libc.rom.text
+                0x101082d4       0x1c ./build/rom/strupr.o
+                0x101082d4                _strupr
+ *(.apple.rom.text*)
+ *(.ssl.rom.text*)
+ *(.dsp.rom.text*)
+
+.rom.rodata     0x101d4000     0x1439
+ *(.hal.rom.rodata*)
+ .hal.rom.rodata
+                0x101d4000        0x8 ./build/rom/rtl8721d_flash_rom.o
+                0x101d4000                SPIC_CALIB_PATTERN
+ .hal.rom.rodata
+                0x101d4008       0x12 ./build/rom/rtl8721d_gdma_rom.o
+ *fill*         0x101d401a        0x2 
+ .hal.rom.rodata
+                0x101d401c        0x8 ./build/rom/rtl8721d_gpio_rom.o
+                0x101d401c                PORT_AB
+ *fill*         0x101d4024       0x1c 
+ .hal.rom.rodata
+                0x101d4040        0x4 ./build/rom/rtl8721dhp_aes_rom.o
+ .hal.rom.rodata
+                0x101d4044        0x8 ./build/rom/rtl8721dhp_boot_rom.o
+ *(.libc.rom.rodata*)
+ *(.apple.rom.rodata*)
+ *(.ssl.rom.rodata*)
+ *(.rom.rodata*)
+ .rom.rodata.str1.4
+                0x101d404c       0x11 ./build/rom/diag.o
+ *fill*         0x101d405d        0x3 
+ .rom.rodata.str1.4
+                0x101d4060       0x35 ./build/rom/rtl8721d_assert_rom.o
+ *fill*         0x101d4095        0x3 
+ .rom.rodata.str1.4
+                0x101d4098      0x2e2 ./build/rom/rtl8721d_efuse_rom.o
+ *fill*         0x101d437a        0x2 
+ .rom.rodata.str1.4
+                0x101d437c       0x40 ./build/rom/rtl8721d_gdma_rom.o
+ .rom.rodata.str1.4
+                0x101d43bc       0xca ./build/rom/rtl8721d_ipc_rom.o
+ *fill*         0x101d4486        0x2 
+ .rom.rodata.str1.4
+                0x101d4488      0x138 ./build/rom/rtl8721d_mpu_rom.o
+ .rom.rodata.str1.4
+                0x101d45c0       0xeb ./build/rom/rtl8721dhp_boot_rom.o
+ *fill*         0x101d46ab        0x1 
+ .rom.rodata.str1.4
+                0x101d46ac      0x4e2 ./build/rom/rtl8721dhp_crypto_rom.o
+ *fill*         0x101d4b8e        0x2 
+ .rom.rodata.str1.4
+                0x101d4b90      0x3b6 ./build/rom/rtl8721dhp_vector_rom.o
+ *(.rodata*)
+ *fill*         0x101d4f46        0x2 
+ .rodata.__FUNCTION__.9954
+                0x101d4f48        0xb ./build/rom/rtl8721d_backup_reg.o
+ *fill*         0x101d4f53        0x1 
+ .rodata.__FUNCTION__.9958
+                0x101d4f54        0xa ./build/rom/rtl8721d_backup_reg.o
+ *fill*         0x101d4f5e        0x2 
+ .rodata.__FUNCTION__.9968
+                0x101d4f60        0xb ./build/rom/rtl8721d_backup_reg.o
+ *fill*         0x101d4f6b        0x1 
+ .rodata.__FUNCTION__.9963
+                0x101d4f6c        0x9 ./build/rom/rtl8721d_backup_reg.o
+ *fill*         0x101d4f75        0x3 
+ .rodata.__func__.10010
+                0x101d4f78       0x10 ./build/rom/rtl8721d_efuse_rom.o
+ .rodata.__FUNCTION__.10048
+                0x101d4f88        0xc ./build/rom/rtl8721d_flash_rom.o
+ .rodata.__FUNCTION__.10012
+                0x101d4f94       0x11 ./build/rom/rtl8721d_flash_rom.o
+ *fill*         0x101d4fa5        0x3 
+ .rodata.__FUNCTION__.9995
+                0x101d4fa8        0xc ./build/rom/rtl8721d_flash_rom.o
+ .rodata.__FUNCTION__.10025
+                0x101d4fb4       0x10 ./build/rom/rtl8721d_flash_rom.o
+ .rodata.__FUNCTION__.10096
+                0x101d4fc4        0xe ./build/rom/rtl8721d_gdma_rom.o
+ *fill*         0x101d4fd2        0x2 
+ .rodata.__FUNCTION__.10036
+                0x101d4fd4       0x10 ./build/rom/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.10042
+                0x101d4fe4       0x10 ./build/rom/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.10049
+                0x101d4ff4       0x10 ./build/rom/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.9967
+                0x101d5004        0xa ./build/rom/rtl8721d_gdma_rom.o
+ *fill*         0x101d500e        0x2 
+ .rodata.__FUNCTION__.10103
+                0x101d5010        0xf ./build/rom/rtl8721d_gdma_rom.o
+ *fill*         0x101d501f        0x1 
+ .rodata.__FUNCTION__.10057
+                0x101d5020       0x10 ./build/rom/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.10064
+                0x101d5030       0x10 ./build/rom/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.9978
+                0x101d5040        0xc ./build/rom/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.9990
+                0x101d504c       0x18 ./build/rom/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.10069
+                0x101d5064       0x12 ./build/rom/rtl8721d_gdma_rom.o
+ *fill*         0x101d5076        0x2 
+ .rodata.__FUNCTION__.10030
+                0x101d5078       0x10 ./build/rom/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.10015
+                0x101d5088        0x9 ./build/rom/rtl8721d_gdma_rom.o
+ *fill*         0x101d5091        0x3 
+ .rodata.__FUNCTION__.10007
+                0x101d5094        0xf ./build/rom/rtl8721d_gdma_rom.o
+ *fill*         0x101d50a3        0x1 
+ .rodata.__FUNCTION__.10023
+                0x101d50a4       0x17 ./build/rom/rtl8721d_gdma_rom.o
+ *fill*         0x101d50bb        0x1 
+ .rodata.__FUNCTION__.10085
+                0x101d50bc        0xf ./build/rom/rtl8721d_gdma_rom.o
+ *fill*         0x101d50cb        0x1 
+ .rodata.__FUNCTION__.9998
+                0x101d50cc        0xe ./build/rom/rtl8721d_gdma_rom.o
+ *fill*         0x101d50da        0x2 
+ .rodata.__FUNCTION__.10074
+                0x101d50dc       0x14 ./build/rom/rtl8721d_gdma_rom.o
+ .rodata.__FUNCTION__.9999
+                0x101d50f0        0xa ./build/rom/rtl8721d_gpio_rom.o
+ *fill*         0x101d50fa        0x2 
+ .rodata.__FUNCTION__.9974
+                0x101d50fc       0x11 ./build/rom/rtl8721d_mpu_rom.o
+ *fill*         0x101d510d        0x3 
+ .rodata.__FUNCTION__.9980
+                0x101d5110        0xf ./build/rom/rtl8721d_mpu_rom.o
+ *fill*         0x101d511f        0x1 
+ .rodata.__FUNCTION__.9973
+                0x101d5120        0xe ./build/rom/rtl8721d_otf_rom.o
+ *fill*         0x101d512e        0x2 
+ .rodata.__FUNCTION__.9979
+                0x101d5130       0x13 ./build/rom/rtl8721d_pinmux_rom.o
+ *fill*         0x101d5143        0x1 
+ .rodata.__FUNCTION__.9961
+                0x101d5144       0x12 ./build/rom/rtl8721d_tim_rom.o
+ *fill*         0x101d5156        0x2 
+ .rodata.__FUNCTION__.10000
+                0x101d5158       0x18 ./build/rom/rtl8721d_tim_rom.o
+ .rodata.__FUNCTION__.9968
+                0x101d5170        0x9 ./build/rom/rtl8721d_tim_rom.o
+ *fill*         0x101d5179        0x3 
+ .rodata.__FUNCTION__.9976
+                0x101d517c        0xc ./build/rom/rtl8721d_tim_rom.o
+ .rodata.__FUNCTION__.9983
+                0x101d5188        0xe ./build/rom/rtl8721d_tim_rom.o
+ *fill*         0x101d5196        0x2 
+ .rodata.__FUNCTION__.10006
+                0x101d5198       0x13 ./build/rom/rtl8721d_tim_rom.o
+ *fill*         0x101d51ab        0x1 
+ .rodata.__FUNCTION__.9990
+                0x101d51ac        0xf ./build/rom/rtl8721d_tim_rom.o
+ *fill*         0x101d51bb        0x1 
+ .rodata.__FUNCTION__.10014
+                0x101d51bc       0x12 ./build/rom/rtl8721d_tim_rom.o
+ *fill*         0x101d51ce        0x2 
+ .rodata.__FUNCTION__.9995
+                0x101d51d0        0xe ./build/rom/rtl8721d_tim_rom.o
+ *fill*         0x101d51de        0x2 
+ .rodata.__FUNCTION__.9962
+                0x101d51e0        0xa ./build/rom/rtl8721d_uart_rom.o
+ *fill*         0x101d51ea        0x2 
+ .rodata.__FUNCTION__.9999
+                0x101d51ec       0x10 ./build/rom/rtl8721d_uart_rom.o
+ .rodata.__FUNCTION__.9956
+                0x101d51fc       0x18 ./build/rom/rtl8721dhp_aes_rom.o
+ .rodata.__FUNCTION__.10000
+                0x101d5214       0x18 ./build/rom/rtl8721dhp_aes_rom.o
+ .rodata.__FUNCTION__.10044
+                0x101d522c       0x18 ./build/rom/rtl8721dhp_aes_rom.o
+ .rodata.__FUNCTION__.10066
+                0x101d5244       0x18 ./build/rom/rtl8721dhp_aes_rom.o
+ .rodata.__FUNCTION__.9978
+                0x101d525c       0x18 ./build/rom/rtl8721dhp_aes_rom.o
+ .rodata.__FUNCTION__.10022
+                0x101d5274       0x18 ./build/rom/rtl8721dhp_aes_rom.o
+ .rodata.XTAL_CLK
+                0x101d528c       0x40 ./build/rom/rtl8721dhp_clk_rom.o
+ .rodata.CpkClkTbl_ASIC
+                0x101d52cc       0x14 ./build/rom/rtl8721dhp_clk_rom.o
+ .rodata.__FUNCTION__.10046
+                0x101d52e0       0x19 ./build/rom/rtl8721dhp_crypto_rom.o
+ *fill*         0x101d52f9        0x3 
+ .rodata.__FUNCTION__.10087
+                0x101d52fc       0x11 ./build/rom/rtl8721dhp_crypto_rom.o
+ *fill*         0x101d530d        0x3 
+ .rodata.__FUNCTION__.10153
+                0x101d5310       0x18 ./build/rom/rtl8721dhp_des_rom.o
+ .rodata.__FUNCTION__.9955
+                0x101d5328       0x19 ./build/rom/rtl8721dhp_des_rom.o
+ *fill*         0x101d5341        0x3 
+ .rodata.__FUNCTION__.10087
+                0x101d5344       0x18 ./build/rom/rtl8721dhp_des_rom.o
+ .rodata.__FUNCTION__.10043
+                0x101d535c       0x19 ./build/rom/rtl8721dhp_des_rom.o
+ *fill*         0x101d5375        0x3 
+ .rodata.__FUNCTION__.10065
+                0x101d5378       0x18 ./build/rom/rtl8721dhp_des_rom.o
+ .rodata.__FUNCTION__.10109
+                0x101d5390       0x18 ./build/rom/rtl8721dhp_des_rom.o
+ .rodata.__FUNCTION__.9977
+                0x101d53a8       0x19 ./build/rom/rtl8721dhp_des_rom.o
+ *fill*         0x101d53c1        0x3 
+ .rodata.__FUNCTION__.10131
+                0x101d53c4       0x18 ./build/rom/rtl8721dhp_des_rom.o
+ .rodata.__FUNCTION__.10021
+                0x101d53dc       0x19 ./build/rom/rtl8721dhp_des_rom.o
+ *fill*         0x101d53f5        0x3 
+ .rodata.__FUNCTION__.9999
+                0x101d53f8       0x19 ./build/rom/rtl8721dhp_des_rom.o
+ *fill*         0x101d5411        0x3 
+ .rodata.__FUNCTION__.9981
+                0x101d5414       0x1b ./build/rom/rtl8721dhp_rcc_rom.o
+ *fill*         0x101d542f        0x1 
+ .rodata.__FUNCTION__.10052
+                0x101d5430        0x9 ./build/rom/sscanf.o
+
+.hal.rom.bss    0x10000000      0x564
+                0x10000000                __rom_bss_start__ = .
+ *(.hal.rom.bss*)
+ .hal.rom.bss   0x10000000       0x1c ./build/rom/diag.o
+                0x10000000                ConfigDebugClose
+                0x10000004                ConfigDebugBuffer
+                0x10000008                ConfigDebugBufferGet
+                0x1000000c                ConfigDebug
+ .hal.rom.bss   0x1000001c       0x18 ./build/rom/rand.o
+                0x1000001c                rand_first
+                0x10000020                rand_seed
+ .hal.rom.bss   0x10000034        0x4 ./build/rom/rtl8721d_delay_rom.o
+                0x10000034                RBSS_UDELAY_DIV
+ .hal.rom.bss   0x10000038       0x60 ./build/rom/rtl8721d_flash_rom.o
+                0x10000038                flash_init_para
+ .hal.rom.bss   0x10000098        0x1 ./build/rom/rtl8721d_gdma_rom.o
+                0x10000098                GDMA_Reg
+ *fill*         0x10000099        0x3 
+ .hal.rom.bss   0x1000009c      0x200 ./build/rom/rtl8721d_gpio_rom.o
+                0x1000009c                PortA_IrqHandler
+                0x1000011c                PortA_IrqData
+                0x1000019c                PortB_IrqHandler
+                0x1000021c                PortB_IrqData
+ .hal.rom.bss   0x1000029c      0x100 ./build/rom/rtl8721d_ipc_rom.o
+                0x1000029c                IPC_IrqHandler
+                0x1000031c                IPC_IrqData
+ .hal.rom.bss   0x1000039c        0x4 ./build/rom/rtl8721dhp_boot_rom.o
+                0x1000039c                IS_FPGA_VERIF
+ .hal.rom.bss   0x100003a0      0x1c0 ./build/rom/rtl8721dhp_crypto_rom.o
+                0x100003a0                crypto_engine
+ .hal.rom.bss   0x10000560        0x4 ./build/rom/strtok.o
+                0x10000564                __rom_bss_end__ = .
+
+.hal.s_rom.bss  0x1007c000      0x348
+                0x1007c000                __rom_bss_start_s__ = .
+ *(.ram_vector_table1)
+ .ram_vector_table1
+                0x1007c000      0x140 ./build/rom/rtl8721dhp_vector_rom.o
+                0x1007c000                NewVectorTable
+ *(.ram_vector_table2)
+ .ram_vector_table2
+                0x1007c140      0x100 ./build/rom/rtl8721dhp_vector_rom.o
+                0x1007c140                UserIrqFunTable
+ *(.ram_vector_table3)
+ .ram_vector_table3
+                0x1007c240      0x100 ./build/rom/rtl8721dhp_vector_rom.o
+                0x1007c240                UserIrqDataTable
+ *(.hal.rom.bank.bss*)
+ .hal.rom.bank.bss
+                0x1007c340        0x8 ./build/rom/rtl8721d_mpu_rom.o
+                0x1007c340                mpu_entry_register
+ *(.ssl_ram_map*)
+                0x1007c348                __rom_bss_end_s__ = .
+
+.ram_image1.entry
+                0x1007d000        0x0
+                0x1007d000                __ram_start_table_start__ = .
+ *(SORT(.image1.entry.data*))
+ *(.image1.validate.rodata*)
+
+.ns_rom.rodata  0x101c0000        0x0
+                0x101c0000                __rom_entry_ns_start__ = ABSOLUTE (.)
+
+.ram.data       0x10070000        0x0
+ *(.data*)
+ .data          0x10070000        0x0 ./build/rom/8721dhp_vectors.o
+ .data          0x10070000        0x0 ./build/rom/char2num.o
+ .data          0x10070000        0x0 ./build/rom/diag.o
+ .data          0x10070000        0x0 ./build/rom/memchr.o
+ .data          0x10070000        0x0 ./build/rom/memcmp.o
+ .data          0x10070000        0x0 ./build/rom/memcpy.o
+ .data          0x10070000        0x0 ./build/rom/memmove.o
+ .data          0x10070000        0x0 ./build/rom/memset.o
+ .data          0x10070000        0x0 ./build/rom/rand.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_assert_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_backup_reg.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_cache_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_delay_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_efuse_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_flash_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_gdma_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_gpio_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_ipc_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_loguart_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_mpu_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_otf_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_pinmux_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_simulation_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_systimer_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_tim_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721d_uart_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721dhp_aes_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721dhp_boot_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721dhp_clk_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721dhp_crypto_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721dhp_des_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721dhp_rcc_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721dhp_syscfg_rom.o
+ .data          0x10070000        0x0 ./build/rom/rtl8721dhp_vector_rom.o
+ .data          0x10070000        0x0 ./build/rom/sscanf.o
+ .data          0x10070000        0x0 ./build/rom/stratoi.o
+ .data          0x10070000        0x0 ./build/rom/strcat.o
+ .data          0x10070000        0x0 ./build/rom/strchr.o
+ .data          0x10070000        0x0 ./build/rom/strcmp.o
+ .data          0x10070000        0x0 ./build/rom/strcpy.o
+ .data          0x10070000        0x0 ./build/rom/stricmp.o
+ .data          0x10070000        0x0 ./build/rom/strlen.o
+ .data          0x10070000        0x0 ./build/rom/strncat.o
+ .data          0x10070000        0x0 ./build/rom/strncmp.o
+ .data          0x10070000        0x0 ./build/rom/strncpy.o
+ .data          0x10070000        0x0 ./build/rom/strnlen.o
+ .data          0x10070000        0x0 ./build/rom/strpbrk.o
+ .data          0x10070000        0x0 ./build/rom/strsep.o
+ .data          0x10070000        0x0 ./build/rom/strstr.o
+ .data          0x10070000        0x0 ./build/rom/strtod.o
+ .data          0x10070000        0x0 ./build/rom/strtok.o
+ .data          0x10070000        0x0 ./build/rom/strtok_r.o
+ .data          0x10070000        0x0 ./build/rom/strtol.o
+ .data          0x10070000        0x0 ./build/rom/strtoul.o
+ .data          0x10070000        0x0 ./build/rom/strupr.o
+
+.ram.bss        0x10070000        0x0
+ *(.bss*)
+ .bss           0x10070000        0x0 ./build/rom/8721dhp_vectors.o
+ .bss           0x10070000        0x0 ./build/rom/char2num.o
+ .bss           0x10070000        0x0 ./build/rom/diag.o
+ .bss           0x10070000        0x0 ./build/rom/memchr.o
+ .bss           0x10070000        0x0 ./build/rom/memcmp.o
+ .bss           0x10070000        0x0 ./build/rom/memcpy.o
+ .bss           0x10070000        0x0 ./build/rom/memmove.o
+ .bss           0x10070000        0x0 ./build/rom/memset.o
+ .bss           0x10070000        0x0 ./build/rom/rand.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_assert_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_backup_reg.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_cache_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_delay_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_efuse_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_flash_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_gdma_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_gpio_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_ipc_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_loguart_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_mpu_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_otf_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_pinmux_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_simulation_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_systimer_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_tim_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721d_uart_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721dhp_aes_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721dhp_boot_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721dhp_clk_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721dhp_crypto_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721dhp_des_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721dhp_rcc_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721dhp_syscfg_rom.o
+ .bss           0x10070000        0x0 ./build/rom/rtl8721dhp_vector_rom.o
+ .bss           0x10070000        0x0 ./build/rom/sscanf.o
+ .bss           0x10070000        0x0 ./build/rom/stratoi.o
+ .bss           0x10070000        0x0 ./build/rom/strcat.o
+ .bss           0x10070000        0x0 ./build/rom/strchr.o
+ .bss           0x10070000        0x0 ./build/rom/strcmp.o
+ .bss           0x10070000        0x0 ./build/rom/strcpy.o
+ .bss           0x10070000        0x0 ./build/rom/stricmp.o
+ .bss           0x10070000        0x0 ./build/rom/strlen.o
+ .bss           0x10070000        0x0 ./build/rom/strncat.o
+ .bss           0x10070000        0x0 ./build/rom/strncmp.o
+ .bss           0x10070000        0x0 ./build/rom/strncpy.o
+ .bss           0x10070000        0x0 ./build/rom/strnlen.o
+ .bss           0x10070000        0x0 ./build/rom/strpbrk.o
+ .bss           0x10070000        0x0 ./build/rom/strsep.o
+ .bss           0x10070000        0x0 ./build/rom/strstr.o
+ .bss           0x10070000        0x0 ./build/rom/strtod.o
+ .bss           0x10070000        0x0 ./build/rom/strtok.o
+ .bss           0x10070000        0x0 ./build/rom/strtok_r.o
+ .bss           0x10070000        0x0 ./build/rom/strtol.o
+ .bss           0x10070000        0x0 ./build/rom/strtoul.o
+ .bss           0x10070000        0x0 ./build/rom/strupr.o
+
+.rom.text.libgcc
+                0x101082f0        0x0
+ *(.text*)
+ .text          0x101082f0        0x0 ./build/rom/8721dhp_vectors.o
+ .text          0x101082f0        0x0 ./build/rom/char2num.o
+ .text          0x101082f0        0x0 ./build/rom/diag.o
+ .text          0x101082f0        0x0 ./build/rom/memchr.o
+ .text          0x101082f0        0x0 ./build/rom/memcmp.o
+ .text          0x101082f0        0x0 ./build/rom/memcpy.o
+ .text          0x101082f0        0x0 ./build/rom/memmove.o
+ .text          0x101082f0        0x0 ./build/rom/memset.o
+ .text          0x101082f0        0x0 ./build/rom/rand.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_assert_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_backup_reg.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_cache_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_delay_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_efuse_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_flash_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_gdma_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_gpio_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_ipc_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_loguart_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_mpu_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_otf_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_pinmux_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_simulation_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_systimer_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_tim_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721d_uart_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721dhp_aes_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721dhp_boot_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721dhp_clk_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721dhp_crypto_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721dhp_des_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721dhp_rcc_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721dhp_syscfg_rom.o
+ .text          0x101082f0        0x0 ./build/rom/rtl8721dhp_vector_rom.o
+ .text          0x101082f0        0x0 ./build/rom/sscanf.o
+ .text          0x101082f0        0x0 ./build/rom/stratoi.o
+ .text          0x101082f0        0x0 ./build/rom/strcat.o
+ .text          0x101082f0        0x0 ./build/rom/strchr.o
+ .text          0x101082f0        0x0 ./build/rom/strcmp.o
+ .text          0x101082f0        0x0 ./build/rom/strcpy.o
+ .text          0x101082f0        0x0 ./build/rom/stricmp.o
+ .text          0x101082f0        0x0 ./build/rom/strlen.o
+ .text          0x101082f0        0x0 ./build/rom/strncat.o
+ .text          0x101082f0        0x0 ./build/rom/strncmp.o
+ .text          0x101082f0        0x0 ./build/rom/strncpy.o
+ .text          0x101082f0        0x0 ./build/rom/strnlen.o
+ .text          0x101082f0        0x0 ./build/rom/strpbrk.o
+ .text          0x101082f0        0x0 ./build/rom/strsep.o
+ .text          0x101082f0        0x0 ./build/rom/strstr.o
+ .text          0x101082f0        0x0 ./build/rom/strtod.o
+ .text          0x101082f0        0x0 ./build/rom/strtok.o
+ .text          0x101082f0        0x0 ./build/rom/strtok_r.o
+ .text          0x101082f0        0x0 ./build/rom/strtol.o
+ .text          0x101082f0        0x0 ./build/rom/strtoul.o
+ .text          0x101082f0        0x0 ./build/rom/strupr.o
+LOAD ./build/rom/8721dhp_vectors.o
+LOAD ./build/rom/char2num.o
+LOAD ./build/rom/diag.o
+LOAD ./build/rom/memchr.o
+LOAD ./build/rom/memcmp.o
+LOAD ./build/rom/memcpy.o
+LOAD ./build/rom/memmove.o
+LOAD ./build/rom/memset.o
+LOAD ./build/rom/rand.o
+LOAD ./build/rom/rtl8721d_assert_rom.o
+LOAD ./build/rom/rtl8721d_backup_reg.o
+LOAD ./build/rom/rtl8721d_cache_rom.o
+LOAD ./build/rom/rtl8721d_delay_rom.o
+LOAD ./build/rom/rtl8721d_efuse_rom.o
+LOAD ./build/rom/rtl8721d_flash_rom.o
+LOAD ./build/rom/rtl8721d_gdma_rom.o
+LOAD ./build/rom/rtl8721d_gpio_rom.o
+LOAD ./build/rom/rtl8721d_ipc_rom.o
+LOAD ./build/rom/rtl8721d_loguart_rom.o
+LOAD ./build/rom/rtl8721d_mpu_rom.o
+LOAD ./build/rom/rtl8721d_otf_rom.o
+LOAD ./build/rom/rtl8721d_pinmux_rom.o
+LOAD ./build/rom/rtl8721d_simulation_rom.o
+LOAD ./build/rom/rtl8721d_systimer_rom.o
+LOAD ./build/rom/rtl8721d_tim_rom.o
+LOAD ./build/rom/rtl8721d_uart_rom.o
+LOAD ./build/rom/rtl8721dhp_aes_rom.o
+LOAD ./build/rom/rtl8721dhp_boot_rom.o
+LOAD ./build/rom/rtl8721dhp_clk_rom.o
+LOAD ./build/rom/rtl8721dhp_crypto_rom.o
+LOAD ./build/rom/rtl8721dhp_des_rom.o
+LOAD ./build/rom/rtl8721dhp_rcc_rom.o
+LOAD ./build/rom/rtl8721dhp_syscfg_rom.o
+LOAD ./build/rom/rtl8721dhp_vector_rom.o
+LOAD ./build/rom/sscanf.o
+LOAD ./build/rom/stratoi.o
+LOAD ./build/rom/strcat.o
+LOAD ./build/rom/strchr.o
+LOAD ./build/rom/strcmp.o
+LOAD ./build/rom/strcpy.o
+LOAD ./build/rom/stricmp.o
+LOAD ./build/rom/strlen.o
+LOAD ./build/rom/strncat.o
+LOAD ./build/rom/strncmp.o
+LOAD ./build/rom/strncpy.o
+LOAD ./build/rom/strnlen.o
+LOAD ./build/rom/strpbrk.o
+LOAD ./build/rom/strsep.o
+LOAD ./build/rom/strstr.o
+LOAD ./build/rom/strtod.o
+LOAD ./build/rom/strtok.o
+LOAD ./build/rom/strtok_r.o
+LOAD ./build/rom/strtol.o
+LOAD ./build/rom/strtoul.o
+LOAD ./build/rom/strupr.o
+OUTPUT(rom.o elf32-littlearm)
+
+.ARM.attributes
+                0x00000000       0x34
+ .ARM.attributes
+                0x00000000       0x22 ./build/rom/8721dhp_vectors.o
+ .ARM.attributes
+                0x00000022       0x38 ./build/rom/char2num.o
+ .ARM.attributes
+                0x0000005a       0x38 ./build/rom/diag.o
+ .ARM.attributes
+                0x00000092       0x38 ./build/rom/memchr.o
+ .ARM.attributes
+                0x000000ca       0x38 ./build/rom/memcmp.o
+ .ARM.attributes
+                0x00000102       0x38 ./build/rom/memcpy.o
+ .ARM.attributes
+                0x0000013a       0x38 ./build/rom/memmove.o
+ .ARM.attributes
+                0x00000172       0x38 ./build/rom/memset.o
+ .ARM.attributes
+                0x000001aa       0x38 ./build/rom/rand.o
+ .ARM.attributes
+                0x000001e2       0x38 ./build/rom/rtl8721d_assert_rom.o
+ .ARM.attributes
+                0x0000021a       0x38 ./build/rom/rtl8721d_backup_reg.o
+ .ARM.attributes
+                0x00000252       0x38 ./build/rom/rtl8721d_cache_rom.o
+ .ARM.attributes
+                0x0000028a       0x38 ./build/rom/rtl8721d_delay_rom.o
+ .ARM.attributes
+                0x000002c2       0x38 ./build/rom/rtl8721d_efuse_rom.o
+ .ARM.attributes
+                0x000002fa       0x38 ./build/rom/rtl8721d_flash_rom.o
+ .ARM.attributes
+                0x00000332       0x38 ./build/rom/rtl8721d_gdma_rom.o
+ .ARM.attributes
+                0x0000036a       0x38 ./build/rom/rtl8721d_gpio_rom.o
+ .ARM.attributes
+                0x000003a2       0x38 ./build/rom/rtl8721d_ipc_rom.o
+ .ARM.attributes
+                0x000003da       0x38 ./build/rom/rtl8721d_loguart_rom.o
+ .ARM.attributes
+                0x00000412       0x38 ./build/rom/rtl8721d_mpu_rom.o
+ .ARM.attributes
+                0x0000044a       0x38 ./build/rom/rtl8721d_otf_rom.o
+ .ARM.attributes
+                0x00000482       0x38 ./build/rom/rtl8721d_pinmux_rom.o
+ .ARM.attributes
+                0x000004ba       0x38 ./build/rom/rtl8721d_simulation_rom.o
+ .ARM.attributes
+                0x000004f2       0x38 ./build/rom/rtl8721d_systimer_rom.o
+ .ARM.attributes
+                0x0000052a       0x38 ./build/rom/rtl8721d_tim_rom.o
+ .ARM.attributes
+                0x00000562       0x38 ./build/rom/rtl8721d_uart_rom.o
+ .ARM.attributes
+                0x0000059a       0x38 ./build/rom/rtl8721dhp_aes_rom.o
+ .ARM.attributes
+                0x000005d2       0x38 ./build/rom/rtl8721dhp_boot_rom.o
+ .ARM.attributes
+                0x0000060a       0x38 ./build/rom/rtl8721dhp_clk_rom.o
+ .ARM.attributes
+                0x00000642       0x38 ./build/rom/rtl8721dhp_crypto_rom.o
+ .ARM.attributes
+                0x0000067a       0x38 ./build/rom/rtl8721dhp_des_rom.o
+ .ARM.attributes
+                0x000006b2       0x38 ./build/rom/rtl8721dhp_rcc_rom.o
+ .ARM.attributes
+                0x000006ea       0x38 ./build/rom/rtl8721dhp_syscfg_rom.o
+ .ARM.attributes
+                0x00000722       0x38 ./build/rom/rtl8721dhp_vector_rom.o
+ .ARM.attributes
+                0x0000075a       0x38 ./build/rom/sscanf.o
+ .ARM.attributes
+                0x00000792       0x38 ./build/rom/stratoi.o
+ .ARM.attributes
+                0x000007ca       0x38 ./build/rom/strcat.o
+ .ARM.attributes
+                0x00000802       0x38 ./build/rom/strchr.o
+ .ARM.attributes
+                0x0000083a       0x38 ./build/rom/strcmp.o
+ .ARM.attributes
+                0x00000872       0x38 ./build/rom/strcpy.o
+ .ARM.attributes
+                0x000008aa       0x38 ./build/rom/stricmp.o
+ .ARM.attributes
+                0x000008e2       0x38 ./build/rom/strlen.o
+ .ARM.attributes
+                0x0000091a       0x38 ./build/rom/strncat.o
+ .ARM.attributes
+                0x00000952       0x38 ./build/rom/strncmp.o
+ .ARM.attributes
+                0x0000098a       0x38 ./build/rom/strncpy.o
+ .ARM.attributes
+                0x000009c2       0x38 ./build/rom/strnlen.o
+ .ARM.attributes
+                0x000009fa       0x38 ./build/rom/strpbrk.o
+ .ARM.attributes
+                0x00000a32       0x38 ./build/rom/strsep.o
+ .ARM.attributes
+                0x00000a6a       0x38 ./build/rom/strstr.o
+ .ARM.attributes
+                0x00000aa2       0x38 ./build/rom/strtod.o
+ .ARM.attributes
+                0x00000ada       0x38 ./build/rom/strtok.o
+ .ARM.attributes
+                0x00000b12       0x38 ./build/rom/strtok_r.o
+ .ARM.attributes
+                0x00000b4a       0x38 ./build/rom/strtol.o
+ .ARM.attributes
+                0x00000b82       0x38 ./build/rom/strtoul.o
+ .ARM.attributes
+                0x00000bba       0x38 ./build/rom/strupr.o
+
+.comment        0x00000000      0xb9a
+ .comment       0x00000000       0x37 ./build/rom/char2num.o
+ .comment       0x00000037       0x37 ./build/rom/diag.o
+ .comment       0x0000006e       0x37 ./build/rom/memchr.o
+ .comment       0x000000a5       0x37 ./build/rom/memcmp.o
+ .comment       0x000000dc       0x37 ./build/rom/memcpy.o
+ .comment       0x00000113       0x37 ./build/rom/memmove.o
+ .comment       0x0000014a       0x37 ./build/rom/memset.o
+ .comment       0x00000181       0x37 ./build/rom/rand.o
+ .comment       0x000001b8       0x37 ./build/rom/rtl8721d_assert_rom.o
+ .comment       0x000001ef       0x37 ./build/rom/rtl8721d_backup_reg.o
+ .comment       0x00000226       0x37 ./build/rom/rtl8721d_cache_rom.o
+ .comment       0x0000025d       0x37 ./build/rom/rtl8721d_delay_rom.o
+ .comment       0x00000294       0x37 ./build/rom/rtl8721d_efuse_rom.o
+ .comment       0x000002cb       0x37 ./build/rom/rtl8721d_flash_rom.o
+ .comment       0x00000302       0x37 ./build/rom/rtl8721d_gdma_rom.o
+ .comment       0x00000339       0x37 ./build/rom/rtl8721d_gpio_rom.o
+ .comment       0x00000370       0x37 ./build/rom/rtl8721d_ipc_rom.o
+ .comment       0x000003a7       0x37 ./build/rom/rtl8721d_loguart_rom.o
+ .comment       0x000003de       0x37 ./build/rom/rtl8721d_mpu_rom.o
+ .comment       0x00000415       0x37 ./build/rom/rtl8721d_otf_rom.o
+ .comment       0x0000044c       0x37 ./build/rom/rtl8721d_pinmux_rom.o
+ .comment       0x00000483       0x37 ./build/rom/rtl8721d_simulation_rom.o
+ .comment       0x000004ba       0x37 ./build/rom/rtl8721d_systimer_rom.o
+ .comment       0x000004f1       0x37 ./build/rom/rtl8721d_tim_rom.o
+ .comment       0x00000528       0x37 ./build/rom/rtl8721d_uart_rom.o
+ .comment       0x0000055f       0x37 ./build/rom/rtl8721dhp_aes_rom.o
+ .comment       0x00000596       0x37 ./build/rom/rtl8721dhp_boot_rom.o
+ .comment       0x000005cd       0x37 ./build/rom/rtl8721dhp_clk_rom.o
+ .comment       0x00000604       0x37 ./build/rom/rtl8721dhp_crypto_rom.o
+ .comment       0x0000063b       0x37 ./build/rom/rtl8721dhp_des_rom.o
+ .comment       0x00000672       0x37 ./build/rom/rtl8721dhp_rcc_rom.o
+ .comment       0x000006a9       0x37 ./build/rom/rtl8721dhp_syscfg_rom.o
+ .comment       0x000006e0       0x37 ./build/rom/rtl8721dhp_vector_rom.o
+ .comment       0x00000717       0x37 ./build/rom/sscanf.o
+ .comment       0x0000074e       0x37 ./build/rom/stratoi.o
+ .comment       0x00000785       0x37 ./build/rom/strcat.o
+ .comment       0x000007bc       0x37 ./build/rom/strchr.o
+ .comment       0x000007f3       0x37 ./build/rom/strcmp.o
+ .comment       0x0000082a       0x37 ./build/rom/strcpy.o
+ .comment       0x00000861       0x37 ./build/rom/stricmp.o
+ .comment       0x00000898       0x37 ./build/rom/strlen.o
+ .comment       0x000008cf       0x37 ./build/rom/strncat.o
+ .comment       0x00000906       0x37 ./build/rom/strncmp.o
+ .comment       0x0000093d       0x37 ./build/rom/strncpy.o
+ .comment       0x00000974       0x37 ./build/rom/strnlen.o
+ .comment       0x000009ab       0x37 ./build/rom/strpbrk.o
+ .comment       0x000009e2       0x37 ./build/rom/strsep.o
+ .comment       0x00000a19       0x37 ./build/rom/strstr.o
+ .comment       0x00000a50       0x37 ./build/rom/strtod.o
+ .comment       0x00000a87       0x37 ./build/rom/strtok.o
+ .comment       0x00000abe       0x37 ./build/rom/strtok_r.o
+ .comment       0x00000af5       0x37 ./build/rom/strtol.o
+ .comment       0x00000b2c       0x37 ./build/rom/strtoul.o
+ .comment       0x00000b63       0x37 ./build/rom/strupr.o
+
+.debug_line     0x00000000     0xb7c5
+ .debug_line    0x00000000       0xd8 ./build/rom/8721dhp_vectors.o
+ .debug_line    0x000000d8      0x229 ./build/rom/char2num.o
+ .debug_line    0x00000301      0x6b1 ./build/rom/diag.o
+ .debug_line    0x000009b2      0x2d2 ./build/rom/memchr.o
+ .debug_line    0x00000c84      0x186 ./build/rom/memcmp.o
+ .debug_line    0x00000e0a      0x196 ./build/rom/memcpy.o
+ .debug_line    0x00000fa0      0x19f ./build/rom/memmove.o
+ .debug_line    0x0000113f      0x2d4 ./build/rom/memset.o
+ .debug_line    0x00001413      0x2f7 ./build/rom/rand.o
+ .debug_line    0x0000170a      0x33c ./build/rom/rtl8721d_assert_rom.o
+ .debug_line    0x00001a46      0x341 ./build/rom/rtl8721d_backup_reg.o
+ .debug_line    0x00001d87      0x229 ./build/rom/rtl8721d_cache_rom.o
+ .debug_line    0x00001fb0      0x309 ./build/rom/rtl8721d_delay_rom.o
+ .debug_line    0x000022b9      0x705 ./build/rom/rtl8721d_efuse_rom.o
+ .debug_line    0x000029be      0x731 ./build/rom/rtl8721d_flash_rom.o
+ .debug_line    0x000030ef      0x7be ./build/rom/rtl8721d_gdma_rom.o
+ .debug_line    0x000038ad      0x430 ./build/rom/rtl8721d_gpio_rom.o
+ .debug_line    0x00003cdd      0x3f1 ./build/rom/rtl8721d_ipc_rom.o
+ .debug_line    0x000040ce      0x3a0 ./build/rom/rtl8721d_loguart_rom.o
+ .debug_line    0x0000446e      0x464 ./build/rom/rtl8721d_mpu_rom.o
+ .debug_line    0x000048d2      0x365 ./build/rom/rtl8721d_otf_rom.o
+ .debug_line    0x00004c37      0x3b9 ./build/rom/rtl8721d_pinmux_rom.o
+ .debug_line    0x00004ff0      0x30b ./build/rom/rtl8721d_simulation_rom.o
+ .debug_line    0x000052fb      0x33e ./build/rom/rtl8721d_systimer_rom.o
+ .debug_line    0x00005639      0x6bb ./build/rom/rtl8721d_tim_rom.o
+ .debug_line    0x00005cf4      0x497 ./build/rom/rtl8721d_uart_rom.o
+ .debug_line    0x0000618b      0x417 ./build/rom/rtl8721dhp_aes_rom.o
+ .debug_line    0x000065a2      0x49d ./build/rom/rtl8721dhp_boot_rom.o
+ .debug_line    0x00006a3f      0x2ef ./build/rom/rtl8721dhp_clk_rom.o
+ .debug_line    0x00006d2e      0xa76 ./build/rom/rtl8721dhp_crypto_rom.o
+ .debug_line    0x000077a4      0x4a9 ./build/rom/rtl8721dhp_des_rom.o
+ .debug_line    0x00007c4d      0x3ab ./build/rom/rtl8721dhp_rcc_rom.o
+ .debug_line    0x00007ff8      0x2d8 ./build/rom/rtl8721dhp_syscfg_rom.o
+ .debug_line    0x000082d0      0x7c1 ./build/rom/rtl8721dhp_vector_rom.o
+ .debug_line    0x00008a91      0x628 ./build/rom/sscanf.o
+ .debug_line    0x000090b9      0x2e8 ./build/rom/stratoi.o
+ .debug_line    0x000093a1       0xcd ./build/rom/strcat.o
+ .debug_line    0x0000946e       0xee ./build/rom/strchr.o
+ .debug_line    0x0000955c       0xe6 ./build/rom/strcmp.o
+ .debug_line    0x00009642       0xd3 ./build/rom/strcpy.o
+ .debug_line    0x00009715      0x2d4 ./build/rom/stricmp.o
+ .debug_line    0x000099e9      0x173 ./build/rom/strlen.o
+ .debug_line    0x00009b5c      0x179 ./build/rom/strncat.o
+ .debug_line    0x00009cd5      0x1ca ./build/rom/strncmp.o
+ .debug_line    0x00009e9f      0x18c ./build/rom/strncpy.o
+ .debug_line    0x0000a02b      0x381 ./build/rom/strnlen.o
+ .debug_line    0x0000a3ac      0x2e3 ./build/rom/strpbrk.o
+ .debug_line    0x0000a68f       0xbd ./build/rom/strsep.o
+ .debug_line    0x0000a74c      0x35b ./build/rom/strstr.o
+ .debug_line    0x0000aaa7      0x380 ./build/rom/strtod.o
+ .debug_line    0x0000ae27       0xbd ./build/rom/strtok.o
+ .debug_line    0x0000aee4       0xf7 ./build/rom/strtok_r.o
+ .debug_line    0x0000afdb      0x28a ./build/rom/strtol.o
+ .debug_line    0x0000b265      0x294 ./build/rom/strtoul.o
+ .debug_line    0x0000b4f9      0x2cc ./build/rom/strupr.o
+
+.debug_info     0x00000000    0x1595a
+ .debug_info    0x00000000      0x118 ./build/rom/8721dhp_vectors.o
+ .debug_info    0x00000118      0x1f9 ./build/rom/char2num.o
+ .debug_info    0x00000311      0x6b2 ./build/rom/diag.o
+ .debug_info    0x000009c3      0x14b ./build/rom/memchr.o
+ .debug_info    0x00000b0e      0x11d ./build/rom/memcmp.o
+ .debug_info    0x00000c2b      0x145 ./build/rom/memcpy.o
+ .debug_info    0x00000d70      0x13b ./build/rom/memmove.o
+ .debug_info    0x00000eab      0x137 ./build/rom/memset.o
+ .debug_info    0x00000fe2      0x256 ./build/rom/rand.o
+ .debug_info    0x00001238      0x295 ./build/rom/rtl8721d_assert_rom.o
+ .debug_info    0x000014cd      0x365 ./build/rom/rtl8721d_backup_reg.o
+ .debug_info    0x00001832      0x110 ./build/rom/rtl8721d_cache_rom.o
+ .debug_info    0x00001942      0x21b ./build/rom/rtl8721d_delay_rom.o
+ .debug_info    0x00001b5d      0xe51 ./build/rom/rtl8721d_efuse_rom.o
+ .debug_info    0x000029ae     0x12ae ./build/rom/rtl8721d_flash_rom.o
+ .debug_info    0x00003c5c     0x2144 ./build/rom/rtl8721d_gdma_rom.o
+ .debug_info    0x00005da0      0xa36 ./build/rom/rtl8721d_gpio_rom.o
+ .debug_info    0x000067d6      0x6ae ./build/rom/rtl8721d_ipc_rom.o
+ .debug_info    0x00006e84      0x5c8 ./build/rom/rtl8721d_loguart_rom.o
+ .debug_info    0x0000744c      0x753 ./build/rom/rtl8721d_mpu_rom.o
+ .debug_info    0x00007b9f      0x4b6 ./build/rom/rtl8721d_otf_rom.o
+ .debug_info    0x00008055      0x7fe ./build/rom/rtl8721d_pinmux_rom.o
+ .debug_info    0x00008853      0x1ae ./build/rom/rtl8721d_simulation_rom.o
+ .debug_info    0x00008a01      0x34b ./build/rom/rtl8721d_systimer_rom.o
+ .debug_info    0x00008d4c      0x8b3 ./build/rom/rtl8721d_tim_rom.o
+ .debug_info    0x000095ff      0xbdc ./build/rom/rtl8721d_uart_rom.o
+ .debug_info    0x0000a1db     0x1081 ./build/rom/rtl8721dhp_aes_rom.o
+ .debug_info    0x0000b25c      0xd2d ./build/rom/rtl8721dhp_boot_rom.o
+ .debug_info    0x0000bf89      0x265 ./build/rom/rtl8721dhp_clk_rom.o
+ .debug_info    0x0000c1ee     0x3521 ./build/rom/rtl8721dhp_crypto_rom.o
+ .debug_info    0x0000f70f     0x1813 ./build/rom/rtl8721dhp_des_rom.o
+ .debug_info    0x00010f22      0x49f ./build/rom/rtl8721dhp_rcc_rom.o
+ .debug_info    0x000113c1      0x134 ./build/rom/rtl8721dhp_syscfg_rom.o
+ .debug_info    0x000114f5     0x1d2b ./build/rom/rtl8721dhp_vector_rom.o
+ .debug_info    0x00013220      0x6b3 ./build/rom/sscanf.o
+ .debug_info    0x000138d3      0x19b ./build/rom/stratoi.o
+ .debug_info    0x00013a6e      0x11b ./build/rom/strcat.o
+ .debug_info    0x00013b89      0x120 ./build/rom/strchr.o
+ .debug_info    0x00013ca9       0xe7 ./build/rom/strcmp.o
+ .debug_info    0x00013d90      0x118 ./build/rom/strcpy.o
+ .debug_info    0x00013ea8      0x1ae ./build/rom/stricmp.o
+ .debug_info    0x00014056       0xe7 ./build/rom/strlen.o
+ .debug_info    0x0001413d      0x117 ./build/rom/strncat.o
+ .debug_info    0x00014254       0xff ./build/rom/strncmp.o
+ .debug_info    0x00014353      0x13c ./build/rom/strncpy.o
+ .debug_info    0x0001448f      0x179 ./build/rom/strnlen.o
+ .debug_info    0x00014608      0x182 ./build/rom/strpbrk.o
+ .debug_info    0x0001478a       0xfe ./build/rom/strsep.o
+ .debug_info    0x00014888      0x4c7 ./build/rom/strstr.o
+ .debug_info    0x00014d4f      0x43f ./build/rom/strtod.o
+ .debug_info    0x0001518e      0x110 ./build/rom/strtok.o
+ .debug_info    0x0001529e      0x190 ./build/rom/strtok_r.o
+ .debug_info    0x0001542e      0x1dc ./build/rom/strtol.o
+ .debug_info    0x0001560a      0x1ce ./build/rom/strtoul.o
+ .debug_info    0x000157d8      0x182 ./build/rom/strupr.o
+
+.debug_abbrev   0x00000000     0x4b58
+ .debug_abbrev  0x00000000       0x14 ./build/rom/8721dhp_vectors.o
+ .debug_abbrev  0x00000014      0x107 ./build/rom/char2num.o
+ .debug_abbrev  0x0000011b      0x25b ./build/rom/diag.o
+ .debug_abbrev  0x00000376       0xab ./build/rom/memchr.o
+ .debug_abbrev  0x00000421       0x7f ./build/rom/memcmp.o
+ .debug_abbrev  0x000004a0       0xb2 ./build/rom/memcpy.o
+ .debug_abbrev  0x00000552       0xab ./build/rom/memmove.o
+ .debug_abbrev  0x000005fd       0x9f ./build/rom/memset.o
+ .debug_abbrev  0x0000069c      0x105 ./build/rom/rand.o
+ .debug_abbrev  0x000007a1       0xec ./build/rom/rtl8721d_assert_rom.o
+ .debug_abbrev  0x0000088d      0x11d ./build/rom/rtl8721d_backup_reg.o
+ .debug_abbrev  0x000009aa       0x5d ./build/rom/rtl8721d_cache_rom.o
+ .debug_abbrev  0x00000a07      0x104 ./build/rom/rtl8721d_delay_rom.o
+ .debug_abbrev  0x00000b0b      0x2d2 ./build/rom/rtl8721d_efuse_rom.o
+ .debug_abbrev  0x00000ddd      0x365 ./build/rom/rtl8721d_flash_rom.o
+ .debug_abbrev  0x00001142      0x33c ./build/rom/rtl8721d_gdma_rom.o
+ .debug_abbrev  0x0000147e      0x254 ./build/rom/rtl8721d_gpio_rom.o
+ .debug_abbrev  0x000016d2      0x23c ./build/rom/rtl8721d_ipc_rom.o
+ .debug_abbrev  0x0000190e      0x18c ./build/rom/rtl8721d_loguart_rom.o
+ .debug_abbrev  0x00001a9a      0x22d ./build/rom/rtl8721d_mpu_rom.o
+ .debug_abbrev  0x00001cc7      0x16b ./build/rom/rtl8721d_otf_rom.o
+ .debug_abbrev  0x00001e32      0x1c1 ./build/rom/rtl8721d_pinmux_rom.o
+ .debug_abbrev  0x00001ff3       0xac ./build/rom/rtl8721d_simulation_rom.o
+ .debug_abbrev  0x0000209f      0x176 ./build/rom/rtl8721d_systimer_rom.o
+ .debug_abbrev  0x00002215      0x21b ./build/rom/rtl8721d_tim_rom.o
+ .debug_abbrev  0x00002430      0x219 ./build/rom/rtl8721d_uart_rom.o
+ .debug_abbrev  0x00002649      0x1c6 ./build/rom/rtl8721dhp_aes_rom.o
+ .debug_abbrev  0x0000280f      0x32a ./build/rom/rtl8721dhp_boot_rom.o
+ .debug_abbrev  0x00002b39       0xdc ./build/rom/rtl8721dhp_clk_rom.o
+ .debug_abbrev  0x00002c15      0x559 ./build/rom/rtl8721dhp_crypto_rom.o
+ .debug_abbrev  0x0000316e      0x1a9 ./build/rom/rtl8721dhp_des_rom.o
+ .debug_abbrev  0x00003317      0x15f ./build/rom/rtl8721dhp_rcc_rom.o
+ .debug_abbrev  0x00003476       0x7d ./build/rom/rtl8721dhp_syscfg_rom.o
+ .debug_abbrev  0x000034f3      0x3ce ./build/rom/rtl8721dhp_vector_rom.o
+ .debug_abbrev  0x000038c1      0x2ca ./build/rom/sscanf.o
+ .debug_abbrev  0x00003b8b       0xdf ./build/rom/stratoi.o
+ .debug_abbrev  0x00003c6a       0xb2 ./build/rom/strcat.o
+ .debug_abbrev  0x00003d1c       0x83 ./build/rom/strchr.o
+ .debug_abbrev  0x00003d9f       0x74 ./build/rom/strcmp.o
+ .debug_abbrev  0x00003e13       0x92 ./build/rom/strcpy.o
+ .debug_abbrev  0x00003ea5       0xcc ./build/rom/stricmp.o
+ .debug_abbrev  0x00003f71       0x81 ./build/rom/strlen.o
+ .debug_abbrev  0x00003ff2       0xa0 ./build/rom/strncat.o
+ .debug_abbrev  0x00004092       0x81 ./build/rom/strncmp.o
+ .debug_abbrev  0x00004113       0xa6 ./build/rom/strncpy.o
+ .debug_abbrev  0x000041b9       0xbc ./build/rom/strnlen.o
+ .debug_abbrev  0x00004275       0xbc ./build/rom/strpbrk.o
+ .debug_abbrev  0x00004331       0x91 ./build/rom/strsep.o
+ .debug_abbrev  0x000043c2      0x1d2 ./build/rom/strstr.o
+ .debug_abbrev  0x00004594      0x1b7 ./build/rom/strtod.o
+ .debug_abbrev  0x0000474b       0xaf ./build/rom/strtok.o
+ .debug_abbrev  0x000047fa       0xed ./build/rom/strtok_r.o
+ .debug_abbrev  0x000048e7       0xd1 ./build/rom/strtol.o
+ .debug_abbrev  0x000049b8       0xe4 ./build/rom/strtoul.o
+ .debug_abbrev  0x00004a9c       0xbc ./build/rom/strupr.o
+
+.debug_aranges  0x00000000      0xfb8
+ .debug_aranges
+                0x00000000       0x20 ./build/rom/8721dhp_vectors.o
+ .debug_aranges
+                0x00000020       0x30 ./build/rom/char2num.o
+ .debug_aranges
+                0x00000050       0x40 ./build/rom/diag.o
+ .debug_aranges
+                0x00000090       0x20 ./build/rom/memchr.o
+ .debug_aranges
+                0x000000b0       0x20 ./build/rom/memcmp.o
+ .debug_aranges
+                0x000000d0       0x20 ./build/rom/memcpy.o
+ .debug_aranges
+                0x000000f0       0x20 ./build/rom/memmove.o
+ .debug_aranges
+                0x00000110       0x20 ./build/rom/memset.o
+ .debug_aranges
+                0x00000130       0x30 ./build/rom/rand.o
+ .debug_aranges
+                0x00000160       0x20 ./build/rom/rtl8721d_assert_rom.o
+ .debug_aranges
+                0x00000180       0x40 ./build/rom/rtl8721d_backup_reg.o
+ .debug_aranges
+                0x000001c0       0x18 ./build/rom/rtl8721d_cache_rom.o
+ .debug_aranges
+                0x000001d8       0x30 ./build/rom/rtl8721d_delay_rom.o
+ .debug_aranges
+                0x00000208       0x48 ./build/rom/rtl8721d_efuse_rom.o
+ .debug_aranges
+                0x00000250       0xa8 ./build/rom/rtl8721d_flash_rom.o
+ .debug_aranges
+                0x000002f8       0xb0 ./build/rom/rtl8721d_gdma_rom.o
+ .debug_aranges
+                0x000003a8       0x78 ./build/rom/rtl8721d_gpio_rom.o
+ .debug_aranges
+                0x00000420       0x70 ./build/rom/rtl8721d_ipc_rom.o
+ .debug_aranges
+                0x00000490       0x60 ./build/rom/rtl8721d_loguart_rom.o
+ .debug_aranges
+                0x000004f0       0x50 ./build/rom/rtl8721d_mpu_rom.o
+ .debug_aranges
+                0x00000540       0x50 ./build/rom/rtl8721d_otf_rom.o
+ .debug_aranges
+                0x00000590       0x50 ./build/rom/rtl8721d_pinmux_rom.o
+ .debug_aranges
+                0x000005e0       0x28 ./build/rom/rtl8721d_simulation_rom.o
+ .debug_aranges
+                0x00000608       0x30 ./build/rom/rtl8721d_systimer_rom.o
+ .debug_aranges
+                0x00000638       0x68 ./build/rom/rtl8721d_tim_rom.o
+ .debug_aranges
+                0x000006a0       0xf0 ./build/rom/rtl8721d_uart_rom.o
+ .debug_aranges
+                0x00000790       0xa8 ./build/rom/rtl8721dhp_aes_rom.o
+ .debug_aranges
+                0x00000838       0x38 ./build/rom/rtl8721dhp_boot_rom.o
+ .debug_aranges
+                0x00000870       0x38 ./build/rom/rtl8721dhp_clk_rom.o
+ .debug_aranges
+                0x000008a8       0x78 ./build/rom/rtl8721dhp_crypto_rom.o
+ .debug_aranges
+                0x00000920      0x108 ./build/rom/rtl8721dhp_des_rom.o
+ .debug_aranges
+                0x00000a28       0x40 ./build/rom/rtl8721dhp_rcc_rom.o
+ .debug_aranges
+                0x00000a68       0x20 ./build/rom/rtl8721dhp_syscfg_rom.o
+ .debug_aranges
+                0x00000a88      0x250 ./build/rom/rtl8721dhp_vector_rom.o
+ .debug_aranges
+                0x00000cd8       0x30 ./build/rom/sscanf.o
+ .debug_aranges
+                0x00000d08       0x20 ./build/rom/stratoi.o
+ .debug_aranges
+                0x00000d28       0x20 ./build/rom/strcat.o
+ .debug_aranges
+                0x00000d48       0x20 ./build/rom/strchr.o
+ .debug_aranges
+                0x00000d68       0x20 ./build/rom/strcmp.o
+ .debug_aranges
+                0x00000d88       0x20 ./build/rom/strcpy.o
+ .debug_aranges
+                0x00000da8       0x20 ./build/rom/stricmp.o
+ .debug_aranges
+                0x00000dc8       0x20 ./build/rom/strlen.o
+ .debug_aranges
+                0x00000de8       0x20 ./build/rom/strncat.o
+ .debug_aranges
+                0x00000e08       0x20 ./build/rom/strncmp.o
+ .debug_aranges
+                0x00000e28       0x20 ./build/rom/strncpy.o
+ .debug_aranges
+                0x00000e48       0x20 ./build/rom/strnlen.o
+ .debug_aranges
+                0x00000e68       0x20 ./build/rom/strpbrk.o
+ .debug_aranges
+                0x00000e88       0x20 ./build/rom/strsep.o
+ .debug_aranges
+                0x00000ea8       0x30 ./build/rom/strstr.o
+ .debug_aranges
+                0x00000ed8       0x28 ./build/rom/strtod.o
+ .debug_aranges
+                0x00000f00       0x20 ./build/rom/strtok.o
+ .debug_aranges
+                0x00000f20       0x28 ./build/rom/strtok_r.o
+ .debug_aranges
+                0x00000f48       0x28 ./build/rom/strtol.o
+ .debug_aranges
+                0x00000f70       0x28 ./build/rom/strtoul.o
+ .debug_aranges
+                0x00000f98       0x20 ./build/rom/strupr.o
+
+.debug_loc      0x00000000    0x10b42
+ .debug_loc     0x00000000      0x27a ./build/rom/char2num.o
+ .debug_loc     0x0000027a      0xf95 ./build/rom/diag.o
+ .debug_loc     0x0000120f      0x1df ./build/rom/memchr.o
+ .debug_loc     0x000013ee      0x166 ./build/rom/memcmp.o
+ .debug_loc     0x00001554      0x1e8 ./build/rom/memcpy.o
+ .debug_loc     0x0000173c      0x292 ./build/rom/memmove.o
+ .debug_loc     0x000019ce      0x1bd ./build/rom/memset.o
+ .debug_loc     0x00001b8b      0x150 ./build/rom/rand.o
+ .debug_loc     0x00001cdb       0x8a ./build/rom/rtl8721d_assert_rom.o
+ .debug_loc     0x00001d65      0x160 ./build/rom/rtl8721d_backup_reg.o
+ .debug_loc     0x00001ec5       0xcd ./build/rom/rtl8721d_delay_rom.o
+ .debug_loc     0x00001f92      0xc9c ./build/rom/rtl8721d_efuse_rom.o
+ .debug_loc     0x00002c2e      0xef3 ./build/rom/rtl8721d_flash_rom.o
+ .debug_loc     0x00003b21     0x14e3 ./build/rom/rtl8721d_gdma_rom.o
+ .debug_loc     0x00005004      0xa17 ./build/rom/rtl8721d_gpio_rom.o
+ .debug_loc     0x00005a1b      0x30b ./build/rom/rtl8721d_ipc_rom.o
+ .debug_loc     0x00005d26       0xe5 ./build/rom/rtl8721d_loguart_rom.o
+ .debug_loc     0x00005e0b      0x1de ./build/rom/rtl8721d_mpu_rom.o
+ .debug_loc     0x00005fe9      0x29b ./build/rom/rtl8721d_otf_rom.o
+ .debug_loc     0x00006284      0x65f ./build/rom/rtl8721d_pinmux_rom.o
+ .debug_loc     0x000068e3       0xf0 ./build/rom/rtl8721d_simulation_rom.o
+ .debug_loc     0x000069d3       0x81 ./build/rom/rtl8721d_systimer_rom.o
+ .debug_loc     0x00006a54      0x44e ./build/rom/rtl8721d_tim_rom.o
+ .debug_loc     0x00006ea2      0x94a ./build/rom/rtl8721d_uart_rom.o
+ .debug_loc     0x000077ec     0x128a ./build/rom/rtl8721dhp_aes_rom.o
+ .debug_loc     0x00008a76      0x314 ./build/rom/rtl8721dhp_boot_rom.o
+ .debug_loc     0x00008d8a      0x10c ./build/rom/rtl8721dhp_clk_rom.o
+ .debug_loc     0x00008e96     0x2578 ./build/rom/rtl8721dhp_crypto_rom.o
+ .debug_loc     0x0000b40e     0x1cf2 ./build/rom/rtl8721dhp_des_rom.o
+ .debug_loc     0x0000d100      0x5b1 ./build/rom/rtl8721dhp_rcc_rom.o
+ .debug_loc     0x0000d6b1      0x895 ./build/rom/rtl8721dhp_vector_rom.o
+ .debug_loc     0x0000df46      0x867 ./build/rom/sscanf.o
+ .debug_loc     0x0000e7ad       0x70 ./build/rom/stratoi.o
+ .debug_loc     0x0000e81d       0x95 ./build/rom/strcat.o
+ .debug_loc     0x0000e8b2      0x224 ./build/rom/strchr.o
+ .debug_loc     0x0000ead6      0x17d ./build/rom/strcmp.o
+ .debug_loc     0x0000ec53       0xdf ./build/rom/strcpy.o
+ .debug_loc     0x0000ed32       0x63 ./build/rom/stricmp.o
+ .debug_loc     0x0000ed95       0xf0 ./build/rom/strlen.o
+ .debug_loc     0x0000ee85       0xc2 ./build/rom/strncat.o
+ .debug_loc     0x0000ef47      0x1b0 ./build/rom/strncmp.o
+ .debug_loc     0x0000f0f7      0x155 ./build/rom/strncpy.o
+ .debug_loc     0x0000f24c       0xf9 ./build/rom/strnlen.o
+ .debug_loc     0x0000f345       0x6e ./build/rom/strpbrk.o
+ .debug_loc     0x0000f3b3       0x4d ./build/rom/strsep.o
+ .debug_loc     0x0000f400      0xafb ./build/rom/strstr.o
+ .debug_loc     0x0000fefb      0x2b6 ./build/rom/strtod.o
+ .debug_loc     0x000101b1       0x42 ./build/rom/strtok.o
+ .debug_loc     0x000101f3      0x257 ./build/rom/strtok_r.o
+ .debug_loc     0x0001044a      0x397 ./build/rom/strtol.o
+ .debug_loc     0x000107e1      0x336 ./build/rom/strtoul.o
+ .debug_loc     0x00010b17       0x2b ./build/rom/strupr.o
+
+.debug_ranges   0x00000000     0x13b8
+ .debug_ranges  0x00000000       0x80 ./build/rom/char2num.o
+ .debug_ranges  0x00000080      0x148 ./build/rom/diag.o
+ .debug_ranges  0x000001c8       0x10 ./build/rom/memchr.o
+ .debug_ranges  0x000001d8       0x10 ./build/rom/memcmp.o
+ .debug_ranges  0x000001e8       0x10 ./build/rom/memcpy.o
+ .debug_ranges  0x000001f8       0x10 ./build/rom/memmove.o
+ .debug_ranges  0x00000208       0x10 ./build/rom/memset.o
+ .debug_ranges  0x00000218       0x20 ./build/rom/rand.o
+ .debug_ranges  0x00000238       0x10 ./build/rom/rtl8721d_assert_rom.o
+ .debug_ranges  0x00000248       0x30 ./build/rom/rtl8721d_backup_reg.o
+ .debug_ranges  0x00000278       0x20 ./build/rom/rtl8721d_delay_rom.o
+ .debug_ranges  0x00000298       0xa0 ./build/rom/rtl8721d_efuse_rom.o
+ .debug_ranges  0x00000338       0xd0 ./build/rom/rtl8721d_flash_rom.o
+ .debug_ranges  0x00000408       0xa0 ./build/rom/rtl8721d_gdma_rom.o
+ .debug_ranges  0x000004a8       0x68 ./build/rom/rtl8721d_gpio_rom.o
+ .debug_ranges  0x00000510       0x60 ./build/rom/rtl8721d_ipc_rom.o
+ .debug_ranges  0x00000570       0x50 ./build/rom/rtl8721d_loguart_rom.o
+ .debug_ranges  0x000005c0       0x88 ./build/rom/rtl8721d_mpu_rom.o
+ .debug_ranges  0x00000648       0x40 ./build/rom/rtl8721d_otf_rom.o
+ .debug_ranges  0x00000688       0x40 ./build/rom/rtl8721d_pinmux_rom.o
+ .debug_ranges  0x000006c8       0x18 ./build/rom/rtl8721d_simulation_rom.o
+ .debug_ranges  0x000006e0       0x20 ./build/rom/rtl8721d_systimer_rom.o
+ .debug_ranges  0x00000700       0x58 ./build/rom/rtl8721d_tim_rom.o
+ .debug_ranges  0x00000758       0xe0 ./build/rom/rtl8721d_uart_rom.o
+ .debug_ranges  0x00000838       0x98 ./build/rom/rtl8721dhp_aes_rom.o
+ .debug_ranges  0x000008d0       0x50 ./build/rom/rtl8721dhp_boot_rom.o
+ .debug_ranges  0x00000920       0x28 ./build/rom/rtl8721dhp_clk_rom.o
+ .debug_ranges  0x00000948      0x3a0 ./build/rom/rtl8721dhp_crypto_rom.o
+ .debug_ranges  0x00000ce8       0xf8 ./build/rom/rtl8721dhp_des_rom.o
+ .debug_ranges  0x00000de0       0x30 ./build/rom/rtl8721dhp_rcc_rom.o
+ .debug_ranges  0x00000e10       0x10 ./build/rom/rtl8721dhp_syscfg_rom.o
+ .debug_ranges  0x00000e20      0x2b0 ./build/rom/rtl8721dhp_vector_rom.o
+ .debug_ranges  0x000010d0       0x50 ./build/rom/sscanf.o
+ .debug_ranges  0x00001120       0x10 ./build/rom/stratoi.o
+ .debug_ranges  0x00001130       0x10 ./build/rom/strcat.o
+ .debug_ranges  0x00001140       0x10 ./build/rom/strchr.o
+ .debug_ranges  0x00001150       0x10 ./build/rom/strcmp.o
+ .debug_ranges  0x00001160       0x10 ./build/rom/strcpy.o
+ .debug_ranges  0x00001170       0x28 ./build/rom/stricmp.o
+ .debug_ranges  0x00001198       0x10 ./build/rom/strlen.o
+ .debug_ranges  0x000011a8       0x10 ./build/rom/strncat.o
+ .debug_ranges  0x000011b8       0x10 ./build/rom/strncmp.o
+ .debug_ranges  0x000011c8       0x10 ./build/rom/strncpy.o
+ .debug_ranges  0x000011d8       0x10 ./build/rom/strnlen.o
+ .debug_ranges  0x000011e8       0x10 ./build/rom/strpbrk.o
+ .debug_ranges  0x000011f8       0x10 ./build/rom/strsep.o
+ .debug_ranges  0x00001208       0xa0 ./build/rom/strstr.o
+ .debug_ranges  0x000012a8       0xa8 ./build/rom/strtod.o
+ .debug_ranges  0x00001350       0x10 ./build/rom/strtok.o
+ .debug_ranges  0x00001360       0x18 ./build/rom/strtok_r.o
+ .debug_ranges  0x00001378       0x18 ./build/rom/strtol.o
+ .debug_ranges  0x00001390       0x18 ./build/rom/strtoul.o
+ .debug_ranges  0x000013a8       0x10 ./build/rom/strupr.o
+
+.debug_str      0x00000000     0xdf68
+ .debug_str     0x00000000      0x1d2 ./build/rom/char2num.o
+ .debug_str     0x000001d2      0x3e4 ./build/rom/diag.o
+ .debug_str     0x000005b6      0x1e9 ./build/rom/memchr.o
+ .debug_str     0x0000079f      0x1bb ./build/rom/memcmp.o
+ .debug_str     0x0000095a      0x1e2 ./build/rom/memcpy.o
+ .debug_str     0x00000b3c      0x1ee ./build/rom/memmove.o
+ .debug_str     0x00000d2a      0x1e3 ./build/rom/memset.o
+ .debug_str     0x00000f0d      0x2bd ./build/rom/rand.o
+ .debug_str     0x000011ca      0x45d ./build/rom/rtl8721d_assert_rom.o
+ .debug_str     0x00001627      0x32b ./build/rom/rtl8721d_backup_reg.o
+ .debug_str     0x00001952      0x28d ./build/rom/rtl8721d_cache_rom.o
+ .debug_str     0x00001bdf      0x2d2 ./build/rom/rtl8721d_delay_rom.o
+ .debug_str     0x00001eb1      0x6e5 ./build/rom/rtl8721d_efuse_rom.o
+ .debug_str     0x00002596      0x958 ./build/rom/rtl8721d_flash_rom.o
+ .debug_str     0x00002eee     0x1232 ./build/rom/rtl8721d_gdma_rom.o
+ .debug_str     0x00004120      0x583 ./build/rom/rtl8721d_gpio_rom.o
+ .debug_str     0x000046a3      0x5bb ./build/rom/rtl8721d_ipc_rom.o
+ .debug_str     0x00004c5e      0x4a2 ./build/rom/rtl8721d_loguart_rom.o
+ .debug_str     0x00005100      0x5c2 ./build/rom/rtl8721d_mpu_rom.o
+ .debug_str     0x000056c2      0x46b ./build/rom/rtl8721d_otf_rom.o
+ .debug_str     0x00005b2d      0x3a7 ./build/rom/rtl8721d_pinmux_rom.o
+ .debug_str     0x00005ed4      0x2e0 ./build/rom/rtl8721d_simulation_rom.o
+ .debug_str     0x000061b4      0x387 ./build/rom/rtl8721d_systimer_rom.o
+ .debug_str     0x0000653b      0x4a3 ./build/rom/rtl8721d_tim_rom.o
+ .debug_str     0x000069de      0x66d ./build/rom/rtl8721d_uart_rom.o
+ .debug_str     0x0000704b      0x693 ./build/rom/rtl8721dhp_aes_rom.o
+ .debug_str     0x000076de      0x8a4 ./build/rom/rtl8721dhp_boot_rom.o
+ .debug_str     0x00007f82      0x318 ./build/rom/rtl8721dhp_clk_rom.o
+ .debug_str     0x0000829a     0x1007 ./build/rom/rtl8721dhp_crypto_rom.o
+ .debug_str     0x000092a1      0x7c2 ./build/rom/rtl8721dhp_des_rom.o
+ .debug_str     0x00009a63      0x45c ./build/rom/rtl8721dhp_rcc_rom.o
+ .debug_str     0x00009ebf      0x29f ./build/rom/rtl8721dhp_syscfg_rom.o
+ .debug_str     0x0000a15e      0xef3 ./build/rom/rtl8721dhp_vector_rom.o
+ .debug_str     0x0000b051      0x405 ./build/rom/sscanf.o
+ .debug_str     0x0000b456      0x28a ./build/rom/stratoi.o
+ .debug_str     0x0000b6e0      0x1c7 ./build/rom/strcat.o
+ .debug_str     0x0000b8a7      0x1c6 ./build/rom/strchr.o
+ .debug_str     0x0000ba6d      0x1b4 ./build/rom/strcmp.o
+ .debug_str     0x0000bc21      0x1d6 ./build/rom/strcpy.o
+ .debug_str     0x0000bdf7      0x29d ./build/rom/stricmp.o
+ .debug_str     0x0000c094      0x1ce ./build/rom/strlen.o
+ .debug_str     0x0000c262      0x1c8 ./build/rom/strncat.o
+ .debug_str     0x0000c42a      0x1bd ./build/rom/strncmp.o
+ .debug_str     0x0000c5e7      0x1e5 ./build/rom/strncpy.o
+ .debug_str     0x0000c7cc      0x292 ./build/rom/strnlen.o
+ .debug_str     0x0000ca5e      0x285 ./build/rom/strpbrk.o
+ .debug_str     0x0000cce3      0x1d0 ./build/rom/strsep.o
+ .debug_str     0x0000ceb3      0x29f ./build/rom/strstr.o
+ .debug_str     0x0000d152      0x310 ./build/rom/strtod.o
+ .debug_str     0x0000d462      0x1d2 ./build/rom/strtok.o
+ .debug_str     0x0000d634      0x1ed ./build/rom/strtok_r.o
+ .debug_str     0x0000d821      0x24f ./build/rom/strtol.o
+ .debug_str     0x0000da70      0x252 ./build/rom/strtoul.o
+ .debug_str     0x0000dcc2      0x2a6 ./build/rom/strupr.o
+
+.debug_frame    0x00000000     0x2880
+ .debug_frame   0x00000000       0x40 ./build/rom/char2num.o
+ .debug_frame   0x00000040      0x160 ./build/rom/diag.o
+ .debug_frame   0x000001a0       0x34 ./build/rom/memchr.o
+ .debug_frame   0x000001d4       0x38 ./build/rom/memcmp.o
+ .debug_frame   0x0000020c       0x30 ./build/rom/memcpy.o
+ .debug_frame   0x0000023c       0x30 ./build/rom/memmove.o
+ .debug_frame   0x0000026c       0x34 ./build/rom/memset.o
+ .debug_frame   0x000002a0       0x70 ./build/rom/rand.o
+ .debug_frame   0x00000310       0x28 ./build/rom/rtl8721d_assert_rom.o
+ .debug_frame   0x00000338       0x8c ./build/rom/rtl8721d_backup_reg.o
+ .debug_frame   0x000003c4       0x50 ./build/rom/rtl8721d_delay_rom.o
+ .debug_frame   0x00000414      0x100 ./build/rom/rtl8721d_efuse_rom.o
+ .debug_frame   0x00000514      0x2bc ./build/rom/rtl8721d_flash_rom.o
+ .debug_frame   0x000007d0      0x258 ./build/rom/rtl8721d_gdma_rom.o
+ .debug_frame   0x00000a28      0x148 ./build/rom/rtl8721d_gpio_rom.o
+ .debug_frame   0x00000b70      0x108 ./build/rom/rtl8721d_ipc_rom.o
+ .debug_frame   0x00000c78       0xd0 ./build/rom/rtl8721d_loguart_rom.o
+ .debug_frame   0x00000d48       0xb8 ./build/rom/rtl8721d_mpu_rom.o
+ .debug_frame   0x00000e00       0xbc ./build/rom/rtl8721d_otf_rom.o
+ .debug_frame   0x00000ebc       0x98 ./build/rom/rtl8721d_pinmux_rom.o
+ .debug_frame   0x00000f54       0x30 ./build/rom/rtl8721d_simulation_rom.o
+ .debug_frame   0x00000f84       0x5c ./build/rom/rtl8721d_systimer_rom.o
+ .debug_frame   0x00000fe0      0x124 ./build/rom/rtl8721d_tim_rom.o
+ .debug_frame   0x00001104      0x278 ./build/rom/rtl8721d_uart_rom.o
+ .debug_frame   0x0000137c      0x2c0 ./build/rom/rtl8721dhp_aes_rom.o
+ .debug_frame   0x0000163c       0x90 ./build/rom/rtl8721dhp_boot_rom.o
+ .debug_frame   0x000016cc       0x50 ./build/rom/rtl8721dhp_clk_rom.o
+ .debug_frame   0x0000171c      0x1e0 ./build/rom/rtl8721dhp_crypto_rom.o
+ .debug_frame   0x000018fc      0x478 ./build/rom/rtl8721dhp_des_rom.o
+ .debug_frame   0x00001d74       0x9c ./build/rom/rtl8721dhp_rcc_rom.o
+ .debug_frame   0x00001e10       0x20 ./build/rom/rtl8721dhp_syscfg_rom.o
+ .debug_frame   0x00001e30      0x4cc ./build/rom/rtl8721dhp_vector_rom.o
+ .debug_frame   0x000022fc       0x94 ./build/rom/sscanf.o
+ .debug_frame   0x00002390       0x34 ./build/rom/stratoi.o
+ .debug_frame   0x000023c4       0x28 ./build/rom/strcat.o
+ .debug_frame   0x000023ec       0x4c ./build/rom/strchr.o
+ .debug_frame   0x00002438       0x3c ./build/rom/strcmp.o
+ .debug_frame   0x00002474       0x30 ./build/rom/strcpy.o
+ .debug_frame   0x000024a4       0x38 ./build/rom/stricmp.o
+ .debug_frame   0x000024dc       0x34 ./build/rom/strlen.o
+ .debug_frame   0x00002510       0x30 ./build/rom/strncat.o
+ .debug_frame   0x00002540       0x54 ./build/rom/strncmp.o
+ .debug_frame   0x00002594       0x34 ./build/rom/strncpy.o
+ .debug_frame   0x000025c8       0x30 ./build/rom/strnlen.o
+ .debug_frame   0x000025f8       0x2c ./build/rom/strpbrk.o
+ .debug_frame   0x00002624       0x20 ./build/rom/strsep.o
+ .debug_frame   0x00002644       0xd8 ./build/rom/strstr.o
+ .debug_frame   0x0000271c       0x54 ./build/rom/strtod.o
+ .debug_frame   0x00002770       0x20 ./build/rom/strtok.o
+ .debug_frame   0x00002790       0x48 ./build/rom/strtok_r.o
+ .debug_frame   0x000027d8       0x44 ./build/rom/strtol.o
+ .debug_frame   0x0000281c       0x44 ./build/rom/strtoul.o
+ .debug_frame   0x00002860       0x20 ./build/rom/strupr.o

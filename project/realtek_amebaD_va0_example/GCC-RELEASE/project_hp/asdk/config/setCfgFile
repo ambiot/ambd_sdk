@@ -1,0 +1,127 @@
+#! /bin/sh
+################################################################################
+#
+# Create symbol links to the proper configuration files 
+#	according to the input parameter "$TARGET"
+#
+################################################################################
+
+################################################################################
+# get the inputed parameter which indicates the sdk usage
+# it may be "11nRouter" or "common", default value is "common"
+#
+TARGET="$1"
+CURRPATH=`pwd`
+################################################################################
+#set the value which indicates vendor directory
+#
+if egrep "^CONFIG_DEFAULTS_KERNEL_2_6*=y" $CURRPATH/.config > /dev/null; then 
+LINUXDIR="$CURRPATH/linux-2.6.x"
+RTL865XC_CONFIG_DIR="$LINUXDIR/arch/mips/realtek/rtl8652"
+DEF_CONFIG_DIR="$LINUXDIR/arch/mips/configs" 
+else
+LINUXDIR="$CURRPATH/linux-2.4.18" 
+DEF_CONFIGS="$LINUXDIR/arch/mips"
+CONFIG_LINUX=defconfig-rtl865x
+fi
+
+#echo $LINUXDIR
+
+#CONFIGS="$LINUXDIR/arch/mips/"
+#VENDORS="$ROOTDIR/vendors/Realtek/RTL865XB"
+#CONFIGS="$ROOTDIR/vendors/Realtek/RTL865XB"
+#SRCDIR="$ROOTDIR/user/boa/src"
+################################################################################
+# get the current path
+#
+#CURRPATH=`pwd`
+
+################################################################################
+# set the configuration file name
+#
+#CONFIG_BUSYBOX=busybox.config
+#CONFIG_BB_MORE=busybox_more.config
+#CONFIG_LINUX26=rtl8652-defconfig
+#CONFIG_LINUX24=defconfig-rtl865x
+#CONFIG_UCLIBC=config.uClibc
+#CONFIG_UCLINUX=config.uClinux
+#CONFIG_VENDOR=config.vendor
+#CONFIG_ARCH=config.arch
+#WEBPAGE=www
+
+################################################################################
+# set the default postfix of configuration files
+#
+#POSTFIX=-gw
+#SDKCONFIG=GWSDKconfig
+################################################################################
+#
+# decide the proper postfix according to parameter "$TARGET"
+#
+if [ "$TARGET" = "8186_gw" ]; then
+	echo "SDK Targets for GW Mode(RTL8186 SoC)"
+	
+fi
+if [ "$TARGET" = "8186_ap" ]; then
+	echo "SDK Targets for AP Mode(RTL8186 SoC)"
+	
+fi
+
+if [ "$TARGET" = "865xc_gw" ]; then
+        echo "SDK Targets for 8186SDK GW Mode(RTL865x SoC)"
+	rm -f $RTL865XC_CONFIG_DIR/Kconfig
+	ln -fs $RTL865XC_CONFIG_DIR/8186SDKconfig_GW $RTL865XC_CONFIG_DIR/Kconfig
+	ln -fs $RTL865XC_CONFIG_DIR/8186SDKconfig_GW_defconfig $DEF_CONFIG_DIR/rtl865xc_defconfig
+fi
+if [ "$TARGET" = "865xc_ap" ]; then
+        echo "SDK Targets for 8186SDK AP Mode(RTL865x SoC)"
+	rm -f $RTL865XC_CONFIG_DIR/Kconfig
+	ln -fs $RTL865XC_CONFIG_DIR/8186SDKconfig_AP $RTL865XC_CONFIG_DIR/Kconfig
+	ln -fs $RTL865XC_CONFIG_DIR/8186SDKconfig_AP_defconfig $DEF_CONFIG_DIR/rtl865xc_defconfig
+fi
+
+################################################################################
+# Change dir to vendors directory
+#
+#cd "$VENDORS"
+
+################################################################################
+# remove all old symbol links
+#
+#rm -f $CONFIG_BUSYBOX $CONFIG_BB_MORE $CONFIG_LINUX26 $CONFIG_LINUX24 \
+#      $CONFIG_UCLIBC $CONFIG_VENDOR $CONFIG_ARCH $CONFIG_UCLINUX
+#rm -f $CONFIGS/$CONFIG_LINUX $CONFIGS/../SDKconfig
+################################################################################
+# create the proper symbol link to the configuration files
+#
+#ln -fs $CONFIG_BUSYBOX$POSTFIX $CONFIG_BUSYBOX
+##ln -fs $CONFIG_BB_MORE$POSTFIX $CONFIG_BB_MORE
+##ln -fs $VENDORS/$CONFIG_LINUX26$POSTFIX $ROOTDIR/linux-2.6.x/arch/mips/configs/rtl865x_defconfig
+#ln -fs $CONFIGS/$CONFIG_LINUX$POSTFIX $CONFIGS/$CONFIG_LINUX
+#cp -f $CONFIGS/$CONFIG_LINUX$POSTFIX $CONFIGS/$CONFIG_LINUX
+#ln -fs $CONFIGS/../$SDKCONFIG $CONFIGS/../SDKconfig
+#ln -fs $CONFIGS/$CONFIG_LINUX24$POSTFIX $CONFIGS/$CONFIG_LINUX24
+##ln -fs $CONFIG_LINUX26$POSTFIX $CONFIG_LINUX26
+##ln -fs $CONFIG_LINUX24$POSTFIX $CONFIG_LINUX24
+##ln -fs $CONFIG_UCLIBC$POSTFIX  $CONFIG_UCLIBC
+#ln -fs $CONFIG_UCLINUX$POSTFIX $CONFIG_UCLINUX
+##ln -fs $CONFIG_VENDOR$POSTFIX  $CONFIG_VENDOR
+#ln -fs $CONFIG_ARCH$POSTFIX    $CONFIG_ARCH
+
+################################################################################
+# chdir to user/boa/src/ to the prefore directory
+#
+#cd "$SRCDIR"
+#rm -f $WEBPAGE
+#ln -fs $WEBPAGE$POSTFIX $WEBPAGE
+
+################################################################################
+# back to the TOP directory
+#
+#cd "$CURRPATH"
+
+
+################################################################################
+# exit this script
+#
+exit 0

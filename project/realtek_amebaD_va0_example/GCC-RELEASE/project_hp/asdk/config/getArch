@@ -1,0 +1,47 @@
+#! /bin/sh
+################################################################################
+#
+# Create symbol links to the proper configuration files 
+#	according to the input parameter "$TARGET"
+#
+################################################################################
+
+################################################################################
+#set the value which indicates vendor directory
+#
+#CONFIG="$ROOTDIR/$LINUXDIR/.config"
+#LINUX_CONFIG="../linux-2.4.x/.config"
+Linux_Config="$1"
+################################################################################
+# set the default ARCH Value
+#
+ARCH=5280
+
+################################################################################
+#
+# decide the ARCH Value according to config File $LINUX_CONFIG
+#
+if [ -f "$LINUX_CONFIG" ]; then
+R865XC="`grep -c '^CONFIG_RTL865XC=y' ${LINUX_CONFIG} `"
+R865XB="`grep -c '^CONFIG_RTL865XB=y' ${LINUX_CONFIG} `"
+R8672="`grep  -c '^CONFIG_RTL8672=y'  ${LINUX_CONFIG} `"
+else
+R865XC="0"
+R865XB="0"
+R8672="0"
+fi
+
+#echo "$R865XB"
+#echo "$R8672"
+#echo "$R865XC"
+
+if [ "$R865XC" = "1" ]; then
+	ARCH=5181
+elif [ "$R8672" = "1" ]; then
+	ARCH=5181
+else
+	ARCH=5280
+fi
+
+echo "$ARCH" 
+exit 0

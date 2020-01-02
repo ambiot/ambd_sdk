@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	android:id="@+id/mainlayout"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <LinearLayout
+		android:id="@+id/layer1_linear1"
+		android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:orientation="horizontal"
+		android:background="#CACACA"
+		android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/textDeviceTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|left"
+            android:layout_weight="5"
+            android:text="Configured Device"
+            android:textSize="25dip"/>
+
+        <ImageButton
+			android:id="@+id/btn_scanDevices"
+			android:contentDescription="@string/app_name"
+			android:layout_weight="1"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical|right"
+			android:scaleType="fitCenter"
+			android:text="Scan Configured Devices"
+			android:src="@drawable/refresh"
+			android:adjustViewBounds="true"
+			android:padding="15dp"
+			android:onClick="ScanDevices_OnClick"/>
+
+	</LinearLayout>
+    
+    <ScrollView
+			android:id="@+id/layer1_linear2"
+			android:layout_width="fill_parent"
+			android:layout_height="0dp" 
+			android:layout_weight="10">
+		<LinearLayout
+			android:id="@+id/layer2_linear1"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+			<ListView android:id="@+id/listView1" 
+			    android:layout_width="fill_parent" 
+			    android:layout_height="fill_parent">
+			</ListView>
+		</LinearLayout>
+	</ScrollView>
+	
+	
+	<LinearLayout
+		android:id="@+id/layer1_linear3"
+		android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:orientation="vertical"
+		android:background="#737373"
+		android:layout_weight="1">
+		<LinearLayout
+			android:id="@+id/layer2_linear2"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content" 
+			android:orientation="horizontal"
+			android:layout_weight="4">
+					<Button
+						android:id="@+id/btn_configNewDevice"
+						android:contentDescription="@string/app_name"
+						android:layout_width="0dp"
+						android:layout_height="fill_parent"
+						android:layout_weight="1"
+						android:text="Configure New Device" 
+						android:onClick="configNewDevice_OnClick"/>
+					
+			
+		</LinearLayout>
+	</LinearLayout>
+	
+</LinearLayout>

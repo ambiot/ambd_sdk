@@ -1,0 +1,53 @@
+                        ChangeLog
+----------------------------------------------------------------
+2018/07/26
+	-Bug fixed for discovery service
+	
+2018/05/03
+	-Bug fixed for configuration
+
+2018/04/23
+	-Bug fixed for discovery service
+
+2017/11/30
+	-add API for soft AP SSID prefix
+
+2017/11/14
+	-Bug fixed when PIN code is not 8 numbers
+
+2017/07/18
+	-Support new AP profile command at configured state
+
+2016/10/13 (v3.0.0)
+	- Initial simple config wizard V3 method
+
+2015/09/25
+	- Bug fixed when packet send fail
+
+2016/09/19
+	- Adjust sending packet interval
+
+2015/08/15 (v2.0.0)
+	- Refined simple config
+
+2016/05/17
+	- Refined CocoaAsyncSocket framework for armv7
+
+2016/03/08
+	- Using CocoaAsyncSocket framework to instead of AsyncUdpSocket
+	- Adjust AsyncSocket releated code
+	
+2015/10/23
+	- Support iOS 9.
+
+2015/08/24
+	- Re-fine simple config
+	
+2015/05/26
+	- Support iOS 8.
+	
+2014/10/20
+	- Re-fine configure flow when DUT receives first UDP packet.
+	
+2014/03/27 (v1.0.0)
+	- Initial Release

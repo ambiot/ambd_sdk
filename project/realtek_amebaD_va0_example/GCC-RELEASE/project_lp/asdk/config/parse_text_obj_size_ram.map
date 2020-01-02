@@ -1,0 +1,331 @@
+hex	dec	file
+=============================================================
+0x0	0	component/common/drivers/wlan/realtek/wlan_ram_map/wlan_ram_map.o
+
+Total:
+0x0	0
+=============================================================
+0x0	0	component/common/drivers/wlan/realtek/src/core/rtw_ap.o
+0x0	0	component/common/drivers/wlan/realtek/src/core/rtw_cmd.o
+0x0	0	component/common/drivers/wlan/realtek/src/core/rtw_debug.o
+0xc	12	component/common/drivers/wlan/realtek/src/core/rtw_promisc.o
+0x0	0	component/common/drivers/wlan/realtek/src/core/rtw_intfs.o
+0x0	0	component/common/drivers/wlan/realtek/src/core/rtw_ieee80211.o
+0x0	0	component/common/drivers/wlan/realtek/src/core/rtw_io.o
+0x0	0	component/common/drivers/wlan/realtek/src/core/rtw_ioctl_set.o
+0x5	5	component/common/drivers/wlan/realtek/src/core/rtw_mlme.o
+0x79	121	component/common/drivers/wlan/realtek/src/core/rtw_mlme_ext.o
+0x0	0	component/common/drivers/wlan/realtek/src/core/rtw_mp.o
+0xdc	220	component/common/drivers/wlan/realtek/src/core/rtw_psk.o
+0x0	0	component/common/drivers/wlan/realtek/src/core/rtw_pwrctrl.o
+0x0	0	component/common/drivers/wlan/realtek/src/core/rtw_recv.o
+0x0	0	component/common/drivers/wlan/realtek/src/core/rtw_security.o
+0x0	0	component/common/drivers/wlan/realtek/src/core/rtw_sta_mgt.o
+0x0	0	component/common/drivers/wlan/realtek/src/core/rtw_wlan_util.o
+0x10	16	component/common/drivers/wlan/realtek/src/core/rtw_xmit.o
+0x0	0	component/common/drivers/wlan/realtek/src/core/rtw_suspend.o
+0x0	0	component/common/drivers/wlan/realtek/src/core/efuse/rtw_efuse.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/rtl8711b/src/rtl8711b_hal_init.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/rtl8711b/src/rtl8711b_hal_efuse.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/rtl8711b/src/rtl8711b_firmware.o
+0x140	320	component/common/drivers/wlan/realtek/src/hal/rtl8711b/src/Hal8711BPwrSeq.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/rtl8711b/src/rtl8711b_rxdesc.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/rtl8711b/src/rtl8711b_sreset.o
+0x4	4	component/common/drivers/wlan/realtek/src/hal/rtl8711b/src/rtl8711b_cmd.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/rtl8711b/src/rtl8711b_dm.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/rtl8711b/src/rtl8711b_mp.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/rtl8711b/src/rtl8711b_phycfg.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/rtl8711b/src/rtl8711b_rf6052.o
+0x20e1	8417	component/common/drivers/wlan/realtek/src/hal/rtl8711b/src/lx_bus/lxbus_ops.o
+0x4	4	component/common/drivers/wlan/realtek/src/hal/rtl8711b/src/lx_bus/lxbus_halinit.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/rtl8711b/src/lx_bus/rtl8711b_xmit.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/rtl8711b/src/lx_bus/rtl8711b_recv.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/rtl8711b/src/lx_bus/rtl8711b_led.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/hal_com.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/hal_intf.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/HalPwrSeqCmd.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/hal_phy.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/hal_com_phycfg.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/OUTSRC/HalPhyRf.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/OUTSRC/phydm.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/OUTSRC/phydm_HWConfig.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/OUTSRC/phydm_debug.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/OUTSRC/phydm_interface.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/OUTSRC/phydm_DIG.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/OUTSRC/phydm_RaInfo.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/OUTSRC/phydm_CfoTracking.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/OUTSRC/PhyDM_Adaptivity.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/OUTSRC/phydm_PowerTracking.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/OUTSRC/rtl8711b/phydm_RegConfig8711B.o
+0x308	776	component/common/drivers/wlan/realtek/src/hal/OUTSRC/rtl8711b/HalHWImg8711B_MAC.o
+0x8	8	component/common/drivers/wlan/realtek/src/hal/OUTSRC/rtl8711b/HalHWImg8711B_FW.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/OUTSRC/rtl8711b/HalHWImg8711B_BB.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/OUTSRC/rtl8711b/HalHWImg8711B_RF.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/OUTSRC/rtl8711b/HalHWImg8711B_MP.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/OUTSRC/rtl8711b/HalPhyRf_8711B.o
+0x0	0	component/common/drivers/wlan/realtek/src/hal/OUTSRC/rtl8711b/Hal8711BRateAdaptive.o
+0x0	0	component/common/drivers/wlan/realtek/src/hci/hci_intfs.o
+0x0	0	component/common/drivers/wlan/realtek/src/hci/lxbus/lxbus_hci_intf.o
+0x0	0	component/common/drivers/wlan/realtek/src/osdep/netdev.o
+0x0	0	component/common/drivers/wlan/realtek/src/osdep/lwip_intf.o
+0x0	0	component/common/drivers/wlan/realtek/src/osdep/freertos/lxbus_intf.o
+0x28	40	component/common/drivers/wlan/realtek/src/osdep/freertos/rtk_wlan_if.o
+0x41	65	component/common/drivers/wlan/realtek/src/osdep/freertos/freertos_ioctl.o
+0x4	4	component/common/drivers/wlan/realtek/src/osdep/freertos/freertos_isr.o
+0x20	32	component/common/drivers/wlan/realtek/src/osdep/freertos/freertos_intfs.o
+0x0	0	component/common/drivers/wlan/realtek/src/osdep/freertos/freertos_mp.o
+0x864c	34380	component/common/drivers/wlan/realtek/src/osdep/freertos/freertos_skbuff.o
+0x0	0	component/common/drivers/wlan/realtek/src/osdep/freertos/freertos_recv.o
+0x0	0	component/common/drivers/wlan/realtek/src/osdep/freertos/freertos_xmit.o
+0x8	8	component/os/freertos/freertos_service.o
+0x0	0	component/os/os_dep/device_lock.o
+0x4	4	component/os/os_dep/osdep_service.o
+
+Total:
+0xad94	44436
+=============================================================
+0x85	133	component/common/network/dhcp/dhcps.o
+0x0	0	component/common/network/lwip/lwip_v1.4.1/src/core/def.o
+0x36	54	component/common/network/lwip/lwip_v1.4.1/src/core/dhcp.o
+0x674	1652	component/common/network/lwip/lwip_v1.4.1/src/core/dns.o
+0x0	0	component/common/network/lwip/lwip_v1.4.1/src/core/init.o
+0x8	8	component/common/network/lwip/lwip_v1.4.1/src/core/lwip_timers.o
+0x1424	5156	component/common/network/lwip/lwip_v1.4.1/src/core/mem.o
+0x4030	16432	component/common/network/lwip/lwip_v1.4.1/src/core/memp.o
+0x9	9	component/common/network/lwip/lwip_v1.4.1/src/core/netif.o
+0x1	1	component/common/network/lwip/lwip_v1.4.1/src/core/pbuf.o
+0x4	4	component/common/network/lwip/lwip_v1.4.1/src/core/raw.o
+0x0	0	component/common/network/lwip/lwip_v1.4.1/src/core/stats.o
+0x0	0	component/common/network/lwip/lwip_v1.4.1/src/core/sys.o
+0x21	33	component/common/network/lwip/lwip_v1.4.1/src/core/tcp.o
+0x30	48	component/common/network/lwip/lwip_v1.4.1/src/core/tcp_in.o
+0x0	0	component/common/network/lwip/lwip_v1.4.1/src/core/tcp_out.o
+0x6	6	component/common/network/lwip/lwip_v1.4.1/src/core/udp.o
+0x0	0	component/common/network/lwip/lwip_v1.4.1/src/core/ipv4/autoip.o
+0x0	0	component/common/network/lwip/lwip_v1.4.1/src/core/ipv4/icmp.o
+0xc	12	component/common/network/lwip/lwip_v1.4.1/src/core/ipv4/igmp.o
+0x0	0	component/common/network/lwip/lwip_v1.4.1/src/core/ipv4/inet.o
+0x0	0	component/common/network/lwip/lwip_v1.4.1/src/core/ipv4/inet_chksum.o
+0x12	18	component/common/network/lwip/lwip_v1.4.1/src/core/ipv4/ip.o
+0x10	16	component/common/network/lwip/lwip_v1.4.1/src/core/ipv4/ip_addr.o
+0x6	6	component/common/network/lwip/lwip_v1.4.1/src/core/ipv4/ip_frag.o
+0x0	0	component/common/network/lwip/lwip_v1.4.1/src/api/api_lib.o
+0x0	0	component/common/network/lwip/lwip_v1.4.1/src/api/api_msg.o
+0x0	0	component/common/network/lwip/lwip_v1.4.1/src/api/err.o
+0x0	0	component/common/network/lwip/lwip_v1.4.1/src/api/netbuf.o
+0x0	0	component/common/network/lwip/lwip_v1.4.1/src/api/netdb.o
+0x0	0	component/common/network/lwip/lwip_v1.4.1/src/api/netifapi.o
+0xc8	200	component/common/network/lwip/lwip_v1.4.1/src/api/sockets.o
+0xc	12	component/common/network/lwip/lwip_v1.4.1/src/api/tcpip.o
+0xcd	205	component/common/network/lwip/lwip_v1.4.1/src/netif/etharp.o
+0x4	4	component/common/network/lwip/lwip_v1.4.1/port/realtek/freertos/ethernetif.o
+0x32	50	component/common/network/lwip/lwip_v1.4.1/port/realtek/freertos/sys_arch.o
+
+Total:
+0x5dfb	24059
+=============================================================
+0x44	68	component/common/api/wifi_interactive_mode.o
+0x40	64	component/common/api/lwip_netconf.o
+
+Total:
+0x84	132
+=============================================================
+0xa0	160	component/common/api/at_cmd/atcmd_sys.o
+0x238	568	component/common/api/at_cmd/atcmd_wifi.o
+0x159	345	component/common/api/at_cmd/log_service.o
+
+Total:
+0x431	1073
+=============================================================
+0x4	4	component/common/api/network/src/wlan_network.o
+0x0	0	component/common/api/network/src/ttcp.o
+0x26	38	component/common/api/network/src/ping_test.o
+
+Total:
+0x2a	42
+=============================================================
+0x0	0	component/common/api/wifi/wifi_util.o
+0x4c	76	component/common/api/wifi/wifi_conf.o
+0x81	129	component/common/api/wifi/wifi_promisc.o
+0x180	384	component/common/api/wifi/wifi_ind.o
+
+Total:
+0x24d	589
+=============================================================
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/wpa_supplicant/wifi_wps_config.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/wpa_supplicant/wps_protocol_handler.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/crypto/random.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/crypto/dh_groups.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/crypto/dh_group5.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/crypto/crypto_internal-modexp.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/wps/wps.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/wps/wps_attr_build.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/wps/wps_attr_parse.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/wps/wps_attr_process.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/wps/wps_common.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/wps/wps_dev_attr.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/wps/wps_enrollee.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/wps/wps_validate.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/eap_common/eap_common.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/eap_common/eap_wsc_common.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/eap_peer/eap_wsc.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/utils/wpabuf.o
+0x0	0	component/common/api/wifi/rtw_wpa_supplicant/src/utils/os_freertos.o
+
+Total:
+0x0	0
+=============================================================
+0xf4	244	component/common/utilities/tcptest.o
+0x0	0	component/common/utilities/ssl_client.o
+0x0	0	component/common/utilities/ssl_client_ext.o
+
+Total:
+0xf4	244
+=============================================================
+
+Total:
+0x0	0
+=============================================================
+0x0	0	component/os/freertos/cmsis_os.o
+0x8	8	component/os/freertos/freertos_service.o
+
+Total:
+0x8	8
+=============================================================
+0x178	376	component/os/freertos/freertos_v8.1.2/Source/tasks.o
+0x0	0	component/os/freertos/freertos_v8.1.2/Source/list.o
+0x0	0	component/os/freertos/freertos_v8.1.2/Source/croutine.o
+0x0	0	component/os/freertos/freertos_v8.1.2/Source/queue.o
+0x3c	60	component/os/freertos/freertos_v8.1.2/Source/timers.o
+0x0	0	component/os/freertos/freertos_v8.1.2/Source/event_groups.o
+0x10	16	component/os/freertos/freertos_v8.1.2/Source/portable/GCC/ARM_CM4F/port.o
+0x19024	102436	component/os/freertos/freertos_v8.1.2/Source/portable/MemMang/heap_4.o
+
+Total:
+0x191e8	102888
+=============================================================
+
+Total:
+0x0	0
+=============================================================
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/aesni.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/ccm.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/cipher.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/cipher_wrap.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/debug.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/ecp_ram.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/error.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/gcm.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/havege.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/memory_buffer_alloc.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/padlock.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/pbkdf2.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/pkcs5.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/pkcs11.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/pkcs12.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/pkparse.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/ssl_cache.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/ssl_cli.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/ssl_srv.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/ssl_ciphersuites.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/ssl_tls.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/threading.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/timing.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/version.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/version_features.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/x509.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/x509_create.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/x509_crl.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/x509_crt.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/x509_csr.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/x509write_crt.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/x509write_csr.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/library/net.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/../ssl_ram_map/ssl_ram_map.o
+0x0	0	component/common/network/ssl/polarssl-1.3.8/ssl_self_test.o
+
+Total:
+0x0	0
+=============================================================
+0x0	0	component/soc/realtek/8711b/swlib/mbed/common/us_ticker_api.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/common/wait_api.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/pinmap_common.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/sys_api.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/us_ticker.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/timer_api.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/dma_api.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/gpio_api.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/gpio_irq_api.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/pinmap.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/port_api.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/spi_api.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/serial_api.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/i2c_api.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/i2s_api.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/pwmout_api.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/analogin_api.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/efuse_api.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/flash_api.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/sleep.o
+0x0	0	component/soc/realtek/8711b/swlib/mbed/targets/hal/rtl8711b/wdt_api.o
+
+Total:
+0x0	0
+=============================================================
+0x42c	1068	component/soc/realtek/8711b/swlib/std_lib//libc/ram/ram_libc.o
+0x4	4	component/soc/realtek/8711b/swlib/std_lib//libc/original/reent/impure.o
+0x0	0	component/soc/realtek/8711b/swlib/std_lib//libgcc/rtl8195a/ram/rtl_eabi_cast_ram.o
+0x0	0	component/soc/realtek/8711b/swlib/std_lib//libgcc/rtl8195a/ram/rtl_math_ram.o
+0x404	1028	component/soc/realtek/8711b/swlib/std_lib//libgloss/rtl8195a/ram/ram_libgloss_retarget.o
+
+Total:
+0x834	2100
+=============================================================
+0x0	0	component/soc/realtek/8711b/app/monitor/ram/monitor.o
+0x8	8	component/soc/realtek/8711b/app/monitor/ram/rtl_consol.o
+0x68	104	component/soc/realtek/8711b/app/monitor/ram/rtl_trace.o
+
+Total:
+0x70	112
+=============================================================
+0x329	809	component/soc/realtek/8711b/fwlib/bootloader/boot_ram.o
+0x134	308	component/soc/realtek/8711b/fwlib/bootloader/boot_flash.o
+0x140	320	component/soc/realtek/8711b/fwlib/bootloader/rtl8710b_ota.o
+0x368	872	component/soc/realtek/8711b/fwlib/bootloader/rtl8710b_flash.o
+
+Total:
+0x905	2309
+=============================================================
+0x0	0	component/soc/realtek/8711b/cmsis/device/cmsis_nvic.o
+0x4	4	component/soc/realtek/8711b/cmsis/device/system_8195a.o
+0x0	0	component/soc/realtek/8711b/cmsis/device/app_start.o
+
+Total:
+0x4	4
+=============================================================
+0x0	0	component/soc/realtek/8711b/fwlib/ram_lib/rtl8710b_usb_dongle.o
+0x0	0	component/soc/realtek/8711b/fwlib/ram_lib/rtl8710b_pinmap.o
+0x0	0	component/soc/realtek/8711b/fwlib/ram_lib/rtl8710b_sleepcfg.o
+0x21c	540	component/soc/realtek/8711b/fwlib/ram_lib/startup.o
+
+Total:
+0x21c	540
+=============================================================
+0x0	0	component/soc/realtek/8711b/fwlib/test/test_monitor.o
+
+Total:
+0x0	0
+=============================================================
+0x40c	1036	component/soc/realtek/8711b/misc/os/freertos_pmu_8710b.o
+
+Total:
+0x40c	1036
+=============================================================
+0x2c4	708	component/soc/realtek/8711b/misc/platform/psm_8710b.o
+
+Total:
+0x2c4	708
+=============================================================
+
+Image size:
+0x2c038	180280

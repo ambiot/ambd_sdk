@@ -1,0 +1,31 @@
+# GDB script for loading ram.bin process
+
+source gnu_utility/gnu_script/rtl_gdb_jtag_boot_com.txt
+
+#===============================================================================
+#Load the file
+file ./image/target.axf
+#lo
+restore ./image/ram_1.bin binary 0x00082000
+restore ./image/ram_2.bin binary 0x00083000
+
+printf "Load image to sram.\n"
+
+#===============================================================================
+set $Temp = 0x0
+set $Temp = {int}($PERI_ON_BASE+$REG_BOOT_CFG)
+p /x $Temp
+
+set $Temp = ($Temp & ~(0xFFFF << 16))
+set $Temp = ($Temp | (0x01 << 31))
+p /x $Temp
+
+set {int}($PERI_ON_BASE+$REG_BOOT_CFG) = $Temp
+printf "....\n"
+printf "wakeup bit(%x):%x\n", ($PERI_ON_BASE+$REG_BOOT_CFG), {int}($PERI_ON_BASE+$REG_BOOT_CFG)
+
+set $pc = 0x04
+c
+
+#quit
+

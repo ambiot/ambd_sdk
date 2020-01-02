@@ -1,0 +1,378 @@
+
+# ATTENTION:
+# Brief explaination:
+#
+# 1. "make menuconfig" will see this file.
+# 2. make menuconfig save file will produce "/.config" and "/autoconf.h" two files.
+# 3. makefile will see the "/.config" file
+# 4. C code will see the "/autoconf.h"  
+#
+# in this file, declare variable xxx, please add the prefix "CONFIG_" word.  Example: "CONFIG_XXX"
+
+
+
+
+
+#===========================================================================
+mainmenu_name 'RTL Bootcode Configuration'
+mainmenu_option next_comment
+comment '< MENUCONFIG FOR CHIP CONFIG'
+
+
+comment '--------------CPU config Start------------'
+
+mainmenu_option next_comment
+comment '< CONFIG CHIP'
+comment 'Target Platform Selection'
+comment 'Choose a Vendor/Product combination.'
+
+choice 'Product' "RTL8721D CONFIG_RTL8721D  \
+		" RTL8721D
+
+choice 'ArmCore' "ARM_CM4 ARM_CORE_CM4 \
+		"ARM_CM4
+
+bool "Select FPGA"            CONFIG_FPGA
+if [ "$CONFIG_FPGA" = "y" ]; then
+define_bool CONFIG_CHIP_A_CUT y
+else
+choice 'Chip Version' "A_Cut		CONFIG_CHIP_A_CUT  \
+		B_Cut			CONFIG_CHIP_B_CUT
+		" A_Cut
+fi
+endmenu
+
+mainmenu_option next_comment
+comment '< CONFIG CPU CLK '
+
+if [ "$CONFIG_FPGA" = "y" ]; then
+define_bool CONFIG_CPU_CLK n
+else
+define_bool CONFIG_CPU_CLK y
+fi
+#bool "Config CPU Clock"            CONFIG_CPU_CLK
+
+if [ "$CONFIG_CPU_CLK" = "y" ]; then
+choice 'CPU Clock Config Type'         "Clock_200MHz		CONFIG_CPU_200MHZ \
+                                        Clock_100MHz		CONFIG_CPU_100MHZ \
+                                        Clock_50MHz		CONFIG_CPU_50MHZ \
+                                        Clock_25MHz		CONFIG_CPU_25MHZ \
+                                        Clock_XTAL		CONFIG_CPU_XTAL \
+                                        FPGA_CLK		CONFIG_FPGA_CLK\
+                                        "Clock_200MHz
+                                        
+if [ "$CONFIG_CPU_200MHZ" = "y" ]; then
+define_int	PLATFORM_CLOCK      200000000
+define_int	CPU_CLOCK_SEL_VALUE      0
+fi
+if [ "$CONFIG_CPU_100MHZ" = "y" ]; then
+define_int	PLATFORM_CLOCK      100000000
+define_int	CPU_CLOCK_SEL_VALUE      0x01
+fi
+if [ "$CONFIG_CPU_50MHZ" = "y" ]; then
+define_int	PLATFORM_CLOCK      50000000
+define_int	CPU_CLOCK_SEL_VALUE      0x02
+fi
+if [ "$CONFIG_CPU_25MHZ" = "y" ]; then
+define_int	PLATFORM_CLOCK      25000000
+define_int	CPU_CLOCK_SEL_VALUE      0x03
+fi
+if [ "$CONFIG_CPU_XTAL" = "y" ]; then
+define_int	PLATFORM_CLOCK      40000000
+define_int	CPU_CLOCK_SEL_VALUE      0x04
+fi
+if [ "$CONFIG_FPGA_CLK" = "y" ]; then
+define_int	PLATFORM_CLOCK      25000000
+define_int	CPU_CLOCK_SEL_VALUE      0
+fi
+else
+choice 'CPU Clock Config Type'		"FPGA_CLK		CONFIG_FPGA_CLK \
+					"FPGA_CLK
+
+define_int	PLATFORM_CLOCK      20000000
+define_int	CPU_CLOCK_SEL_VALUE      0
+fi
+endmenu #CONFIG CPU CLK
+
+mainmenu_option next_comment
+comment '< CONFIG TEST MODE '
+
+comment 'Mass Production:'
+comment '(1)for MP Related'
+comment '(1)for CP Test'
+comment '(1)for FT Test'
+comment '(1)for EQC Test'
+
+bool "Select MP "  						CONFIG_MP
+bool "Select CP "  						CONFIG_CP
+bool "Select FT "  						CONFIG_FT
+bool "Select EQC "  						CONFIG_EQC
+
+endmenu
+
+mainmenu_option next_comment
+comment '< CONFIG TrustZone '
+bool "Enable TrustZone"			CONFIG_TRUSTZONE
+if [ "$CONFIG_TRUSTZONE" = "y" ]; then
+	define_bool CONFIG_TRUSTZONE_EN y
+fi
+endmenu
+
+#===========================================================================
+# Common Config with every IC have this function in here. Don't litmit someone ic.
+#
+comment '--------------OS config Start------------'
+mainmenu_option next_comment
+comment '< CONFIG OS '
+
+bool "Enable Kernel"                     CONFIG_KERNEL
+
+if [ "$CONFIG_KERNEL" = "y" ]; then
+choice 'Kernel Selecte' "FREERTOS        PLATFORM_FREERTOS \
+						"FREERTOS        
+define_int TASK_SCHEDULER_DISABLED 0
+fi
+endmenu #CONFIG OS
+
+#===========================================================================
+
+#===========================================================================
+# Normall function config
+#
+
+
+comment '--------------Peripheral config Start------------'
+mainmenu_option next_comment
+comment '< CONFIG SOC PS '
+bool "Enable SOC PS"			CONFIG_SOC_PS_EN
+if [ "$CONFIG_SOC_PS_EN" = "y" ]; then
+	define_bool CONFIG_SOC_PS_MODULE y
+fi
+endmenu
+
+mainmenu_option next_comment
+comment '< CONFIG SDIO Device '
+bool "Enable Sdio Device"		CONFIG_SDIO_DEVICE_EN
+if [ "$CONFIG_SDIO_DEVICE_EN" = "y" ]; then
+	define_bool CONFIG_SDIO_DEVICE_NORMAL y
+	define_bool CONFIG_SDIO_DEVICE_MODULE y
+fi
+endmenu
+
+mainmenu_option next_comment
+comment '< CONFIG PINMUX '
+bool "PINMAP Enable"			CONFIG_PINMAP_ENABLE
+endmenu
+
+mainmenu_option next_comment
+comment '< MBED_API '
+bool "Enable MBED_API "                CONFIG_MBED_API_EN
+endmenu
+
+comment '--------------Peripheral config End---------------'
+
+comment '--------------Peripheral Test start---------------'
+mainmenu_option next_comment
+comment '< CONFIG FUNCTION TEST '
+bool "Enable Peripheral Test"		CONFIG_PER_TEST
+if [ "$CONFIG_PER_TEST" = "y" ]; then
+	bool "DBGPORT Enable"		CONFIG_DBGPORT_ENABLE
+	bool "Timer_Verify_Mode"	CONFIG_TIMER_VERIFY
+	bool "WDG_Verify_Mode"		CONFIG_WDG_VERIFY
+	bool "Gdma_Verify_Mode"		CONFIG_GDMA_VERIFY
+	bool "GPIO_Verify_Mode"		CONFIG_GPIO_VERIFY
+	bool "SPI_COM_Verify_Mode"	CONFIG_SPI_COM_VERIFY
+	bool "USI_SPI_Verify_Mode"	CONFIG_USI_SPI_VERIFY
+	bool "UART_Verify_Mode"		CONFIG_UART_VERIFY
+	bool "USI_UART_Verify_Mode"	CONFIG_USI_UART_VERIFY
+	bool "LCDC_Verify_Mode"		CONFIG_LCDC_VERIFY
+	bool "I2C_Verify_Mode"		CONFIG_I2C_VERIFY
+	bool "PMC_Verify_Mode"		CONFIG_PMC_VERIFY
+	bool "USI_I2C_Verify_Mode"	CONFIG_USI_I2C_VERIFY
+	bool "KeyScan_Verify_Mode"	CONFIG_KEYSCAN_VERIFY
+	bool "SGPIO_Verify_Mode"	CONFIG_SGPIO_VERIFY
+	bool "PSRAM_Verify_Mode"	CONFIG_PSRAM_VERIFY
+	bool "I2S_Verify_Mode"		CONFIG_I2S_VERIFY
+	bool "AUDIO_Verify_Mode"	CONFIG_AUDIO_VERIFY
+	bool "SOC_PS_Verify_Mode"	CONFIG_SOC_PS_VERIFY
+	bool "Crypto_Verify_Mode"	CONFIG_CRYPTO_VERIFY
+	bool "EFUSE_Verify_Mode"	CONFIG_EFUSE_VERIFY
+	bool "SPIC_Verify_Mode"		CONFIG_SPIC_VERIFY
+	bool "FTL_Verify_Mode"		CONFIG_FTL_VERIFY
+	bool "ADC_Verify_Mode"		CONFIG_ADC_VERIFY
+	bool "RSIP_Verify_Mode"		CONFIG_RSIP_VERIFY
+	bool "SDIO_DEVICE_Verify_Mode"	CONFIG_SDIO_DEVICE_VERIFY
+	bool "SDIO_HOST_Verify_Mode"	CONFIG_SDIOH_VERIFY
+	bool "Dhrystone Test"		CONFIG_DHRYSTONE_TEST
+	bool "RTLIB ROM Test"		CONFIG_RTLIB_VERIFY
+	bool "IPC Test"			CONFIG_IPC_VERIFY
+	bool "IR Test"			CONFIG_IR_VERIFY
+	bool "MPU Test"			CONFIG_MPU_VERIFY
+	bool "CACHE Test"		CONFIG_CACHE_VERIFY
+	bool "WFE Test"			CONFIG_WFE_VERIFY
+fi #CONFIG_PER_TEST
+endmenu #CONFIG PER TEST
+comment '--------------Peripheral Test End---------------'
+
+comment '--------------Secure Test start---------------'
+mainmenu_option next_comment
+comment '< CONFIG SECURE TEST '
+bool "SEC_Verify_Mode"			CONFIG_SEC_VERIFY
+if [ "$CONFIG_SEC_VERIFY" = "y" ]; then
+	bool "CACHE Secure Test"	CONFIG_CACHE_SEC_VERIFY
+	bool "EFUSE Secure Test"	CONFIG_EFUSE_SEC_VERIFY
+	bool "GDMA Secure Test"		CONFIG_GDMA_SEC_VERIFY
+	bool "AES Secure Test"		CONFIG_AES_SEC_VERIFY
+	bool "Crypto Secure Test"	CONFIG_CRYPTO_SEC_VERIFY
+	bool "CRC Secure Test"		CONFIG_CRC_SEC_VERIFY
+	bool "RDP Secure Test"		CONFIG_RDP_SEC_VERIFY
+fi #CONFIG_PER_TEST
+endmenu #CONFIG PER TEST
+comment '--------------Secure Test End---------------'
+
+comment '--------------Network Config Start------------'
+mainmenu_option next_comment
+comment '< CONFIG BT '
+bool "Enable BT"				CONFIG_BT_EN
+if [ "$CONFIG_BT_EN" = "y" ]; then
+define_bool CONFIG_BT y
+	define_bool CONFIG_BT y
+	bool "BT_Peripheral"		CONFIG_BT_PERIPHERAL
+	bool "BT_Central"			CONFIG_BT_CENTRAL
+	dep_bool "BT_Scatternet"	CONFIG_BT_SCATTERNET $CONFIG_BT_PERIPHERAL $CONFIG_BT_CENTRAL
+	bool "BT_Beacon"			CONFIG_BT_BEACON
+	bool "BT_Simple_Config"		CONFIG_BT_CONFIG
+	bool "BT_Airsync_Config"	CONFIG_BT_AIRSYNC_CONFIG
+else
+	define_bool CONFIG_BT n
+	define_bool CONFIG_BT_PERIPHERAL n
+	define_bool CONFIG_BT_CENTRAL n
+	define_bool CONFIG_BT_SCATTERNET n
+	define_bool CONFIG_BT_BEACON n
+	define_bool CONFIG_BT_CONFIG n
+	define_bool CONFIG_BT_AIRSYNC_CONFIG n
+fi
+endmenu
+
+mainmenu_option next_comment
+comment '< CONFIG WIFI '
+bool "Enable Wifi"                CONFIG_WIFI_EN
+if [ "$CONFIG_WIFI_EN" = "y" ]; then
+bool "Enable High TP Test"	CONFIG_HIGH_TP_TEST
+bool "Enable Performance Monitor"	WIFI_PERFORMANCE_MONITOR
+choice 'WIFI Config Type'         "WIFI_Normall_Mode      CONFIG_WIFI_NORMAL \
+                                   WIFI_Verify_Mode       CONFIG_WIFI_TEST \
+                                  "WIFI_Normall_Mode
+
+if [ "$CONFIG_WIFI_NORMAL" = "y" ]; then
+define_bool CONFIG_WIFI_MODULE y
+fi
+
+if [ "$CONFIG_WIFI_TEST" = "y" ]; then
+define_bool CONFIG_WIFI_MODULE y
+define_bool CONFIG_WIFI_VERIFY y
+fi
+fi
+endmenu
+
+mainmenu_option next_comment
+comment '< CONFIG NETWORK '
+bool "Enable Network"                    		CONFIG_NETWORK
+endmenu
+
+mainmenu_option next_comment
+comment '< CONFIG USB '
+bool "Enable USB"                 		        CONFIG_USB_OTG_EN
+if [ "$CONFIG_USB_OTG_EN" = "y" ]; then
+choice 'USB OTG Type'             "USB_OTG_DEVICE_MODE  CONFIG_USB_DEVICE_EN \
+                                  "USB_OTG_DEVICE_MODE
+
+if [ "$CONFIG_USB_DEVICE_EN" = "y" ]; then
+choice 'USB Device Type'         "USB_DEVICE_AUDIO      CONFIG_USBD_AUDIO \
+                                  USB_DEVICE_MSC        CONFIG_USBD_MSC \
+                                  USB_DEVICE_CDC_ACM    CONFIG_USBD_CDC_ACM \
+                                 "
+fi
+
+fi
+endmenu
+
+comment '--------------Network Config End--------------'
+
+comment '--------------Application Config Start------------'
+mainmenu_option next_comment
+comment '< SSL Config '
+define_bool CONFIG_USE_MBEDTLS_ROM y
+bool "MBEDTLS Enable"		CONFIG_MBED_TLS_ENABLED
+bool "SSL ROM Test"		CONFIG_SSL_ROM_TEST
+endmenu
+
+mainmenu_option next_comment
+comment '< DuerOS Config '
+bool "Enable DuerOS"                    		CONFIG_BAIDU_DUER
+endmenu
+
+mainmenu_option next_comment
+comment '< MQTT Config '
+bool "Enable MQTT"                    		CONFIG_MQTT_EN
+endmenu
+
+mainmenu_option next_comment
+comment '< GUI Config '
+bool "Enable GUI"                    		CONFIG_GUI_EN
+if [ "$CONFIG_GUI_EN" = "y" ]; then
+	bool "emWin"		CONFIG_EMWIN_EN
+	bool "LittlevGL"		CONFIG_LITTLEVGL_EN
+fi
+endmenu
+
+mainmenu_option next_comment
+comment '< Audio Config '
+bool "Enable Audio"                    		CONFIG_AUDIO_EN
+endmenu
+
+comment '--------------Application Config End--------------'
+#===========================================================================
+#===========================================================================
+
+#===========================================================================
+#=====================    Debug Message Config Start   =====================
+comment '--------------------------'
+mainmenu_option next_comment
+comment 'To set debug msg flag'                      
+bool "Enable debug log"                          CONFIG_DEBUG_LOG
+endmenu
+
+#===========================================================================
+# Normal: Build all code, includes ROM code. Normally for FPGA verification.
+# Release: Build user application code and link with ROM + RAM libraries.
+# Build_ROM_Lib: Build the ROM code library only.
+# Build_RAM_Lib: Build the RAM code library only.
+# Build_RAM_All: Build all RAM code, includes user application, and link with ROM library.
+comment '--------------------------'
+mainmenu_option next_comment
+
+comment '< Build Option '
+
+comment 'Select toolchain  '
+choice 'Toolchain'		"ASDK             CONFIG_TOOLCHAIN_ASDK  \
+                                 ARM_GCC          CONFIG_TOOLCHAIN_ARM_GCC  \
+ 			           		" ASDK
+
+comment 'Choose the build configuration '
+choice 'Link ROM Mode ' 			"Link_ROM_Library      CONFIG_LINK_ROM_LIB  \
+                                     Link_ROM_Symbol       CONFIG_LINK_ROM_SYMB  \
+					               " Link_ROM_Library
+endmenu
+#===========================================================================
+# Some SW CONFIG based on different IC version
+#
+
+#---------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------
+
+
+#===========================================================================
+comment '--------------------------'
+endmenu

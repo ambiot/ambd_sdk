@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#525f67">
+
+    
+   	<LinearLayout
+		android:id="@+id/icon"
+		android:layout_width="match_parent"
+		android:layout_height="40dp"
+		android:orientation="horizontal">
+
+   	    <RelativeLayout
+		    android:layout_width="0dp"
+		    android:layout_height="40dp"
+		    android:layout_weight="4"
+		    android:orientation="vertical"
+		    android:background="#525f67">
+   	    
+			<ImageView
+			    android:id="@+id/icon_sub"
+		        android:layout_width="40dp"
+		        android:layout_height="40dp"
+		        android:padding="2dp"
+		        android:src="@drawable/settings_icon"
+		        android:layout_alignParentTop="true"
+		        android:layout_alignParentLeft="true" >
+		    </ImageView>
+			<TextView
+		        android:id="@+id/customtitlebar"
+		        android:layout_width="match_parent"
+		        android:layout_height="40dp"
+		        android:textColor="#ffffff"
+		        android:text="Connect to home AP"
+		        android:padding="3px"
+		        android:textStyle="bold" 
+		        android:layout_toRightOf="@id/icon_sub"
+		        android:layout_alignParentTop="true"
+		        android:gravity="center_vertical"/>
+	    </RelativeLayout>
+	    
+		<ImageButton
+			android:id="@+id/addNewNetworkBtn"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			
+			android:background="@null"
+			android:contentDescription="@string/app_name"
+			android:adjustViewBounds="true"
+			android:scaleType="fitCenter"
+			android:padding="2dp"
+			android:onClick="addNewNetwork_OnClick"
+			android:src="@drawable/add_icon"/>
+	</LinearLayout>
+
+     <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#ff0000" 
+        android:layout_below="@id/icon"><!-- This is line below the title -->
+    </ImageView>
+
+</RelativeLayout>

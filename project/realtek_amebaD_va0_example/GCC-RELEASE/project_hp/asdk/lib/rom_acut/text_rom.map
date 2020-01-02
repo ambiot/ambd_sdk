@@ -1,0 +1,781 @@
+Archive member included to satisfy reference by file (symbol)
+
+/cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+                              (Reset_Handler)
+
+Discarded input sections
+
+ .ram.data      0x00000000        0x0 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+ .ram.bss       0x00000000        0x0 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+ .rom.text.libgcc
+                0x00000000        0x0 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+IROM             0x10100000         0x0000a000         xr
+IROM_NS          0x1010a000         0x00036000         xr
+DROM_NS          0x101c0000         0x00014000         xr
+DROM             0x101d4000         0x00004000         xr
+ROMBSS_RAM_COM   0x10000000         0x00001000         rw
+ROMBSS_RAM_NS    0x10001000         0x00001000         rw
+RSVD_RAM_NS      0x10002000         0x00002000         rw
+MSP_RAM_NS       0x10004000         0x00001000         rw
+BD_RAM_NS        0x10005000         0x0006a000         xrw
+PRINT_RAM        0x1006f000         0x00001000         xrw
+BD_RAM_S         0x10070000         0x0000a000         xrw
+BD_RAM_NSC       0x1007a000         0x00002000         xrw
+ROMBSS_RAM_S     0x1007c000         0x00001000         xrw
+BOOTLOADER_RAM_S 0x1007d000         0x00002000         xrw
+MSP_RAM_S        0x1007f000         0x00001000         xrw
+EXTENTION_SRAM   0x100e0000         0x00020000         xrw
+KM0_BOOT         0x08000020         0x00003fe0         xr
+KM4_BOOT         0x08004020         0x00003fe0         xr
+BACKUP           0x08008000         0x00001000         r
+XIPSYS           0x08009000         0x00001000         r
+RESVD            0x0800a000         0x00001000         r
+KM0_IMG2         0x0800b020         0x0001ffe0         xr
+KM4_IMG2         0x0802b020         0x00064fe0         xr
+KM4_IMG2_OTA2    0x08090020         0x00064fe0         xr
+KM4_IMG3         0x080f5020         0x0000afe0         xr
+BTRACE           0x08800000         0x00400000         xr
+KM0_SRAM         0x00080000         0x00010000         xrw
+RETENTION_RAM    0x000c0000         0x00000400         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a
+START GROUP
+LOAD /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/toolchain/cygwin/asdk-5.4.1/cygwin/newlib/bin/../lib/gcc/arm-none-eabi/5.4.1/armv8-m.main/softfp/fpv5-sp-d16/libgcc.a
+LOAD /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/toolchain/cygwin/asdk-5.4.1/cygwin/newlib/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv8-m.main/softfp/fpv5-sp-d16/libc.a
+END GROUP
+
+.glue_7         0x10100000        0x0
+ .glue_7        0x10100000        0x0 linker stubs
+
+.glue_7t        0x10100000        0x0
+ .glue_7t       0x10100000        0x0 linker stubs
+
+.vfp11_veneer   0x10100000        0x0
+ .vfp11_veneer  0x10100000        0x0 linker stubs
+
+.v4_bx          0x10100000        0x0
+ .v4_bx         0x10100000        0x0 linker stubs
+
+.iplt           0x10100000        0x0
+ .iplt          0x10100000        0x0 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+
+.igot.plt       0x10000000        0x0
+ .igot.plt      0x10000000        0x0 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+
+.rom.text       0x10100000     0x82f0
+ .rom.text      0x10100000     0x82f0 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+                0x10100000                __vectors_table
+                0x10100100                Reset_Handler
+                0x10100110                NMI_Handler
+                0x10100114                HardFault_Handler
+                0x10100118                MemManage_Handler
+                0x1010011c                BusFault_Handler
+                0x10100120                UsageFault_Handler
+                0x10100124                SecureFault_Handler
+                0x1010012c                DiagVSprintf
+                0x101003f4                DiagPrintf
+                0x10100444                DiagPrintfD
+                0x10100470                DiagSPrintf
+                0x1010049c                DiagSnPrintf
+                0x10100764                Rand
+                0x101007f0                Rand_Arc4
+                0x10100824                RandBytes_Get
+                0x10100870                io_assert_failed
+                0x10100890                BKUP_Write
+                0x101008b4                BKUP_Read
+                0x101008d4                BKUP_Set
+                0x101008fc                BKUP_Clear
+                0x10100928                BOOT_Reason
+                0x10100938                DelayNop
+                0x10100948                DelayUs
+                0x10100994                DelayMs
+                0x101009a8                EFUSEPowerSwitch
+                0x10100a30                EFUSERead8
+                0x10100b1c                EFUSEWrite8
+                0x10100c20                EFUSE_PG_Packet
+                0x10100e98                EFUSE_LogicalMap_Read
+                0x10100fac                EFUSE_LogicalMap_Write
+                0x10101194                FLASH_RxData
+                0x1010129c                FLASH_TxCmd
+                0x10101328                FLASH_SW_CS_Control
+                0x1010137c                FLASH_SetSpiMode
+                0x10101414                FLASH_RxCmd
+                0x10101478                FLASH_WaitBusy
+                0x101014f8                FLASH_WriteEn
+                0x1010151c                FLASH_TxData256B
+                0x1010160c                FLASH_TxData12B
+                0x101016ec                FLASH_SetStatus
+                0x1010170c                FLASH_Erase
+                0x101017b8                FLASH_DeepPowerDown
+                0x10101808                FLASH_SetStatusBits
+                0x101018dc                FLASH_StructInit_Micron
+                0x1010198c                FLASH_StructInit_MXIC
+                0x10101a38                FLASH_StructInit_GD
+                0x10101aec                FLASH_StructInit
+                0x10101ba0                FLASH_Init
+                0x10101c24                GDMA_StructInit
+                0x10101c44                GDMA_SetLLP
+                0x10101cd8                GDMA_ClearINTPendingBit
+                0x10101da4                GDMA_ClearINT
+                0x10101e74                GDMA_INTConfig
+                0x10101f90                GDMA_Cmd
+                0x10101ff8                GDMA_Init
+                0x1010214c                GDMA_ChCleanAutoReload
+                0x101021d0                GDMA_SetSrcAddr
+                0x10102220                GDMA_GetSrcAddr
+                0x1010226c                GDMA_GetDstAddr
+                0x101022b8                GDMA_SetDstAddr
+                0x10102308                GDMA_SetBlkSize
+                0x10102368                GDMA_GetBlkSize
+                0x101023b8                GDMA_ChnlRegister
+                0x10102400                GDMA_ChnlUnRegister
+                0x1010243c                GDMA_ChnlAlloc
+                0x101024d8                GDMA_ChnlFree
+                0x10102564                GDMA_GetIrqNum
+                0x101025a8                GPIO_INTMode
+                0x10102640                GPIO_INTConfig
+                0x10102678                GPIO_INTHandler
+                0x10102720                GPIO_Direction
+                0x10102754                GPIO_Init
+                0x101027e0                GPIO_DeInit
+                0x1010284c                GPIO_ReadDataBit
+                0x10102870                GPIO_WriteBit
+                0x101028a0                GPIO_PortDirection
+                0x101028c4                GPIO_PortRead
+                0x101028d4                GPIO_PortWrite
+                0x101028ec                GPIO_UserRegIrq
+                0x10102924                IPC_INTConfig
+                0x10102938                IPC_IERSet
+                0x1010293c                IPC_IERGet
+                0x10102940                IPC_INTRequest
+                0x1010294c                IPC_INTClear
+                0x10102958                IPC_INTGet
+                0x1010295c                IPC_CPUID
+                0x10102968                IPC_SEMGet
+                0x101029b8                IPC_SEMFree
+                0x10102a20                IPC_INTHandler
+                0x10102a60                IPC_INTUserHandler
+                0x10102a9c                LOGUART_StructInit
+                0x10102ab4                LOGUART_Init
+                0x10102af4                LOGUART_PutChar
+                0x10102b28                LOGUART_GetChar
+                0x10102b44                LOGUART_Readable
+                0x10102b58                LOGUART_GetIMR
+                0x10102b64                LOGUART_SetIMR
+                0x10102b70                LOGUART_WaitBusy
+                0x10102b90                LOGUART_SetBaud
+                0x10102bd4                mpu_enable
+                0x10102bec                mpu_disable
+                0x10102c00                mpu_init
+                0x10102c3c                mpu_set_mem_attr
+                0x10102cb0                mpu_region_cfg
+                0x10102db4                mpu_entry_free
+                0x10102dc0                mpu_entry_alloc
+                0x10102de8                RSIP_Cmd
+                0x10102e04                RSIP_OTF_init
+                0x10102e6c                RSIP_OTF_Cmd
+                0x10102e80                RSIP_OTF_Mask
+                0x10102ec8                RSIP_KEY_Request
+                0x10102f0c                RSIP_MMU_Config
+                0x10102f30                RSIP_MMU_Cmd
+                0x10102f50                PAD_DrvStrength
+                0x10102f6c                PAD_PullCtrl
+                0x10102f98                PAD_CMD
+                0x10102fb8                Pinmux_Config
+                0x10102fd8                Pinmux_ConfigGet
+                0x10102fe8                Pinmux_UartLogCtrl
+                0x1010303c                Pinmux_SpicCtrl
+                0x10103180                simulation_bit_index
+                0x10103198                simulation_stage_set
+                0x101031c4                SYSTIMER_Init
+                0x10103214                SYSTIMER_TickGet
+                0x10103224                SYSTIMER_GetPassTime
+                0x10103254                RTIM_TimeBaseStructInit
+                0x1010326c                RTIM_Cmd
+                0x101032f4                RTIM_GetCount
+                0x10103360                RTIM_INTConfig
+                0x101033f0                RTIM_INTClear
+                0x1010345c                RTIM_TimeBaseInit
+                0x10103594                RTIM_DeInit
+                0x10103610                RTIM_INTClearPendingBit
+                0x10103684                RTIM_GetFlagStatus
+                0x1010375c                RTIM_GetINTStatus
+                0x1010383c                UART_DeInit
+                0x10103844                UART_StructInit
+                0x10103860                UART_BaudParaGetFull
+                0x10103898                UART_BaudParaGet
+                0x101038bc                UART_SetBaud
+                0x10103954                UART_SetBaudExt
+                0x101039cc                UART_SetRxLevel
+                0x101039f4                UART_RxCmd
+                0x10103a08                UART_Writable
+                0x10103a10                UART_Readable
+                0x10103a18                UART_CharPut
+                0x10103a1c                UART_CharGet
+                0x10103a24                UART_ReceiveData
+                0x10103a4c                UART_SendData
+                0x10103a74                UART_ReceiveDataTO
+                0x10103ab4                UART_SendDataTO
+                0x10103af4                UART_RxByteCntClear
+                0x10103b00                UART_RxByteCntGet
+                0x10103b08                UART_BreakCtl
+                0x10103b1c                UART_ClearRxFifo
+                0x10103b3c                UART_Init
+                0x10103be4                UART_ClearTxFifo
+                0x10103bf0                UART_INTConfig
+                0x10103c00                UART_IntStatus
+                0x10103c04                UART_ModemStatusGet
+                0x10103c08                UART_LineStatusGet
+                0x10103c0c                UART_WaitBusy
+                0x10103c30                rtl_crypto_aes_cbc_init
+                0x10103c80                rtl_crypto_aes_cbc_encrypt
+                0x10103ccc                rtl_crypto_aes_cbc_decrypt
+                0x10103d18                rtl_crypto_aes_ecb_init
+                0x10103d68                rtl_crypto_aes_ecb_encrypt
+                0x10103da0                rtl_crypto_aes_ecb_decrypt
+                0x10103dd8                rtl_crypto_aes_ctr_init
+                0x10103e28                rtl_crypto_aes_ctr_encrypt
+                0x10103e6c                rtl_crypto_aes_ctr_decrypt
+                0x10103eb0                rtl_crypto_aes_cfb_init
+                0x10103f00                rtl_crypto_aes_cfb_encrypt
+                0x10103f44                rtl_crypto_aes_cfb_decrypt
+                0x10103f88                rtl_crypto_aes_ofb_init
+                0x10103fdc                rtl_crypto_aes_ofb_encrypt
+                0x10104020                rtl_crypto_aes_ofb_decrypt
+                0x10104064                rtl_crypto_aes_gcm_init
+                0x101040b8                rtl_crypto_aes_gcm_encrypt
+                0x10104130                rtl_crypto_aes_gcm_decrypt
+                0x101041a8                BOOT_ROM_SignatureCheck
+                0x10104280                BOOT_ROM_FromFlash
+                0x1010438c                BOOT_ROM_InitDebugFlg
+                0x101043a8                BOOT_ROM_ResetVsr
+                0x101044c8                EXT32K_Cmd
+                0x101044e8                XTAL_ClkGet
+                0x10104500                CPU_ClkSet
+                0x10104514                CPU_ClkGet
+                0x10104538                CRYPTO_MemDump
+                0x10104600                CRYPTO_RegDump
+                0x101047c0                CRYPTO_CleanCmdOk
+                0x101047f8                CRYPTO_ClearAllINT
+                0x10104828                CRYPTO_Reset
+                0x1010486c                CRYPTO_SetSecurityModeAD
+                0x10104a48                CRYPTO_Init
+                0x10104a6c                CRYPTO_ProcessAD
+                0x10105680                CRYPTO_SendSeqBuf
+                0x10105798                CRYPTO_CipherInit
+                0x101057b8                CRYPTO_CipherEncryptAD
+                0x101057e8                CRYPTO_CipherDecryptAD
+                0x10105818                rtl_crypto_3des_cbc_init
+                0x10105868                rtl_crypto_3des_cbc_encrypt
+                0x101058b4                rtl_crypto_3des_cbc_decrypt
+                0x10105900                rtl_crypto_3des_ecb_init
+                0x10105950                rtl_crypto_3des_ecb_encrypt
+                0x10105988                rtl_crypto_3des_ecb_decrypt
+                0x101059c0                rtl_crypto_3des_cfb_init
+                0x10105a10                rtl_crypto_3des_cfb_encrypt
+                0x10105a48                rtl_crypto_3des_cfb_decrypt
+                0x10105a80                rtl_crypto_3des_ofb_init
+                0x10105ad0                rtl_crypto_3des_ofb_encrypt
+                0x10105b08                rtl_crypto_3des_ofb_decrypt
+                0x10105b40                rtl_crypto_3des_ctr_init
+                0x10105b94                rtl_crypto_3des_ctr_encrypt
+                0x10105bcc                rtl_crypto_3des_ctr_decrypt
+                0x10105c04                rtl_crypto_des_cbc_init
+                0x10105c58                rtl_crypto_des_cbc_encrypt
+                0x10105cb4                rtl_crypto_des_cbc_decrypt
+                0x10105d10                rtl_crypto_des_ecb_init
+                0x10105d64                rtl_crypto_des_ecb_encrypt
+                0x10105d9c                rtl_crypto_des_ecb_decrypt
+                0x10105dd4                rtl_crypto_des_cfb_init
+                0x10105e28                rtl_crypto_des_cfb_encrypt
+                0x10105e60                rtl_crypto_des_cfb_decrypt
+                0x10105e98                rtl_crypto_des_ofb_init
+                0x10105eec                rtl_crypto_des_ofb_encrypt
+                0x10105f24                rtl_crypto_des_ofb_decrypt
+                0x10105f5c                rtl_crypto_des_ctr_init
+                0x10105fb0                rtl_crypto_des_ctr_encrypt
+                0x10105fe8                rtl_crypto_des_ctr_decrypt
+                0x10106020                RCC_PeriphClockCmd
+                0x101060b8                RCC_PeriphClockSource_RTC
+                0x10106104                RCC_PeriphClockSource_I2C
+                0x10106124                RCC_PeriphClockSource_QDEC
+                0x10106144                RCC_PeriphClockSource_UART
+                0x101061b8                SYSCFG_GetChipInfo
+                0x101061c4                INT_HardFault
+                0x101061e4                INT_MemManage
+                0x10106204                INT_BusFault
+                0x10106224                INT_UsageFault
+                0x10106244                INT_SecureFault
+                0x10106264                INT_HardFault_C
+                0x10106634                INT_NMI
+                0x1010677c                irq_table_init
+                0x101069b8                irq_enable
+                0x101069d4                irq_disable
+                0x101069f8                irq_set_priority
+                0x10106a24                irq_get_priority
+                0x10106a4c                irq_set_pending
+                0x10106a68                irq_get_pending
+                0x10106a8c                irq_clear_pending
+                0x10106aa8                irq_register
+                0x10106af4                irq_unregister
+                0x10106b14                _char2num
+                0x10106b44                _2char2dec
+                0x10106bb8                _2char2hex
+                0x10106c20                _memchr
+                0x10106cb0                _memcmp
+                0x10106d14                _memcpy
+                0x10106dc0                _memmove
+                0x10106e88                _memset
+                0x10106fe4                _vsscanf
+                0x101075a8                _sscanf
+                0x101075c8                _stratoi
+                0x1010761c                _strcat
+                0x1010765c                _strchr
+                0x1010772c                _strcmp
+                0x101077a0                _strcpy
+                0x101077ec                _stricmp
+                0x10107820                _strlen
+                0x10107884                _strncat
+                0x101078e0                _strncmp
+                0x10107984                _strncpy
+                0x101079ec                _strnlen
+                0x10107a20                _strpbrk
+                0x10107a4c                _strsep
+                0x10107d0c                _strstr
+                0x10107f24                _strtoull
+                0x10107fe4                _strtoll
+                0x10108004                _strtok
+                0x10108010                __strtok_r
+                0x10108074                _strtok_r
+                0x1010807c                _strtol_r
+                0x10108198                _strtol
+                0x1010819c                _strtoul_r
+                0x101082d0                _strtoul
+                0x101082d4                _strupr
+
+.rel.dyn        0x101082f0        0x0
+ .rel.iplt      0x101082f0        0x0 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+
+.rom.rodata     0x101d4000     0x1439
+ .rom.rodata    0x101d4000     0x1439 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+                0x101d4000                SPIC_CALIB_PATTERN
+                0x101d401c                PORT_AB
+
+.hal.rom.bss    0x10000000      0x564
+ .hal.rom.bss   0x10000000      0x564 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+                0x10000000                __rom_bss_start__
+                0x10000000                ConfigDebugClose
+                0x10000004                ConfigDebugBuffer
+                0x10000008                ConfigDebugBufferGet
+                0x1000000c                ConfigDebug
+                0x1000001c                rand_first
+                0x10000020                rand_seed
+                0x10000034                RBSS_UDELAY_DIV
+                0x10000038                flash_init_para
+                0x10000098                GDMA_Reg
+                0x1000009c                PortA_IrqHandler
+                0x1000011c                PortA_IrqData
+                0x1000019c                PortB_IrqHandler
+                0x1000021c                PortB_IrqData
+                0x1000029c                IPC_IrqHandler
+                0x1000031c                IPC_IrqData
+                0x1000039c                IS_FPGA_VERIF
+                0x100003a0                crypto_engine
+                0x10000564                __rom_bss_end__
+
+.hal.s_rom.bss  0x1007c000      0x348
+ .hal.s_rom.bss
+                0x1007c000      0x348 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+                0x1007c000                NewVectorTable
+                0x1007c000                __rom_bss_start_s__
+                0x1007c140                UserIrqFunTable
+                0x1007c240                UserIrqDataTable
+                0x1007c340                mpu_entry_register
+                0x1007c348                __rom_bss_end_s__
+
+.ram_image1.entry
+                0x1007d000        0x0
+                0x1007d000                __ram_start_table_start__ = .
+ *(SORT(.image1.entry.data*))
+ *(.image1.validate.rodata*)
+ .ram_image1.entry
+                0x1007d000        0x0 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+
+.ns_rom.rodata  0x101c0000        0x0
+                0x101c0000                __rom_entry_ns_start__ = ABSOLUTE (.)
+ .ns_rom.rodata
+                0x101c0000        0x0 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+
+.ram.data
+ *(.data*)
+
+.ram.bss
+ *(.bss*)
+
+.rom.text.libgcc
+ *(.text*)
+OUTPUT(target_rom.axf elf32-littlearm)
+
+.ARM.attributes
+                0x00000000       0x34
+ .ARM.attributes
+                0x00000000       0x34 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+
+.comment        0x00000000       0x36
+ .comment       0x00000000       0x36 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+                                0xb9a (size before relaxing)
+
+.debug_line     0x00000000     0xb7c5
+ .debug_line    0x00000000     0xb7c5 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+
+.debug_info     0x00000000    0x1595a
+ .debug_info    0x00000000    0x1595a /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+
+.debug_abbrev   0x00000000     0x4b58
+ .debug_abbrev  0x00000000     0x4b58 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+
+.debug_aranges  0x00000000      0xfb8
+ .debug_aranges
+                0x00000000      0xfb8 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+
+.debug_loc      0x00000000    0x10b42
+ .debug_loc     0x00000000    0x10b42 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+
+.debug_ranges   0x00000000     0x13b8
+ .debug_ranges  0x00000000     0x13b8 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+
+.debug_str      0x00000000     0x5730
+ .debug_str     0x00000000     0x5730 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+                               0xdf68 (size before relaxing)
+
+.debug_frame    0x00000000     0x2880
+ .debug_frame   0x00000000     0x2880 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+
+Cross Reference Table
+
+Symbol                                            File
+BKUP_Clear                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+BKUP_Read                                         /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+BKUP_Set                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+BKUP_Write                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+BOOT_ROM_FromFlash                                /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+BOOT_ROM_InitDebugFlg                             /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+BOOT_ROM_ResetVsr                                 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+BOOT_ROM_SignatureCheck                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+BOOT_Reason                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+BusFault_Handler                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+CPU_ClkGet                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+CPU_ClkSet                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+CRYPTO_CipherDecryptAD                            /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+CRYPTO_CipherEncryptAD                            /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+CRYPTO_CipherInit                                 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+CRYPTO_CleanCmdOk                                 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+CRYPTO_ClearAllINT                                /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+CRYPTO_Init                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+CRYPTO_MemDump                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+CRYPTO_ProcessAD                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+CRYPTO_RegDump                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+CRYPTO_Reset                                      /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+CRYPTO_SendSeqBuf                                 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+CRYPTO_SetSecurityModeAD                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+ConfigDebug                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+ConfigDebugBuffer                                 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+ConfigDebugBufferGet                              /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+ConfigDebugClose                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+DelayMs                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+DelayNop                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+DelayUs                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+DiagPrintf                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+DiagPrintfD                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+DiagSPrintf                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+DiagSnPrintf                                      /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+DiagVSprintf                                      /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+EFUSEPowerSwitch                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+EFUSERead8                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+EFUSEWrite8                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+EFUSE_LogicalMap_Read                             /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+EFUSE_LogicalMap_Write                            /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+EFUSE_PG_Packet                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+EXT32K_Cmd                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_DeepPowerDown                               /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_Erase                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_Init                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_RxCmd                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_RxData                                      /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_SW_CS_Control                               /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_SetSpiMode                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_SetStatus                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_SetStatusBits                               /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_StructInit                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_StructInit_GD                               /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_StructInit_MXIC                             /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_StructInit_Micron                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_TxCmd                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_TxData12B                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_TxData256B                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_WaitBusy                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+FLASH_WriteEn                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_ChCleanAutoReload                            /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_ChnlAlloc                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_ChnlFree                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_ChnlRegister                                 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_ChnlUnRegister                               /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_ClearINT                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_ClearINTPendingBit                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_Cmd                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_GetBlkSize                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_GetDstAddr                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_GetIrqNum                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_GetSrcAddr                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_INTConfig                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_Init                                         /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_Reg                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_SetBlkSize                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_SetDstAddr                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_SetLLP                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_SetSrcAddr                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GDMA_StructInit                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GPIO_DeInit                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GPIO_Direction                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GPIO_INTConfig                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GPIO_INTHandler                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GPIO_INTMode                                      /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GPIO_Init                                         /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GPIO_PortDirection                                /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GPIO_PortRead                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GPIO_PortWrite                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GPIO_ReadDataBit                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GPIO_UserRegIrq                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+GPIO_WriteBit                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+HardFault_Handler                                 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+INT_BusFault                                      /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+INT_HardFault                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+INT_HardFault_C                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+INT_MemManage                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+INT_NMI                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+INT_SecureFault                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+INT_UsageFault                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+IPC_CPUID                                         /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+IPC_IERGet                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+IPC_IERSet                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+IPC_INTClear                                      /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+IPC_INTConfig                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+IPC_INTGet                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+IPC_INTHandler                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+IPC_INTRequest                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+IPC_INTUserHandler                                /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+IPC_IrqData                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+IPC_IrqHandler                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+IPC_SEMFree                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+IPC_SEMGet                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+IS_FPGA_VERIF                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+LOGUART_GetChar                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+LOGUART_GetIMR                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+LOGUART_Init                                      /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+LOGUART_PutChar                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+LOGUART_Readable                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+LOGUART_SetBaud                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+LOGUART_SetIMR                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+LOGUART_StructInit                                /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+LOGUART_WaitBusy                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+MemManage_Handler                                 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+NMI_Handler                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+NewVectorTable                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+PAD_CMD                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+PAD_DrvStrength                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+PAD_PullCtrl                                      /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+PORT_AB                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+Pinmux_Config                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+Pinmux_ConfigGet                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+Pinmux_SpicCtrl                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+Pinmux_UartLogCtrl                                /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+PortA_IrqData                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+PortA_IrqHandler                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+PortB_IrqData                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+PortB_IrqHandler                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RBSS_UDELAY_DIV                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RCC_PeriphClockCmd                                /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RCC_PeriphClockSource_I2C                         /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RCC_PeriphClockSource_QDEC                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RCC_PeriphClockSource_RTC                         /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RCC_PeriphClockSource_UART                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RSIP_Cmd                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RSIP_KEY_Request                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RSIP_MMU_Cmd                                      /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RSIP_MMU_Config                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RSIP_OTF_Cmd                                      /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RSIP_OTF_Mask                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RSIP_OTF_init                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RTIM_Cmd                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RTIM_DeInit                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RTIM_GetCount                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RTIM_GetFlagStatus                                /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RTIM_GetINTStatus                                 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RTIM_INTClear                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RTIM_INTClearPendingBit                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RTIM_INTConfig                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RTIM_TimeBaseInit                                 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RTIM_TimeBaseStructInit                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+Rand                                              /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+RandBytes_Get                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+Rand_Arc4                                         /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+Reset_Handler                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+SPIC_CALIB_PATTERN                                /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+STACK_TOP                                         /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+SYSCFG_GetChipInfo                                /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+SYSTIMER_GetPassTime                              /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+SYSTIMER_Init                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+SYSTIMER_TickGet                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+SecureFault_Handler                               /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_BaudParaGet                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_BaudParaGetFull                              /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_BreakCtl                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_CharGet                                      /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_CharPut                                      /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_ClearRxFifo                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_ClearTxFifo                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_DeInit                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_INTConfig                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_Init                                         /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_IntStatus                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_LineStatusGet                                /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_ModemStatusGet                               /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_Readable                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_ReceiveData                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_ReceiveDataTO                                /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_RxByteCntClear                               /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_RxByteCntGet                                 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_RxCmd                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_SendData                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_SendDataTO                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_SetBaud                                      /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_SetBaudExt                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_SetRxLevel                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_StructInit                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_WaitBusy                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UART_Writable                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UsageFault_Handler                                /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UserIrqDataTable                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+UserIrqFunTable                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+XTAL_ClkGet                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_2char2dec                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_2char2hex                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+__ram_start_table_start__                         /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+__rom_bss_end__                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+__rom_bss_end_s__                                 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+__rom_bss_start__                                 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+__rom_bss_start_s__                               /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+__rom_entry_ns_start__                            /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+__strtok_r                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+__vectors_table                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_char2num                                         /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_memchr                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_memcmp                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_memcpy                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_memmove                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_memset                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_sscanf                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_stratoi                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strcat                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strchr                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strcmp                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strcpy                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_stricmp                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strlen                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strncat                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strncmp                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strncpy                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strnlen                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strpbrk                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strsep                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strstr                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strtok                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strtok_r                                         /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strtol                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strtol_r                                         /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strtoll                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strtoul                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strtoul_r                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strtoull                                         /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_strupr                                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+_vsscanf                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+crypto_engine                                     /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+flash_init_para                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+io_assert_failed                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+irq_clear_pending                                 /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+irq_disable                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+irq_enable                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+irq_get_pending                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+irq_get_priority                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+irq_register                                      /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+irq_set_pending                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+irq_set_priority                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+irq_table_init                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+irq_unregister                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+mpu_disable                                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+mpu_enable                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+mpu_entry_alloc                                   /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+mpu_entry_free                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+mpu_entry_register                                /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+mpu_init                                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+mpu_region_cfg                                    /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+mpu_set_mem_attr                                  /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rand_first                                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rand_seed                                         /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_3des_cbc_decrypt                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_3des_cbc_encrypt                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_3des_cbc_init                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_3des_cfb_decrypt                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_3des_cfb_encrypt                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_3des_cfb_init                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_3des_ctr_decrypt                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_3des_ctr_encrypt                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_3des_ctr_init                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_3des_ecb_decrypt                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_3des_ecb_encrypt                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_3des_ecb_init                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_3des_ofb_decrypt                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_3des_ofb_encrypt                       /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_3des_ofb_init                          /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_cbc_decrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_cbc_encrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_cbc_init                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_cfb_decrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_cfb_encrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_cfb_init                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_ctr_decrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_ctr_encrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_ctr_init                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_ecb_decrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_ecb_encrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_ecb_init                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_gcm_decrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_gcm_encrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_gcm_init                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_ofb_decrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_ofb_encrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_aes_ofb_init                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_des_cbc_decrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_des_cbc_encrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_des_cbc_init                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_des_cfb_decrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_des_cfb_encrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_des_cfb_init                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_des_ctr_decrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_des_ctr_encrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_des_ctr_init                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_des_ecb_decrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_des_ecb_encrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_des_ecb_init                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_des_ofb_decrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_des_ofb_encrypt                        /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+rtl_crypto_des_ofb_init                           /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+simulation_bit_index                              /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)
+simulation_stage_set                              /cygdrive/E/AmebaD/sdk/svn_new/project/realtek_amebaD_cm4_gcc_verification/asdk/lib/rom_acut/rom.a(rom.o)

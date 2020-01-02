@@ -1,0 +1,7 @@
+#define UTS_VERSION "2019/12/19-15:54:13"
+#define RTL_FW_COMPILE_TIME "2019/12/19-15:54:13"
+#define RTL_FW_COMPILE_DATE "2019/12/19"
+#define RTL_FW_COMPILE_BY "jingjun_wu"
+#define RTL_FW_COMPILE_HOST "N55312510"
+#define RTL_FW_COMPILE_DOMAIN "realsil.com.cn"
+#define RTL_FW_COMPILER "gcc version 6.4.1 20180307 (Realtek ASDK-6.4.1 Build 2778) "

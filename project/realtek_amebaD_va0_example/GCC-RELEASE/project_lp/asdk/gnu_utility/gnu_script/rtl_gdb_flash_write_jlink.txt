@@ -1,0 +1,168 @@
+# GDB script for loading ram.bin process
+
+source gnu_utility/gnu_script/rtl_gdb_jtag_boot_com.txt
+
+monitor reset 1
+monitor sleep 20
+monitor reset 1
+monitor sleep 20
+
+#===============================================================================
+#Macro define
+
+if ($CUT_VERSION == 1)
+	set $FLASHDATBUFSIZE = 0x800
+else
+	set $FLASHDATBUFSIZE = 0x4000
+end
+
+set $IMAGE_BOOT = 0x001
+set $IMAGE_IMG2 = 0x002
+
+#===============================================================================
+
+#===============================================================================
+#Load flash download file
+printf "Load flash loader.\n"
+file gnu_utility/gnu_script/target_FPGA.axf
+#Load the file
+#lo
+#restore ./image/rom.bin binary 0x0
+restore gnu_utility/gnu_script/flash_loader_ram_1.bin binary 0x00082000
+#===============================================================================
+
+
+#===============================================================================
+#flash write function
+define flash_write
+	printf "flash_write FileName:%x \n", $arg0
+	printf "flash_write FileSize:%d \n", $arg1
+	printf "flash_write FlashAddrForWrite:%x \n", FlashAddrForWrite
+
+	set $FileName = $arg0
+	set $FileSize = $arg1
+	set $Loopnumber = ($FileSize / $FLASHDATBUFSIZE)
+	set $TailSize = ($FileSize % $FLASHDATBUFSIZE)
+	printf "FileSize: %x\n",$FileSize
+	printf "Loopnumber = %d\n", $Loopnumber
+	printf "TailSize = %d\n", $TailSize
+	printf "global variables\n"
+
+	set $FILESTARTADDR = 0
+	set $FLASHDATSRC = FlashDatSrc
+	set FlashBlockWriteSize = $FLASHDATBUFSIZE
+
+	printf "FlashDatSrc:%x\n", $FLASHDATSRC
+	printf "FlashBlockWriteSize:%x\n", FlashBlockWriteSize
+	printf  "FlashAddrForWrite:%x", FlashAddrForWrite
+
+	printf  "Flash write start...\n"
+	set $Loop = 0
+	while  ($Loop < $Loopnumber)
+    		set $FILESTARTADDR = $FLASHDATBUFSIZE * $Loop
+    		printf "FILESTARTADDR"
+    		p /x $FILESTARTADDR
+    		p /x FlashAddrForWrite
+    		p /x $Loop
+
+		if ($FileName == $IMAGE_IMG2)
+			restore ./image/km0_km4_image2.bin binary ($FLASHDATSRC-$FILESTARTADDR) $FILESTARTADDR ($FILESTARTADDR + $FLASHDATBUFSIZE)
+		end
+		if ($FileName == $IMAGE_BOOT)
+			restore ./image/km0_boot_all.bin binary ($FLASHDATSRC-$FILESTARTADDR) $FILESTARTADDR ($FILESTARTADDR + $FLASHDATBUFSIZE)
+		end
+    		c
+    
+    		set $Loop = $Loop + 0x01
+	end
+
+	if ( $TailSize > 0)
+		set $FILESTARTADDR = $FLASHDATBUFSIZE * $Loop
+		set FlashBlockWriteSize = $TailSize
+		printf "FILESTARTADDR"
+		p /x $FILESTARTADDR
+		p /x FlashAddrForWrite
+		p /x $Loop
+
+		if ($FileName == $IMAGE_IMG2)
+			restore ./image/km0_km4_image2.bin binary ($FLASHDATSRC-$FILESTARTADDR) $FILESTARTADDR ($FILESTARTADDR + $TailSize)
+		end
+		if ($FileName == $IMAGE_BOOT)
+			restore ./image/km0_boot_all.bin binary ($FLASHDATSRC-$FILESTARTADDR) $FILESTARTADDR ($FILESTARTADDR + $TailSize)
+		end
+		c
+	end
+end
+
+#===============================================================================
+#Set rom boot BIT to flash loader
+set $Temp = 0x0
+set $Temp = {int}($PERI_ON_BASE+$REG_BOOT_CFG)
+p /x $Temp
+
+set $Temp = ($Temp & ~(0xFFFF << 16))
+set $Temp = ($Temp | (0x01 << 26))
+p /x $Temp
+
+set {int}($PERI_ON_BASE+$REG_BOOT_CFG) = $Temp
+printf "....\n"
+printf "wakeup bit(%x):%x\n", ($PERI_ON_BASE+$REG_BOOT_CFG), {int}($PERI_ON_BASE+$REG_BOOT_CFG)
+#===============================================================================
+#Stop KM4 when download flash
+set $Temp = 0x0
+set $Temp = {int}($PERI_ON_BASE+0x21C)
+p /x $Temp
+
+set $Temp = ($Temp & ~(1 << 3))
+set $Temp = ($Temp & ~(1 << 24))
+p /x $Temp
+
+set {int}($PERI_ON_BASE+0x21C) = $Temp
+printf "....\n"
+printf "wakeup bit(%x):%x\n", ($PERI_ON_BASE+$REG_BOOT_CFG), {int}($PERI_ON_BASE+0x21C)
+
+#===============================================================================
+#b RtlFlashProgram:StartOfFlashBlockWrite
+b rtl_flash_download.c:88
+b rtl_flash_download.c:118
+
+set $pc = 0x04
+#continue
+c
+#=============================================================================== 
+
+#=============================================================================== 
+#flash write
+set $XIPBootSize =4184
+set FlashAddrForWrite =0x00000
+flash_write $IMAGE_BOOT $XIPBootSize
+
+set $FlashFileSize =0
+set FlashAddrForWrite =0x06000
+flash_write $IMAGE_IMG2 $FlashFileSize
+
+#Tell flashloader complete flag
+set FlashWriteComplete = 0x1
+#=============================================================================== 
+
+#=============================================================================== 
+#dump image from flash
+printf "dump for check\n"
+
+#Enable HW reset when download finish
+set $Temp = {int}(0x1298)
+if ($Temp != 0)
+	set $Temp = 0x0
+	set $Temp = {int}($PERI_ON_BASE+0x54)
+	set $Temp = ($Temp | (1 << 1))
+	p /x $Temp
+	set {int}($PERI_ON_BASE+0x54) = $Temp
+end
+
+c
+#delete
+
+#=============================================================================== 
+quit
+#===============================================================================
+

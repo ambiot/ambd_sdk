@@ -1,0 +1,36 @@
+BLEDIR = $(BASEDIR)/component/common/bluetooth/realtek
+
+IFLAGS += \
+   -I$(BLEDIR)/sdk \
+   -I$(BLEDIR)/sdk/inc \
+   -I$(BLEDIR)/sdk/inc/app \
+   -I$(BLEDIR)/sdk/inc/bluetooth/gap \
+   -I$(BLEDIR)/sdk/inc/bluetooth/gap/gap_lib \
+   -I$(BLEDIR)/sdk/inc/os \
+   -I$(BLEDIR)/sdk/inc/platform \
+   -I$(BLEDIR)/sdk/inc/bluetooth/profile \
+   -I$(BLEDIR)/sdk/inc/bluetooth/profile/client \
+   -I$(BLEDIR)/sdk/inc/bluetooth/profile/server \
+   -I$(BLEDIR)/sdk/inc/stack \
+   -I$(BLEDIR)/sdk/board/amebad/src \
+   -I$(BLEDIR)/sdk/board/amebad/src/hci \
+   -I$(BLEDIR)/sdk/board/amebad/src/vendor_cmd \
+   -I$(BLEDIR)/sdk/board/amebad/lib \
+   -I$(BLEDIR)/sdk/board/common/inc
+
+IFLAGS += \
+   -I$(BLEDIR)/sdk/example/ble_central \
+   -I$(BLEDIR)/sdk/example/ble_scatternet \
+   -I$(BLEDIR)/sdk/board/amebad/src/data_uart \
+   -I$(BLEDIR)/sdk/src/mcu/module/data_uart_cmd
+
+IFLAGS += \
+   -I$(BLEDIR)/sdk/example/ble_peripheral
+
+IFLAGS += \
+   -I$(BLEDIR)/../../application/airsync/1.0.4 \
+   -I$(BLEDIR)/sdk/example/bt_airsync_config \
+   -I$(BLEDIR)/sdk/example/bt_config
+
+IFLAGS += \
+   -I$(BLEDIR)/sdk/example/bt_beacon

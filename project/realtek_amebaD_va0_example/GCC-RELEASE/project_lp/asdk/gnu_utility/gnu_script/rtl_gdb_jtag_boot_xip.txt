@@ -1,0 +1,20 @@
+# GDB script for loading ram.bin process
+
+source gnu_utility/gnu_script/rtl_gdb_jtag_boot_com.txt
+
+#===============================================================================
+set $Temp = 0x0
+set $Temp = {int}($PERI_ON_BASE+$REG_BOOT_CFG)
+p /x $Temp
+
+set $Temp = ($Temp & ~(0xFFFF << 16))
+p /x $Temp
+
+set {int}($PERI_ON_BASE+$REG_BOOT_CFG) = $Temp
+printf "....\n"
+printf "wakeup bit(%x):%x\n", ($PERI_ON_BASE+$REG_BOOT_CFG), {int}($PERI_ON_BASE+$REG_BOOT_CFG)
+
+c
+
+#quit
+

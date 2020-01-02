@@ -1,0 +1,238 @@
+
+# ATTENTION:
+# Brief explaination:
+#
+# 1. "make menuconfig" will see this file.
+# 2. make menuconfig save file will produce "/.config" and "/autoconf.h" two files.
+# 3. makefile will see the "/.config" file
+# 4. C code will see the "/autoconf.h"  
+#
+# in this file, declare variable xxx, please add the prefix "CONFIG_" word.  Example: "CONFIG_XXX"
+
+
+
+
+
+#===========================================================================
+mainmenu_name 'RTL Bootcode Configuration'
+mainmenu_option next_comment
+comment '< MENUCONFIG FOR CHIP CONFIG'
+
+
+comment '--------------CPU config Start------------'
+
+mainmenu_option next_comment
+comment '< CONFIG CHIP'
+comment 'Target Platform Selection'
+comment 'Choose a Vendor/Product combination.'
+
+choice 'Product' "RTL8721D CONFIG_RTL8721D  \
+		" RTL8721D
+
+choice 'ArmCore' "ARM_KM0 ARM_CORE_CM0  \
+		"ARM_KM0
+
+bool "Select FPGA"            CONFIG_FPGA
+if [ "$CONFIG_FPGA" = "y" ]; then
+define_bool CONFIG_CHIP_A_CUT y
+else
+choice 'Chip Version' "A_Cut		CONFIG_CHIP_A_CUT  \
+		B_Cut			CONFIG_CHIP_B_CUT
+		" A_Cut
+fi
+endmenu
+
+mainmenu_option next_comment
+comment '< CONFIG CPU CLK '
+
+if [ "$CONFIG_FPGA" = "y" ]; then
+define_bool CONFIG_CPU_CLK n
+else
+define_bool CONFIG_CPU_CLK y
+fi
+#bool "Config CPU Clock"            CONFIG_CPU_CLK
+
+if [ "$CONFIG_CPU_CLK" = "y" ]; then
+choice 'CPU Clock Config Type'         "Clock_XTAL	CONFIG_CPU_XTAL \
+										Clock_XTAL_2	CONFIG_CPU_XTAL_2 \
+                                        Clock_4MHz		CONFIG_CPU_4MHZ \
+                                        FPGA_CLK		CONFIG_FPGA_CLK\
+                                        "Clock_XTAL
+                                        
+if [ "$CONFIG_CPU_XTAL" = "y" ]; then
+define_int	PLATFORM_CLOCK      40000000
+define_int	CPU_CLOCK_SEL_VALUE      0x00
+fi
+if [ "$CONFIG_CPU_XTAL_2" = "y" ]; then
+define_int	PLATFORM_CLOCK      20000000
+define_int	CPU_CLOCK_SEL_VALUE      0x01
+fi
+if [ "$CONFIG_CPU_4MHZ" = "y" ]; then
+define_int	PLATFORM_CLOCK      4000000
+define_int	CPU_CLOCK_SEL_VALUE      0x10
+fi
+if [ "$CONFIG_FPGA_CLK" = "y" ]; then
+define_int	PLATFORM_CLOCK      20000000
+define_int	CPU_CLOCK_SEL_VALUE      0
+fi
+else
+choice 'CPU Clock Config Type'		"FPGA_CLK		CONFIG_FPGA_CLK \
+					"FPGA_CLK
+
+define_int	PLATFORM_CLOCK      10000000
+define_int	CPU_CLOCK_SEL_VALUE      0
+fi
+endmenu #CONFIG CPU CLK
+
+mainmenu_option next_comment
+comment '< CONFIG TEST MODE '
+
+comment 'Mass Production:'
+comment '(1)for MP Related'
+comment '(1)for CP Test'
+comment '(1)for FT Test'
+comment '(1)for EQC Test'
+
+bool "Select MP "  						CONFIG_MP
+bool "Select CP "  						CONFIG_CP
+bool "Select FT "  						CONFIG_FT
+bool "Select EQC "  						CONFIG_EQC
+
+endmenu
+
+#===========================================================================
+# Common Config with every IC have this function in here. Don't litmit someone ic.
+#
+comment '--------------OS config Start------------'
+mainmenu_option next_comment
+comment '< CONFIG OS '
+
+bool "Enable Kernel"                     CONFIG_KERNEL
+
+if [ "$CONFIG_KERNEL" = "y" ]; then
+choice 'Kernel Selecte' "FREERTOS        PLATFORM_FREERTOS \
+						"FREERTOS        
+define_int TASK_SCHEDULER_DISABLED 0
+fi
+endmenu #CONFIG OS
+
+#===========================================================================
+
+#===========================================================================
+# Normall function config
+#
+
+
+comment '--------------Peripheral config Start------------'
+mainmenu_option next_comment
+comment '< CONFIG SOC PS '
+bool "Enable SOC PS"			CONFIG_SOC_PS_EN
+if [ "$CONFIG_SOC_PS_EN" = "y" ]; then
+	define_bool CONFIG_SOC_PS_MODULE y
+fi
+endmenu
+
+mainmenu_option next_comment
+comment '< CONFIG SPIC '
+bool "Enable Phase Calibration"	CONFIG_SPIC_PHASE_CALIBATION
+bool "Enable 4Bytes Address"	CONFIG_SPIC_4BYTES_ADDRESS
+
+endmenu
+
+mainmenu_option next_comment
+comment '< CONFIG PINMUX '
+bool "PINMAP Enable"			CONFIG_PINMAP_ENABLE
+endmenu
+
+comment '--------------Peripheral config End---------------'
+
+comment '--------------Peripheral Test start---------------'
+mainmenu_option next_comment
+comment '< CONFIG FUNCTION TEST '
+bool "Enable Peripheral Test"		CONFIG_PER_TEST
+if [ "$CONFIG_PER_TEST" = "y" ]; then
+	bool "DBGPORT Enable"		CONFIG_DBGPORT_ENABLE
+	bool "Timer_Verify_Mode"	CONFIG_TIMER_VERIFY
+	bool "WDG_Verify_Mode"		CONFIG_WDG_VERIFY
+	bool "Gdma_Verify_Mode"		CONFIG_GDMA_VERIFY
+	bool "GPIO_Verify_Mode"		CONFIG_GPIO_VERIFY
+	bool "SPI_COM_Verify_Mode"	CONFIG_SPI_COM_VERIFY
+	bool "UART_Verify_Mode"		CONFIG_UART_VERIFY
+	bool "I2C_Verify_Mode"		CONFIG_I2C_VERIFY
+	bool "PMC_Verify_Mode"		CONFIG_PMC_VERIFY
+	bool "EFUSE_Verify_Mode"	CONFIG_EFUSE_VERIFY
+	bool "SPIC_Verify_Mode"		CONFIG_SPIC_VERIFY
+	bool "ADC_Verify_Mode"		CONFIG_ADC_VERIFY
+	bool "RSIP_Verify_Mode"		CONFIG_RSIP_VERIFY
+	bool "KeyScan_Verify_Mode"	CONFIG_KEYSCAN_VERIFY
+	bool "CapTouch_Verify_Mode"	CONFIG_CAPTOUCH_VERIFY
+	bool "SGPIO_Verify_Mode"	CONFIG_SGPIO_VERIFY
+	bool "Qdecoder_Verify_Mode"	CONFIG_QDEC_VERIFY
+	bool "Dhrystone Test"		CONFIG_DHRYSTONE_TEST
+	bool "SSL ROM Test"		CONFIG_SSL_ROM_TEST
+	bool "RTLIB ROM Test"		CONFIG_RTLIB_VERIFY
+	bool "SecureBoot Test"		CONFIG_SBOOT_VERIFY
+	bool "IPC Test"			CONFIG_IPC_VERIFY
+	bool "MPU Test"			CONFIG_MPU_VERIFY
+	bool "CACHE Test"		CONFIG_CACHE_VERIFY
+	bool "WFE Test"			CONFIG_WFE_VERIFY
+fi #CONFIG_PER_TEST
+endmenu #CONFIG PER TEST
+comment '--------------Peripheral Test End---------------'
+
+comment '--------------WIFI FW Config Start------------'
+mainmenu_option next_comment
+comment '< CONFIG WIFI '
+bool "Enable Wifi firmware"                CONFIG_WIFI_FW_EN
+if [ "$CONFIG_WIFI_FW_EN" = "y" ]; then
+bool "WIFI USER CTRL POWER SAVE"		CONFIG_USER_CTRL_PS
+#bool "WIFI FW Test"		CONFIG_WIFI_FW_VERIFY
+fi
+endmenu
+
+comment '--------------WIFI FW Config End--------------'
+
+#===========================================================================
+#===========================================================================
+
+#===========================================================================
+#=====================    Debug Message Config Start   =====================
+comment '--------------------------'
+mainmenu_option next_comment
+comment 'To set debug msg flag'                      
+bool "Enable debug log"                          CONFIG_DEBUG_LOG
+endmenu
+
+#===========================================================================
+# Normal: Build all code, includes ROM code. Normally for FPGA verification.
+# Release: Build user application code and link with ROM + RAM libraries.
+# Build_ROM_Lib: Build the ROM code library only.
+# Build_RAM_Lib: Build the RAM code library only.
+# Build_RAM_All: Build all RAM code, includes user application, and link with ROM library.
+comment '--------------------------'
+mainmenu_option next_comment
+
+comment '< Build Option '
+
+comment 'Select toolchain  '
+choice 'Toolchain'		"ASDK             CONFIG_TOOLCHAIN_ASDK  \
+                                 ARM_GCC          CONFIG_TOOLCHAIN_ARM_GCC  \
+ 			           		" ASDK
+
+comment 'Choose the build configuration '
+choice 'Link ROM Mode ' 			"Link_ROM_Library      CONFIG_LINK_ROM_LIB  \
+                                     Link_ROM_Symbol       CONFIG_LINK_ROM_SYMB  \
+					               " Link_ROM_Library
+endmenu
+#===========================================================================
+# Some SW CONFIG based on different IC version
+#
+
+#---------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------
+
+
+#===========================================================================
+comment '--------------------------'
+endmenu
