@@ -173,6 +173,13 @@
 #endif
 #endif
 /******************End of iNIC configurations*******************/
+/* For Azure embedded iot hub telemetry example*/
+#define CONFIG_EXAMPLE_AZURE   0
+#if CONFIG_EXAMPLE_AZURE
+#undef WAIT_FOR_ACK
+#define WAIT_FOR_ACK
+#endif
+
 /* For Amazon FreeRTOS SDK example */
 #define CONFIG_EXAMPLE_AMAZON_FREERTOS   0
 

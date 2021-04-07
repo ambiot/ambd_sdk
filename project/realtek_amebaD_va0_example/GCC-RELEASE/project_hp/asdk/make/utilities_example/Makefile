@@ -18,7 +18,7 @@ endif
 #*****************************************************************************#
 DIR = $(BASEDIR)/component/common/example
 RM_DIRS = 'example/audio_mp3|example/audio_amr|example/audio_helix_aac|example/audio_helix_mp3|example/audio_m4a_selfparse|example/audio_m4a|example/audio_pcm_upload|example/audio_hls'
-DIRS = $(shell find $(DIR) -maxdepth 2 -type d|grep -vE $(RM_DIRS))
+DIRS = $(shell find $(DIR) -maxdepth 3 -type d|grep -vE $(RM_DIRS))
 
 vpath %.c $(DIRS)
 
@@ -112,6 +112,36 @@ endif
 #CSRC += $(DIR)/usbd_audio/example_usbd_audio.c
 #CSRC += $(DIR)/usbd_msc/example_usbd_msc.c
 #CSRC += $(DIR)/usbd_cdc_vcom/example_usbd_cdc_acm.c
+
+
+#azure embedded examples
+# CSRC += $(DIR)/azure/example_azure_iot_common.c
+# CSRC += $(DIR)/azure/example_azure_iot_entry.c
+# CSRC += $(DIR)/azure/example_azure_iot_hub_c2d.c
+# CSRC += $(DIR)/azure/example_azure_iot_hub_methods.c
+# CSRC += $(DIR)/azure/example_azure_iot_hub_pnp.c
+# CSRC += $(DIR)/azure/example_azure_iot_hub_pnp_component.c
+# CSRC += $(DIR)/azure/example_azure_iot_hub_sas_telemetry.c
+# CSRC += $(DIR)/azure/example_azure_iot_hub_telemetry.c
+# CSRC += $(DIR)/azure/example_azure_iot_hub_twin.c
+# CSRC += $(DIR)/azure/example_azure_iot_rtk_pnp_sas.c
+# CSRC += $(DIR)/azure/example_azure_iot_rtk_pnp_x509.c
+# CSRC += $(DIR)/azure/example_azure_iot_provisioning.c
+# CSRC += $(DIR)/azure/example_azure_iot_provisioning_sas.c
+# CSRC += $(DIR)/azure/pnp/pnp_mqtt_message.c
+# CSRC += $(DIR)/azure/pnp/pnp_protocol.c
+# CSRC += $(DIR)/azure/pnp/sample_component/pnp_device_info_component.c
+# CSRC += $(DIR)/azure/pnp/sample_component/pnp_thermostat_component.c
+# CSRC += $(DIR)/azure/pnp/rtk_message/pnp_common_message.c
+# CSRC += $(DIR)/azure/pnp/rtk_component/pnp_audio.c
+# CSRC += $(DIR)/azure/pnp/rtk_component/pnp_bluetooth.c
+# CSRC += $(DIR)/azure/pnp/rtk_component/pnp_device_info.c
+# CSRC += $(DIR)/azure/pnp/rtk_component/pnp_gpio.c
+# CSRC += $(DIR)/azure/pnp/rtk_component/pnp_lcd.c
+# CSRC += $(DIR)/azure/pnp/rtk_component/pnp_memory.c
+# CSRC += $(DIR)/azure/pnp/rtk_component/pnp_system.c
+# CSRC += $(DIR)/azure/pnp/rtk_component/pnp_video.c
+# CSRC += $(DIR)/azure/pnp/rtk_component/pnp_wireless.c
 
 #*****************************************************************************#
 #                               Object FILE LIST                              #

@@ -89,6 +89,10 @@
 #include <azure_iot_hub/example_azure_iot_hub.h>
 #endif
 
+#if defined(CONFIG_EXAMPLE_AZURE) && CONFIG_EXAMPLE_AZURE 
+#include <azure/example_azure_iot_entry.h>
+#endif
+
 #if defined(CONFIG_EXAMPLE_GOOGLE_NEST) && CONFIG_EXAMPLE_GOOGLE_NEST
 #include <googlenest/example_google.h>  
 #define FromDevice            1
@@ -712,6 +716,10 @@ void example_entry(void)
     example_iot_hub();
 #endif
     
+#if defined(CONFIG_EXAMPLE_AZURE) && CONFIG_EXAMPLE_AZURE 
+    example_azure();
+#endif    
+
 #if CONFIG_ALINK
 	example_alink();
 #endif

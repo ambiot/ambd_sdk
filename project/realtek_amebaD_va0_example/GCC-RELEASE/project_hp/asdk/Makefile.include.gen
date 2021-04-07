@@ -212,6 +212,8 @@ IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/ssl_ram_map/ro
 IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/mbedtls-2.4.0/include
 IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/mbedtls_ram_map/rom
 IFLAGS               += -I$(BASEDIR)/component/common/application/amazon/amazon-freertos/lib/include/private
+#AZURE_EMB
+IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-sdk-for-c/sdk/inc
 
 #temp for git server code
 IFLAGS               += -I$(BASEDIR)/component/common/mbed/targets/hal/rtl8721d/
