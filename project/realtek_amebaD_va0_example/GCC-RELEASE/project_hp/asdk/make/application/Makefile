@@ -16,7 +16,10 @@ endif
 ifeq ($(CONFIG_MQTT_EN),y)
 	@make -C mqtt all
 endif
-	#@make -C azure_emb all
+ifeq ($(CONFIG_LINKKIT_AWSS),y)
+	@make -C linkkit all
+endif
+	@make -C xmodem all
 	#@make -C airkiss all
 #*****************************************************************************#
 #              CLEAN GENERATED FILES                                          #
@@ -24,6 +27,7 @@ endif
 clean:
 	@make -C baidu clean
 	@make -C mqtt clean
+	@make -C xmodem clean
 	#@make -C airkiss clean
-	@make -C azure_emb clean
+	@make -C linkkit clean
 -include $(DEPS)

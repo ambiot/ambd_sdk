@@ -11,6 +11,26 @@ MODULE_IFLAGS = -I$(DIR)./
 MODULE_IFLAGS += -I$(BASEDIR)/component/common/drivers/ir/protocol
 vpath %.c $(DIR) $(shell find $(DIR) -type d)
 
+ifeq ($(findstring y, $(CONFIG_USBD_VERIFY) $(CONFIG_USBD_CLASS_VERIFY)), y)
+IFLAGS += -I$(TARGETDIR)/fwlib/usb_otg/device/inc
+IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device/audio/inc
+IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device/cdc_acm/inc
+IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device/msc/inc
+IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device/vendor/inc
+endif
+ifeq ($(findstring y, $(CONFIG_USBH_VERIFY) $(CONFIG_USBH_CLASS_VERIFY)), y)
+IFLAGS += -I$(TARGETDIR)/fwlib/usb_otg/host/inc
+IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/host/msc/inc
+IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/host/uvc/inc
+IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/host/vendor/inc
+IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/host/cdc_acm/inc
+ifeq ($(CONFIG_USBH_UVC),y)
+IFLAGS += -I$(BASEDIR)/component/common/video/v4l2/inc
+IFLAGS += -I$(BASEDIR)/component/common/media/rtp_codec
+IFLAGS += -I$(BASEDIR)/component/common/media/mmfv2
+endif
+endif
+
 #*****************************************************************************#
 #                               Source FILE LIST                              #
 #*****************************************************************************#
@@ -163,10 +183,24 @@ CSRC += $(DIR)/lcdc/demo_code/tempre_pic.c
 CSRC += $(DIR)/lcdc/demo_code/wave_pic.c
 endif
 
-ifeq ($(CONFIG_USB_VERIFY),y)
-CSRC += $(DIR)/usb_otg/rtl8721d_otg_test.c
-CSRC += $(DIR)/usb_otg/usb_verify_device.c
-CSRC += $(DIR)/usb_otg/usb_verify_host.c
+ifeq ($(CONFIG_USBD_VERIFY),y)
+CSRC += $(DIR)/usb_otg/rtl8721d_usbd_test.c
+endif
+
+ifeq ($(CONFIG_USBH_VERIFY),y)
+CSRC += $(DIR)/usb_otg/rtl8721d_usbh_test.c
+endif
+
+ifeq ($(CONFIG_USBD_CDC_ACM_TP),y)
+CSRC += $(DIR)/usb_otg/usbd_cdc_acm/example_usbd_cdc_acm_tx_tp.c
+endif
+
+ifeq ($(CONFIG_USBD_CDC_ACM_RP),y)
+CSRC += $(DIR)/usb_otg/usbd_cdc_acm/example_usbd_cdc_acm_rx_tp.c
+endif
+
+ifeq ($(CONFIG_USBH_CDC_ACM_VERIFY),y)
+CSRC += $(DIR)/usb_otg/usbh_cdc_acm/usbh_cdc_acm_tp_test.c
 endif
 
 ifeq ($(CONFIG_WDG_VERIFY),y)

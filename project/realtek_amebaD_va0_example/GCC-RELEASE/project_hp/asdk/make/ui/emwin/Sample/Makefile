@@ -19,9 +19,11 @@ CSRC = $(DIR)/Config/GUIConf.c \
 	$(DIR)/hal/gt911.c \
 	$(DIR)/hal/hal_rgb_lcd.c \
 	$(DIR)/Config/LCDConf_RGB_6bit_eval.c \
-
+#	$(DIR)/hal/ft6236.c \
 #	$(DIR)/hal/hal_mcu_lcd.c \
 #	$(DIR)/Config/LCDConf_MCU_8bit_eval.c \
+
+
 
 #*****************************************************************************#
 #                               Object FILE LIST                              #

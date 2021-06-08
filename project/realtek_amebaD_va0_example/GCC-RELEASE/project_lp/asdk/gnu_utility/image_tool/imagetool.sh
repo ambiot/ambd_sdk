@@ -7,6 +7,36 @@ Usage() {
     echo "Usage: $0 [Image Name]"
 }
 
+function relative_to_path {
+        local source=$1
+        local target=$2
+        local common_part=$source
+        local result=""
+
+        while [[ "${target#$common_part}" == "${target}" ]]; do
+                common_part="$(dirname $common_part)"
+                if [[ -z $result ]]; then
+                        result=".."
+                else
+                        result="../$result"
+                fi
+        done
+
+        if [[ $common_part == "/" ]]; then
+                result="$result/"
+        fi
+
+        local forward_part="${target#$common_part}"
+
+        if [[ -n $result ]] && [[ -n $forward_part ]]; then
+                result="$result$forward_part"
+        elif [[ -n $forward_part ]]; then
+                result="${forward_part:1}"
+        fi
+
+        echo $result
+}
+
 ################
 # Main
 ################
@@ -19,10 +49,15 @@ cd ./gnu_utility/image_tool
 source ../../../../security_config.sh
 
 # Get Parameters
-COMPILEOS=$(uname -o)
+COMPILEOS=$(uname)
+if [ "$COMPILEOS" != "Darwin" ]; then
+	COMPILEOS=$(uname -o)
+fi
 
 if [ "$COMPILEOS" == "GNU/Linux" ]; then
 	IMAGE_FULLNAME=$1
+elif [ "$COMPILEOS" == "Darwin" ]; then
+	IMAGE_FULLNAME=$(relative_to_path $(pwd) $1)
 else
 	IMAGE_FULLNAME=$(realpath --relative-to=$(pwd) $1)
 fi
@@ -33,6 +68,8 @@ CURR_PATH=$(dirname $1)
 if [ "$2" != "" ]; then
 	if [ "$COMPILEOS" == "GNU/Linux" ]; then
 		COPY_PATH=$2
+        elif [ "$COMPILEOS" == "Darwin" ]; then
+		COPY_PATH=$(relative_to_path $(pwd) $2)
 	else
 		COPY_PATH=$(realpath --relative-to=$(pwd) $2)
 	fi

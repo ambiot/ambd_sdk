@@ -43,10 +43,15 @@ BUILDDIR	= $(ROOTDIR)/build
 PHERIEXAMPLE	= $(ROOTDIR)/../example/demo_peripheral
 # -----------------------------------------------------------------------------
 PREPENDTOOL		= $(UTILITYDIR)/prepend_header.sh
+OTAPREPENDTOOL  = $(UTILITYDIR)/prepend_ota_header.sh
 LXDIALOG_CYGWIN_STATIC 	= $(UTILITYDIR)/lxdialog_prebuilt/lxdialog_cygwin_x86_static.exe
+LINUX_OS		= GNU/Linux
+DARWIN_OS		= Darwin
+COMPILEOS		= $(shell uname)
+ifneq ($(COMPILEOS),$(DARWIN_OS))
 COMPILEOS		= $(shell uname -o)
 COMPILEOS_CYGWIN	= $(shell uname -o | cut -c 1-6)
-LINUX_OS		= GNU/Linux
+endif
 HOSTCC			= cc
 MAKE			= make
 
@@ -72,9 +77,12 @@ IMAGE_TARGET_FOLDER     = $(ROOTDIR)/image
 ifeq ($(COMPILEOS),$(LINUX_OS))
 ASDK_TOOLCHAIN = $(TOOLCHAINDIR)/linux/asdk-6.4.1/linux/newlib
 ASDK_TOOLCHAIN_R = ../toolchain/linux/asdk-6.4.1/linux/newlib
-else
+else ifeq ($(COMPILEOS_CYGWIN),Cygwin)
 ASDK_TOOLCHAIN = $(TOOLCHAINDIR)/cygwin/asdk-6.4.1/cygwin/newlib
 ASDK_TOOLCHAIN_R = ../toolchain/cygwin/asdk-6.4.1/cygwin/newlib
+else ifeq ($(COMPILEOS),$(DARWIN_OS))
+ASDK_TOOLCHAIN = $(TOOLCHAINDIR)/darwin/asdk-6.5.0-darwin-newlib-build-999+-10.13/darwin/newlib
+ASDK_TOOLCHAIN_R = ../toolchain/darwin/asdk-6.5.0-darwin-newlib-build-999+-10.13/darwin/newlib
 endif
 
 tool_dir = $(ASDK_TOOLCHAIN)/bin
@@ -141,7 +149,6 @@ IFLAGS               += -I$(TARGETDIR)/misc
 IFLAGS               += -I$(TARGETDIR)/swlib/os_dep/include/
 IFLAGS               += -I$(TARGETDIR)/swlib/os_dep/../
 IFLAGS               += -I$(TARGETDIR)/swlib/string
-IFLAGS               += -I$(TARGETDIR)/fwlib/usb_otg
 
 IFLAGS               += -I$(INCDIR)
 IFLAGS               += -I$(BASEDIR)/component/common/api
@@ -197,6 +204,7 @@ IFLAGS               += -I$(BASEDIR)/component/common/api/at_cmd
 IFLAGS               += -I$(BASEDIR)/component/common/api/wifi/rtw_wpa_supplicant/src
 IFLAGS               += -I$(BASEDIR)/component/common/api/wifi/rtw_wpa_supplicant/src/crypto
 IFLAGS               += -I$(BASEDIR)/component/os/os_dep/include/
+#IFLAGS               += -I$(BASEDIR)/component/common/network/http2/nghttp2-1.31.0/includes
 
 #INIC
 IFLAGS               += -I$(BASEDIR)/component/common/drivers/inic/rtl8721d
@@ -212,8 +220,6 @@ IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/ssl_ram_map/ro
 IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/mbedtls-2.4.0/include
 IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/mbedtls_ram_map/rom
 IFLAGS               += -I$(BASEDIR)/component/common/application/amazon/amazon-freertos/lib/include/private
-#AZURE_EMB
-IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-sdk-for-c/sdk/inc
 
 #temp for git server code
 IFLAGS               += -I$(BASEDIR)/component/common/mbed/targets/hal/rtl8721d/
@@ -333,7 +339,7 @@ GLOBAL_CFLAGS += -Wno-write-strings
 GLOBAL_CFLAGS += -Wno-maybe-uninitialized
 GLOBAL_CFLAGS += --save-temps
 GLOBAL_CFLAGS += -c
-GLOBAL_CFLAGS += -MMD
+GLOBAL_CFLAGS += -MMD -MP
 
 #GLOBAL_CFLAGS += -specs nosys.specs 
 #GLOBAL_CFLAGS += -fno-short-enums
@@ -430,7 +436,7 @@ COPY_RAM_OBJS:
 	$(CC_SIZE) -t $(OBJS) >> $(ROOTDIR)/ram_size.txt;\
 	for i in  $(OBJS) $(ASM_OBJS); do \
 		echo $$i >> $(ROOTDIR)/obj_list.txt;\
-		 $(COPY)  $$i $(BUILD_TARGET_RAM_FOLDER) -f;\
+		 $(COPY) -f  $$i $(BUILD_TARGET_RAM_FOLDER);\
 		done \
 
 #*****************************************************************************#
@@ -452,10 +458,10 @@ COPY_ROM_OBJS:
 	       >> $(ROOTDIR)/rom_size.txt;\
 	$(CC_SIZE) -t $(OBJS) $(ASM_OBJS) >> $(ROOTDIR)/rom_size.txt;\
 	for i in  $(OBJS) $(ASM_OBJS); do \
-		 $(COPY)  $$i $(BUILD_TARGET_ROM_FOLDER) -f;\
+		 $(COPY) -f  $$i $(BUILD_TARGET_ROM_FOLDER);\
 		done \
 
-#	@-$(COPY) *.o $(BUILD_TARGET_ROM_FOLDER) -f
+#	@-$(COPY) -f *.o $(BUILD_TARGET_ROM_FOLDER)
 #	$(REMOVE) *.o
 
 

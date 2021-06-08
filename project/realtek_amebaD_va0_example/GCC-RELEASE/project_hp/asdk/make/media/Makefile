@@ -26,8 +26,8 @@ OBJS = $(notdir $(CSRC:.c=.o))
 #                        RULES TO GENERATE TARGETS                            #
 #*****************************************************************************#
 all: CORE_TARGETS COPY_RAM_OBJS
-	make -C mmfv2 all
-	make -C rtp_codec all
+	#make -C mmfv2 all
+	#make -C rtp_codec all
 
 #*****************************************************************************#
 #              GENERATE OBJECT FILE 

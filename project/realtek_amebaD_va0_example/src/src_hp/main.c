@@ -100,6 +100,39 @@ VOID app_shared_btmem(u32 NewStatus)
 	HAL_WRITE32(SYSTEM_CTRL_BASE_HP, REG_HS_PLATFORM_PARA, temp);
 }
 
+static void app_dslp_wake(void)
+{
+	u32 aon_wake_event = SOCPS_AONWakeReason();
+
+	DBG_8195A("hs app_dslp_wake %x \n", aon_wake_event);
+
+	if(BIT_GPIO_WAKE_STS & aon_wake_event) {
+		DBG_8195A("DSLP AonWakepin wakeup, wakepin %x\n", SOCPS_WakePinCheck());
+	}
+
+	if(BIT_AON_WAKE_TIM0_STS & aon_wake_event) {
+		SOCPS_AONTimerCmd(DISABLE);
+		DBG_8195A("DSLP Aontimer wakeup \n");
+	}
+
+	if(BIT_RTC_WAKE_STS & aon_wake_event) {
+		DBG_8195A("DSLP RTC wakeup \n");
+	}
+
+	if(BIT_DLPS_TSF_WAKE_STS & aon_wake_event) {
+		DBG_8195A("DSLP TSF wakeup \n");
+	}
+	
+	if(BIT_KEYSCAN_WAKE_STS & aon_wake_event) {
+		DBG_8195A("DSLP KS wakeup\n");
+	}
+
+	if(BIT_CAPTOUCH_WAKE_STS & aon_wake_event) {
+		DBG_8195A("DSLP Touch wakeup\n");
+	}
+
+	SOCPS_AONWakeClear(BIT_ALL_WAKE_STS);
+}
 
 //default main
 int main(void)
@@ -125,6 +158,10 @@ int main(void)
 	/* Register Log Uart Callback function */
 	InterruptRegister((IRQ_FUN) shell_uart_irq_rom, UART_LOG_IRQ, (u32)NULL, 5);
 	InterruptEn(UART_LOG_IRQ,5);
+
+	if(TRUE == SOCPS_DsleepWakeStatusGet()) {
+		app_dslp_wake();
+	}
 
 #ifdef CONFIG_FTL_ENABLED
 	app_ftl_init();

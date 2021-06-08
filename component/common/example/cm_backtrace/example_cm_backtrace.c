@@ -60,6 +60,11 @@
     #pragma section="CPP_INIT"
     #pragma section="CODE"	
     #pragma section=".sdram.text"
+#elif defined(CONFIG_PLATFORM_8721D)		
+    #pragma section=".text"
+    #pragma section=".image2.ram.text"
+    #pragma section=".image2.net.ram.text"	
+    #pragma section=".psram.text"
 #endif
 
 #elif defined(__GNUC__)
@@ -109,6 +114,15 @@ enum {
     PRINT_DFSR_EXTERNAL,
     PRINT_MMAR,
     PRINT_BFAR,
+    #if (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_KM4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_TM9)
+    PRINT_SFSR_LSERR,
+    PRINT_SFSR_LSPERR,
+    PRINT_SFSR_INVTRAN,
+    PRINT_SFSR_AUVIOL,
+    PRINT_SFSR_INVER,
+    PRINT_SFSR_INVIS,
+    PRINT_SFSR_INVEP,
+    #endif
 };
 
 static const char *print_info[] = {
@@ -142,8 +156,8 @@ static const char *print_info[] = {
         [PRINT_UFSR_INVSTATE]         = "Usage fault is caused by attempts to switch to an invalid state (e.g., ARM)",
         [PRINT_UFSR_INVPC]            = "Usage fault is caused by attempts to do an exception with a bad value in the EXC_RETURN number",
         [PRINT_UFSR_NOCP]             = "Usage fault is caused by attempts to execute a coprocessor instruction",
-        [PRINT_UFSR_UNALIGNED]        = "Usage fault is caused by indicates that an unaligned access fault has taken place",
-        [PRINT_UFSR_DIVBYZERO]        = "Usage fault is caused by Indicates a divide by zero has taken place (can be set only if DIV_0_TRP is set)",
+        [PRINT_UFSR_UNALIGNED]        = "Usage fault is caused by an unaligned address access(can be set only if UNALIGN_TRP is set)",
+        [PRINT_UFSR_DIVBYZERO]        = "Usage fault is caused by a division by zero has taken place(can be set only if DIV_0_TRP is set)",
         [PRINT_DFSR_HALTED]           = "Debug fault is caused by halt requested in NVIC",
         [PRINT_DFSR_BKPT]             = "Debug fault is caused by BKPT instruction executed",
         [PRINT_DFSR_DWTTRAP]          = "Debug fault is caused by DWT match occurred",
@@ -151,7 +165,16 @@ static const char *print_info[] = {
         [PRINT_DFSR_EXTERNAL]         = "Debug fault is caused by EDBGRQ signal asserted",
         [PRINT_MMAR]                  = "The memory management fault occurred address is %08x",
         [PRINT_BFAR]                  = "The bus fault occurred address is %08x",
-#elif (CMB_PRINT_LANGUAGE == CMB_PRINT_LANUUAGE_CHINESE)
+         #if (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_KM4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_TM9)
+        [PRINT_SFSR_LSERR]            = "Secure fault is caused during laze state",
+        [PRINT_SFSR_LSPERR]           = "Secure fault is caused during laze preservation of floating-point state",
+        [PRINT_SFSR_INVTRAN]          = "Secure fault is caused by transition error",
+        [PRINT_SFSR_AUVIOL]           = "Secure fault is caused by attribution unit violation",
+        [PRINT_SFSR_INVER]            = "Secure fault is caused by invalid exception return",
+        [PRINT_SFSR_INVIS]            = "Secure fault is caused by invalid integrity signature",
+        [PRINT_SFSR_INVEP]            = "Secure falut is caused by invalid entry point",
+        #endif
+#elif (CMB_PRINT_LANGUAGE == CMB_PRINT_LANGUAGE_CHINESE)
         [PRINT_FIRMWARE_INFO]         = "固件名称：%s，硬件版本号：%s，软件版本号：%s",
         [PRINT_ASSERT_ON_THREAD]      = "在线程(%s)中发生断言",
         [PRINT_ASSERT_ON_HANDLER]     = "在中断或裸机环境下发生断言",
@@ -188,7 +211,16 @@ static const char *print_info[] = {
         [PRINT_DFSR_VCATCH]           = "发生调试错误，原因：发生向量捕获",
         [PRINT_DFSR_EXTERNAL]         = "发生调试错误，原因：外部调试请求",
         [PRINT_MMAR]                  = "发生存储器管理错误的地址：%08x",
+        #if (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_KM4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_TM9)
         [PRINT_BFAR]                  = "发生总线错误的地址：%08x",
+        [PRINT_SFSR_LSERR]            = "发生安全错误，原因：lazy状态发生错误",
+        [PRINT_SFSR_LSPERR]           = "发生安全错误，原因：保留lazy时违背SAU/IDAU设置",
+        [PRINT_SFSR_INVTRAN]          = "发生安全错误，原因：分支未标记域",
+        [PRINT_SFSR_AUVIOL]           = "发生安全错误：原因：非安全域访问安全空间",
+        [PRINT_SFSR_INVER]            = "发生安全错误，原因：无效的异常返回",
+        [PRINT_SFSR_INVIS]            = "发生安全错误，原因：出栈时无效的签名",
+        [PRINT_SFSR_INVEP]            = "发生安全错误，原因：无效的入口",
+        #endif
 #else
     #error "CMB_PRINT_LANGUAGE defined error in 'cmb_cfg.h'"
 #endif
@@ -204,6 +236,9 @@ static size_t code_size = 0;
 static uint32_t sdram_code_start_addr = 0;
 static size_t sdram_code_size = 0;
 static size_t sdram_code_enable = 0;
+static uint32_t psram_code_start_addr = 0;
+static size_t psram_code_size = 0;
+static size_t psram_code_enable = 0;
 
 static bool init_ok = false;
 static char call_stack_info[CMB_CALL_STACK_MAX_DEPTH * (8 + 1)] = { 0 };
@@ -211,7 +246,7 @@ static bool on_fault = false;
 static bool stack_is_overflow = false;
 static struct cmb_hard_fault_regs regs;
 
-#if (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M7)
+#if (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M7) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_KM4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_TM9)
 static bool statck_has_fpu_regs = false;
 #endif
 
@@ -284,14 +319,69 @@ void cm_backtrace_init(const char *firmware_name, const char *hardware_ver, cons
 
     main_stack_start_addr = 0x1ffffffc;
     main_stack_size = 0x1ffffffc - (uint32_t)__section_end(".heap.stdlib");   
+
+#elif defined(CONFIG_PLATFORM_8721D)	
+    code_start_addr = (uint32_t)__section_begin(".text");
+    code_size = (uint32_t)__section_end(".text") - code_start_addr;
+
+    sdram_code_start_addr = (uint32_t)__section_begin(".image2.ram.text");
+    sdram_code_size = (uint32_t)__section_end(".image2.net.ram.text") - sdram_code_start_addr;
+    if(sdram_code_size != 0 )
+    {
+        sdram_code_enable = 1;
+    }
+
+    psram_code_start_addr = (uint32_t)__section_begin(".psram.text");
+    psram_code_size = (uint32_t)__section_end(".psram.text") - psram_code_start_addr;
+    if(psram_code_size != 0)
+    {
+        psram_code_enable = 1;
+    }
+
+    main_stack_start_addr = 0x10005000;
+    main_stack_size = 0x10005000 - 0x10004000;   
 #endif
 
     //printf("0x%x, %d,  code 0x%x, %d, sdram 0x%x, %d, enable sdram %d\r\n",main_stack_start_addr, main_stack_size, code_start_addr, code_size, sdram_code_start_addr, sdram_code_size, sdram_code_enable);
 #elif defined(__GNUC__)
+#if defined(CONFIG_PLATFORM_8721D)	
+    extern u8 __flash_text_start__[];
+    extern u8 __flash_text_end__[];
+    extern u8 __ram_text_start__[];
+    extern u8 __ram_text_end__[];
+    extern u8 __ram_text_start__[];
+    extern u8 __ram_text_end__[];
+    extern u8 __psram_image2_text_start__[];
+    extern u8 __psram_image2_text_end__[];
+
+    code_start_addr = (uint32_t) __flash_text_start__;
+    code_size = (uint32_t)(__flash_text_end__ - __flash_text_start__);
+
+    sdram_code_start_addr = (uint32_t) __ram_text_start__;
+    sdram_code_size = (uint32_t)(__ram_text_end__ - __ram_text_start__);
+    if(sdram_code_size != 0)
+    {
+        sdram_code_enable = 1;
+    }
+
+     psram_code_start_addr = (uint32_t) __ram_text_start__;
+    psram_code_size = (uint32_t)(__ram_text_end__ - __ram_text_start__);
+    if(psram_code_size != 0)
+    {
+        psram_code_enable = 1;
+    }
+
+	
+    main_stack_start_addr = 0x10005000;
+    main_stack_size = 0x10005000 - 0x10004000;   
+
+#else
     main_stack_start_addr = (uint32_t)(&CMB_CSTACK_BLOCK_START);
     main_stack_size = (uint32_t)(&CMB_CSTACK_BLOCK_END) - main_stack_start_addr;
     code_start_addr = (uint32_t)(&CMB_CODE_SECTION_START);
     code_size = (uint32_t)(&CMB_CODE_SECTION_END) - code_start_addr;
+#endif
+
 #else
     #error "not supported compiler"
 #endif
@@ -414,7 +504,8 @@ size_t cm_backtrace_call_stack(uint32_t *buffer, size_t size, uint32_t sp) {
             /* second depth is from LR, so need decrease a word to PC */
             pc = regs.saved.lr - sizeof(size_t);
             if ((((pc >= code_start_addr) && (pc <= code_start_addr + code_size))
-				||(sdram_code_enable && (pc >= sdram_code_start_addr) && (pc <= sdram_code_start_addr + sdram_code_size))) 
+				||(sdram_code_enable && (pc >= sdram_code_start_addr) && (pc <= sdram_code_start_addr + sdram_code_size))
+				||(psram_code_enable && (pc >= psram_code_start_addr) && (pc <= psram_code_start_addr + psram_code_size))) 
 			&& (depth < CMB_CALL_STACK_MAX_DEPTH)
                     && (depth < size)) {
                 buffer[depth++] = pc;
@@ -535,7 +626,7 @@ void cm_backtrace_assert(uint32_t sp) {
     print_call_stack(sp);
 }
 
-#if (CMB_CPU_PLATFORM_TYPE != CMB_CPU_ARM_CORTEX_M0)
+#if (CMB_CPU_PLATFORM_TYPE != CMB_CPU_ARM_CORTEX_M0) && (CMB_CPU_PLATFORM_TYPE != CMB_CPU_REALTEK_KM0)
 /**
  * fault diagnosis then print cause of fault
  */
@@ -644,16 +735,53 @@ static void fault_diagnosis(void) {
             }
         }
     }
+
+	#if (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_KM4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_TM9)
+	if (regs.sfsr.value) {
+		if (regs.sfsr.bits.LSERR) {
+			cmb_println(print_info[PRINT_SFSR_LSERR]);
+		}
+		if (regs.sfsr.bits.LSPERR) {
+			cmb_println(print_info[PRINT_SFSR_LSPERR]);
+		}
+		if (regs.sfsr.bits.INVTRAN) {
+			cmb_println(print_info[PRINT_SFSR_INVTRAN]);
+		}
+		if (regs.sfsr.bits.AUVIOL) {
+			cmb_println(print_info[PRINT_SFSR_AUVIOL]);
+		}
+		if (regs.sfsr.bits.INVER) {
+			cmb_println(print_info[PRINT_SFSR_INVER]);
+		}
+		if (regs.sfsr.bits.INVIS) {
+			cmb_println(print_info[PRINT_SFSR_INVIS]);
+		}
+		if (regs.sfsr.bits.INVEP) {
+			cmb_println(print_info[PRINT_SFSR_INVEP]);
+		}
+		if (regs.sfsr.bits.SFARVALID) {
+			cmb_println("Secure voilation address is 0x%x", CMB_NVIC_SFAR);
+		}
+	}
+	#endif
 }
 #endif /* (CMB_CPU_PLATFORM_TYPE != CMB_CPU_ARM_CORTEX_M0) */
 
-#if (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M7)
+#if (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M7) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_KM4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_TM9)
 static uint32_t statck_del_fpu_regs(uint32_t fault_handler_lr, uint32_t sp) {
     statck_has_fpu_regs = (fault_handler_lr & (1UL << 4)) == 0 ? true : false;
 
-    /* the stack has S0~S15 and FPSCR registers when statck_has_fpu_regs is true, double word align */
-    return statck_has_fpu_regs == true ? sp + sizeof(size_t) * 18 : sp;
-}
+	if (statck_has_fpu_regs == true) {
+		/* the stack has S0~S15 and FPSCR registers when statck_has_fpu_regs is true, double word align */
+		sp += sizeof(size_t) * 18;
+		#if (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_KM4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_TM9)
+		/* the stack has S16-S31 registers when FPCCR_S.TS is 1 in secure state */
+		if ((fault_handler_lr & (1UL << 6)) && (CMB_FPCCR_S & (1UL << 26)))
+			sp += sizeof(size_t) * 16;
+		#endif
+		}
+	return sp;
+	}
 #endif
 
 /**
@@ -663,7 +791,7 @@ static uint32_t statck_del_fpu_regs(uint32_t fault_handler_lr, uint32_t sp) {
  * @param fault_handler_lr the LR register value on fault handler
  * @param fault_handler_sp the stack pointer on fault handler
  */
- #if defined(CONFIG_PLATFORM_8711B)	
+ #if defined(CONFIG_PLATFORM_8711B)	||defined(CONFIG_PLATFORM_8721D)
 void cm_backtrace_fault(uint32_t fault_handler_sp, uint32_t fault_handler_lr) {
 #elif defined(CONFIG_PLATFORM_8195A)		
 void cm_backtrace_fault(uint32_t fault_handler_sp) {
@@ -709,8 +837,8 @@ void cm_backtrace_fault(uint32_t fault_handler_sp) {
     /* delete saved R0~R3, R12, LR,PC,xPSR registers space */
     stack_pointer += sizeof(size_t) * 8;
 
-#if (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M7)
-#if defined(CONFIG_PLATFORM_8711B)	
+#if (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M7) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_KM4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_TM9)
+#if defined(CONFIG_PLATFORM_8711B) || defined(CONFIG_PLATFORM_8721D)
 	stack_pointer = statck_del_fpu_regs(fault_handler_lr, stack_pointer);
 #endif
 #endif /* (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_ARM_CORTEX_M7) */
@@ -750,7 +878,7 @@ void cm_backtrace_fault(uint32_t fault_handler_sp) {
     }
 
     /* the Cortex-M0 is not support fault diagnosis */
-#if (CMB_CPU_PLATFORM_TYPE != CMB_CPU_ARM_CORTEX_M0)
+#if (CMB_CPU_PLATFORM_TYPE != CMB_CPU_ARM_CORTEX_M0)  && (CMB_CPU_PLATFORM_TYPE != CMB_CPU_REALTEK_KM0)
     regs.syshndctrl.value = CMB_SYSHND_CTRL;  // System Handler Control and State Register
     regs.mfsr.value       = CMB_NVIC_MFSR;    // Memory Fault Status Register
     regs.mmar             = CMB_NVIC_MMAR;    // Memory Management Fault Address Register
@@ -760,6 +888,9 @@ void cm_backtrace_fault(uint32_t fault_handler_sp) {
     regs.hfsr.value       = CMB_NVIC_HFSR;    // Hard Fault Status Register
     regs.dfsr.value       = CMB_NVIC_DFSR;    // Debug Fault Status Register
     regs.afsr             = CMB_NVIC_AFSR;    // Auxiliary Fault Status Register
+    #if (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_KM4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_TM9)
+    regs.sfsr.value       = CMB_NVIC_SFSR;    // Secure Fault Status Register
+    #endif
 
     fault_diagnosis();
 #endif

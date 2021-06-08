@@ -26,48 +26,49 @@
   * @retval status value:
   *          - 1: set ok
   *          - 0: set fail
-  * @note SelectOTA2: will set LSB  odd bits 0, 0xFFFFFFFE/0xFFFFFFF8... means select OTA2
-  * @note SelectOTA1: will set LSB  even bits 0,  0xFFFFFFFF/0xFFFFFFFC... means select OTA1
   */
+
+#define OTA1_ADDR 0x6000
+#define OTA2_ADDR 0X106000
+
 IMAGE2_RAM_TEXT_SECTION
 u32 OTA_Change(u32 OTAIdx)
 {
 	u32 BitIdx = 0;
-	u32 ValidIMG2 = HAL_READ32(SPI_FLASH_BASE, FLASH_SYSTEM_DATA_ADDR + 4);
+	u32 ota2_sig[2];
 
-	/* erase ValidIMG2 when all 32bits cleared */
-	if (ValidIMG2 == 0x00000000) {
-		FLASH_EreaseDwordsXIP(FLASH_SYSTEM_DATA_ADDR + 4, 1);
-		ValidIMG2 = 0xFFFFFFFF;
-	}
+	ota2_sig[0] = HAL_READ32(SPI_FLASH_BASE, OTA2_ADDR);
+	ota2_sig[1] = HAL_READ32(SPI_FLASH_BASE, OTA2_ADDR+4);
 
-	/* get first bit which is not cleared */
-	for (BitIdx = 0; BitIdx <= 31; BitIdx++) {
-		if ((ValidIMG2 & BIT(BitIdx)) != 0) {
-			break;
-		}
-	}
+	for(int i = 0; i < 2; i++)
+		DBG_8195A("%x",ota2_sig[i]);
 
-	DBG_8195A("BitIdx: %d \n", BitIdx);
+	if(0x35393138 == ota2_sig[0] && 0x31313738 == ota2_sig[1])
+		BitIdx = 2;
+	else
+		BitIdx = 1;
 
+	ota2_sig[0] = 0x35393138;
+	ota2_sig[1] = 0x31313738;
+		
 	/* even bits 0 currrent is OTA1 */
-	if ((BitIdx % 2) == 0) {
+	if (BitIdx == 1) {
 		if (OTAIdx == OTA_INDEX_1) {
 			DBG_8195A("currrent is OTA1, select OTA1 \n");
-			return _TRUE;
 		} else {
 			DBG_8195A("currrent is OTA1, select OTA2 \n");
-			ValidIMG2 &= ~BIT(BitIdx);
-			FLASH_TxData12BXIP(FLASH_SYSTEM_DATA_ADDR + 4, 4, (u8*)&ValidIMG2);
+			FLASH_EreaseDwordsXIP(OTA1_ADDR, 2);
+			FLASH_EreaseDwordsXIP(OTA2_ADDR, 2);
+			FLASH_TxData12BXIP(OTA2_ADDR, 8,(u8*)ota2_sig);
 		}
 	} else { /* odd bits 0 currrent is OTA2 */
 		if (OTAIdx == OTA_INDEX_1) {
 			DBG_8195A("currrent is OTA2, select OTA1 \n");
-			ValidIMG2 &= ~BIT(BitIdx);
-			FLASH_TxData12BXIP(FLASH_SYSTEM_DATA_ADDR + 4, 4, (u8*)&ValidIMG2);
+			FLASH_EreaseDwordsXIP(OTA1_ADDR, 2);
+			FLASH_EreaseDwordsXIP(OTA2_ADDR, 2);
+			FLASH_TxData12BXIP(OTA1_ADDR, 8, (u8*)ota2_sig);
 		} else {
 			DBG_8195A("currrent is OTA2, select OTA2 \n");
-			return _TRUE;
 		}	
 	}
 	

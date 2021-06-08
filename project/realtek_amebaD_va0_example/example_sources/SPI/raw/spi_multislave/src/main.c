@@ -144,7 +144,7 @@ void Spi_free(SPI_OBJ* spi_obj)
 	SSI_Cmd(spi_obj->spi_dev, DISABLE);
 }
 
-void dump_data(const u8 *start, u32 size, char * strHeader)
+void dump_data(u8 *start, u32 size, char * strHeader)
 {
 	int row, column, index, index2, max;
 	u8 *buf, *line;
@@ -218,7 +218,7 @@ void Spi_master_write_stream(SPI_OBJ *spi_obj, char *tx_buffer, uint32_t length)
 	SSI_INTConfig(spi_obj->spi_dev, (BIT_IMR_TXOIM | BIT_IMR_TXEIM), ENABLE);
 }
 
-void Spi_slave_read_stream(SPI_OBJ *spi_obj, char *rx_buffer, uint32_t length)
+int32_t Spi_slave_read_stream(SPI_OBJ *spi_obj, char *rx_buffer, uint32_t length)
 {
 	assert_param(length != 0);
 
@@ -237,15 +237,10 @@ void Spi_slave_read_stream(SPI_OBJ *spi_obj, char *rx_buffer, uint32_t length)
 	}
 	spi_obj->RxData = (void*)rx_buffer;
 	SSI_INTConfig(spi_obj->spi_dev, (BIT_IMR_RXFIM | BIT_IMR_RXOIM | BIT_IMR_RXUIM), ENABLE);
+	return _TRUE;
 }
 
-
-/**
-  * @brief  Main program.
-  * @param  None
-  * @retval None
-  */
-void main(void)
+void spi_multislave_task(void* param)
 {
 	u32 SclkPhase = SCPH_TOGGLES_IN_MIDDLE; // SCPH_TOGGLES_IN_MIDDLE or SCPH_TOGGLES_AT_START
 	u32 SclkPolarity = SCPOL_INACTIVE_IS_LOW; // SCPOL_INACTIVE_IS_LOW or SCPOL_INACTIVE_IS_HIGH
@@ -418,7 +413,7 @@ void main(void)
 		/* flush rx fifo */
 		Spi_flush_rx_fifo(&spi_slave);
 
-		Spi_slave_read_stream(&spi_slave, TestBuf, TEST_BUF_SIZE);
+		Spi_slave_read_stream(&spi_slave, (char *)TestBuf, TEST_BUF_SIZE);
 
 
 		i=0;
@@ -433,7 +428,7 @@ void main(void)
 			}
 		}
 
-		dump_data(TestBuf, TEST_BUF_SIZE, "SPI Slave Read Data:");
+		dump_data((u8 *)TestBuf, TEST_BUF_SIZE, "SPI Slave Read Data:");
 
 		Counter++;
     }
@@ -443,5 +438,23 @@ void main(void)
 #endif
 
     DBG_8195A("SPI Demo finished.\n");
-    for(;;);
+
+    vTaskDelete(NULL);
+}
+
+/**
+  * @brief  Main program.
+  * @param  None
+  * @retval None
+  */
+void main(void)
+{
+	if(xTaskCreate(spi_multislave_task, ((const char*)"spi_multislave_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
+		printf("\n\r%s xTaskCreate(spi_multislave_task) failed", __FUNCTION__);
+
+	vTaskStartScheduler();
+	while(1){
+		vTaskDelay( 1000 / portTICK_RATE_MS );
+	}
+	
 }

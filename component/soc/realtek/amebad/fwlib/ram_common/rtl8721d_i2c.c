@@ -915,7 +915,9 @@ BOOL I2C_TXGDMA_Init(
 	u8 GdmaChnl;
 	
 	assert_param(GDMA_InitStruct != NULL);
-	
+
+	DCache_CleanInvalidate((u32)pTxBuf, TxCount);
+
 	GdmaChnl = GDMA_ChnlAlloc(0, (IRQ_FUN)CallbackFunc, (u32)CallbackData, 12);
 	if (GdmaChnl == 0xFF) {
 		/*  No Available DMA channel */
@@ -985,7 +987,9 @@ BOOL I2C_RXGDMA_Init(
 	u8 GdmaChnl;
 	
 	assert_param(GDMA_InitStruct != NULL);
-	
+
+	DCache_CleanInvalidate((u32) pRxBuf, RxCount);
+
 	GdmaChnl = GDMA_ChnlAlloc(0, (IRQ_FUN)CallbackFunc, (u32)CallbackData, 12);
 	if (GdmaChnl == 0xFF) {
 		/* No Available DMA channel */

@@ -1,12 +1,13 @@
 include $(MAKE_INCLUDE_GEN)
 
-.PHONY: lib lib_mp clean
+.PHONY: lib lib_mp lib_lp clean
 
 #*****************************************************************************#
 #                               VARIABLES	                              #
 #*****************************************************************************#
 DIR = $(BASEDIR)/component/common/drivers/wlan/realtek/src
 lib_mp:GLOBAL_CFLAGS += -DCONFIG_MP_INCLUDED
+lib_lp:GLOBAL_CFLAGS += -DLOW_POWER_WIFI_CONNECT
 #*****************************************************************************#
 #                               Object FILE LIST                              #
 #*****************************************************************************#
@@ -46,7 +47,7 @@ OBJS += $(DIR)/hal/rtl8721d/src/rtl8721d_rf_onoff.o
 # Define the Rules to build the core targets
 lib: CORE_TARGETS NETWORK_RENAME_CODE2SRAM COPY_RAM_OBJS
 lib_mp: CORE_TARGETS NETWORK_RENAME_CODE2SRAM COPY_RAM_OBJS
-
+lib_lp: CORE_TARGETS NETWORK_RENAME_CODE2SRAM COPY_RAM_OBJS
 #*****************************************************************************#
 #              GENERATE OBJECT FILE 
 #*****************************************************************************#

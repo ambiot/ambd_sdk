@@ -45,6 +45,7 @@ extern "C" {
 #define AES_ENABLED        0x0004
 #define WSEC_SWFLAG        0x0008
 #define AES_CMAC_ENABLED        0x0010
+#define ENTERPRISE_ENABLED			0x0020
 
 #define SHARED_ENABLED  0x00008000
 #define WPA_SECURITY    0x00200000
@@ -133,11 +134,16 @@ enum {
     RTW_SECURITY_WEP_SHARED     = ( WEP_ENABLED | SHARED_ENABLED ),                 /**< WEP Security with shared authentication */
     RTW_SECURITY_WPA_TKIP_PSK   = ( WPA_SECURITY  | TKIP_ENABLED ),                 /**< WPA Security with TKIP                  */
     RTW_SECURITY_WPA_AES_PSK    = ( WPA_SECURITY  | AES_ENABLED ),                  /**< WPA Security with AES                   */
+    RTW_SECURITY_WPA_MIXED_PSK  = ( WPA_SECURITY | AES_ENABLED | TKIP_ENABLED ),    /**< WPA Security with AES & TKIP            */
     RTW_SECURITY_WPA2_AES_PSK   = ( WPA2_SECURITY | AES_ENABLED ),                  /**< WPA2 Security with AES                  */
     RTW_SECURITY_WPA2_TKIP_PSK  = ( WPA2_SECURITY | TKIP_ENABLED ),                 /**< WPA2 Security with TKIP                 */
     RTW_SECURITY_WPA2_MIXED_PSK = ( WPA2_SECURITY | AES_ENABLED | TKIP_ENABLED ),   /**< WPA2 Security with AES & TKIP           */
-    RTW_SECURITY_WPA_WPA2_MIXED = ( WPA_SECURITY  | WPA2_SECURITY ),                /**< WPA/WPA2 Security                       */
-    RTW_SECURITY_WPA2_AES_CMAC = ( WPA2_SECURITY | AES_CMAC_ENABLED),                /**< WPA2 Security with AES and Management Frame Protection                 */
+    RTW_SECURITY_WPA_WPA2_TKIP_PSK = ( WPA_SECURITY  | WPA2_SECURITY | TKIP_ENABLED), /**< WPA/WPA2 Security with TKIP           */
+    RTW_SECURITY_WPA_WPA2_AES_PSK = ( WPA_SECURITY  | WPA2_SECURITY | AES_ENABLED),   /**< WPA/WPA2 Security with AES            */
+    RTW_SECURITY_WPA_WPA2_MIXED_PSK = ( WPA_SECURITY  | WPA2_SECURITY | TKIP_ENABLED | AES_ENABLED), /**< WPA/WPA2 Security with AES & TKIP      */
+    RTW_SECURITY_WPA2_AES_CMAC = ( WPA2_SECURITY | AES_CMAC_ENABLED),                /**< WPA2 Security with AES and Management Frame Protection */
+    RTW_SECURITY_WPA2_ENTERPRISE = ( WPA2_SECURITY | ENTERPRISE_ENABLED ),				/**< WPA2 Security with 802.1X authentication>*/
+    RTW_SECURITY_WPA_WPA2_ENTERPRISE = ( WPA_SECURITY | WPA2_SECURITY | ENTERPRISE_ENABLED),	/**<WPA/WPA2 Security with 802.1X authentication>*/
 
     RTW_SECURITY_WPS_OPEN       = WPS_ENABLED,                                      /**< WPS with open security                  */
     RTW_SECURITY_WPS_SECURE     = (WPS_ENABLED | AES_ENABLED),                      /**< WPS with AES security                   */
@@ -393,6 +399,18 @@ enum {
 typedef unsigned long rtw_adaptivity_mode_t;
 
 /**
+  * @brief  The enumeration lists the trp_tis types.
+  */
+enum {
+	RTW_TRP_TIS_DISABLE = 0,
+	RTW_TRP_TIS_NORMAL,
+	RTW_TRP_TIS_DYNAMIC,				// enable dynamic mechanism
+	RTW_TRP_TIS_FIX_ACK_RATE,			// fix ack rate to 6M
+};
+typedef unsigned long rtw_trp_tis_mode_t;
+
+
+/**
   * @brief  The enumeration lists the supported operation mode by WIFI driver,
   *			including station and AP mode.
   */
@@ -572,6 +590,8 @@ enum _WIFI_EVENT_INDICATE{
 	WIFI_EVENT_IP_CHANGED = 16,
 	WIFI_EVENT_ICV_ERROR = 17,
 	WIFI_EVENT_CHALLENGE_FAIL = 18,
+	WIFI_EVENT_SOFTAP_START = 19,
+	WIFI_EVENT_SOFTAP_STOP = 20,
 	WIFI_EVENT_MAX,
 };
 typedef unsigned long rtw_event_indicate_t;

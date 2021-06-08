@@ -1,5 +1,8 @@
 
 include $(MAKE_INCLUDE_GEN)
+MESH_MULTIPLE_PROFILE_DIR = $(BASEDIR)/component/common/bluetooth/realtek/sdk/example/bt_mesh_multiple_profile
+
+IFLAGS               += -I$(BASEDIR)/component/common/network/libcoap/include
 
 
 .PHONY: all clean
@@ -23,6 +26,10 @@ CSRC +=	$(DIR)/atcmd_sys.c \
 
 ifeq ($(CONFIG_BT_EN), y)
 CSRC += $(DIR)/atcmd_bt.c
+endif	
+
+ifeq ($(CONFIG_LINKKIT_AWSS), y)
+CSRC += $(DIR)/atcmd_linkkit.c
 endif	
 #*****************************************************************************#
 #                               Object FILE LIST                              #

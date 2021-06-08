@@ -113,11 +113,11 @@ static void save_client_addr(struct ip_addr *client_ip, uint8_t *hwaddr)
 	memcpy(ip_table.client_mac[d], hwaddr, 6); 
 #if (debug_dhcps)	
 #if LWIP_VERSION_MAJOR >= 2
-	printf("\r\n%s: ip %d.%d.%d.%d, hwaddr %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x\n", __func__,
+	printf("\r\n%s: ip %d.%d.%d.%d, hwaddr 0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x\n", __func__,
 		ip4_addr1(ip_2_ip4(client_ip)), ip4_addr2(ip_2_ip4(client_ip)), ip4_addr3(ip_2_ip4(client_ip)), ip4_addr4(ip_2_ip4(client_ip)),
 		hwaddr[0], hwaddr[1], hwaddr[2], hwaddr[3], hwaddr[4], hwaddr[5]);
 #else
-	printf("\r\n%s: ip %d.%d.%d.%d, hwaddr %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x\n", __func__,
+	printf("\r\n%s: ip %d.%d.%d.%d, hwaddr 0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x\n", __func__,
 		ip4_addr1(client_ip), ip4_addr2(client_ip), ip4_addr3(client_ip), ip4_addr4(client_ip),
 		hwaddr[0], hwaddr[1], hwaddr[2], hwaddr[3], hwaddr[4], hwaddr[5]);
 #endif
@@ -134,11 +134,11 @@ static uint8_t check_client_request_ip(struct ip_addr *client_req_ip, uint8_t *h
 
 #if (debug_dhcps)	
 #if LWIP_VERSION_MAJOR >= 2
-	printf("\r\n%s: ip %d.%d.%d.%d, hwaddr %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x\n", __func__,
+	printf("\r\n%s: ip %d.%d.%d.%d, hwaddr 0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x\n", __func__,
 		ip4_addr1(ip_2_ip4(client_req_ip)), ip4_addr2(ip_2_ip4(client_req_ip)), ip4_addr3(ip_2_ip4(client_req_ip)), ip4_addr4(ip_2_ip4(client_req_ip)),
 		hwaddr[0], hwaddr[1], hwaddr[2], hwaddr[3], hwaddr[4], hwaddr[5]);
 #else
-	printf("\r\n%s: ip %d.%d.%d.%d, hwaddr %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x\n", __func__,
+	printf("\r\n%s: ip %d.%d.%d.%d, hwaddr 0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x\n", __func__,
 			ip4_addr1(client_req_ip), ip4_addr2(client_req_ip), ip4_addr3(client_req_ip), ip4_addr4(client_req_ip),
 			hwaddr[0], hwaddr[1], hwaddr[2], hwaddr[3], hwaddr[4], hwaddr[5]);
 #endif	
@@ -147,7 +147,7 @@ static uint8_t check_client_request_ip(struct ip_addr *client_req_ip, uint8_t *h
 	xSemaphoreTake(dhcps_ip_table_semaphore, portMAX_DELAY);
 	for(i=DHCP_POOL_START;i<=DHCP_POOL_END;i++)
 	{
-		//printf("client[%d] = %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x\n",i,ip_table.client_mac[i][0],ip_table.client_mac[i][0],ip_table.client_mac[i][1],ip_table.client_mac[i][2],ip_table.client_mac[i][3],ip_table.client_mac[i][4],ip_table.client_mac[i][5]);
+		//printf("client[%d] = 0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x\n",i,ip_table.client_mac[i][0],ip_table.client_mac[i][0],ip_table.client_mac[i][1],ip_table.client_mac[i][2],ip_table.client_mac[i][3],ip_table.client_mac[i][4],ip_table.client_mac[i][5]);
 		if(memcmp(ip_table.client_mac[i], hwaddr, 6) == 0){
 			if((ip_table.ip_range[i/32]>>(i%32-1)) & 1){
 				ip_addr4 = i;
@@ -169,11 +169,11 @@ static uint8_t check_client_direct_request_ip(struct ip_addr *client_req_ip, uin
 
 #if (debug_dhcps)	
 #if LWIP_VERSION_MAJOR >= 2
-	printf("\r\n%s: ip %d.%d.%d.%d, hwaddr %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x\n", __func__,
+	printf("\r\n%s: ip %d.%d.%d.%d, hwaddr 0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x\n", __func__,
 			ip4_addr1(ip_2_ip4(client_req_ip)), ip4_addr2(ip_2_ip4(client_req_ip)), ip4_addr3(ip_2_ip4(client_req_ip)), ip4_addr4(ip_2_ip4(client_req_ip)),
 			hwaddr[0], hwaddr[1], hwaddr[2], hwaddr[3], hwaddr[4], hwaddr[5]);
 #else
-	printf("\r\n%s: ip %d.%d.%d.%d, hwaddr %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x\n", __func__,
+	printf("\r\n%s: ip %d.%d.%d.%d, hwaddr 0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x\n", __func__,
 			ip4_addr1(client_req_ip), ip4_addr2(client_req_ip), ip4_addr3(client_req_ip), ip4_addr4(client_req_ip),
 			hwaddr[0], hwaddr[1], hwaddr[2], hwaddr[3], hwaddr[4], hwaddr[5]);
 #endif	
@@ -203,12 +203,13 @@ static uint8_t check_client_direct_request_ip(struct ip_addr *client_req_ip, uin
 		goto Exit;
 	}
 	xSemaphoreTake(dhcps_ip_table_semaphore, portMAX_DELAY);
-	printf("ip_table[%d] = %x,%x,%x,%x,%x,%x\n",ip_addr4,ip_table.client_mac[ip_addr4][0],
-										  			     ip_table.client_mac[ip_addr4][1],
-										  				 ip_table.client_mac[ip_addr4][2],
-										  				 ip_table.client_mac[ip_addr4][3],
-										  				 ip_table.client_mac[ip_addr4][4],
-										  				 ip_table.client_mac[ip_addr4][5]);
+	printf("ip_table[%d] = %02x,%02x,%02x,%02x,%02x,%02x\n", ip_addr4, \
+				ip_table.client_mac[ip_addr4][0], \
+				ip_table.client_mac[ip_addr4][1], \
+				ip_table.client_mac[ip_addr4][2], \
+				ip_table.client_mac[ip_addr4][3], \
+				ip_table.client_mac[ip_addr4][4], \
+				ip_table.client_mac[ip_addr4][5]);
 	if(	(	ip_table.client_mac[ip_addr4][0] == 0 &&
 			ip_table.client_mac[ip_addr4][1] == 0 &&
 			ip_table.client_mac[ip_addr4][2] == 0 &&
@@ -246,7 +247,7 @@ void dump_client_table(void)
 	for(i=1; i<=DHCPS_MAX_CLIENT_NUM; i++)
 	{
 		p = ip_table.client_mac[i];
-		printf("\r\nClient[%d]: %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x",
+		printf("\r\nClient[%d]: 0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x",
 			i, p[0], p[1], p[2], p[3], p[4], p[5]);
 	}
 	printf("\r\n");
@@ -523,11 +524,20 @@ static void dhcps_send_offer(struct pbuf *packet_buffer)
 		printf("\r\n No useable ip!!!!\r\n");
 	}
 #if LWIP_VERSION_MAJOR >= 2
-	printf("\n\r[%d]DHCP assign ip = %d.%d.%d.%d\n", xTaskGetTickCount(), ip4_addr1(ip_2_ip4(&dhcps_network_id)),ip4_addr2(ip_2_ip4(&dhcps_network_id)),ip4_addr3(ip_2_ip4(&dhcps_network_id)),temp_ip);
+	printf("\n\r[%d]DHCP assign ip = %d.%d.%d.%d, hwaddr 0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x\n", \
+			xTaskGetTickCount(), ip4_addr1(ip_2_ip4(&dhcps_network_id)), \
+			ip4_addr2(ip_2_ip4(&dhcps_network_id)), \
+			ip4_addr3(ip_2_ip4(&dhcps_network_id)), temp_ip, \
+			client_addr[0], client_addr[1], client_addr[2], \
+			client_addr[3], client_addr[4], client_addr[5]);
 	IP4_ADDR(ip_2_ip4(&dhcps_allocated_client_address), (ip4_addr1(ip_2_ip4(&dhcps_network_id))),
 			ip4_addr2(ip_2_ip4(&dhcps_network_id)), ip4_addr3(ip_2_ip4(&dhcps_network_id)), temp_ip);
 #else
-	printf("\n\r[%d]DHCP assign ip = %d.%d.%d.%d\n", xTaskGetTickCount(), ip4_addr1(&dhcps_network_id),ip4_addr2(&dhcps_network_id),ip4_addr3(&dhcps_network_id),temp_ip);
+	printf("\n\r[%d]DHCP assign ip = %d.%d.%d.%d, hwaddr 0x%02x:0x%02x:0x%02x:0x%02x:0x%02x:0x%02x\n", \
+			xTaskGetTickCount(), ip4_addr1(&dhcps_network_id), \
+			ip4_addr2(&dhcps_network_id), ip4_addr3(&dhcps_network_id), temp_ip, \
+			client_addr[0], client_addr[1], client_addr[2], \
+			client_addr[3], client_addr[4], client_addr[5]);
 	IP4_ADDR(&dhcps_allocated_client_address, (ip4_addr1(&dhcps_network_id)),
 			ip4_addr2(&dhcps_network_id), ip4_addr3(&dhcps_network_id), temp_ip);
 #endif

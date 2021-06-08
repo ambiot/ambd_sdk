@@ -25,6 +25,6 @@ A ssl server example thread will be started automatically when booting.
 
 [Supported List]
 	Supported :
-	    Ameba-1, Ameba-z, Ameba-z2
+	    Ameba-1, Ameba-z, Ameba-z2, AmebaD
 	Source code not in project:
 	    Ameba-pro

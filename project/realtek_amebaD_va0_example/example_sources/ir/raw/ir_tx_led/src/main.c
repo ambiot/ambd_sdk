@@ -56,7 +56,7 @@ void Driver_IR_Init(void)
   * @param   No parameter.
   * @return  void
   */
-void IR_TX_thread(void)
+void IR_TX_thread(void* param)
 {
 	
 	u32 tx_count;
@@ -96,7 +96,7 @@ void IR_TX_thread(void)
 		DBG_8195A("TX %2x%2x%2x\n",GRB[2], GRB[1], GRB[0]);
 
 		/* Encode by LED protocol */
-		IR_LEDEncode(IR_InitStruct.IR_Freq, &GRB, &IR_DataStruct, 0);
+		IR_LEDEncode(IR_InitStruct.IR_Freq, (uint8_t *)&GRB, &IR_DataStruct, 0);
 			
 		IR_SendBuf(IR_DEV, IR_DataStruct.irBuf, IR_TX_FIFO_SIZE, FALSE);		
 		IR_Cmd(IR_DEV, IR_InitStruct.IR_Mode, ENABLE);

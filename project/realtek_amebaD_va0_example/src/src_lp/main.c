@@ -7,19 +7,16 @@ void app_keyscan_init(u8 reset_status);
 
 void app_dslp_wake(void)
 {
-	u32 temp;
 	u32 aon_wake_event = SOCPS_AONWakeReason();
 
 	DBG_8195A("app_dslp_wake %x \n", aon_wake_event);
 
 	if(BIT_GPIO_WAKE_STS & aon_wake_event) {
-		temp = HAL_READ32(SYSTEM_CTRL_BASE, REG_AON_WAKE_GPIO_CTRL2);
-		HAL_WRITE32(SYSTEM_CTRL_BASE, REG_AON_WAKE_GPIO_CTRL2, temp);
-		DBG_8195A("DSLP GPIO wakeup %x\n", temp);
+		DBG_8195A("DSLP GPIO wakeup %x\n", SOCPS_WakePinCheck());
 	}
 
 	if(BIT_AON_WAKE_TIM0_STS & aon_wake_event) {
-		SOCPS_AONTimerCmd(DISABLE);
+		//SOCPS_AONTimerCmd(DISABLE);
 		DBG_8195A("DSLP Aontimer wakeup \n");
 	}
 
@@ -36,12 +33,12 @@ void app_dslp_wake(void)
 	}
 
 	if(BIT_CAPTOUCH_WAKE_STS & aon_wake_event) {
-		DBG_8195A("DSLP Touch wakeup %x\n", temp);
+		DBG_8195A("DSLP Touch wakeup\n");
 	}
 
 	km4_boot_on();
 
-	SOCPS_AONWakeClear(BIT_ALL_WAKE_STS);
+	//SOCPS_AONWakeClear(BIT_ALL_WAKE_STS);
 }
 
 
@@ -132,8 +129,9 @@ VOID app_pmu_init(VOID)
 		/* 2mA higher in active mode */
 		Temp &= ~BIT_MASK_SWR_REG_ZCDC_H; /* reg_zcdc_H: EFUSE[5]BIT[6:5] 00 0.1u@PFM */ /* 4uA @ sleep mode */
 	}
-	Temp &= ~BIT_MASK_SWR_OCP_L1;
-	Temp |= (0x03 << BIT_SHIFT_SWR_OCP_L1); /* PWM:600 PFM: 250, default OCP: BIT[10:8] 100 */
+	/*Mask OCP setting, or some chip won't wake up after sleep*/
+	//Temp &= ~BIT_MASK_SWR_OCP_L1;
+	//Temp |= (0x03 << BIT_SHIFT_SWR_OCP_L1); /* PWM:600 PFM: 250, default OCP: BIT[10:8] 100 */
 	HAL_WRITE32(SYSTEM_CTRL_BASE_LP, REG_SYS_EFUSE_SYSCFG1,Temp);
 
 	/* LDO & SWR switch time when DSLP, default is 0x200=5ms (unit is 1cycle of 100K=10us) */

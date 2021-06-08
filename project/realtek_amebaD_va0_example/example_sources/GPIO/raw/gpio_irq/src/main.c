@@ -48,15 +48,15 @@ void raw_gpio_irq_demo(void)
 	GPIO_InitStruct_PUSHBT.GPIO_ITPolarity = GPIO_INT_POLARITY_ACTIVE_LOW;
 
 	if (port_num == GPIO_PORT_A) {
-		InterruptRegister(GPIO_INTHandler, GPIOA_IRQ, GPIOA_BASE, 10);		
+		InterruptRegister((IRQ_FUN)GPIO_INTHandler, GPIOA_IRQ, (u32)GPIOA_BASE, 10);		
 		InterruptEn(GPIOA_IRQ, 10);
 	} else if (port_num == GPIO_PORT_B) {
-		InterruptRegister(GPIO_INTHandler, GPIOB_IRQ, GPIOB_BASE, 10);		
+		InterruptRegister((IRQ_FUN)GPIO_INTHandler, GPIOB_IRQ, (u32)GPIOB_BASE, 10);		
 		InterruptEn(GPIOB_IRQ, 10);
 	}
 
 	GPIO_Init(&GPIO_InitStruct_PUSHBT);
-	GPIO_UserRegIrq(GPIO_PUSHBT_PIN, gpio_demo_irq_handler, &GPIO_InitStruct_PUSHBT);
+	GPIO_UserRegIrq(GPIO_PUSHBT_PIN, (void *)gpio_demo_irq_handler, &GPIO_InitStruct_PUSHBT);
 	GPIO_INTConfig(GPIO_PUSHBT_PIN, ENABLE);
 
 	GPIO_WriteBit(GPIO_LED_PIN, led_ctrl);

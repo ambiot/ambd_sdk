@@ -14,7 +14,7 @@
 
 #define DataFrameSize	8
 #define ClockDivider	20
-#define TEST_BUF_SIZE	8192
+#define TEST_BUF_SIZE	8192 //for dma mode, buffer size should be multiple of 32-byte
 
 /*SPIx pin location:
 
@@ -49,7 +49,8 @@ SPI1:
 #define SPI1_SCLK  PB_6
 #define SPI1_CS    PB_7
 
-SRAM_NOCACHE_DATA_SECTION u8 MasterTxBuf[TEST_BUF_SIZE];
+/* for dma mode, start address of buffer should be 32-byte aligned*/
+u8 MasterTxBuf[TEST_BUF_SIZE] __attribute__((aligned(32)));
 
 typedef struct {
 	GDMA_InitTypeDef SSITxGdmaInitStruct;
@@ -99,13 +100,7 @@ void Spi_free(SPI_OBJ* spi_obj)
 	SSI_Cmd(spi_obj->spi_dev, DISABLE);
 }
 
-/**
-  * @brief  Main program.
-  * @param  None 
-  * @retval None
-  */
-
-void main(void)
+void spi_singleblock_task(void* param)
 {
 
 	u32 SclkPhase = SCPH_TOGGLES_IN_MIDDLE; // SCPH_TOGGLES_IN_MIDDLE or SCPH_TOGGLES_AT_START
@@ -169,7 +164,24 @@ void main(void)
 
     DBG_8195A("SPI Demo finished.\n");
 
-    for(;;);
+	vTaskDelete(NULL);
 
+}
+
+/**
+  * @brief  Main program.
+  * @param  None
+  * @retval None
+  */
+void main(void)
+{
+	if(xTaskCreate(spi_singleblock_task, ((const char*)"spi_singleblock_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
+		printf("\n\r%s xTaskCreate(spi_singleblock_task) failed", __FUNCTION__);
+
+	vTaskStartScheduler();
+	while(1){
+		vTaskDelay( 1000 / portTICK_RATE_MS );
+	}
+	
 }
 

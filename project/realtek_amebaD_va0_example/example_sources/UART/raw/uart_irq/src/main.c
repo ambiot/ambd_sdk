@@ -20,7 +20,7 @@
 #define UART_RX    _PA_19
 #define UART_DEV  UART0_DEV
 
-volatile char rc=0;
+u8 rc=0;
 volatile int tx_flag=0;
 
 u32 uart_get_idx(UART_TypeDef* UartDEV)
@@ -94,7 +94,7 @@ void main(void)
 	uart_send_string("Hello World!!\n");
 	uart_send_string("\r\n8195a$");
 	
-	InterruptRegister((IRQ_FUN)uart_irq, UART_DEV_TABLE[uart_index].IrqNum, UART_DEV, 10);
+	InterruptRegister((IRQ_FUN)uart_irq, UART_DEV_TABLE[uart_index].IrqNum, (u32)UART_DEV, 10);
 	InterruptEn(UART_DEV_TABLE[uart_index].IrqNum, 10);
 	UART_INTConfig(UART_DEV, RUART_IER_ERBI | RUART_IER_ELSI | RUART_IER_ETOI, ENABLE);
 	tx_flag=1;

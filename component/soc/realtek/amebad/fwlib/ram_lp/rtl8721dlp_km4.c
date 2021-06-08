@@ -42,6 +42,7 @@ CPU_PWR_SEQ SYSPLL_OFF_SEQ[] = {
 };
 
 CPU_PWR_SEQ HSPWR_ON_SEQ[] = {
+	{0x4800021C, CPU_PWRSEQ_CMD_WRITE,		(0x011 << 0),			0x00000000}, /* reset 21c[0]&[4]for WDG reset */
 	{0x00000000, CPU_PWRSEQ_CMD_LOGE,		0x00000000,			0x00000000/* or 1 */}, /* Enable LOG or not */
 
 	/* 1. Enable SWR */ //PMC
@@ -408,6 +409,7 @@ void km4_tickless_ipc_int(VOID *Data, u32 IrqStatus, u32 ChanNum)
 	u32 Rtemp;
 	KM4SLEEP_ParamDef * psleep_param;
 	
+	NVIC_ClearPendingIRQ(UART_LOG_IRQ_LP);
 	InterruptEn(UART_LOG_IRQ_LP, 10);
 	IPCM0_DEV->IPCx_USR[IPC_INT_CHAN_SHELL_SWITCH] = 0x00000000;
 
@@ -416,11 +418,14 @@ void km4_tickless_ipc_int(VOID *Data, u32 IrqStatus, u32 ChanNum)
 
 	//set dlps
 	if (psleep_param->dlps_enable){
-		SOCPS_AONTimer(psleep_param->sleep_time);
+		SOCPS_AONTimerCmd(DISABLE);
 		if (psleep_param->sleep_time) {
+			SOCPS_AONTimer(psleep_param->sleep_time);
 			SOCPS_AONTimerCmd(ENABLE);
 		}
+		FLASH_Write_Lock();
 		SOCPS_DeepSleep_RAM();
+		FLASH_Write_Unlock();
 	}
 
 	km4_sleep_type = psleep_param->sleep_type;

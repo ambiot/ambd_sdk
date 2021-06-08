@@ -56,7 +56,7 @@ void Driver_IR_Init(void)
   * @param   No parameter.
   * @return  void
   */
-void IR_TX_thread(void)
+void IR_TX_thread(void* param)
 {
 	
 	u32 tx_count;
@@ -83,7 +83,7 @@ void IR_TX_thread(void)
 		data[1] = ~ir_code[0];
 		data[2] = ir_code[1];
 		data[3] = ~ir_code[1];
-		IR_NECEncode( IR_InitStruct.IR_Freq, &data, &IR_DataStruct);
+		IR_NECEncode( IR_InitStruct.IR_Freq, (uint8_t *)&data, &IR_DataStruct);
 		
 		IR_SendBuf(IR_DEV, IR_DataStruct.irBuf, IR_TX_FIFO_SIZE, FALSE);		
 		IR_Cmd(IR_DEV, IR_InitStruct.IR_Mode, ENABLE);

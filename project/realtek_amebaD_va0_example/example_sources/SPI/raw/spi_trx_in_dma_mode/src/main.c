@@ -15,7 +15,7 @@
 #define DataFrameSize	8
 #define dfs_mask 		0xFF
 #define ClockDivider	20
-#define TEST_BUF_SIZE	512
+#define TEST_BUF_SIZE	512 //for dma mode, buffer size should be multiple of 32-byte
 
 /*SPIx pin location:
 
@@ -56,10 +56,11 @@ SPI1:
 #define SPI1_SCLK  PB_6
 #define SPI1_CS    PB_7
 
-SRAM_NOCACHE_DATA_SECTION u8 MasterTxBuf[TEST_BUF_SIZE];
-SRAM_NOCACHE_DATA_SECTION u8 MasterRxBuf[TEST_BUF_SIZE];
-SRAM_NOCACHE_DATA_SECTION u8 SlaveTxBuf[TEST_BUF_SIZE];
-SRAM_NOCACHE_DATA_SECTION u8 SlaveRxBuf[TEST_BUF_SIZE];
+/* for dma mode, start address of buffer should be 32-byte aligned*/
+u8 MasterTxBuf[TEST_BUF_SIZE] __attribute__((aligned(32)));
+u8 MasterRxBuf[TEST_BUF_SIZE] __attribute__((aligned(32)));
+u8 SlaveTxBuf[TEST_BUF_SIZE] __attribute__((aligned(32)));
+u8 SlaveRxBuf[TEST_BUF_SIZE] __attribute__((aligned(32)));
 
 volatile int MasterTxDone;
 volatile int MasterRxDone;
@@ -114,6 +115,8 @@ void Ssi_dma_tx_irq(void *Data)
 void Ssi_dma_rx_irq(void *Data)
 {
 	SPI_OBJ* spi_obj = (SPI_OBJ*) Data;
+	u32 Length = spi_obj->RxLength;
+	u32* pRxData = spi_obj->RxData;
 	PGDMA_InitTypeDef GDMA_InitStruct;
 
 	GDMA_InitStruct = &spi_obj->SSIRxGdmaInitStruct;
@@ -121,6 +124,8 @@ void Ssi_dma_rx_irq(void *Data)
 	/* Clear Pending ISR */
 	GDMA_ClearINT(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum);
 	GDMA_Cmd(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum, DISABLE);
+
+	DCache_Invalidate((u32) pRxData, Length);
 
 	/*  Call user RX complete callback */
 	if (spi_obj->Index == 0)
@@ -266,13 +271,7 @@ void Spi_master_write_read_stream_dma(SPI_OBJ *spi_obj, char *tx_buffer, char *r
 	NVIC_SetPriority(GDMA_GetIrqNum(0, spi_obj->SSITxGdmaInitStruct.GDMA_ChNum), 10); 
 } 
 
-/**
-  * @brief  Main program.
-  * @param  None 
-  * @retval None
-  */
-
-void main(void)
+void spi_dma_task(void* param)
 {
 
 	u32 SclkPhase = SCPH_TOGGLES_IN_MIDDLE; // SCPH_TOGGLES_IN_MIDDLE or SCPH_TOGGLES_AT_START
@@ -419,7 +418,24 @@ void main(void)
 
 	DBG_8195A("SPI Demo finished.\n");
 
-	for(;;);
+	vTaskDelete(NULL);
 
+}
+
+/**
+  * @brief  Main program.
+  * @param  None
+  * @retval None
+  */
+void main(void)
+{
+	if(xTaskCreate(spi_dma_task, ((const char*)"spi_dma_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
+		printf("\n\r%s xTaskCreate(spi_dma_task) failed", __FUNCTION__);
+
+	vTaskStartScheduler();
+	while(1){
+		vTaskDelay( 1000 / portTICK_RATE_MS );
+	}
+	
 }
 

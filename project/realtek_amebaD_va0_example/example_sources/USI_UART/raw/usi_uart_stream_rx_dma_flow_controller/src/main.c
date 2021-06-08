@@ -21,14 +21,13 @@
 #define UART_TX    _PB_20//UART  TX
 #define UART_RX    _PB_21  //UART  RX
 #define USI_DEV        USI0_DEV
-#define SRX_BUF_SZ 100
+
+#define SRX_BUF_SZ 32*5      /*note that dma mode buffer length should be integral multiple of 32 bytes*/
+char rx_buf[SRX_BUF_SZ]__attribute__((aligned(32)))={0};  /*note that dma mode buffer address should be 32 bytes aligned*/
 
 USI_UARTInitTypeDef USI_UARTInitStruct;
-
 GDMA_InitTypeDef GDMA_InitStruct;
 
-SRAM_NOCACHE_DATA_SECTION
-char rx_buf[SRX_BUF_SZ]={0};
 volatile u32 tx_busy=0;
 volatile u32 rx_done=0;
 volatile u32 wait_rx=0;
@@ -53,6 +52,7 @@ void uart_send_string_done(void)
 
 void uart_recv_string_done(void)
 {
+	DCache_Invalidate((u32)rx_buf, SRX_BUF_SZ);  /*!!!To solve the cache consistency problem, DMA mode need it!!!*/
 	dma_free();
 	rx_done = 1;
 	wait_rx=0;
@@ -68,7 +68,7 @@ void uart_dma_send(char *pstr,u32 len)
 	USI_UARTTXDMAConfig(USI_DEV, 8);
 	USI_UARTTXDMACmd(USI_DEV, ENABLE);
 	ret= USI_UARTTXGDMA_Init(UartIndex, &GDMA_InitStruct,
-		USI_DEV, uart_send_string_done,pstr,len);
+		USI_DEV, (IRQ_FUN)uart_send_string_done, pstr, len);
 	NVIC_SetPriority(GDMA_GetIrqNum(0, GDMA_InitStruct.GDMA_ChNum), 12);	
 
 	 if (!ret ) {
@@ -88,7 +88,7 @@ u32 uart_dma_recv_flow_controller(u8 * pstr)
 	USI_UARTRXDMACmd(USI_DEV, ENABLE);
 
 	ret= USI_UARTRXGDMA_Init(UartIndex,  &GDMA_InitStruct,
-		USI_DEV, uart_recv_string_done,pstr,0);
+		USI_DEV, (IRQ_FUN)uart_recv_string_done, pstr, 0);
 	NVIC_SetPriority(GDMA_GetIrqNum(0, GDMA_InitStruct.GDMA_ChNum), 12);
 	return ret;
 }
@@ -119,7 +119,7 @@ void main(void)
 	/*set timeout 64~65535 bit time, time in second=RxTimeOutCnt/baudrate*/
 	USI_UARTInitStruct.USI_UARTRxTimeOutCnt=60000;
 	USI_UARTInit(USI_DEV,&USI_UARTInitStruct);
-	USI_UARTSetBaud(USI_DEV, 9600);
+	USI_UARTSetBaud(USI_DEV, 38400);
 	USI_UARTRxCmd(USI_DEV, ENABLE);
 
 	for(i=0;i<SRX_BUF_SZ;i++){

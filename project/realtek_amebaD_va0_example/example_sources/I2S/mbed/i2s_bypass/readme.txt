@@ -15,3 +15,5 @@ Procedure:
   4.Plug audio source to Red phone jack
 
 In this example, you can hear the fluent audio source from the earphone. 
+
+Tips: To compile this example, you need to copy main.c and alc5651.c to "project\realtek_amebaD_va0_example\src\src_hp".

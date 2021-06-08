@@ -12,7 +12,7 @@
 
 #if CONFIG_EXAMPLE_DCT
 
-//#define DCT_BEGIN_ADDR			0x100000	/*!< DCT begin address of flash, ex: 0x100000 = 1M */
+#define DCT_BEGIN_ADDR			0x100000	/*!< DCT begin address of flash, ex: 0x100000 = 1M */
 #define	MODULE_NUM				6			/*!< max number of module */
 
 #if defined(CONFIG_PLATFORM_8710C) || defined(CONFIG_PLATFORM_8721D)

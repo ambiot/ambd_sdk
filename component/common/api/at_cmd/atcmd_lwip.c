@@ -968,7 +968,7 @@ void fATP3(void *arg){
 		printf("[ATP3]Usage: ATP3=REMOTE_IP\n\r");
 		goto exit;
 	}
-	strcpy((char*)remote_addr, (char*)arg);
+	strncpy((char*)remote_addr, (char*)arg, sizeof(remote_addr));
 	printf("[ATP3]: _AT_TRANSPORT_REMOTE_IP_ [%s]\n\r", remote_addr);
 
 exit:
@@ -1564,7 +1564,7 @@ void fATPT(void *arg){
 		&&(curnode->role == NODE_ROLE_SERVER))
 	{
 		char udp_clientaddr[16]={0};
-		strcpy((char*)udp_clientaddr, (char*)argv[3]);
+		strncpy((char*)udp_clientaddr, (char*)argv[3], sizeof(udp_clientaddr));
 		cli_addr.sin_family = AF_INET;
 		cli_addr.sin_port = htons(atoi((char*)argv[4]));
 		if (inet_aton(udp_clientaddr , &cli_addr.sin_addr) == 0) 
@@ -1682,12 +1682,12 @@ exit:
 		if(curnode->protocol == NODE_MODE_UDP && curnode->role == NODE_ROLE_SERVER){
 			AT_DBG_MSG(AT_FLAG_LWIP, AT_DBG_ALWAYS,
 					"\r\n[ATPR] OK,%d,%d,%s,%d:%s", total_recv_size, con_id, udp_clientaddr, udp_clientport, rx_buffer);
-            sprintf(tmpbuf, "\r\n[ATPR] OK,%d,%d,%s,%d:", total_recv_size, con_id, udp_clientaddr, udp_clientport);
+            snprintf(tmpbuf, ATPR_RSVD_HEADER_SIZE, "\r\n[ATPR] OK,%d,%d,%s,%d:", total_recv_size, con_id, udp_clientaddr, udp_clientport);
 		}
 		else{
 			AT_DBG_MSG(AT_FLAG_LWIP, AT_DBG_ALWAYS,
 					"\r\n[ATPR] OK,%d,%d:%s", total_recv_size, con_id, rx_buffer);
-            sprintf(tmpbuf, "\r\n[ATPR] OK,%d,%d:", total_recv_size, con_id);
+            snprintf(tmpbuf, ATPR_RSVD_HEADER_SIZE, "\r\n[ATPR] OK,%d,%d:", total_recv_size, con_id);
 		}
         header_len = strlen(tmpbuf);
         memmove(rx_buffer + header_len, rx_buffer, total_recv_size);
@@ -1884,12 +1884,12 @@ void fATPP(void *arg){
 			addr.s_addr = htonl(curnode->addr);
 			inet_ntoa_r(addr, buf, sizeof(buf));
 		}else if( curnode->role == 0){//ping local server
-			strcpy(buf,SERVER);
+			strncpy(buf,SERVER, sizeof(buf));
 		}else if( curnode->role == 2){ //ping seed
-			strcpy(buf,(char*) curnode->addr);
+			strncpy(buf,(char*) curnode->addr, sizeof(buf));
 		}
 	}else
-		strcpy(buf, argv[1]);
+		strncpy(buf, argv[1], sizeof(buf));
 
 	if(argc == 2){
 		count = 5;
@@ -3030,7 +3030,7 @@ static char *atcmd_lwip_itoa(int value){
 		len ++;
 
 	val_str = (char *) pvPortMalloc(len + 1);
-	sprintf(val_str, "%d", value);
+	snprintf(val_str, (len+1), "%d", value);
 
 	return val_str;
 }
@@ -3969,7 +3969,7 @@ void fATP3(void *arg){
 		printf("[ATP3]Usage: ATP3=REMOTE_IP\n\r");
 		goto exit;
 	}
-	strcpy((char*)remote_addr, (char*)arg);
+	strncpy((char*)remote_addr, (char*)arg, sizeof(remote_addr));
 	printf("[ATP3]: _AT_TRANSPORT_REMOTE_IP_ [%s]\n\r", remote_addr);
 
 exit:
@@ -4534,8 +4534,8 @@ void fATPT(void *arg){
 	node* curnode = NULL;
 	struct sockaddr_in cli_addr;
 	int data_sz;
-	int data_pos = C_NUM_AT_CMD + C_NUM_AT_CMD_DLT+ strlen(arg) + 1;
-	u8 *data = (u8 *)log_buf + data_pos;
+	int data_pos;
+	u8 *data;
 
 	AT_DBG_MSG(AT_FLAG_LWIP, AT_DBG_ALWAYS, 
 		"[ATPT]: _AT_TRANSPORT_SEND_DATA");
@@ -4551,6 +4551,9 @@ void fATPT(void *arg){
 		error_no = 1;
 		goto exit;
 	}
+
+	data_pos = C_NUM_AT_CMD + C_NUM_AT_CMD_DLT+ strlen(arg) + 1;
+	data = (u8 *)log_buf + data_pos;
 
 	data_sz = atoi((char*)argv[1]);
 	if(data_sz > MAX_BUFFER){
@@ -4569,7 +4572,7 @@ void fATPT(void *arg){
 		&&(curnode->role == NODE_ROLE_SERVER))
 	{
 		char udp_clientaddr[16]={0};
-		strcpy((char*)udp_clientaddr, (char*)argv[3]);
+		strncpy((char*)udp_clientaddr, (char*)argv[3], sizeof(udp_clientaddr));
 		cli_addr.sin_family = AF_INET;
 		cli_addr.sin_port = htons(atoi((char*)argv[4]));
 		if (inet_aton(udp_clientaddr , &cli_addr.sin_addr) == 0) 
@@ -4687,12 +4690,12 @@ exit:
 		if(curnode->protocol == NODE_MODE_UDP && curnode->role == NODE_ROLE_SERVER){
 			AT_DBG_MSG(AT_FLAG_LWIP, AT_DBG_ALWAYS,
 					"\r\n[ATPR] OK,%d,%d,%s,%d:%s", total_recv_size, con_id, udp_clientaddr, udp_clientport, rx_buffer);
-			sprintf(tmpbuf, "\r\n[ATPR] OK,%d,%d,%s,%d:", total_recv_size, con_id, udp_clientaddr, udp_clientport);
+			snprintf(tmpbuf, ATPR_RSVD_HEADER_SIZE, "\r\n[ATPR] OK,%d,%d,%s,%d:", total_recv_size, con_id, udp_clientaddr, udp_clientport);
 		}
 		else{
 			AT_DBG_MSG(AT_FLAG_LWIP, AT_DBG_ALWAYS,
 					"\r\n[ATPR] OK,%d,%d:%s", total_recv_size, con_id, rx_buffer);
-			sprintf(tmpbuf, "\r\n[ATPR] OK,%d,%d:", total_recv_size, con_id);
+			snprintf(tmpbuf, ATPR_RSVD_HEADER_SIZE, "\r\n[ATPR] OK,%d,%d:", total_recv_size, con_id);
 		}
 		header_len = strlen(tmpbuf);
 		memmove(rx_buffer + header_len, rx_buffer, total_recv_size);
@@ -4889,12 +4892,12 @@ void fATPP(void *arg){
 			addr.s_addr = htonl(curnode->addr);
 			inet_ntoa_r(addr, buf, sizeof(buf));
 		}else if( curnode->role == 0){//ping local server
-			strcpy(buf,SERVER);
+			strncpy(buf,SERVER, sizeof(buf));
 		}else if( curnode->role == 2){ //ping seed
-			strcpy(buf,(char*) curnode->addr);
+			strncpy(buf,(char*) curnode->addr, sizeof(buf));
 		}
 	}else
-		strcpy(buf, argv[1]);
+		strncpy(buf, argv[1], sizeof(buf));
 
 	if(argc == 2){
 		count = 5;

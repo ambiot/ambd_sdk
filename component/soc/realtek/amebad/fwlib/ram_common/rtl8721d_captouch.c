@@ -55,6 +55,9 @@ void CapTouch_StructInit(CapTouch_InitTypeDef* CapTouch_InitStruct)
 void CapTouch_Init(CAPTOUCH_TypeDef *CapTouch, CapTouch_InitTypeDef* CapTouch_InitStruct)
 {
 	u8 i;
+	u8 FT_Type;
+	u32 Temp;
+	u32 FT_Type_Address = 0x1F0;
 	
 	/* Check the parameters */
 	assert_param(IS_CAPTOUCH_ALL_PERIPH(CapTouch));
@@ -64,6 +67,34 @@ void CapTouch_Init(CAPTOUCH_TypeDef *CapTouch, CapTouch_InitTypeDef* CapTouch_In
 	assert_param(CapTouch_InitStruct->CT_ETCStep <= 0xF );
 	assert_param(CapTouch_InitStruct->CT_ETCFactor <= 0xF );
 	assert_param(CapTouch_InitStruct->CT_ETCScanInterval <= 0x7F );
+
+	EFUSE_PMAP_READ8(0, FT_Type_Address, &FT_Type, L25EOUTVOLTAGE);
+	FT_Type &= (BIT(1) | BIT(0));
+
+	if ( FT_Type == 0x2) {
+		/*Set CT_ADC_REG1X_LPAD register with 2'b 00*/
+		Temp = (u32)CapTouch->CT_ADC_REG1X_LPAD;
+		Temp &= ~(BIT(6) | BIT(7));
+		CapTouch->CT_ADC_REG1X_LPAD = Temp;
+
+		/*Set CT_ADC_REG0X_LPAD register with 3'b 101*/
+		Temp = (u32)CapTouch->CT_ADC_REG0X_LPAD;
+		Temp &= ~(BIT(9));
+		Temp |= (BIT(8) | BIT(10));
+		CapTouch->CT_ADC_REG0X_LPAD = Temp;
+
+	} else {
+		/*Set CT_ADC_REG1X_LPAD register with 2'b 00*/
+		Temp = (u32)CapTouch->CT_ADC_REG1X_LPAD;
+		Temp &= ~(BIT(6) | BIT(7));
+		CapTouch->CT_ADC_REG1X_LPAD = Temp;
+
+		/*Set CT_ADC_REG0X_LPAD register with 3'b 100*/
+		Temp = (u32)CapTouch->CT_ADC_REG0X_LPAD;
+		Temp &= ~(BIT(8) | BIT(9));
+		Temp |= BIT(10);
+		CapTouch->CT_ADC_REG0X_LPAD = Temp;
+	}
 	
 	for(i = 0; i < CT_CHANNEL_NUM ;i++) {
 		assert_param(CapTouch_InitStruct->CT_Channel[i].CT_DiffThrehold  <= 0xFFF );

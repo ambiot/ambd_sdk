@@ -60,7 +60,7 @@ void uart_clock_send_string(UART_TypeDef* UartDEV, char *pstr)
 	
 	UART_TXDMAConfig(UartDEV, 8);
 	UART_TXDMACmd(UartDEV, ENABLE);
-	ret= UART_TXGDMA_Init(UartIndex, &GDMA_InitStruct, UART_DEV, uart_clock_send_string_done,pstr,_strlen(pstr));
+	ret= UART_TXGDMA_Init(UartIndex, &GDMA_InitStruct, UART_DEV, (IRQ_FUN)uart_clock_send_string_done,pstr,_strlen(pstr));
 	NVIC_SetPriority(GDMA_GetIrqNum(0, GDMA_InitStruct.GDMA_ChNum), 12);	
  
 	if (ret == 0) {

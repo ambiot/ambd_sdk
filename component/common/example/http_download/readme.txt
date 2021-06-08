@@ -36,4 +36,4 @@ Supported List
 ~~~~~~~~~~~~~~
 [Supported List]
         Supported IC :
-                Ameba-pro, Ameba-z2
+                Ameba-pro, Ameba-z2, AmebaD

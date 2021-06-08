@@ -5,9 +5,9 @@
 uint16_t randLIB_get_16bit(){
 
 	unsigned char rnd[2];
-    rtw_get_random_bytes(rnd,2);
+	rtw_get_random_bytes(rnd,2);
 
-    return ( ((uint16_t)rnd[0] << 8) | ((uint16_t)rnd[1]) );
+	return ( ((uint16_t)rnd[0] << 8) | ((uint16_t)rnd[1]) );
 }
 
 ///////////////////////////////////////////memory allocation///////////////////////////////////////////
@@ -70,7 +70,7 @@ int coap_sock_close(int socket_fd){
 	return r;
 }
 
-int coap_send(char *to_address, uint16_t port, int socket, sn_coap_hdr_s *coap_msg_hdr){
+int coap_sendto(char *to_address, uint16_t port, int socket, sn_coap_hdr_s *coap_msg_hdr){
 
 	// Calculate the CoAP message size, allocate the memory and build the message
 
@@ -135,7 +135,7 @@ void coap_print_hdr(sn_coap_hdr_s* parsed_hdr){
 	char code[] = "0.00";
 	int cat = (parsed_hdr->msg_code & 0xe0) >> 5;
 	int dd = parsed_hdr->msg_code & 0x1f;
-	sprintf(code, "%d.%.2x", cat, dd);
+	sprintf(code, "%d.%2x", cat, dd);
 
 	printf("\ttoken_len:            %d\n", parsed_hdr->token_len);
 	if(parsed_hdr->token_ptr)
@@ -300,7 +300,7 @@ void coap_print_hdr(sn_coap_hdr_s* parsed_hdr){
 		printf("\n");
 	}
 
-	printf("\tmsg_type:             %.2x ", parsed_hdr->msg_type);
+	printf("\tmsg_type:             %2x ", parsed_hdr->msg_type);
 	switch(parsed_hdr->msg_type){
 
 		case COAP_MSG_TYPE_CONFIRMABLE:
@@ -365,13 +365,13 @@ void coap_print_hdr(sn_coap_hdr_s* parsed_hdr){
 	printf("\tmsg_id:               %d\n", parsed_hdr->msg_id);
 	printf("\turi_path_len:         %d\n", parsed_hdr->uri_path_len);	
 	if(parsed_hdr->uri_path_ptr)
-    		printf("\turi_path_ptr:         %s\n", parsed_hdr->uri_path_ptr);
+		printf("\turi_path_ptr:         %s\n", parsed_hdr->uri_path_ptr);
 	else
 		printf("\turi_path_ptr:         (null)\n");	
-    	printf("\tpayload_len:          %d\n", parsed_hdr->payload_len);		
+		printf("\tpayload_len:          %d\n", parsed_hdr->payload_len);		
 	if(parsed_hdr->payload_ptr)
-    		printf("\tpayload_ptr:          %s\n", parsed_hdr->payload_ptr);
+		printf("\tpayload_ptr:          %s\n", parsed_hdr->payload_ptr);
 	else
 		printf("\tpayload_ptr:          (null)\n");
-    //printf("\toptions_list_ptr:     %p\n", parsed_hdr->options_list_ptr);
+		//printf("\toptions_list_ptr:     %p\n", parsed_hdr->options_list_ptr);
 }

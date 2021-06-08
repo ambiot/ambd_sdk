@@ -164,14 +164,22 @@ WIFI_RETRY_LOOP:
 
 		ret = wifi_connect((char*)wifi.ssid.val, wifi.security_type, (char*)wifi.password, wifi.ssid.len,
 			wifi.password_len, wifi.key_id, NULL);
-                if(ret != RTW_SUCCESS){
-                  wifi_retry_connect--;
-                  if(wifi_retry_connect > 0){
-                      printf("wifi retry\r\n");
-                      goto WIFI_RETRY_LOOP;
-                  }
-                  
-                }
+		if (ret != RTW_SUCCESS) {
+			wifi_retry_connect--;
+			if (wifi_retry_connect > 0) {
+				/* Add the delay to wait for the _rtw_join_timeout_handler
+				 * If there is no this delay, there are some error when rhe AP
+				 * send the disassociation frame. It will cause the connection
+				 * to be failed at first time after resetting. So keep 300ms delay
+				 * here. For the detail about this error, please refer to
+				 * [RSWLANDIOT-1954].
+				 */
+				vTaskDelay(300);
+				printf("wifi retry\r\n");
+				goto WIFI_RETRY_LOOP;
+			}
+		}
+
 		if(ret == RTW_SUCCESS){
 			LwIP_DHCP(0, DHCP_START);
 		}

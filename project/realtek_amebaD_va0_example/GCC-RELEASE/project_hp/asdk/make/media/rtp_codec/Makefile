@@ -17,7 +17,9 @@ vpath %.c $(DIR) $(shell find $(DIR) -type d)
 CSRC += $(DIR)/aac/aac.c
 CSRC += $(DIR)/avcodec.c
 CSRC += $(DIR)/g711/g711.c
-# CSRC += $(DIR)/g711_sip/g711_sip.c
+#CSRC += $(DIR)/h264/h264.c
+CSRC += $(DIR)/mjpeg/mjpeg.c
+
 #*****************************************************************************#
 #                               Object FILE LIST                              #
 #*****************************************************************************#
@@ -33,6 +35,8 @@ OBJS = $(notdir $(CSRC:.c=.o))
 #                        RULES TO GENERATE TARGETS                            #
 #*****************************************************************************#
 all: CORE_TARGETS COPY_RAM_OBJS
+	$(AR) rvs lib_rtp_codec.a $(OBJS)
+	$(MOVE) -f lib_rtp_codec.a $(ROOTDIR)/lib/application
 	
 #*****************************************************************************#
 #              GENERATE OBJECT FILE 
@@ -48,6 +52,5 @@ clean: CLEAN_OBJS
 	$(REMOVE) *.s
 	$(REMOVE) *.su
 	$(REMOVE) *.d
-	$(REMOVE) *.c
 
 -include $(DEPS)	

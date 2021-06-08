@@ -17,3 +17,4 @@ So pinmux as below:
 Note:
 	1) This example aims to demonstrate how the spi master continue TX use use single GDMA blocks.
 	2) Data array send times can be set through Macro define.
+	3) For dma mode, both CPU and dma have access to spi buffer. Start address of spi buffer should be 32-byte aligned and size of spi buffer should be multiple of 32 byte.

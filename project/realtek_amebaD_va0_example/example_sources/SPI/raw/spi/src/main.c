@@ -10,7 +10,7 @@
 #include "device.h"
 #include "diag.h"
 #include "main.h"
-#include "Rtl8721d_ssi.h"
+#include "rtl8721d_ssi.h"
 
 /*SPIx pin location:
 
@@ -50,7 +50,7 @@ SPI1:
 #define SPI1_SCLK  PB_6
 #define SPI1_CS    PB_7
 
-void main(void)
+void spi_task(void* param)
 {
 
 	u32 SclkPhase = SCPH_TOGGLES_IN_MIDDLE; // SCPH_TOGGLES_IN_MIDDLE or SCPH_TOGGLES_AT_START
@@ -178,7 +178,25 @@ void main(void)
 
 	DBG_8195A("SPI Demo finished.\n");
 	DBG_8195A("\r\nResult is %s\r\n", (result) ? "success" : "fail");
-	for(;;);
 
+	vTaskDelete(NULL);
+
+}
+
+/**
+  * @brief  Main program.
+  * @param  None
+  * @retval None
+  */
+void main(void)
+{
+	if(xTaskCreate(spi_task, ((const char*)"spi_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
+		printf("\n\r%s xTaskCreate(spi_task) failed", __FUNCTION__);
+
+	vTaskStartScheduler();
+	while(1){
+		vTaskDelay( 1000 / portTICK_RATE_MS );
+	}
+	
 }
 

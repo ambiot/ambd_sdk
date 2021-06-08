@@ -75,6 +75,7 @@
 
 #include "device_lock.h"
 
+
 #if defined(MBEDTLS_GCM_C)
 /* shared by all GCM ciphers */
 static void *gcm_ctx_alloc( void )

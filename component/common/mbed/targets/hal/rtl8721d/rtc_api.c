@@ -127,16 +127,16 @@ static void rtc_restore_timeinfo(void)
 {
 	u32 value;
 	int days_in_year;
+	RRAM_TypeDef* RRAM = ((RRAM_TypeDef *) RRAM_BASE);
 
 	RTC_TimeTypeDef RTC_TimeStruct;
-        RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
+	RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
 	rtc_timeinfo.tm_sec = RTC_TimeStruct.RTC_Seconds;
 	rtc_timeinfo.tm_min = RTC_TimeStruct.RTC_Minutes;
 	rtc_timeinfo.tm_hour = RTC_TimeStruct.RTC_Hours;
 	rtc_timeinfo.tm_yday = RTC_TimeStruct.RTC_Days;
 
-	value = BKUP_Read(0);
-	rtc_timeinfo.tm_year = (value & BIT_RTC_BACKUP) >> BIT_RTC_BACKUP_SHIFT;
+	rtc_timeinfo.tm_year = RRAM->RTC_YEAR&0x7fffffff;
 
 	days_in_year =  (is_leap_year(rtc_timeinfo.tm_year) ? 366 : 365);
 	if(rtc_timeinfo.tm_yday > (days_in_year - 1)){
@@ -159,12 +159,9 @@ static void rtc_restore_timeinfo(void)
   */
 void rtc_backup_timeinfo(void)
 {
-	u32 value = BKUP_Read(0);
-	value = (value & ~BIT_RTC_BACKUP) | (rtc_timeinfo.tm_year << BIT_RTC_BACKUP_SHIFT);
-
-	BKUP_Write(0, value);
-	
-	BKUP_Set(0, BIT_RTC_RESTORE);
+	RRAM_TypeDef* RRAM = ((RRAM_TypeDef *) RRAM_BASE);
+	RRAM->RTC_YEAR = rtc_timeinfo.tm_year;
+	RRAM->RTC_YEAR |= 0x80000000;
 }
 
 /**
@@ -182,6 +179,8 @@ void rtc_init(void)
 	RTC_InitStruct.RTC_HourFormat = RTC_HourFormat_24;
 	
 	RTC_Init(&RTC_InitStruct);
+
+	RTC_BypassShadowCmd(ENABLE);
 
 	/* 32760 need add need add 15 cycles (256Hz) every 4 min*/
 	//RTC_SmoothCalibConfig(RTC_CalibSign_Positive, 15,
@@ -249,10 +248,11 @@ time_t rtc_read(void)
 	struct tm tm_temp;
 	RTC_TimeTypeDef RTC_TimeStruct;
 	u32 delta_days = 0;
+	RRAM_TypeDef* RRAM = ((RRAM_TypeDef *) RRAM_BASE);
 
-	if(BKUP_Read(0) & BIT_RTC_RESTORE){
+	if((0x80000000&(RRAM->RTC_YEAR)) !=0){
 		rtc_restore_timeinfo();
-		BKUP_Clear(0, BIT_RTC_RESTORE);
+		RRAM->RTC_YEAR&=(~0x80000000);
 	}
 
 	_memcpy((void*)&tm_temp, (void*)&rtc_timeinfo, sizeof(struct tm));

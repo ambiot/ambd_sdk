@@ -3,11 +3,19 @@
 #include "example_uart_update.h"
 #include <platform/platform_stdlib.h>
 
+#if defined(CONFIG_PLATFORM_8721D)
+#define XMODEM_UART_IDX 0
+#define XMODEM_UART_BAUDRATE 115200
+#define UART_TX_PIN 		_PA_18
+#define UART_RX_PIN		_PA_19
+extern void OTU_FW_Update(u8 uart_idx, u8 uart_tx, u8 uart_rx, u32 baud_rate);
+#else
 #define XMODEM_UART_IDX 0
 #define XMODEM_UART_MUX 2
 #define XMODEM_UART_BAUDRATE 115200
-
 extern void OTU_FW_Update(u8, u8, u32);
+#endif
+
 
 int is_update_image_enable(gpio_t *gpio_uart_update_eable)
 {
@@ -34,7 +42,11 @@ void example_uart_update_thread(void *param)
 		if(gpio_read(&gpio_uart_update_eable) == 0){
 			printf("update image enabled with xmodem protocol!\r\n");
 			//uart_ymodem();
+#if defined(CONFIG_PLATFORM_8721D)
+			OTU_FW_Update(XMODEM_UART_IDX, UART_TX_PIN,UART_RX_PIN, XMODEM_UART_BAUDRATE);
+#else
 			OTU_FW_Update(XMODEM_UART_IDX, XMODEM_UART_MUX, XMODEM_UART_BAUDRATE);
+#endif
 			break;
 		}
 		else{

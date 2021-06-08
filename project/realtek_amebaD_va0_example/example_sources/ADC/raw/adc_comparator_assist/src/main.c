@@ -45,7 +45,8 @@ VOID main (VOID)
 	u32 addressGain = 0x1D2;
 
 	u16 i;
-	
+
+
 	for (index = 0; index< 2; index++) {
 		EFUSERead8(0, addressOffset+index, EfuseBuf + index, L25EOUTVOLTAGE);
 	}

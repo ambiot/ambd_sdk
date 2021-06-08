@@ -398,6 +398,14 @@ struct net_device_stats {
 	unsigned long   rx_bytes;               /* total bytes received         */
 	unsigned long   tx_bytes;               /* total bytes transmitted      */
 	unsigned long   rx_overflow;            /* rx fifo overflow count       */
+	unsigned long   rx_reorder_drop_cnt;
+	unsigned long   rx_reorder_timeout_cnt;
+	unsigned long	tx_unicast_packets;
+	unsigned long	tx_broadcast_packets;
+	unsigned long	tx_multicast_packets;
+	unsigned long	rx_unicast_packets;
+	unsigned long	rx_broadcast_packets;
+	unsigned long	rx_multicast_packets;
 };
 
 struct net_device {
@@ -419,6 +427,7 @@ typedef struct {
 	unsigned int rx_busy;
 	unsigned char enable;
 	unsigned char mac[6];
+	_sema netif_rx_sema;		/* prevent race condition on .skb in rltk_netif_rx() */
 } Rltk_wlan_t;
 
 #define netdev_priv(dev)		dev->priv

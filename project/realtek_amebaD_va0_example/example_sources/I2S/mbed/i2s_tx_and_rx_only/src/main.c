@@ -18,11 +18,13 @@ i2s_t i2s_obj;
 #define I2S_DMA_PAGE_SIZE	768   // 2 ~ 4096
 #define I2S_DMA_PAGE_NUM    4   // Vaild number is 2~4
 
-u8 i2s_tx_buf[I2S_DMA_PAGE_SIZE*I2S_DMA_PAGE_NUM];
-u8 i2s_rx_buf[I2S_DMA_PAGE_SIZE*I2S_DMA_PAGE_NUM];
+//The size of this buffer should be multiples of 32 and its head address should align to 32 
+//to prevent problems that may occur when CPU and DMA access this area simultaneously. 
+u8 i2s_tx_buf[I2S_DMA_PAGE_SIZE*I2S_DMA_PAGE_NUM]__attribute__((aligned(32)));
+u8 i2s_rx_buf[I2S_DMA_PAGE_SIZE*I2S_DMA_PAGE_NUM]__attribute__((aligned(32)));
 
 #define RECV_PAGE_NUM 	50
-u8 recv_buf[I2S_DMA_PAGE_SIZE*RECV_PAGE_NUM];
+u8 recv_buf[I2S_DMA_PAGE_SIZE*RECV_PAGE_NUM]__attribute__((aligned(32)));
 
 /* QFN48 Pinmux
 // S0
@@ -85,8 +87,8 @@ void test_rx_complete(void *data, char* pbuf)
     i2s_t *obj = (i2s_t *)data;
     int *ptx_buf;
 
-    DCache_Invalidate(((u32)(pbuf) & CACHE_LINE_ADDR_MSK), (I2S_DMA_PAGE_SIZE + CACHE_LINE_SIZE));
-
+    //DCache_Invalidate(((u32)(pbuf) & CACHE_LINE_ADDR_MSK), (I2S_DMA_PAGE_SIZE + CACHE_LINE_SIZE));
+	DCache_Invalidate((u32)(pbuf), I2S_DMA_PAGE_SIZE);
 	if (tx_process) {
 		i2s_recv_page(obj);
 	} else if(count < RECV_PAGE_NUM){

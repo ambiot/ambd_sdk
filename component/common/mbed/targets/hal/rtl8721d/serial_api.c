@@ -223,6 +223,7 @@ uart_dmarecv_irqhandler(
 {
 	PMBED_UART_ADAPTER puart_adapter = (PMBED_UART_ADAPTER) Data;
 
+	DCache_Invalidate((u32)puart_adapter->pRxBuf, puart_adapter->RxCount);
 	puart_adapter->RxCount = 0;
 	uart_dmarecv_complete(puart_adapter);
 
@@ -370,6 +371,7 @@ uart_irqhandler(
 }
 
 #ifdef UART_USE_GTIMER_TO
+int trans_less_than_four = 0;
 static void
 uart_gtimer_handle(
     IN  VOID        *Data
@@ -388,7 +390,7 @@ uart_gtimer_handle(
 		u32 data_in_fifo = UART_Readable(puart_adapter->UARTx);
 
 		/* have Rx some data */
-		if ((Current_Addr != (u32)(puart_adapter->pRxBuf)) || data_in_fifo) {
+		if ((Current_Addr != (u32)(puart_adapter->pRxBuf))) {
 			/* not increase for 5ms */
 			if (puart_adapter->last_dma_addr == Current_Addr) {
 				/* rx stop 5ms, packet complete */
@@ -405,9 +407,10 @@ uart_gtimer_handle(
 				puart_adapter->RxCount -= TransCnt;
 				puart_adapter->pRxBuf += TransCnt;
 				
+				trans_less_than_four = 0;
 				uart_dmarecv_complete(puart_adapter);
 				
-				GDMA_Cmd(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum, DISABLE);
+				//GDMA_Cmd(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum, DISABLE);
 	
 				//DBG_8195A("UART DMA TO RxCount: %d\n", puart_adapter->RxCount);
 			} else {
@@ -415,6 +418,21 @@ uart_gtimer_handle(
 			}
 		} else { /* rx not start */
 			puart_adapter->last_dma_addr = (u32)(puart_adapter->pRxBuf);
+			if(data_in_fifo) {	//DATA in FIFO less than src burst size(4 Bytes)
+				if(trans_less_than_four){
+					RTIM_Cmd(TIMx[UART_TIMER_ID], DISABLE);
+
+					TransCnt = UART_ReceiveDataTO(puart_adapter->UARTx, puart_adapter->pRxBuf,
+						puart_adapter->RxCount, 1);
+					puart_adapter->RxCount -= TransCnt;
+					puart_adapter->pRxBuf += TransCnt;
+					
+					trans_less_than_four = 0;
+					uart_dmarecv_complete(puart_adapter);
+				} else {
+					trans_less_than_four = 1;
+				}
+			}
 		}
 	}
 }
@@ -563,6 +581,8 @@ void serial_baud(serial_t *obj, int baudrate)
 {
 	current_baudrate=baudrate;
 	PMBED_UART_ADAPTER puart_adapter = &(uart_adapter[obj->uart_idx]);
+
+	RCC_PeriphClockSource_UART(puart_adapter->UARTx, UART_RX_CLK_XTAL_40M);
 	
 	UART_SetBaud(puart_adapter->UARTx, baudrate);
 	UART_RxCmd(puart_adapter->UARTx, ENABLE);
@@ -991,6 +1011,11 @@ int32_t serial_recv_stream_dma (serial_t *obj, char *prxbuf, uint32_t len)
 		}
 	}
 	
+	#ifdef UART_USE_GTIMER_TO
+	uart_gtimer_init(puart_adapter, UART_TIMER_TO);
+	RTIM_Cmd(TIMx[UART_TIMER_ID], ENABLE);
+	#endif
+	
 	return (ret);
 }
 
@@ -1398,6 +1423,7 @@ int32_t serial_recv_stream_dma_timeout(serial_t *obj,
 
 	puart_adapter->pRxBuf = (uint8_t*)prxbuf;
 	puart_adapter->last_dma_addr = (u32)prxbuf;
+	puart_adapter->RxCount = 0;
 	
 	if(0!=timeout_count){
 		int regval=puart_adapter->UARTx->RX_PATH;

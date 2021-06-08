@@ -13,7 +13,7 @@
 #include "rtl8721d_ssi.h"
 
 #define DataFrameSize		8
-#define TEST_BUF_SIZE	8400
+#define TEST_BUF_SIZE	8400  //for dma mode, buffer size should be multiple of 32-byte
 #define BLOCK_SIZE 		2048  //number of bytes in a block
 
 /*SPIx pin location:
@@ -49,7 +49,8 @@ SPI1:
 #define SPI1_SCLK  PB_6
 #define SPI1_CS    PB_7
 
-SRAM_NOCACHE_DATA_SECTION u8 MasterTxBuf[TEST_BUF_SIZE];
+/* for dma mode, start address of buffer should be 32-byte aligned*/
+u8 MasterTxBuf[TEST_BUF_SIZE] __attribute__((aligned(32)));
 
 SPI_TypeDef *spi_master;
 GDMA_InitTypeDef SSITxGdmaInitStruct;
@@ -96,13 +97,13 @@ void Gdma_multiblock_irq(VOID *Data)
 	
 
 	/* reload cache from sram before use the DMA destination data */
-	DCache_Invalidate(((u32)pDstData & CACHE_LINE_ADDR_MSK), (BLOCK_SIZE + CACHE_LINE_SIZE));
+	DCache_Invalidate((u32)pDstData, BLOCK_SIZE);
 
 //	for(int num = 0;num < BLOCK_SIZE; num++){
 //		DBG_8195A( "\r\src: %d\n" ,*(pSrcData+num));  
 //		}
 
-	DCache_Clean(pDstData, (BLOCK_SIZE + CACHE_LINE_SIZE));
+	DCache_Clean((u32)pDstData, BLOCK_SIZE);
 
 	//Clear Pending ISR, next block will start transfer
 	IsrTypeMap = GDMA_ClearINT(0, GDMA_InitStruct->GDMA_ChNum);
@@ -132,6 +133,8 @@ BOOL SSI_Multi_TXGDMA_Init(PGDMA_InitTypeDef GDMA_InitStruct, void *CallbackData
 	IRQn_Type   IrqNum;
 
 	assert_param(GDMA_InitStruct != NULL);
+
+	DCache_CleanInvalidate((u32) pTxData, Length);
 
 	GdmaChnl = GDMA_ChnlAlloc(0, CallbackFunc, (u32)CallbackData, 12);//ACUT is 0x10, BCUT is 12
 	if (GdmaChnl == 0xFF) {
@@ -226,13 +229,7 @@ void Spi_free(SPI_TypeDef *spi_dev)
 	SSI_Cmd(spi_dev, DISABLE);
 }
 
-/**
-  * @brief  Main program.
-  * @param  None 
-  * @retval None
-  */
-
-void main(void)
+void spi_multiblock_task(void* param)
 {
 	int i = 0;	
 
@@ -299,7 +296,24 @@ void main(void)
 
 	DBG_8195A("SPI Demo finished.\n");
 
-	for(;;);
+	vTaskDelete(NULL);
 
+}
+
+/**
+  * @brief  Main program.
+  * @param  None
+  * @retval None
+  */
+void main(void)
+{
+	if(xTaskCreate(spi_multiblock_task, ((const char*)"spi_multiblock_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
+		printf("\n\r%s xTaskCreate(spi_multiblock_task) failed", __FUNCTION__);
+
+	vTaskStartScheduler();
+	while(1){
+		vTaskDelay( 1000 / portTICK_RATE_MS );
+	}
+	
 }
 

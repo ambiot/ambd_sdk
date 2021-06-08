@@ -118,6 +118,14 @@ if [ "$CONFIG_TRUSTZONE" = "y" ]; then
 fi
 endmenu
 
+mainmenu_option next_comment
+comment '< CONFIG SBootIMG2 '
+bool "Enable SBootIMG2"			CONFIG_SBootIMG2
+if [ "$CONFIG_SBootIMG2" = "y" ]; then
+	define_bool CONFIG_SBOOTIMG2_EN y
+fi
+endmenu
+
 #===========================================================================
 # Common Config with every IC have this function in here. Don't litmit someone ic.
 #
@@ -156,6 +164,41 @@ bool "Enable Sdio Device"		CONFIG_SDIO_DEVICE_EN
 if [ "$CONFIG_SDIO_DEVICE_EN" = "y" ]; then
 	define_bool CONFIG_SDIO_DEVICE_NORMAL y
 	define_bool CONFIG_SDIO_DEVICE_MODULE y
+fi
+endmenu
+
+mainmenu_option next_comment
+comment '< CONFIG USB '
+bool "Enable USB"                 		        CONFIG_USB_OTG_EN
+if [ "$CONFIG_USB_OTG_EN" = "y" ]; then
+choice 'USB OTG Type'             "USB_OTG_DEVICE_MODE  CONFIG_USB_DEVICE_EN \
+                                   USB_OTG_HOST_MODE    CONFIG_USB_HOST_EN \
+                                  "USB_OTG_DEVICE_MODE
+
+if [ "$CONFIG_USB_DEVICE_EN" = "y" ]; then
+choice 'USB Device Type'         "USB_DEVICE_AUDIO      CONFIG_USBD_AUDIO \
+                                  USB_DEVICE_CDC_ACM    CONFIG_USBD_CDC_ACM \
+                                  USB_DEVICE_HID        CONFIG_USBD_HID \
+                                  USB_DEVICE_MSC        CONFIG_USBD_MSC \
+                                  USB_DEVICE_VENDOR     CONFIG_USBD_VENDOR \
+                                 "
+fi
+
+if [ "$CONFIG_USB_HOST_EN" = "y" ]; then
+choice 'USB Host Type'           "USB_HOST_CDC_ACM      CONFIG_USBH_CDC_ACM \
+                                  USB_HOST_MSC          CONFIG_USBH_MSC \
+                                  USB_HOST_UVC          CONFIG_USBH_UVC \
+                                  USB_HOST_VENDOR       CONFIG_USBH_VENDOR \
+                                 "
+fi
+
+if [ "$CONFIG_USBH_UVC" = "y" ]; then
+define_bool CONFIG_V4L2_EN      y
+define_bool CONFIG_RTSP_EN      y
+define_bool CONFIG_RTP_CODEC_EN y
+define_bool CONFIG_MMF_EN       y
+fi
+
 fi
 endmenu
 
@@ -203,6 +246,28 @@ if [ "$CONFIG_PER_TEST" = "y" ]; then
 	bool "RSIP_Verify_Mode"		CONFIG_RSIP_VERIFY
 	bool "SDIO_DEVICE_Verify_Mode"	CONFIG_SDIO_DEVICE_VERIFY
 	bool "SDIO_HOST_Verify_Mode"	CONFIG_SDIOH_VERIFY
+	bool "USB_Verify_Mode"		CONFIG_USB_VERIFY
+	if [ "$CONFIG_USB_VERIFY" = "y" ]; then
+	choice 'USB Verify Type'	"USB_HOST_Verify_Mode    CONFIG_USBH_VERIFY \
+								USB_DEVICE_Verify_Mode    CONFIG_USBD_VERIFY \
+								USB_DEVICE_CLASS_Verify_Mode	CONFIG_USBD_CLASS_VERIFY \
+								USB_HOST_CLASS_Verify_Mode	CONFIG_USBH_CLASS_VERIFY \
+								"
+	
+	if [ "$CONFIG_USBD_CLASS_VERIFY" = "y" ]; then
+	if [ "$CONFIG_USBD_CDC_ACM" = "y" ]; then
+	choice 'USBD CDC ACM Test'  "CDC_TX_Performance_Test      CONFIG_USBD_CDC_ACM_TP \
+								CDC_RX_Performance_Test    CONFIG_USBD_CDC_ACM_RP \
+								"
+	fi
+	fi
+
+	if [ "$CONFIG_USBH_CLASS_VERIFY" = "y" ]; then
+	if [ "$CONFIG_USBH_CDC_ACM" = "y" ]; then
+	choice "USBH CDC ACM TEST" "CDC_Throughput_Test CONFIG_USBH_CDC_ACM_VERIFY"
+	fi
+	fi
+	fi
 	bool "Dhrystone Test"		CONFIG_DHRYSTONE_TEST
 	bool "RTLIB ROM Test"		CONFIG_RTLIB_VERIFY
 	bool "IPC Test"			CONFIG_IPC_VERIFY
@@ -235,7 +300,6 @@ mainmenu_option next_comment
 comment '< CONFIG BT '
 bool "Enable BT"				CONFIG_BT_EN
 if [ "$CONFIG_BT_EN" = "y" ]; then
-define_bool CONFIG_BT y
 	define_bool CONFIG_BT y
 	bool "BT_Peripheral"		CONFIG_BT_PERIPHERAL
 	bool "BT_Central"			CONFIG_BT_CENTRAL
@@ -243,6 +307,40 @@ define_bool CONFIG_BT y
 	bool "BT_Beacon"			CONFIG_BT_BEACON
 	bool "BT_Simple_Config"		CONFIG_BT_CONFIG
 	bool "BT_Airsync_Config"	CONFIG_BT_AIRSYNC_CONFIG
+	bool "BT_Breeze"			CONFIG_BT_BREEZE
+	bool "BT_Mesh_Provisioner"	CONFIG_BT_MESH_PROVISIONER
+	if [ "$CONFIG_BT_MESH_PROVISIONER" = "y" ]; then
+		bool "BT_Mesh_Provisioner_RTK_Demo"	CONFIG_BT_MESH_PROVISIONER_RTK_DEMO
+	fi
+	bool "BT_Mesh_Device"		CONFIG_BT_MESH_DEVICE
+	if [ "$CONFIG_BT_MESH_DEVICE" = "y" ]; then
+		bool "BT_Mesh_Device_RTK_Demo"		CONFIG_BT_MESH_DEVICE_RTK_DEMO
+	fi
+	bool "BT_Mesh_Provisioner_Multiple_Profile"	CONFIG_BT_MESH_PROVISIONER_MULTIPLE_PROFILE
+	if [ "$CONFIG_BT_MESH_PROVISIONER_MULTIPLE_PROFILE" = "y" ]; then
+		bool "BT_Mesh_Provisioner_RTK_Demo"	CONFIG_BT_MESH_PROVISIONER_RTK_DEMO 
+		bool "BT_Mesh_Central"              CONFIG_BT_MESH_CENTRAL
+		bool "BT_Mesh_Peripheral"           CONFIG_BT_MESH_PERIPHERAL
+		bool "BT_Mesh_Scatternet"           CONFIG_BT_MESH_SCATTERNET
+	fi
+	bool "BT_Mesh_Device_Multiple_Profile"	CONFIG_BT_MESH_DEVICE_MULTIPLE_PROFILE
+	if [ "$CONFIG_BT_MESH_DEVICE_MULTIPLE_PROFILE" = "y" ]; then
+		bool "BT_Mesh_Device_RTK_Demo"		CONFIG_BT_MESH_DEVICE_RTK_DEMO
+		bool "BT_Mesh_Central"              CONFIG_BT_MESH_CENTRAL
+		bool "BT_Mesh_Peripheral"           CONFIG_BT_MESH_PERIPHERAL
+		bool "BT_Mesh_Scatternet"           CONFIG_BT_MESH_SCATTERNET
+	fi
+	if [ "$CONFIG_BT_MESH_PROVISIONER $CONFIG_BT_MESH_PROVISIONER_MULTIPLE_PROFILE" = "n n" ]; then
+		define_bool CONFIG_BT_MESH_PROVISIONER_RTK_DEMO  n
+	fi
+	if [ "$CONFIG_BT_MESH_DEVICE $CONFIG_BT_MESH_DEVICE_MULTIPLE_PROFILE" = "n n" ]; then
+		define_bool CONFIG_BT_MESH_DEVICE_RTK_DEMO       n
+	fi
+	if [ "$CONFIG_BT_MESH_PROVISIONER_MULTIPLE_PROFILE $CONFIG_BT_MESH_DEVICE_MULTIPLE_PROFILE" = "n n" ]; then
+		define_bool CONFIG_BT_MESH_CENTRAL               n
+		define_bool CONFIG_BT_MESH_PERIPHERAL            n
+		define_bool CONFIG_BT_MESH_SCATTERNET            n
+	fi
 else
 	define_bool CONFIG_BT n
 	define_bool CONFIG_BT_PERIPHERAL n
@@ -251,6 +349,16 @@ else
 	define_bool CONFIG_BT_BEACON n
 	define_bool CONFIG_BT_CONFIG n
 	define_bool CONFIG_BT_AIRSYNC_CONFIG n
+	define_bool CONFIG_BT_BREEZE n
+	define_bool CONFIG_BT_MESH_PROVISIONER n
+	define_bool CONFIG_BT_MESH_PROVISIONER_RTK_DEMO n
+	define_bool CONFIG_BT_MESH_DEVICE n
+	define_bool CONFIG_BT_MESH_DEVICE_RTK_DEMO n
+	define_bool CONFIG_BT_MESH_PROVISIONER_MULTIPLE_PROFILE n
+	define_bool CONFIG_BT_MESH_DEVICE_MULTIPLE_PROFILE n
+	define_bool CONFIG_BT_MESH_CENTRAL n
+	define_bool CONFIG_BT_MESH_PERIPHERAL n
+	define_bool CONFIG_BT_MESH_SCATTERNET n
 fi
 endmenu
 
@@ -280,23 +388,6 @@ comment '< CONFIG NETWORK '
 bool "Enable Network"                    		CONFIG_NETWORK
 endmenu
 
-mainmenu_option next_comment
-comment '< CONFIG USB '
-bool "Enable USB"                 		        CONFIG_USB_OTG_EN
-if [ "$CONFIG_USB_OTG_EN" = "y" ]; then
-choice 'USB OTG Type'             "USB_OTG_DEVICE_MODE  CONFIG_USB_DEVICE_EN \
-                                  "USB_OTG_DEVICE_MODE
-
-if [ "$CONFIG_USB_DEVICE_EN" = "y" ]; then
-choice 'USB Device Type'         "USB_DEVICE_AUDIO      CONFIG_USBD_AUDIO \
-                                  USB_DEVICE_MSC        CONFIG_USBD_MSC \
-                                  USB_DEVICE_CDC_ACM    CONFIG_USBD_CDC_ACM \
-                                 "
-fi
-
-fi
-endmenu
-
 comment '--------------Network Config End--------------'
 
 comment '--------------Application Config Start------------'
@@ -310,6 +401,11 @@ endmenu
 mainmenu_option next_comment
 comment '< DuerOS Config '
 bool "Enable DuerOS"                    		CONFIG_BAIDU_DUER
+endmenu
+
+mainmenu_option next_comment
+comment '< LinkKit Config '
+bool "Enable LinkKit"                    		CONFIG_LINKKIT_AWSS
 endmenu
 
 mainmenu_option next_comment

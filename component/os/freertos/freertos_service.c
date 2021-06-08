@@ -448,6 +448,22 @@ static int _freertos_pop_from_xqueue( _xqueue* queue, void* message, u32 timeout
     return 0;
 }
 
+
+static int _freertos_peek_from_xqueue( _xqueue* queue, void* message, u32 timeout_ms )
+{
+	if(timeout_ms == RTW_WAIT_FOREVER) {
+		timeout_ms = portMAX_DELAY;
+	} else {
+		timeout_ms = rtw_ms_to_systime(timeout_ms);
+	}
+
+    if ( xQueuePeek( *queue, message, timeout_ms ) != pdPASS )
+    {
+        return -1;
+    }
+
+    return 0;
+}
 static int _freertos_deinit_xqueue( _xqueue* queue )
 {
     int result = 0;
@@ -802,12 +818,32 @@ static void _freertos_delete_task(struct task_struct *ptask)
 	DBG_TRACE("Delete Task \"%s\"\n", ptask->task_name);
 }
 
+static void _freertos_set_priority_task(void* task, u32 NewPriority)
+{
+	vTaskPrioritySet( (TaskHandle_t) task, (UBaseType_t) NewPriority );
+}
+
+static int _freertos_get_priority_task(void *task)
+{
+	return (int) uxTaskPriorityGet((TaskHandle_t) task );
+}
+
 static void _freertos_thread_enter(char *name)
 {
 	/* To avoid gcc warnings */
 	( void ) name;
 	
 	DBG_INFO("\n\rRTKTHREAD %s\n", name);
+}
+
+static void _freertos_suspend_task(void *task)
+{
+	vTaskSuspend((TaskHandle_t) task );
+}
+
+static void _freertos_resume_task(void *task)
+{
+	vTaskResume((TaskHandle_t) task );
 }
 
 static void _freertos_thread_exit(void)
@@ -970,6 +1006,11 @@ void _freertos_create_secure_context(u32 secure_stack_size)
 #endif	
 }
 
+void* _freertos_get_current_TaskHandle(void)
+{
+	return (void*)xTaskGetCurrentTaskHandle();
+}
+
 const struct osdep_service_ops osdep_service = {
 	_freertos_malloc,			//rtw_vmalloc
 	_freertos_zmalloc,			//rtw_zvmalloc
@@ -1009,6 +1050,7 @@ const struct osdep_service_ops osdep_service = {
 	_freertos_init_xqueue,			//rtw_init_xqueue
 	_freertos_push_to_xqueue,		//rtw_push_to_xqueue
 	_freertos_pop_from_xqueue,		//rtw_pop_from_xqueue
+	_freertos_peek_from_xqueue,		//rtw_peek_from_xqueue
 	_freertos_deinit_xqueue,		//rtw_deinit_xqueue
 	_freertos_get_current_time,		//rtw_get_current_time
 	_freertos_systime_to_ms,		//rtw_systime_to_ms
@@ -1039,6 +1081,10 @@ const struct osdep_service_ops osdep_service = {
 	_freertos_create_task,			//rtw_create_task
 	_freertos_delete_task,			//rtw_delete_task
 	NULL,							//rtw_wakeup_task
+	_freertos_set_priority_task,	//rtw_set_priority_task
+	_freertos_get_priority_task,	//rtw_get_priority_task
+	_freertos_suspend_task,			//rtw_suspend_task
+	_freertos_resume_task,			//rtw_resume_task
 
 	_freertos_thread_enter,			//rtw_thread_enter
 	_freertos_thread_exit,			//rtw_thread_exit
@@ -1061,4 +1107,5 @@ const struct osdep_service_ops osdep_service = {
 	_freertos_wakelock_timeout,		//rtw_wakelock_timeout
 	_freertos_get_scheduler_state,	//rtw_get_scheduler_state
 	_freertos_create_secure_context,	// rtw_create_secure_context	
+	_freertos_get_current_TaskHandle,	//rtw_get_current_TaskHandle
 };

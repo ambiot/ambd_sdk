@@ -47,6 +47,10 @@ extern u32 _ntohl(u32 n);
 #define SC_SOFTAP_EN      0 // disable softAP mode for iNIC applications
 #endif
 
+#if SC_SOFTAP_EN
+#define SOFTAP_SSID_LEN		33
+#endif
+
 #if CONFIG_WLAN
 #if (CONFIG_INCLUDE_SIMPLE_CONFIG)
 #include "wifi/wifi_conf.h"
@@ -186,7 +190,7 @@ static void set_device_name(char *device_name)
 	memcpy(device_name, "ameba_", 6);
 	for(int i = 0; i < 3; i++)
 	{
-		sprintf(device_name + 6 + pos, "%02x", xnetif[0].hwaddr[i + 3]);
+		snprintf(device_name + 6 + pos, 64-6-pos, "%02x", xnetif[0].hwaddr[i + 3]);
 		pos += 2;
 		if(i != 2)
 			device_name[6 + pos++] = ':';
@@ -1291,10 +1295,10 @@ static void simpleConfig_get_softAP_profile(unsigned char *SimpleConfig_SSID, un
     
     MAC_sum_complement = -(mac_addr[3] + mac_addr[4] + mac_addr[5]);
 	if(strlen((char const*)softap_prefix) > 0)
-    	sprintf((char*)SimpleConfig_SSID, "%s-%02X%02X%02X00%02X",
+    	snprintf((char*)SimpleConfig_SSID, SOFTAP_SSID_LEN, "%s-%02X%02X%02X00%02X",
             softap_prefix, mac_addr[3], mac_addr[4], mac_addr[5], (MAC_sum_complement & 0xff));
 	else	
-		sprintf((char*)SimpleConfig_SSID, "@RSC-%02X%02X%02X00%02X",
+		snprintf((char*)SimpleConfig_SSID, SOFTAP_SSID_LEN, "@RSC-%02X%02X%02X00%02X",
 			mac_addr[3], mac_addr[4], mac_addr[5], (MAC_sum_complement & 0xff));
 
     memcpy(SimpleConfig_password, "12345678", 8);
@@ -1409,7 +1413,7 @@ static int simple_config_softap_config(void)
                         char softAP_ack_content[17];
                         //printf("softAP mode simpleConfig success, send response\n");
                     	// ack content: MAC address in string mode
-                    	sprintf(softAP_ack_content, "%02x:%02x:%02x:%02x:%02x:%02x",
+                    	snprintf(softAP_ack_content, sizeof(softAP_ack_content), "%02x:%02x:%02x:%02x:%02x:%02x",
                     	        mac_addr[0], mac_addr[1], mac_addr[2], 
                     	        mac_addr[3], mac_addr[4], mac_addr[5]);
 

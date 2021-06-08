@@ -13,3 +13,6 @@ So we connect them as below:
     master's CS   (PA_28) connect to slave's CS  (PA_28) 
 
 After boot up, the slave will send data to slave and receive date from slave. Results will be displayed on LOG_OUT.
+
+Note:
+1. for dma mode, both CPU and dma have access to usi spi buffer. Start address of usi spi buffer should be 32-byte aligned and size of usi spi buffer should be multiple of 32 byte.

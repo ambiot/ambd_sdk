@@ -121,7 +121,7 @@ static void app_keyscan_timeout_handler(void)
 
 static void app_keyscan_timeout_init(void)
 {
-	app_keyscan_xTimers = xTimerCreate("Keyscan_Timeout_Timer", KEYSCAN_TIMEOUT_DELAY, pdFALSE, NULL, app_keyscan_timeout_handler);
+	app_keyscan_xTimers = xTimerCreate("Keyscan_Timeout_Timer", KEYSCAN_TIMEOUT_DELAY, pdFALSE, NULL, (TimerCallbackFunction_t)app_keyscan_timeout_handler);
 	if(app_keyscan_xTimers == NULL)
 		DBG_8195A("Keyscan_Timeout_Timer create error\n"); 
 }

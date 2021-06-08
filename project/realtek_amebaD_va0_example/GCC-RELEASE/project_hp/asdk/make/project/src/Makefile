@@ -12,7 +12,11 @@ include $(MAKE_INCLUDE_GEN)
 #*****************************************************************************#
 all:
 	@make -C $(SRCDIR) all
-	find $(SRCDIR) -type f -regex '.*\(\.i\|\.d\|\.s\|\.su\|\.o\)' |xargs -i mv {} ./
+	@if [ "$(COMPILEOS)" != "$(DARWIN)" ]; then \
+		find $(SRCDIR) -type f -regex '.*\(\.i\|\.d\|\.s\|\.su\|\.o\)' |xargs -i mv {} ./; \
+	else \
+		find $(SRCDIR) -type f -regex '.*\(\.i\|\.d\|\.s\|\.su\|\.o\)' |xargs -I mv {} ./; \
+	fi
 
 #*****************************************************************************#
 #                        RULES TO CLEAN TARGETS                               #
@@ -24,4 +28,4 @@ clean: CLEAN_OBJS
 	$(REMOVE) *.d
 	$(REMOVE) *.su
 
--include $(DEPS)	
+-include $(DEPS)

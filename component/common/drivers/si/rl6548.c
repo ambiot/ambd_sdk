@@ -269,7 +269,9 @@ void CODEC_Init(u32 sample_rate, u32 word_len, u32 mono_stereo, u32 application)
 		}
 	}
 
-	DelayMs(200);
+	if (((application&APP_AMIC_IN) == APP_AMIC_IN) || ((application&APP_LINE_IN) == APP_LINE_IN) || ((application&APP_LINE_OUT) == APP_LINE_OUT)) { 
+		DelayMs(200); 
+	} 
 
 	if ((application&APP_LINE_OUT) == APP_LINE_OUT){
 		//step5

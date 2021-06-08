@@ -32,6 +32,11 @@
 #include <ctype.h>
 #include "cJSON.h"
 
+
+/* strlen of character literals resolved at compile time */
+#define static_strlen(string_literal) (sizeof(string_literal) - sizeof(""))
+
+
 static const char *ep;
 
 const char *cJSON_GetErrorPtr(void) {return ep;}
@@ -107,7 +112,7 @@ const char *parse_number(cJSON *item,const char *num)
 	}
 
 	n=sign*n*pow(10.0,(scale+subscale*signsubscale));	/* number = +/- number.fraction * 10^+/- exponent */
-	
+
 	item->valuedouble=n;
 	item->valueint=(int)n;
 	item->type=cJSON_Number;
@@ -154,16 +159,29 @@ static unsigned parse_hex4(const char *str)
 static const unsigned char firstByteMark[7] = { 0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC };
 static const char *parse_string(cJSON *item,const char *str)
 {
-	const char *ptr=str+1;char *ptr2;char *out;int len=0;unsigned uc,uc2;
+	const char *ptr=str+1, *end_ptr=str+1;char *ptr2;char *out;int len=0;unsigned uc,uc2;
 	if (*str!='\"') {ep=str;return 0;}	/* not a string! */
-	
-	while (*ptr!='\"' && *ptr && ++len) if (*ptr++ == '\\') ptr++;	/* Skip escaped quotes. */
-	
+
+
+
+	while (*end_ptr!='\"' && *end_ptr && ++len)
+	{
+	    if (*end_ptr++ == '\\')
+	    {
+		if (*end_ptr == '\0')
+		{
+		    /* prevent buffer overflow when last input character is a backslash */
+		    return 0;
+		}
+		end_ptr++;	/* Skip escaped quotes. */
+	    }
+	}
+
 	out=(char*)cJSON_malloc(len+1);	/* This is how long we need for the string, roughly. */
 	if (!out) return 0;
-	
+
 	ptr=str+1;ptr2=out;
-	while (*ptr!='\"' && *ptr)
+	while (ptr < end_ptr)
 	{
 		if (*ptr!='\\') *ptr2++=*ptr++;
 		else
@@ -178,24 +196,27 @@ static const char *parse_string(cJSON *item,const char *str)
 				case 't': *ptr2++='\t';	break;
 				case 'u':	 /* transcode utf16 to utf8. */
 					uc=parse_hex4(ptr+1);ptr+=4;	/* get the unicode char. */
+					if (ptr >= end_ptr) {ep=str;return 0;}	/* invalid */
 
-					if ((uc>=0xDC00 && uc<=0xDFFF) || uc==0)	break;	/* check for invalid.	*/
+					if ((uc>=0xDC00 && uc<=0xDFFF) || uc==0)    {ep=str;return 0;}	/* check for invalid.   */
 
 					if (uc>=0xD800 && uc<=0xDBFF)	/* UTF16 surrogate pairs.	*/
 					{
-						if (ptr[1]!='\\' || ptr[2]!='u')	break;	/* missing second-half of surrogate.	*/
+						if (ptr+6 > end_ptr)    {ep=str;return 0;}	/* invalid */
+						if (ptr[1]!='\\' || ptr[2]!='u')    {ep=str;return 0;}	/* missing second-half of surrogate.    */
 						uc2=parse_hex4(ptr+3);ptr+=6;
-						if (uc2<0xDC00 || uc2>0xDFFF)		break;	/* invalid second-half of surrogate.	*/
+						if (uc2<0xDC00 || uc2>0xDFFF)       {ep=str;return 0;}	/* invalid second-half of surrogate.    */
 						uc=0x10000 + (((uc&0x3FF)<<10) | (uc2&0x3FF));
 					}
 
 					len=4;if (uc<0x80) len=1;else if (uc<0x800) len=2;else if (uc<0x10000) len=3; ptr2+=len;
-					
+
 					switch (len) {
-						case 4: *--ptr2 =((uc | 0x80) & 0xBF); uc >>= 6;
-						case 3: *--ptr2 =((uc | 0x80) & 0xBF); uc >>= 6;
-						case 2: *--ptr2 =((uc | 0x80) & 0xBF); uc >>= 6;
-						case 1: *--ptr2 =(uc | firstByteMark[len]);
+						case 4: *--ptr2 =((uc | 0x80) & 0xBF); uc >>= 6;	break;
+						case 3: *--ptr2 =((uc | 0x80) & 0xBF); uc >>= 6;	break;
+						case 2: *--ptr2 =((uc | 0x80) & 0xBF); uc >>= 6;	break;
+						case 1: *--ptr2 =(uc | firstByteMark[len]);	break;
+						default: break;
 					}
 					ptr2+=len;
 					break;
@@ -215,10 +236,10 @@ static const char *parse_string(cJSON *item,const char *str)
 static char *print_string_ptr(const char *str)
 {
 	const char *ptr;char *ptr2,*out;int len=0;unsigned char token;
-	
+
 	if (!str) return cJSON_strdup("");
 	ptr=str;while ((token=*ptr) && ++len) {if (strchr("\"\\\b\f\n\r\t",token)) len++; else if (token<32) len+=5;ptr++;}
-	
+
 	out=(char*)cJSON_malloc(len+3);
 	if (!out) return 0;
 
@@ -351,7 +372,7 @@ static char *print_array(cJSON *item,int depth,int fmt)
 	char *out=0,*ptr,*ret;int len=5;
 	cJSON *child=item->child;
 	int numentries=0,i=0,fail=0;
-	
+
 	/* How many entries in the array? */
 	while (child) numentries++,child=child->next;
 	/* Explicitly handle numentries==0 */
@@ -374,7 +395,7 @@ static char *print_array(cJSON *item,int depth,int fmt)
 		if (ret) len+=strlen(ret)+2+(fmt?1:0); else fail=1;
 		child=child->next;
 	}
-	
+
 	/* If we didn't fail, try to malloc the output string */
 	if (!fail) out=(char*)cJSON_malloc(len);
 	/* If that fails, we fail. */
@@ -387,7 +408,7 @@ static char *print_array(cJSON *item,int depth,int fmt)
 		cJSON_free(entries);
 		return 0;
 	}
-	
+
 	/* Compose the output array. */
 	*out='[';
 	ptr=out+1;*ptr=0;
@@ -399,7 +420,7 @@ static char *print_array(cJSON *item,int depth,int fmt)
 	}
 	cJSON_free(entries);
 	*ptr++=']';*ptr++=0;
-	return out;	
+	return out;
 }
 
 /* Build an object from the text. */
@@ -407,11 +428,11 @@ static const char *parse_object(cJSON *item,const char *value)
 {
 	cJSON *child;
 	if (*value!='{')	{ep=value;return 0;}	/* not an object! */
-	
+
 	item->type=cJSON_Object;
 	value=skip(value+1);
 	if (*value=='}') return value+1;	/* empty array. */
-	
+
 	item->child=child=cJSON_New_Item();
 	if (!item->child) return 0;
 	value=skip(parse_string(child,skip(value)));
@@ -420,7 +441,7 @@ static const char *parse_object(cJSON *item,const char *value)
 	if (*value!=':') {ep=value;return 0;}	/* fail! */
 	value=skip(parse_value(child,skip(value+1)));	/* skip any spacing, get the value. */
 	if (!value) return 0;
-	
+
 	while (*value==',')
 	{
 		cJSON *new_item;
@@ -433,7 +454,7 @@ static const char *parse_object(cJSON *item,const char *value)
 		value=skip(parse_value(child,skip(value+1)));	/* skip any spacing, get the value. */
 		if (!value) return 0;
 	}
-	
+
 	if (*value=='}') return value+1;	/* end of array */
 	ep=value;return 0;	/* malformed. */
 }
@@ -474,7 +495,7 @@ static char *print_object(cJSON *item,int depth,int fmt)
 		if (str && ret) len+=strlen(ret)+strlen(str)+2+(fmt?2+depth:0); else fail=1;
 		child=child->next;
 	}
-	
+
 	/* Try to allocate the output string */
 	if (!fail) out=(char*)cJSON_malloc(len);
 	if (!out) fail=1;
@@ -486,7 +507,7 @@ static char *print_object(cJSON *item,int depth,int fmt)
 		cJSON_free(names);cJSON_free(entries);
 		return 0;
 	}
-	
+
 	/* Compose the output: */
 	*out='{';ptr=out+1;if (fmt)*ptr++='\n';*ptr=0;
 	for (i=0;i<numentries;i++)
@@ -499,11 +520,11 @@ static char *print_object(cJSON *item,int depth,int fmt)
 		if (fmt) *ptr++='\n';*ptr=0;
 		cJSON_free(names[i]);cJSON_free(entries[i]);
 	}
-	
+
 	cJSON_free(names);cJSON_free(entries);
 	if (fmt) for (i=0;i<depth-1;i++) *ptr++='\t';
 	*ptr++='}';*ptr++=0;
-	return out;	
+	return out;
 }
 
 /* Get Array size/item / object item. */
@@ -578,19 +599,98 @@ cJSON *cJSON_Duplicate(cJSON *item,int recurse)
 	return newitem;
 }
 
+
+static void skip_oneline_comment(char **input)
+{
+    *input += static_strlen("//");
+
+    for (; (*input)[0] != '\0'; ++(*input))
+    {
+        if ((*input)[0] == '\n') {
+            *input += static_strlen("\n");
+            return;
+        }
+    }
+}
+
+static void skip_multiline_comment(char **input)
+{
+    *input += static_strlen("/*");
+    for (; (*input)[0] != '\0'; ++(*input))
+    {
+        if (((*input)[0] == '*') && ((*input)[1] == '/'))
+        {
+            *input += static_strlen("*/");
+            return;
+        }
+    }
+}
+
+static void minify_string(char **input, char **output)
+{
+    (*output)[0] = (*input)[0];
+    *input += static_strlen("\"");
+    *output += static_strlen("\"");
+
+    for (; (*input)[0] != '\0'; (void)++(*input), ++(*output)) {
+        (*output)[0] = (*input)[0];
+
+        if ((*input)[0] == '\"') {
+            (*output)[0] = '\"';
+            *input += static_strlen("\"");
+            *output += static_strlen("\"");
+            return;
+        } else if (((*input)[0] == '\\') && ((*input)[1] == '\"')) {
+            (*output)[1] = (*input)[1];
+            *input += static_strlen("\"");
+            *output += static_strlen("\"");
+        }
+    }
+}
+
 void cJSON_Minify(char *json)
 {
-	char *into=json;
-	while (*json)
-	{
-		if (*json==' ') json++;
-		else if (*json=='\t') json++;	// Whitespace characters.
-		else if (*json=='\r') json++;
-		else if (*json=='\n') json++;
-		else if (*json=='/' && json[1]=='/')  while (*json && *json!='\n') json++;	// double-slash comments, to end of line.
-		else if (*json=='/' && json[1]=='*') {while (*json && !(*json=='*' && json[1]=='/')) json++;json+=2;}	// multiline comments.
-		else if (*json=='\"'){*into++=*json++;while (*json && *json!='\"'){if (*json=='\\') *into++=*json++;*into++=*json++;}*into++=*json++;} // string literals, which are \" sensitive.
-		else *into++=*json++;			// All other characters.
-	}
-	*into=0;	// and null-terminate.
+    char *into = json;
+
+    if (json == NULL)
+    {
+        return;
+    }
+
+    while (json[0] != '\0')
+    {
+        switch (json[0])
+        {
+            case ' ':
+            case '\t':
+            case '\r':
+            case '\n':
+                json++;
+                break;
+
+            case '/':
+                if (json[1] == '/')
+                {
+                    skip_oneline_comment(&json);
+                }
+                else if (json[1] == '*')
+                {
+                    skip_multiline_comment(&json);
+                }
+                break;
+
+            case '\"':
+                minify_string(&json, (char**)&into);
+                break;
+
+            default:
+                into[0] = json[0];
+                json++;
+                into++;
+        }
+    }
+
+    /* and null-terminate. */
+    *into = '\0';
 }
+

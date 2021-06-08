@@ -13,6 +13,11 @@
 #undef PIN_NAME
 #endif
 #define PIN_NAME		PA_5
+#elif defined(CONFIG_PLATFORM_8721D)
+#if defined(PIN_NAME)
+#undef PIN_NAME
+#endif
+#define PIN_NAME		PA_25
 #else
 #if defined(PIN_NAME)
 #undef PIN_NAME

@@ -43,9 +43,6 @@ void main(void)
 	PAD_PullCtrl(UART_TX, GPIO_PuPd_UP);   //Tx/Rx pin should pull up
 	PAD_PullCtrl(UART_RX, GPIO_PuPd_UP);
 	
-	/*choose clock source*/
-	RCC_PeriphClockSource_UART(UART_DEV, UART_RX_CLK_XTAL_40M);
-	
 	UART_StructInit(&UART_InitStruct);
 	UART_InitStruct.Parity=RUART_PARITY_DISABLE;
 	UART_Init(UART_DEV, &UART_InitStruct);

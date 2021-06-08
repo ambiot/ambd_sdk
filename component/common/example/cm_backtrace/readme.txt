@@ -30,12 +30,15 @@ Description
 	
 Setup Guide
 ~~~~~~~~~~~
+		For Ameba1/AmebazZ:
         Step 1 : Open the AmebaZ or Ameba1 IAR project, add a new group called cm_backtrace.
         Step 2 : Add cm_backtrace.c into the new-added group, and the cm_backtrace.c file is located at sdk-ameba-v4.0a\sdk-ameba-v4.0a\component\common\application\cm_backtrace
         Step 3 : Replace the main.c file located under the folder of project\realtek_amebaZ_va0_example\src (or \project\realtek_ameba1_va0_example\src,if 
                  using Ameba1 project) using the main.c located at the folder of project\realtek_amebaZ_va0_example\example_sources\cm_backtrace\src(or 
                  project\realtek_ameba1_va0_example\example_sources\cm_backtrace\src).
         Step 4 : Finally the IAR project is configured completely. Then compile this project.
+		
+		For AmebaD, set CONFIG_EXAMPLE_CM_BACKTRACE to 1 in project\realtek_amebaD_va0_example\inc\inc_hp\platform_opts.h.
 	
 
 Result description
@@ -50,6 +53,6 @@ Supported List
 ~~~~~~~~~~~~~~
 [Supported List]
 	Supported :
-	    Ameba-1, Ameba-z
+	    Ameba-1, Ameba-z,Ameba-d.
 	Source code not in project:
 	    Ameba-pro

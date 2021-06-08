@@ -30,6 +30,7 @@ export ABS_ROOTDIR MAKE_INCLUDE_GEN HOSTCC
 ifeq ($(COMPILEOS_CYGWIN),Cygwin)
 HOSTNAME_APP = /usr/bin/hostname
 PADTOOL      = $(UTILITYDIR)/imgpad.exe
+LBITS := $(shell getconf LONG_BIT)
 else
 HOSTNAME_APP = $(which hostname)
 PADTOOL      = $(UTILITYDIR)/imgpadl
@@ -52,11 +53,13 @@ LINK_ROM_LIB_NS = $(ROOTDIR)/lib/rom_acut/rom_ns.a
 
 LINK_ROM_SYMBOL_NS = ./ld/rlx8721d_rom_symbol_empty.ld
 LINK_ROM_SYMBOL_S = ./ld/rlx8721d_rom_symbol_empty.ld
+LINK_ROM_SYMBOL_BOOT = ./ld/rlx8721d_rom_symbol_empty.ld
 ifeq ($(CONFIG_LINK_ROM_SYMB),y) 
 LINK_ROM_LIB =
 LINK_ROM_LIB_NS =
 LINK_ROM_SYMBOL_NS = ./ld/rlx8721d_rom_symbol_acut.ld
 LINK_ROM_SYMBOL_S = ./ld/rlx8721d_rom_symbol_acut_s.ld
+LINK_ROM_SYMBOL_BOOT = ./ld/rlx8721d_rom_symbol_acut_boot.ld
 endif
 
 ifeq ($(CONFIG_FT),y) 
@@ -65,31 +68,54 @@ else
 LINK_APP_LIB =
 endif
 
-LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_application_hp.a
 ifeq ($(CONFIG_AUDIO_EN),y)
+#LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_ac3.a
 LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_amr.a
-LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_m4a_self.a
-LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_opusfile.a
-LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_opusenc.a
-LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_libogg.a
+#LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_haac.a
+#LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_hls.a
+#LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_hmp3.a
+#LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_m4a.a
+#LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_m4a_self.a
+#LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_mp3.a
+#LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_flac.a
+#LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_ekho.a
+#LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_gsm610.a
+#LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_libogg.a
 #LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_opusfile.a
 LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_opus.a
 #LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_opusenc.a
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_resample.a
 endif
 
 ifeq ($(CONFIG_BT_EN), y) 
 LINK_APP_LIB += $(BASEDIR)/component/common/bluetooth/realtek/sdk/board/amebad/lib/btgap.a
-#LINK_APP_LIB += $(BASEDIR)/component/common/bluetooth/realtek/sdk/example/mesh/lib/lib/amebad/btmesh_prov.a
-#LINK_APP_LIB += $(BASEDIR)/component/common/bluetooth/realtek/sdk/example/mesh/lib/lib/amebad/btmesh_dev.a
+ifeq ($(findstring y, $(CONFIG_BT_MESH_PROVISIONER) $(CONFIG_BT_MESH_PROVISIONER_MULTIPLE_PROFILE)), y)
+LINK_APP_LIB += $(BASEDIR)/component/common/bluetooth/realtek/sdk/example/bt_mesh/lib/lib/amebad/btmesh_prov.a
+else ifeq ($(findstring y, $(CONFIG_BT_MESH_DEVICE) $(CONFIG_BT_MESH_DEVICE_MULTIPLE_PROFILE)), y)
+LINK_APP_LIB += $(BASEDIR)/component/common/bluetooth/realtek/sdk/example/bt_mesh/lib/lib/amebad/btmesh_dev.a
+endif
 endif
 
 # MMF LIBRARY
-# LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_rtsp.a
+ifeq ($(CONFIG_MMF_EN), y) 
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_mmfv2.a
+endif
+ifeq ($(CONFIG_RTSP_EN), y) 
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_rtsp.a
+endif
+ifeq ($(CONFIG_MMF_EN), y) 
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_mmfv2.a
+endif
+ifeq ($(CONFIG_RTP_CODEC_EN), y) 
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_rtp_codec.a
+endif
 # LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_g711.a
 # LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_speex.a
 # LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_haac.a
 # LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_faac.a
 LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_cmsis_dsp.a
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_application_hp.a
+
 
 ifeq ($(CONFIG_TRUSTZONE), y)
 LINK_APP_LIB += $(IMAGE_TARGET_FOLDER)/cmse_implib.lib
@@ -105,6 +131,9 @@ LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_mdns.a
 LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_websocket.a
 LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_tftp.a
 LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_dct.a
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_coap.a
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_eap.a
+#LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_http2.a
 #LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_rt_airkiss_algo.a
 #LINK_APP_LIB += $(BASEDIR)/component/common/application/airkiss/2.0.0-26515/lib/libairkiss.a
 
@@ -112,11 +141,18 @@ image2_ns:LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_wlan.a $(ROOTDIR)/lib/a
 mp_image2_ns:LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_wlan_mp.a $(ROOTDIR)/lib/application/lib_wps.a
 endif
 
-ifeq ($(CONFIG_USB_HOST_EN),y)
-	LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_usbh.a
+ifeq ($(CONFIG_LINKKIT_AWSS), y)
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_aliiot.a
 endif
-ifeq ($(CONFIG_USB_DEVICE_EN),y)
-	LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_usbd.a
+
+ifeq ($(findstring y, $(CONFIG_USB_HOST_EN) $(CONFIG_USBH_VERIFY)), y)
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_usbh.a
+endif
+ifeq ($(findstring y, $(CONFIG_USB_DEVICE_EN) $(CONFIG_USBD_VERIFY)), y)
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_usbd.a
+endif
+ifeq ($(CONFIG_V4L2_EN),y)
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_v4l2.a
 endif
 
 ifeq ($(CONFIG_EMWIN_EN),y)
@@ -137,6 +173,12 @@ lib_all: build_target_folder copy_ld_img2 check_toolchain build_info.h make_subd
 #*****************************************************************************#
 
 build_target_folder:
+ifeq ($(COMPILEOS_CYGWIN),Cygwin)
+ifneq ("$(LBITS)", "32")
+	@echo ONLY 32-BIT CYGWIN IS SUPPORTED!
+	@exit -1
+endif
+endif
 	@if [ -d $(BUILD_TARGET_FOLDER) ]; then echo "$(BUILD_TARGET_FOLDER) exist"; else $(MKDIR) -p $(BUILD_TARGET_FOLDER); fi
 	@if [ -d $(IMAGE_TARGET_FOLDER) ]; then echo "$(IMAGE_TARGET_FOLDER) exist"; else $(MKDIR) -p $(IMAGE_TARGET_FOLDER); fi
 	@if [ -d $(BUILD_TARGET_RAM_FOLDER) ]; then echo "$(BUILD_TARGET_RAM_FOLDER) exist"; else $(MKDIR) $(BUILD_TARGET_RAM_FOLDER); fi
@@ -183,20 +225,29 @@ make_subdirs_lib:
 	@make -C make/wlan lib
 	#@make -C make/wlan clean
 	#@make -C make/wlan lib_mp
+	#@make -C make/wlan clean
+	#@make -C make/wlan lib_lp	
 	@make -C make/cmsis-dsp all
 	@make -C make/wps all
 	@make -C make/network/httpc all
 	@make -C make/network/httpd all
 	@make -C make/network/websocket all
+	#@make -C make/network/http2 all
+	@make -C make/network/eap all
 	@make -C make/network/tftp all
 	@make -C make/file_system/dct all
+	#@make -C make/network/libcoap all
 #	MMF LIBRARY
 # 	@make -C make/audio/g711 all
 # 	@make -C make/audio/faac all
 # 	@make -C make/audio/haac all
 #	@make -C make/audio/speex all
+	@make -C make/media/rtp_codec all
 #	@make -C make/network/rtsp all
-	@make -C make/target/usb_otg/device/lib all
+	@make -C make/media/mmfv2 all
+	@make -C make/video/v4l2 all
+#	@make -C make/target/usb_otg/device/lib all
+#	@make -C make/target/usb_otg/host/lib all
 #	@make -C make/ui/emwin/emWinLibrary/GUI lib
 
 #*****************************************************************************#
@@ -258,7 +309,6 @@ ifeq ($(CONFIG_TRUSTZONE), y)
 
 	@echo "========== Image manipulating end =========="
 endif
-
 linker_image2:
 	@echo "========= linker img2 start ========="
 	$(LD) $(LD_ARG) target.axf $(RAM_OBJS_LIST) $(LINK_ROM_LIB) $(LINK_APP_LIB)
@@ -352,19 +402,21 @@ endif
 	cat $(IMAGE_TARGET_FOLDER)/xip_image2_prepend.bin $(IMAGE_TARGET_FOLDER)/ram_2_prepend.bin $(IMAGE_TARGET_FOLDER)/psram_2_prepend.bin  > $(IMAGE_TARGET_FOLDER)/km4_image2_all.bin
 	$(UTILITYDIR)/pad.sh $(IMAGE_TARGET_FOLDER)/km4_image2_all.bin
 
-	@if [ ${BUILD_TYPE} == "MFG" ]; then \
-		cat $(KM0_BUILDDIR)/asdk/image/km0_image2_all.bin  $(IMAGE_TARGET_FOLDER)/km4_image2_all.bin $(IMAGE_TARGET_FOLDER)/km4_image3_all.bin $(IMAGE_TARGET_FOLDER)/km4_image3_psram.bin > $(IMAGE_TARGET_FOLDER)/km0_km4_image2.bin; \
+	$(UTILITYDIR)/image_tool/imagetool.sh $(IMAGE_TARGET_FOLDER)/km4_image2_all.bin $(KM0_BUILDDIR)/asdk/image ${BUILD_TYPE}
+
+	@if [ ${BUILD_TYPE} = "MFG" ]; then \
 		$(MOVE) $(IMAGE_TARGET_FOLDER)/km0_km4_image2.bin $(IMAGE_TARGET_FOLDER)/km0_km4_image2_mp.bin; \
-		$(RM) $(IMAGE_TARGET_FOLDER)/km4_image2_all.bin; \
-	else \
-		$(UTILITYDIR)/image_tool/imagetool.sh $(IMAGE_TARGET_FOLDER)/km4_image2_all.bin $(KM0_BUILDDIR)/asdk/image; \
 	fi
+
+	#@if [ -f $(IMAGE_TARGET_FOLDER)/km0_km4_image2.bin ]; then \
+		#$(OTAPREPENDTOOL) $(IMAGE_TARGET_FOLDER)/km0_km4_image2.bin $(KM0_BUILDDIR)/asdk/image; \
+	#fi
 
 	@echo "========== Image manipulating end =========="
 
 linker_loader:
 	@echo "========= linker loader start ========="
-	$(LD) $(LD_ARG) target_loader.axf $(RAM_OBJS_LIST) $(LINK_ROM_LIB) -Wl,--whole-archive -lbootloader_hp -Wl,--no-whole-archive 
+	$(LD) $(LD_ARG) target_loader.axf $(RAM_OBJS_LIST) $(LINK_ROM_LIB)  -Wl,--whole-archive -lbootloader_hp -Wl,--no-whole-archive
 
 	$(MOVE) text.map $(IMAGE_TARGET_FOLDER)/text_loader.map
 	$(MOVE) target_loader.axf $(IMAGE_TARGET_FOLDER)
@@ -408,7 +460,8 @@ linker_loader:
 #*****************************************************************************#
 
 menuconfig:
-	cp $(CONFIGDIR)/config.in $(CONFIGDIR)/config.in.old -f
+
+	cp -f $(CONFIGDIR)/config.in $(CONFIGDIR)/config.in.old
 ifeq ($(COMPILEOS_CYGWIN),Cygwin)
 	@cp $(LXDIALOG_CYGWIN_STATIC) $(SCRIPTSDIR)/lxdialog/lxdialog.exe
 else
@@ -668,7 +721,7 @@ copy_ld_rom:
 	$(COPY) ./ld/rlx8721d_rom_bin.ld  $(BUILD_TARGET_FOLDER)/rlx8721d.ld
 copy_ld_img1:
 	$(COPY) ./ld/rlx8721d_img1_s.ld  $(BUILD_TARGET_FOLDER)/rlx8721d.ld
-	cat $(LINK_ROM_SYMBOL_S) >> $(BUILD_TARGET_FOLDER)/rlx8721d.ld
+	cat $(LINK_ROM_SYMBOL_BOOT) >> $(BUILD_TARGET_FOLDER)/rlx8721d.ld
 copy_ld_img2:
 ifeq ($(CONFIG_TRUSTZONE_EN), y)
 	$(COPY) ./ld/rlx8721d_img2_tz.ld  $(BUILD_TARGET_FOLDER)/rlx8721d.ld

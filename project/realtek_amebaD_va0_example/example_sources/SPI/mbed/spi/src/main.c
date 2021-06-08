@@ -53,15 +53,11 @@ SPI1:
 #define SPI1_SCLK  PB_6
 #define SPI1_CS    PB_7
 
-/**
-  * @brief  Main program.
-  * @param  None
-  * @retval None
-  */
+
 spi_t spi_master;
 spi_t spi_slave;
 
-void main(void)
+static void spi_task(void* param)
 {
 #if FakeMbedAPI
 
@@ -135,5 +131,23 @@ void main(void)
 
 #endif
 
+	vTaskDelete(NULL);
+}
+
+/**
+  * @brief  Main program.
+  * @param  None
+  * @retval None
+  */
+void main(void)
+{
+	if(xTaskCreate(spi_task, ((const char*)"spi_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
+		printf("\n\r%s xTaskCreate(spi_task) failed", __FUNCTION__);
+
+	vTaskStartScheduler();
+	while(1){
+		vTaskDelay( 1000 / portTICK_RATE_MS );
+	}
+	
 }
 

@@ -1490,7 +1490,9 @@ typedef struct {
 	uint8_t FLASH_rd_dummy_cyle1;
 	uint8_t FLASH_rd_dummy_cyle2;
 
-	uint8_t RRAM_USER_RSVD[124];			/*usr can alloc from this RSVD space*/
+	uint32_t RTC_YEAR;	
+
+	uint8_t RRAM_USER_RSVD[120];			/*usr can alloc from this RSVD space*/
 
 	
 } RRAM_TypeDef;

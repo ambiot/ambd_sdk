@@ -55,12 +55,44 @@ void ADC_StructInit(ADC_InitTypeDef *ADC_InitStruct)
 void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
 {
 	ADC_TypeDef	*adc = ADC;
+	CAPTOUCH_TypeDef *CapTouch = CAPTOUCH_DEV;
 	u32 value = 0;
 	u8 len, i;
+	u8 FT_Type;
+	u32 Temp;
+	u32 FT_Type_Address = 0x1F0;
 
 	assert_param(IS_ADC_MODE(ADC_InitStruct->ADC_OpMode));
 	assert_param(IS_ADC_SAMPLE_CLK(ADC_InitStruct->ADC_ClkDiv));
 	assert_param(ADC_InitStruct->ADC_CvlistLen < 16);
+
+	EFUSE_PMAP_READ8(0, FT_Type_Address, &FT_Type, L25EOUTVOLTAGE);
+	FT_Type &= (BIT(1) | BIT(0));
+
+	if ( FT_Type == 0x2) {
+		/*Set CT_ADC_REG1X_LPAD register with 2'b 00*/
+		Temp = (u32)CapTouch->CT_ADC_REG1X_LPAD;
+		Temp &= ~(BIT(6) | BIT(7));
+		CapTouch->CT_ADC_REG1X_LPAD = Temp;
+
+		/*Set CT_ADC_REG0X_LPAD register with 3'b 101*/
+		Temp = (u32)CapTouch->CT_ADC_REG0X_LPAD;
+		Temp &= ~(BIT(9));
+		Temp |= (BIT(8) | BIT(10));
+		CapTouch->CT_ADC_REG0X_LPAD = Temp;
+
+	} else {
+		/*Set CT_ADC_REG1X_LPAD register with 2'b 00*/
+		Temp = (u32)CapTouch->CT_ADC_REG1X_LPAD;
+		Temp &= ~(BIT(6) | BIT(7));
+		CapTouch->CT_ADC_REG1X_LPAD = Temp;
+
+		/*Set CT_ADC_REG0X_LPAD register with 3'b 100*/
+		Temp = (u32)CapTouch->CT_ADC_REG0X_LPAD;
+		Temp &= ~(BIT(8) | BIT(9));
+		Temp |= BIT(10);
+		CapTouch->CT_ADC_REG0X_LPAD = Temp;
+	}
 
 	/* Disable ADC, clear pending interrupt, clear FIFO */
 	ADC_Cmd(DISABLE);

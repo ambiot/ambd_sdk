@@ -312,28 +312,26 @@ int rtl_crypto_hmac_sha1_init(IN const u8* key, IN const u32 keylen)
 	HAL_CRYPTO_ADAPTER *pIE = &crypto_engine;
 	u8* pCipherKey = NULL;
 	u32 lenCipherKey = 0;
-	u8* pAuthKey = NULL;
-	u32 lenAuthKey = 0;
-	
-	if (key == NULL) {
-		if (hmac_sha1_key == NULL) return _ERRNO_CRYPTO_NULL_POINTER;
-		memcpy(pAuthKey, hmac_sha1_key, hmac_sha1_keylen);
-		lenAuthKey = hmac_sha1_keylen;
-	} else {
-		memcpy(pAuthKey, key, keylen);
-		lenAuthKey = keylen;
-	}
-	if ( (u32)(pAuthKey) & 0x3 ) return _ERRNO_CRYPTO_ADDR_NOT_4Byte_Aligned; // need to be 4 byte alignment
-	if ( lenAuthKey > CRYPTO_AUTH_PADDING ) return _ERRNO_CRYPTO_KEY_OutRange;
 
-	assert_param( (pIE != NULL) && (pIE->isInit == _TRUE) );		
-
+	assert_param( (pIE != NULL) && (pIE->isInit == _TRUE) );
 	// for sequential hash
 	pIE->hmac_seq_is_recorded = 0;
 	pIE->hmac_seq_buf_is_used_bytes = 0;
 
-	return CRYPTO_SetSecurityModeAD(pIE, CIPHER_TYPE_NO_CIPHER, AUTH_TYPE_HMAC_SHA1,
-		pCipherKey, lenCipherKey, pAuthKey, lenAuthKey);
+	if (key == NULL) {
+		if (hmac_sha1_key == NULL) return _ERRNO_CRYPTO_NULL_POINTER;
+		if ( (u32)(hmac_sha1_key) & 0x3 ) return _ERRNO_CRYPTO_ADDR_NOT_4Byte_Aligned; // need to be 4 byte alignment
+		if ( hmac_sha1_keylen > CRYPTO_AUTH_PADDING ) return _ERRNO_CRYPTO_KEY_OutRange;
+
+		return CRYPTO_SetSecurityModeAD(pIE, CIPHER_TYPE_NO_CIPHER, AUTH_TYPE_HMAC_SHA1,
+			pCipherKey, lenCipherKey, hmac_sha1_key, hmac_sha1_keylen);
+	} else {
+		if ( (u32)(key) & 0x3 ) return _ERRNO_CRYPTO_ADDR_NOT_4Byte_Aligned; // need to be 4 byte alignment
+		if ( keylen > CRYPTO_AUTH_PADDING ) return _ERRNO_CRYPTO_KEY_OutRange;
+
+		return CRYPTO_SetSecurityModeAD(pIE, CIPHER_TYPE_NO_CIPHER, AUTH_TYPE_HMAC_SHA1,
+			pCipherKey, lenCipherKey, key, keylen);
+	}
 }
 
 /**
@@ -481,20 +479,6 @@ int rtl_crypto_hmac_sha2_init(
 	int auth_type;
 	u8* pCipherKey = NULL;
 	u32 lenCipherKey = 0;
-	u8* pAuthKey = NULL;
-	u32 lenAuthKey = 0;
-
-	if (key == NULL) {
-		if (hmac_sha2_key == NULL) return _ERRNO_CRYPTO_NULL_POINTER;
-		memcpy(pAuthKey, hmac_sha2_key, hmac_sha2_keylen);
-		lenAuthKey = hmac_sha2_keylen;
-	} else {
-		memcpy(pAuthKey, key, keylen);
-		lenAuthKey = keylen;
-	}
-
-	if ( (u32)(pAuthKey) & 0x3 ) return _ERRNO_CRYPTO_ADDR_NOT_4Byte_Aligned; // need to be 4 byte alignment
-	if ( lenAuthKey > CRYPTO_AUTH_PADDING ) return _ERRNO_CRYPTO_KEY_OutRange;
 
 	assert_param( (pIE != NULL) && (pIE->isInit == _TRUE) );
 
@@ -515,8 +499,20 @@ int rtl_crypto_hmac_sha2_init(
 	pIE->hmac_seq_is_recorded = 0;
 	pIE->hmac_seq_buf_is_used_bytes = 0;
 
-	return CRYPTO_SetSecurityModeAD(pIE, CIPHER_TYPE_NO_CIPHER, auth_type,
-		pCipherKey, lenCipherKey, pAuthKey, lenAuthKey);
+	if (key == NULL) {
+		if (hmac_sha2_key == NULL) return _ERRNO_CRYPTO_NULL_POINTER;
+		if ( (u32)(hmac_sha2_key) & 0x3 ) return _ERRNO_CRYPTO_ADDR_NOT_4Byte_Aligned; // need to be 4 byte alignment
+		if ( hmac_sha2_keylen > CRYPTO_AUTH_PADDING ) return _ERRNO_CRYPTO_KEY_OutRange;
+
+		return CRYPTO_SetSecurityModeAD(pIE, CIPHER_TYPE_NO_CIPHER, auth_type,
+			pCipherKey, lenCipherKey, hmac_sha2_key, hmac_sha2_keylen);
+	} else {
+		if ( (u32)(key) & 0x3 ) return _ERRNO_CRYPTO_ADDR_NOT_4Byte_Aligned; // need to be 4 byte alignment
+		if ( keylen > CRYPTO_AUTH_PADDING ) return _ERRNO_CRYPTO_KEY_OutRange;
+
+		return CRYPTO_SetSecurityModeAD(pIE, CIPHER_TYPE_NO_CIPHER, auth_type,
+			pCipherKey, lenCipherKey, key, keylen);
+	}
 }
 
 /**

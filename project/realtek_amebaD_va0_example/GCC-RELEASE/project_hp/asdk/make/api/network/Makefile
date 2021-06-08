@@ -1,6 +1,6 @@
 
 include $(MAKE_INCLUDE_GEN)
-
+IFLAGS               += -I$(BASEDIR)/component/common/network/libcoap/include
 
 .PHONY: all clean
 

@@ -52,8 +52,6 @@ void rltk_wlan_send_skb(int idx, struct sk_buff *skb);	//struct sk_buff as defin
 int rltk_wlan_send(int idx, struct eth_drv_sg *sg_list, int sg_len, int total_len);
 void rltk_wlan_recv(int idx, struct eth_drv_sg *sg_list, int sg_len);
 unsigned char rltk_wlan_running(unsigned char idx);		// interface is up. 0: interface is down
-int rltk_set_tx_pause(unsigned char pause);
-int rltk_get_tx_pause(unsigned char *pause);
 
 #if defined(CONFIG_MBED_ENABLED)
 typedef void (*emac_callback)(void *param, struct netif *netif, unsigned int len);

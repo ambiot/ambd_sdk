@@ -210,7 +210,7 @@ void Spi_slave_write_stream(SPI_OBJ *spi_obj, char *tx_buffer, uint32_t length)
 	SSI_INTConfig(spi_obj->spi_dev, (BIT_IMR_TXOIM | BIT_IMR_TXEIM), ENABLE);
 }
 
-void Spi_slave_read_stream(SPI_OBJ *spi_obj, char *rx_buffer, uint32_t length)
+int32_t Spi_slave_read_stream(SPI_OBJ *spi_obj, char *rx_buffer, uint32_t length)
 {
 	assert_param(length != 0);
 
@@ -284,13 +284,7 @@ void Spi_master_read_stream(SPI_OBJ *spi_obj, char *rx_buffer, uint32_t length)
 	SSI_INTConfig(spi_obj->spi_dev, (BIT_IMR_TXOIM | BIT_IMR_TXEIM), ENABLE);
 }
 
-/**
-  * @brief  Main program.
-  * @param  None 
-  * @retval None
-  */
-
-void main(void)
+void spi_interrupt_task(void* param)
 {
 
 	u32 SclkPhase = SCPH_TOGGLES_IN_MIDDLE; // SCPH_TOGGLES_IN_MIDDLE or SCPH_TOGGLES_AT_START
@@ -442,7 +436,24 @@ void main(void)
 
     DBG_8195A("SPI Demo finished.\n");
 
-    for(;;);
+    vTaskDelete(NULL);
 
+}
+
+/**
+  * @brief  Main program.
+  * @param  None 
+  * @retval None
+  */
+void main(void)
+{
+	if(xTaskCreate(spi_interrupt_task, ((const char*)"spi_interrupt_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
+		printf("\n\r%s xTaskCreate(spi_interrupt_task) failed", __FUNCTION__);
+
+        vTaskStartScheduler();
+	while(1){
+		vTaskDelay( 1000 / portTICK_RATE_MS );
+	}
+	
 }
 

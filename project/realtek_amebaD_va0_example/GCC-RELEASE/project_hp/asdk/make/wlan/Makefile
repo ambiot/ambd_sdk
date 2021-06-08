@@ -21,6 +21,10 @@ lib: CORE_TARGETS
 lib_mp: CORE_TARGETS
 	make -C sram lib_mp
 	make -C xip lib_mp
+	
+lib_lp: CORE_TARGETS
+	make -C sram lib_lp
+	make -C xip lib_lp	
 all:
 	make -C option all
 

@@ -313,7 +313,7 @@
  *
  * Uncomment to use your own hardware entropy collector.
  */
-#define MBEDTLS_ENTROPY_HARDWARE_ALT
+//#define MBEDTLS_ENTROPY_HARDWARE_ALT
 
 /**
  * \def MBEDTLS_AES_ROM_TABLES
@@ -805,7 +805,7 @@
  *
  * Uncomment this macro to disable the built-in platform entropy functions.
  */
-#define MBEDTLS_NO_PLATFORM_ENTROPY
+//#define MBEDTLS_NO_PLATFORM_ENTROPY
 
 /**
  * \def MBEDTLS_ENTROPY_FORCE_SHA256
@@ -1274,7 +1274,7 @@
  *
  * Uncomment this to allow your own alternate threading implementation.
  */
-#define MBEDTLS_THREADING_ALT
+//#define MBEDTLS_THREADING_ALT
 
 /**
  * \def MBEDTLS_THREADING_PTHREAD
@@ -1698,7 +1698,7 @@
  *
  * This module provides debugging functions.
  */
-//#define MBEDTLS_DEBUG_C
+#define MBEDTLS_DEBUG_C
 
 /**
  * \def MBEDTLS_DES_C
@@ -1816,7 +1816,7 @@
  *
  * This module provides a generic entropy pool
  */
-#define MBEDTLS_ENTROPY_C
+//#define MBEDTLS_ENTROPY_C
 
 /**
  * \def MBEDTLS_ERROR_C
@@ -2322,7 +2322,7 @@
  *
  * Enable this layer to allow use of mutexes within mbed TLS
  */
-#define MBEDTLS_THREADING_C
+//#define MBEDTLS_THREADING_C
 
 /**
  * \def MBEDTLS_TIMING_C
@@ -2345,7 +2345,7 @@
  *
  * This module is used by the HAVEGE random number generator.
  */
-//#define MBEDTLS_TIMING_C
+#define MBEDTLS_TIMING_C
 
 /**
  * \def MBEDTLS_VERSION_C

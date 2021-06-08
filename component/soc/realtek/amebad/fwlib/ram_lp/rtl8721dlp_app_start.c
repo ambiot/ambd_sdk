@@ -12,8 +12,8 @@
 #if defined ( __ICCARM__ )
 #pragma section=".ram_image2.bss"
 
-SECTION(".data") u8* __bss_start__;
-SECTION(".data") u8* __bss_end__;
+SECTION(".data") u8* __bss_start__ = 0;
+SECTION(".data") u8* __bss_end__ = 0;
 #endif
 
 static u32 Cutversion;
@@ -298,11 +298,15 @@ static void app_gen_random_seed(void)
 	int i = 0, j = 0;
 	u8 random[4], tmp;
 
-	/*Write reg 0x4801C404[7:6] with 0b'11*/
-	u32 Temp, Data;
-	Data = HAL_READ32(CTC_REG_BASE, 0x404);
-	Temp = Data |0x00C0;
-	HAL_WRITE32(CTC_REG_BASE, 0x404, Temp);
+	/*Write reg CT_ADC_REG1X_LPAD[7:6] with 2b'11*/
+	u32 RegTemp, RegData;
+	CAPTOUCH_TypeDef *CapTouch = CAPTOUCH_DEV;
+	RegData = (u32)CapTouch->CT_ADC_REG1X_LPAD;
+	RegTemp = RegData | (BIT(6) | BIT(7));
+	CapTouch->CT_ADC_REG1X_LPAD = RegTemp;
+
+	RCC_PeriphClockCmd(APBPeriph_ADC, APBPeriph_ADC_CLOCK, DISABLE);
+	RCC_PeriphClockCmd(APBPeriph_ADC, APBPeriph_ADC_CLOCK, ENABLE);
 
 	ADC_Cmd(DISABLE);
 
@@ -342,8 +346,8 @@ retry:
 
 	ADC_Cmd(DISABLE);
 
-	/*Restore reg 0x4801C404[7:6] of initial value 0b'00*/
-	HAL_WRITE32(CTC_REG_BASE, 0x404, Data);
+	/*Restore reg CT_ADC_REG1X_LPAD[7:6] of initial value 2b'00*/
+	CapTouch->CT_ADC_REG1X_LPAD = RegData;
 
 	rand_first = 1;
 	data = (random[3] << 24) | (random[2] << 16) | (random[1] << 8) | (random[0]);
@@ -402,8 +406,17 @@ void app_start(void)
 	if(SOCPS_DsleepWakeStatusGet() == FALSE) {
 		OSC131K_Calibration(30000); /* PPM=30000=3% *//* 7.5ms */
 
+		/* fix OTA upgarte fail after version 6.2, because 32k is not enabled*/
+		u32 Temp = SDM32K_Read(REG_SDM_CTRL0);
+		if (!(Temp & BIT_AON_SDM_ALWAYS_CAL_EN)) {
+			SDM32K_Enable(SDM32K_ALWAYS_CAL); /* 0.6ms */
+		}
+		
 		SDM32K_RTCCalEnable(ps_config.km0_rtc_calibration); /* 0.3ms */
 
+		Temp = HAL_READ32(SYSTEM_CTRL_BASE_LP, REG_AON_BOOT_REASON1);
+		Temp &= ~BIT_DSLP_RETENTION_RAM_PATCH;
+		HAL_WRITE32(SYSTEM_CTRL_BASE_LP, REG_AON_BOOT_REASON1, Temp);
 		// Retention Ram reset
 		_memset((void*)RETENTION_RAM_BASE,0,1024);
 		assert_param(sizeof(RRAM_TypeDef) <= 0xB0);

@@ -26,7 +26,7 @@
 #define USI_SPI_CS	PA_28
 
 
-void main(void)
+void usi_spi_task(void* param)
 {
 
 	u32 SclkPhase = USI_SPI_SCPH_TOGGLES_IN_MIDDLE;
@@ -83,7 +83,25 @@ void main(void)
 
 	DBG_8195A("USI SPI Master Demo Finished.\n");
 	DBG_8195A("\r\nMaster Result is %s\r\n", (result) ? "success" : "fail");
-	for(;;);
 
+	vTaskDelete(NULL);
+
+}
+
+/**
+  * @brief  Main program.
+  * @param  None
+  * @retval None
+  */
+void main(void)
+{
+	if(xTaskCreate(usi_spi_task, ((const char*)"usi_spi_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
+		printf("\n\r%s xTaskCreate(usi_spi_task) failed", __FUNCTION__);
+
+	vTaskStartScheduler();
+	while(1){
+		vTaskDelay( 1000 / portTICK_RATE_MS );
+	}
+	
 }
 

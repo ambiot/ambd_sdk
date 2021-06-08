@@ -24,7 +24,7 @@ void bod_intr_test(void)
 	BOR_ClearINT();
 
 	/*register BOD interrupt handler*/
-	InterruptRegister(bod_irq_handler, BOR2_IRQ_LP, NULL, 10);
+	InterruptRegister((IRQ_FUN)bod_irq_handler, BOR2_IRQ_LP, NULL, 10);
 	InterruptEn(BOR2_IRQ_LP, 10);
 
 	BOR_ThresholdSet(BOR_TH_LOW6, BOR_TH_HIGH7);

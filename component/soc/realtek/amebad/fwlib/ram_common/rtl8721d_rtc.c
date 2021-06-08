@@ -225,7 +225,7 @@ void RTC_StructInit(RTC_InitTypeDef* RTC_InitStruct)
 	RTC_InitStruct->RTC_SynchPrediv = (u32)0xFF; /* 256 /256 = 1Hz*/
 
 	/*Initialize the RTC_Day_Threshold member*/
-	RTC_InitStruct->RTC_DayThreshold = 365;
+	RTC_InitStruct->RTC_DayThreshold = (u32) 0x1FF;
 }
 
 /**

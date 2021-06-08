@@ -19,7 +19,7 @@ Table of Contents
 Description
 ~~~~~~~~~~~
         This example demonstrates how to use mbed-CoAP C library to build and parse a CoAP message.
-	
+
 Setup Guide
 ~~~~~~~~~~~
         1) Add CoAP library and example to SDK : 
@@ -47,34 +47,34 @@ Setup Guide
         |-- example_coap.h
         `-- readme.txt
         
-        2) Add/Enable CONFIG_EXAMPLE_COAP in platform_opts.h
-	/* for CoAP example*/
-        #define CONFIG_EXAMPLE_COAP 1
+        2) Enable CONFIG_EXAMPLE_COAP in [platform_opts.h]
+        /* for CoAP example*/
+        #define CONFIG_EXAMPLE_COAP                1
+        #define CONFIG_EXAMPLE_COAP_SERVER         0
+        #define CONFIG_EXAMPLE_COAP_CLIENT         0
 
-        3) Add example_coap() to example_entry.c
-        #if CONFIG_EXAMPLE_COAP
-            #include <coap/example_coap.h>
-        #endif
-        void example_entry(void)
-        {
-        #if CONFIG_EXAMPLE_COAP
-            example_coap();
-        #endif
-        }
-        4) Add CoAP related files to IAR project
-        5) Add include directories to project
-        $PROJ_DIR$\..\..\..\component\common\network\coap\include
+
 
 Result description
 ~~~~~~~~~~~~~~~~~~
-	In the example, a confirmable GET request is send to test server "coap.me" to retrieve the resource under path "/hello". The expected return is an ACK message with payload "world".
-
+    In the example, a confirmable GET request is send to test server "californium.eclipse.org" to retrieve the resource under path "/obs". The expected return is an ACK message with payload
+containing the Greenwich Mean Time (GMT).
         Note: Company Firewall may block CoAP message. You can use copper (https://addons.mozilla.org/en-US/firefox/addon/copper-270430/) to test the server's reachability.
+
+    In the example, you can also set a GET request sent to test server "coap.me" to retrieve the resource under path "/hello".  The expected return is an ACK message with payload "world".
 
 Parameter Setting and Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	Make sure SERVER_PORT has been set.
-	
+    Make sure SERVER_PORT has been set.
+    Note:
+        If there is error when compiling the project. Please make sure 
+        1) Check CoAP example source files added to the project
+          (a) For IAR project, include example_coap.c under example group
+          (b) For GCC project, add  CSRC += $(DIR)/coap/example_coap.c  to "Makefile"
+        2) Add include directories to project
+          (a) For IAR project, $PROJ_DIR$\..\..\..\component\common\network\coap\include
+          (b) For GCC project, IFLAGS  += -I$(BASEDIR)/component/common/network/coap/include
+
 
 Other Reference
 ~~~~~~~~~~~~~~~
@@ -84,12 +84,7 @@ Other Reference
 Supported List
 ~~~~~~~~~~~~~~
 [Supported List]
-	Supported IC :
-		Ameba-1, 
-		Ameba-pro, 
-		Ameba-z2
-	Not Supported IC: 
-		Ameba-z
-  
-
-	 
+    Supported IC : 
+        Ameba-1, Ameba-pro, Ameba-z2, AmebaD
+    Not Supported IC: 
+        Ameba-z 

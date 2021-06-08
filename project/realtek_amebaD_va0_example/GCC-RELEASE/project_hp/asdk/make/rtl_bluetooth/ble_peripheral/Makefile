@@ -14,7 +14,8 @@ CSRC += \
     $(DIR)/sdk/src/ble/profile/server/bas.c \
     $(DIR)/sdk/example/ble_peripheral/app_task.c \
     $(DIR)/sdk/example/ble_peripheral/ble_app_main.c \
-    $(DIR)/sdk/example/ble_peripheral/peripheral_app.c
+    $(DIR)/sdk/example/ble_peripheral/peripheral_app.c \
+    $(DIR)/sdk/example/ble_peripheral/ble_peripheral_at_cmd.c
 
 OBJS = $(CSRC:.c=.o)
 TOBJS = $(notdir $(OBJS))

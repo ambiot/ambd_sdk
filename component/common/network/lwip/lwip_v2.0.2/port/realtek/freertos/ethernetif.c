@@ -87,6 +87,10 @@ static void arp_timer(void *arg);
 extern void rltk_mii_recv(struct eth_drv_sg *sg_list, int sg_len);
 extern s8 rltk_mii_send(struct eth_drv_sg *sg_list, int sg_len, int total_len);
 
+#if CONFIG_BRIDGE
+extern u8_t get_bridge_portnum(void);
+#endif
+
 /**
  * In this function, the hardware should be initialized.
  * Called from ethernetif_init().
@@ -110,6 +114,10 @@ static void low_level_init(struct netif *netif)
 #if LWIP_IGMP
 	/* make LwIP_Init do igmp_start to add group 224.0.0.1 */
 	netif->flags |= NETIF_FLAG_IGMP;
+#endif
+
+#if CONFIG_BRIDGE
+	netif->flags |= NETIF_FLAG_ETHERNET;
 #endif
 
 	/* Wlan interface is initialized later */
@@ -223,6 +231,14 @@ void ethernetif_recv(struct netif *netif, int total_len)
 	if(!rltk_wlan_running(netif_get_idx(netif)))
 		return;
 #endif
+
+#if CONFIG_BRIDGE
+	if (get_bridge_portnum() != (NET_IF_NUM - 1)) {
+		// return if bridge not ready
+		return;
+	}
+#endif
+
 	if ((total_len > MAX_ETH_MSG) || (total_len < 0))
 		total_len = MAX_ETH_MSG;
 
@@ -237,6 +253,10 @@ void ethernetif_recv(struct netif *netif, int total_len)
 	for (q = p; q != NULL && sg_len < MAX_ETH_DRV_SG; q = q->next) {
    		sg_list[sg_len].buf = (unsigned int) q->payload;
 		sg_list[sg_len++].len = q->len;
+	}
+
+	if (p->if_idx == NETIF_NO_INDEX) {
+		p->if_idx = netif_get_index(netif);
 	}
 
 	// Copy received packet to scatter list from wrapper rx skb

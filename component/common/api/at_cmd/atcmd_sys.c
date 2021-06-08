@@ -1013,6 +1013,42 @@ void fATSJ(void *arg)
 #endif
 }
 
+
+#if WIFI_LOGO_CERTIFICATION_CONFIG
+
+#define FLASH_ADDR_SW_VERSION 	FAST_RECONNECT_DATA+0x900
+#define SW_VERSION_LENGTH 	32
+
+
+void fATSV(void *arg)
+{
+	unsigned char sw_version[SW_VERSION_LENGTH+1];
+	flash_t flash;
+
+	if(!arg){
+		printf("[ATSV]Usage: ATSV=[SW_VERSION]\n\r");
+		return;
+    }
+
+	if(strlen((char*)arg) > SW_VERSION_LENGTH){
+		printf("[ATSV] ERROR : SW_VERSION length can't exceed %d\n\r",SW_VERSION_LENGTH);
+		return;
+	}
+
+	memset(sw_version,0,SW_VERSION_LENGTH+1);
+	strncpy(sw_version, (char*)arg, strlen((char*)arg));
+
+	device_mutex_lock(RT_DEV_LOCK_FLASH);
+	flash_erase_sector(&flash, FAST_RECONNECT_DATA);
+	flash_stream_write(&flash, FLASH_ADDR_SW_VERSION, strlen((char*)arg), (uint8_t *) sw_version);
+	device_mutex_unlock(RT_DEV_LOCK_FLASH);
+
+	printf("[ATSV] Write SW_VERSION to flash : %s\n\r",sw_version);
+
+}
+#endif
+
+
 void fATSx(void *arg)
 {
 	/* To avoid gcc warnings */
@@ -1024,7 +1060,7 @@ void fATSx(void *arg)
 	AT_PRINTK("[ATS?]: _AT_SYSTEM_HELP_");
 	AT_PRINTK("[ATS?]: COMPILE TIME: %s", RTL_FW_COMPILE_TIME);
 //	wifi_get_drv_ability(&ability);
-	strcpy(buf, "v");
+	strncpy(buf, "v", sizeof(buf));
 //	if(ability & 0x1)
 //		strcat(buf, "m");
 #if defined(CONFIG_PLATFORM_8710C)
@@ -1032,12 +1068,33 @@ void fATSx(void *arg)
 #elif defined(CONFIG_PLATFORM_8195BHP)
 	strcat(buf, ".5.2." RTL_FW_COMPILE_DATE);
 #elif defined(CONFIG_PLATFORM_8721D)
-	strcat(buf, ".6.1." RTL_FW_COMPILE_DATE);
+	strcat(buf, ".6.2." RTL_FW_COMPILE_DATE);
 #else
 	strcat(buf, ".4.0." RTL_FW_COMPILE_DATE);
 #endif
+
+#if WIFI_LOGO_CERTIFICATION_CONFIG
+	flash_t		flash;
+	unsigned char sw_version[SW_VERSION_LENGTH+1];
+
+	memset(sw_version,0,SW_VERSION_LENGTH+1);
+
+	device_mutex_lock(RT_DEV_LOCK_FLASH);
+	flash_stream_read(&flash, FLASH_ADDR_SW_VERSION, SW_VERSION_LENGTH, (uint8_t *)sw_version);
+	device_mutex_unlock(RT_DEV_LOCK_FLASH);
+
+	if(sw_version[0] != 0xff)
+		AT_PRINTK("[ATS?]: SW VERSION: %s", sw_version);
+	else
+		AT_PRINTK("[ATS?]: SW VERSION: %s", buf);
+
+#else
 	AT_PRINTK("[ATS?]: SW VERSION: %s", buf);
+#endif
 }
+
+
+
 #elif ATCMD_VER == ATVER_2
 
 #define ATCMD_VERSION		"v2" //ATCMD MAJOR VERSION, AT FORMAT CHANGED
@@ -1085,14 +1142,16 @@ void fATSV(void *arg){
 	char fw_buf[32];
 
 	// get at version
-	strcpy(at_buf, ATCMD_VERSION"."ATCMD_SUBVERSION"."ATCMD_REVISION);
+	strncpy(at_buf, ATCMD_VERSION"."ATCMD_SUBVERSION"."ATCMD_REVISION, sizeof(at_buf));
 
 	// get fw version
-	strcpy(fw_buf, SDK_VERSION);
+	strncpy(fw_buf, SDK_VERSION, sizeof(fw_buf));
 #if defined CONFIG_PLATFORM_8195A
 	at_printf("\r\n[ATSV] OK:%s,%s(%s)",at_buf,fw_buf,RTL8195BFW_COMPILE_TIME);
 #elif defined CONFIG_PLATFORM_8710C
 	at_printf("\r\n[ATSV] OK:%s,%s(%s)",at_buf,fw_buf,RTL8710CFW_COMPILE_TIME);
+#elif defined CONFIG_PLATFORM_8721D
+	at_printf("\r\n[ATSV] OK:%s,%s(%s)",at_buf,fw_buf,RTL_FW_COMPILE_TIME);
 #endif
 }
 
@@ -1396,6 +1455,18 @@ void fATSG(void *arg)
 		goto exit;
 	}
 
+	if(port != 0 || port != 1){
+		AT_DBG_MSG(AT_FLAG_GPIO, AT_DBG_ALWAYS, "[ATSG]: Invalid Port");
+		error_no = 3;
+		goto exit;
+	}
+
+	if(num < 0||num>31){
+		AT_DBG_MSG(AT_FLAG_GPIO, AT_DBG_ALWAYS, "[ATSG]: Invalid Pin Number");
+		error_no = 3;
+		goto exit;
+	}
+
 	gpio_init(&gpio_ctrl, pin);
 	if(argv[4]){
 		int dir = atoi(argv[4]);
@@ -1539,6 +1610,9 @@ log_item_t at_sys_items[] = {
 	{"ATS!", fATSc,{NULL,NULL}},	// Debug config setting
 	{"ATS#", fATSt,{NULL,NULL}},	// test command
 	{"ATS?", fATSx,{NULL,NULL}},	// Help
+#if WIFI_LOGO_CERTIFICATION_CONFIG
+	{"ATSV", fATSV},				// Write SW version for wifi logo test
+#endif
 #elif ATCMD_VER == ATVER_2 //#if ATCMD_VER == ATVER_1
 	{"AT", 	 fATS0,},	// test AT command ready
 	{"ATS?", fATSh,},	// list all AT command

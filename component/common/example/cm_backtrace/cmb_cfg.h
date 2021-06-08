@@ -42,6 +42,8 @@
 #define CMB_CPU_PLATFORM_TYPE         CMB_CPU_ARM_CORTEX_M4
 #elif defined(CONFIG_PLATFORM_8195A)	
 #define CMB_CPU_PLATFORM_TYPE         CMB_CPU_ARM_CORTEX_M3
+#elif defined(CONFIG_PLATFORM_8721D)	
+#define CMB_CPU_PLATFORM_TYPE         CMB_CPU_REALTEK_KM4
 #endif
 /* enable dump stack information */
 #define CMB_USING_DUMP_STACK_INFO 

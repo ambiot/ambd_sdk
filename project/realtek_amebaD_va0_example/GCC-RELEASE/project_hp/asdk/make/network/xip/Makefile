@@ -1,6 +1,7 @@
 
 include $(MAKE_INCLUDE_GEN)
-IFLAGS               += -I$(BASEDIR)/component/common/network/coap/include
+#IFLAGS               += -I$(BASEDIR)/component/common/network/coap/include
+IFLAGS               += -I$(BASEDIR)/component/common/network/libcoap/include
 
 .PHONY: all clean
 
@@ -17,11 +18,6 @@ OBJS +=	\
 		$(NETWORK)/sntp/sntp.o\
 		$(NETWORK)/websocket/wsserver_tls.o\
 		$(NETWORK)/websocket/wsclient_tls.o\
-		$(NETWORK)/coap/sn_coap_ameba_port.o\
-		$(NETWORK)/coap/sn_coap_builder.o\
-		$(NETWORK)/coap/sn_coap_header_check.o\
-		$(NETWORK)/coap/sn_coap_parser.o\
-		$(NETWORK)/coap/sn_coap_protocol.o\
 		$(LWIPDIR)/src/core/ipv4/dhcp.o \
 		$(LWIPDIR)/src/core/ipv6/dhcp6.o \
 		$(LWIPDIR)/src/core/dns.o \
@@ -39,6 +35,11 @@ OBJS +=	\
 		$(NETWORK)/mDNS/mDNSPlatform.o\
 		$(LWIPDIR)/src/core/stats.o \
 		$(LWIPDIR)/src/core/sys.o \
+		#$(NETWORK)/coap/sn_coap_ameba_port.o\
+		#$(NETWORK)/coap/sn_coap_builder.o\
+		#$(NETWORK)/coap/sn_coap_header_check.o\
+		#$(NETWORK)/coap/sn_coap_parser.o\
+		#$(NETWORK)/coap/sn_coap_protocol.o
 
 
 #ifeq ($(CONFIG_HIGH_TP),y)

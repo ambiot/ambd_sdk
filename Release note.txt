@@ -1,0 +1,517 @@
+Realtek IOT AmebaD 6.2 SDK Release Note
+
+We recommand the flow items:
+1,  Apply the lastest Patch will make your project synchronize with our Git branch code, and will make it easier to analysis some issues or implement requirements
+2,  Try not to modify the .c and .h files in default SDK. If you are obliged to do this, add your own marco between your code, and it will make it easier for you to merge Patch
+	a) If the .c and .h files in Patch are not modified in your project, just copy and paste
+	b) If the .c and .h files in Patch are modified in your project, use compare tool to only merge the difference which are not changed by yourself
+	
+Patch List:
+	1. Full Patch:
+		sdk-amebad_v6.2C-RC.tar.gz
+		6.2_patch_integrated_210604_7d7d3c19.zip
+		
+	2. Single Patch:
+		sdk-amebad_v6.2C-RC.tar.gz
+		6.2_patch_integrated_200529_aa1d394c_(v01).zip
+		6.2_critical_patch_200702_aa1d394c_to_60a4f6a7.zip
+		6.2_critical_patch_200806_60a4f6a7_to_cf3cddb5.zip
+		6.2_critical_patch_200911_cf3cddb5_to_f2db61ae.zip
+		6.2_critical_patch_201020_f2db61ae_to_c0354081.zip
+		6.2_critical_patch_201127_c0354081_to_b4975e52.zip
+		6.2_critical_patch_210106_b4975e52_to_39e0d1af.zip
+		6.2_critical_patch_210129_39e0d1af_to_46c34f15.zip
+		6.2_critical_patch_210204_46c34f15_to_78d4b568.zip
+		6.2_critical_patch_210311_78d4b568_to_9c6f8545.zip
+		6.2_critical_patch_210407_9c6f8545_to_733408e9.zip
+		6.2_critical_patch_210413_733408e9_to_fe817a24.zip
+		6.2_critical_patch_210428_fe817a24_to_13a21db4.zip
+		6.2_critical_patch_210604_13a21db4_to_7d7d3c19.zip
+		
+Critical Patch List:
+	6.2c to Git 200529_aa1d394c:
+		1.  Support USB Host UVC
+			  
+		2. 	Fix FLASH Write Bug
+				Symptom:  Flash write API may set error data on Flash When KM4 and KM0 both calling flash write API
+				Reason: Flash write lock function use wrong register address to check core status
+					
+		3. 	Optimize BLE project setting and makefile
+		
+		4. 	Fix BLE Bug
+				Symptom:  BT address shows error in "ATBC" & "ATBn" command.
+				Reason: BT address shows in an inverted order.
+		
+		5,  Fix SoftAP Bug
+				Symptom:  SoftAP may not Tx Beacon when connected and disconnected by STA repeatly 
+				Reason: SoftAP tx beacon flow may hit corner case and cause Tx Beacon error	
+					
+		6, 	Optimize Ram Usage
+		
+		7, 	Fix PowerTracking Bug
+				Symptom:  PowerTracking function may not work in MP mode 
+				Reason: The Function check condition use wrong value will cause powertracking function not be called
+					
+		8, 	Fix USB msc memory leakage Bug
+				Symptom:  memory may reduce when USB hot-plug repeatly 
+				Reason: mutex will alloc and not free in removed function
+					
+		9,  Support EAP
+		
+		10, Fix watchdog reset fail Bug
+				Symptom:  KM4 will not running when watchdog reset happen
+				Reason: The power sequence flow need to modify 	
+				
+		11, Support BLE Mesh
+		
+		12, Update BLE example code and macro
+		
+		13, Fix PSRAM Bug
+				Symptom:  The Data on PSRAM may not sync after sleep wakeup
+				Reason: need to clean and invalidation D-cache in PSRAM area	
+		
+		
+		14, Optimize WIFI/BLE coexistence
+		
+		15, Fix MMFv2 Bug
+				Symptom:  System may Hardfault when running MMFv2 example
+				Reason: Malloc use wrong size in MMFv2 related function
+					
+		16, Fix PSRAM Bug
+				Symptom:  PSRAM data may changed during long run
+				Reason: Change psram cache writeback to avoid Winbond psram leakage issue
+					
+		17, Fix PSRAM Bug
+				Symptom:  System may crash during PSRAM init flow
+				Reason: PSRAM power on may not stable， need to enter PSRAM sleep mode before
+					
+		18, Fix wifi connect Bug
+				Symptom： wifi connect may fail when connect to some specical AP
+				Reason:  This AP use OFDM management Frame， need to do RF related calibration to adjust RX in wifi init flow
+					
+
+	Git 200529_aa1d394c to Git 200702_60a4f6a7:
+		1, 	Fix BLE Mesh Bug
+				Symptom:  Need to add mesh api user_cmd_prov_discover to user cmd list.
+				Reason: user_cmd_prov_discover is for serching and listing surround mesh nodes, which is useful for vendor's deBug.
+					
+		2, 	Optimize WIFI/BLE coexistence in connection 
+		
+		3, 	Fix BLE Mesh Bug
+				Symptom:  Transmitter sometimes will miss the data trans model's acknowledge from the receiver.
+				Reason: Data trans model's acknowledge may be collision with transmitter's retry packets, so rand delay mechanism is attached before receiver sending the acknowledge.
+		
+		4, 	Fix BLE Mesh Bug
+				Symptom:  After "ATBm=1" and "ATBm=0", there is a memory leak.
+				Reason: gcs_delete_client is missed when calling "ATBm=0".
+		
+		5, 	Support Sys reset boot reason
+				
+		6, 	Support 3 antenna diversity function
+		
+		7, 	Fix USBH UVC Bug
+				Symptom:  UVC stream on may not return forever
+				Reason: stream on need break function to return when timeout
+		
+		8，	Fix wifi connect Bug
+				Symptom:  wifi reconnection may fail with 11k AP
+				Reason: AP do not reply assoc request causing the AmebaD not deleting PMKSA Caching
+			
+		9，	Fix SoftAP Bug
+				Symptom:  SoftAP may not receive Sta deauth frames
+				Reason: management frame protection check is working in WPA2
+		
+		10，Fix Tickless Bug 
+				Symptom： Lwip Timer may not timeout correctly， 30s timer may take several minutes to time out
+				Reason:  Lwip timers are chain together, tickless wakeup need to adjust the tick
+		
+		11，Update Document：
+				AN0400 Add the section: Used Memory Size Calculation
+ 			  	AN0400 Add the section: PSRAM Cache “Write Back” Policy Change Note
+				UM0400 Update the figure: System architecture
+ 			  	UM0400 Update the figure: ACC clock architecture
+ 			  	UM0400 Update the table: Pad types
+ 			  	UM0400 Update the table: PWM timer features
+				UM0401D&CS Add the section: XTAL Oscillator
+ 			  	UM0401D&CS Add the section: Power Consumption
+ 			  	UM0401D Update the feature of UART
+ 			  	UM0401D Add some restrictions for Power Supply
+				UM0401D Update the ordering information
+ 			  	UM0401D Update the chapter: Memory Organization
+ 			  	UM0401D Update the RF receiver specification
+ 			  	UM0401D Update the figure: System architecture
+
+	Git 200702_60a4f6a7 to Git 200806_cf3cddb5:
+		1,	Fix BLE MESH Bug
+				Symptom:  Add a vendor command for peripheral to disable slave latency.
+				Reason: Customer requests BLE peripheral diaable slave latency.
+		
+		2,	Fix BLE MESH Bug
+				Symptom:  Counter reply mechanism is not work and friend node init num is dismatch with the reality.
+				Reason: Mesh lib bug.
+    
+		3, 	Fix BLE MESH Bug
+				Symptom:  Mesh + central scan can not receive scan response.
+				Reason: Scan parameter is configured as passive scan in mesh lib, when do ble scan, need to change to active scan firstly.
+	
+		4,  Fix BLE MESH Bug
+				Symptom:  "ATBm=0" will cause assert fault without "ATBm=1".
+				Reason: Logic bug.
+				
+		5,	Fix DeepSleep Bug
+				Symptom:  System may hang when enter DeepSleep with Wifi on
+				Reason: WIFI power is not cut off when doing DeepSleep configuration
+
+        6,	Support USB UVC hot-plug
+
+		7,	Support Dynamic Heap
+		
+		8, 	Fix USB UVC Bug
+				Symptom:  Steam on off repeatly will cause Hardfault
+				Reason: Queue Flag setting error
+
+		9,	Fix RSIP Bug
+				Symptom:  flash read from RSIP mask area maybe wrong 
+				Reason: Flash Read need protect lock when rsip enabled
+				
+		10, Fix WIFI Bug
+				Symptom:  5G PowerLimit may be useless
+				Reason: Logic bug
+
+		11，Optimize DPK Calibration
+
+		12,	Optimize Anti-Interference
+
+					
+	Git 200806_cf3cddb5 to Git 200911_f2db61ae:	
+		1, 	Support http 301/302 jump, new url is saved in conn->response.location
+		
+		2, 	Suport TIS/TRP Test new mode
+		
+		3, 	Fix UART Bug
+				Symptom:  Uart DMA rx with gtimer may stop rx in some corner case
+				Reason:  The Gtimer check flow have logic bug to stop next DMA rx
+		
+		4,	Support USB Host phy registers Read and Write
+		
+		5,	Support USB Host hot plug
+		
+		6,	Fix WIFI Bug
+				Symptom:  system may cause hardfault when do some test
+				Reason: Large packet make 4-2 checkmic overwrite to hardfault	
+		
+		7,	Support HTTPD callback for all Path
+		
+		8,	Support example to choose AP to be connected
+		
+		9,	Fix IPv6 Bug
+				Symptom:  see "cannot allocate pbuf" error after idle long running	
+				Reason: missing pbuf_free() call when handling IPv6 multicast packets
+				
+		10, Fix WIFI Bug
+				Symptom:  power limitation value wrong in ch13 in some situation
+				Reason:	 Logic bug cause value setting wrong
+			
+		11, Fix WIFI Bug
+				Symptom:  WPS IE found in softAP beacon
+				Reason: Should remove this WPS IE because softAP not support WPS mode by default
+			
+		12, FIX HTTP Bug
+				Symptom:  HTTP may cause hardfault during long run test
+				Reason:  check source length before memcpy to avoid stack overflow
+
+		13, Optimize BLE example code and macro.
+		
+		14,	Fix BLE MP Bug
+				Symptom: BLE MP flow may init fail.
+				Reason: BLE MP patch used wrong chip ID.
+	
+		15,	Support Low Power Node and Friend Node in BLE Mesh.
+		
+		16,	Fix BLE Mesh Bug
+			Symptom: Timer may be deleted when send one shot adv packet periodically.
+			Reason: Incorrect timer API is used in BLE mesh multiple profile example.
+		
+		17,	Fix BLE Mesh Bug
+			Symptom: One shot adv packet sometimes can not send out.
+			Reason: One shot adv packet may allocate buffer fail, need to be optimized.
+		
+		18,	Fix BLE Mesh Bug
+			Symptom: BLE mesh multiple profile example can not receive scan response packet.
+			Reason: BLE mesh scan used passive scan, need to be changed to active scan when do BLE scan.
+
+	Git 200911_f2db61ae to Git 201020_c0354081:	
+		1, 	Optimize WIFI Logo Certification Test
+		
+		2, 	Support HTTP 1.0 Requst
+		
+		3,	Support USB Host cdc_acm_class example
+		
+		4, 	Add Powersave Mode API 
+		
+		5,	Optimize WIFI PowerLimit Table of multilateral regulation
+		
+		6,	Optimize WIFI channel plan for new version
+		
+		7, 	Fix Tickless Bug
+			Symptom: Interrupt will trigger during Sleep procedure, cause sleep fail
+			Reason: During sleep procedure, rtw_read8/16/32 clear PRIMASK to enable interrupt response by mistake, which will break sleep procedure.
+
+		8, 	Fix Tickless Bug
+			Symptom: Entering log uart interrupt by mistake when the other core enable log uart interrupt.
+			Reason: Log uart is shared by km0 and km4. When data are input, both pending interrupt register in km0 and km4 are set, but only one core will process the interrupt.
+			
+		9,	Add wifi softap start and stop handler
+		
+		10, Fix MP Bug
+			Symptom: ContinuousTx may not Tx packet actually in some cmd flow
+			Reaon:	BB register setting wrong value may cause Tx fail in MP continuousTx mode
+			
+		11,	Optimize KRACK Test 
+		
+		12, Support for antenna diversity SP3T
+		
+		13,	Fix BLE Bug
+			Symptom: Mix use of different BLE example's AT commands may cause unknown error.
+			Reason: Mix use of different BLE example's AT commands should not be allowed.
+		
+		14,	Fix BLE Mesh Bug
+			Symptom: Within mesh example, when wifi is connected, there is sometimes pb adv link open fail or link busy problem.
+			Reason: When wifi is connected, coex tdma mechanism is working, making a 100ms TBTT to separated wifi and bt slot. So there is a possibility the pb adv connect ack sending from responser will locate in the wifi slot, making the pbadv con procedure time out.
+		
+		15,	Optimize BLE Log
+			Symptom: The log of BLE read & write is shown unclear.
+			Reason: The format of BLE read & write log should be optimized.
+			
+	Git 201020_c0354081 to Git 201127_b4975e52:	
+		1,	Optimize WPA3 wifi logo certification
+		
+		2,	Support Country Code for UA and CN
+		
+		3,	Optimize USB OTG for win7 
+		
+		4,	Support Antenna SP3T in MP mode
+		
+		5,  Update new version Tx Power Limit Table
+		
+		6,	Fix IAR Bug
+			Symptom: PSRAM code can not work in IAR
+			Reason: PSRAM layout has been changed, need to update
+			
+		7,	Support USB UVC for hot plug
+		
+		8,	Fix BLE Mesh Bug
+			Symptom: When enable mesh multiple profile, BLE scan response data can not be modified.
+			Reason: BLE scan response data is overwritten by mesh stack.
+		
+		9,	Fix BLE Mesh Bug
+			Symptom: Mesh device can not subscribe virtual address.
+			Reason: There is something status wrong within mesh stack.
+		
+		10,	Optimize BLE
+			Reason: Optimize BLE connection success rate.
+		
+		11,	Optimize BLE
+			Reason: Decoupling some BLE examples with FreeRTOS API.
+			
+		12,	Fix wlan vulnerability reported by VDOO
+			
+	Git 201127_b4975e52 to Git 210106_39e0d1af:
+		1,  Fix WIFI Bug
+			Symptom: Rx may lose packet when there is a 2ss packet before
+			Reason: Register setting error will cause rx hang too long and lose packet, now use correct setting
+			
+		2,  Fix Websocket Bug
+			Symptom: websocket may hardfault when it receive malformed message
+			Reason:	when receive malformed message, will free rx buffer, so we should return and not continue process
+			
+		3,  Support power tracking by power index in MP
+
+		4,  Add security type condition to wifi connect
+		
+		5,	Add ssid and password length check to start SoftAP
+		
+		6,	Fix WIFI Bug
+			Symptom: System may hang or hardfault if connect to AP with large ssid length
+			Reason:	There is memory overflow during memcpy if the ssid length is illegal
+		
+		7,	Add Tickless Roaming example
+		
+		8,	Fix Deep Sleep Bug
+			Symptom: System may hang when it try to enter deepsleep
+			Reason:	DeepSleep will force flash enter power down mode， need make sure interrupts are all disabled
+			
+		9,	Fix BLE Mesh Bug
+			Symptom: Mesh message step is inaccurate.
+			Reason: Update btmesh_dev.a to 1.0.0.9, fixing inaccurate mesh message step and make sure the proxy node will relay the message.
+		
+		10,	Fix BLE Mesh Bug
+			Symptom: Mesh will hard fault when use async mode API sometimes.
+			Reason: Fix hard fault cause by mesh user API async mode.
+		
+		11,	Optimize BLE Mesh
+			Reason: Add two mesh commands of friend node deinit and low power node deinit.
+		
+		12,	Optimize BLE
+			Reason: Add WPA3 AP case in BT config.
+		
+		13,	Optimize BLE
+			Reason: Decoupling some BLE examples with FreeRTOS API.
+	
+		
+	Git 201127_b4975e52 to Git 210106_39e0d1af:
+		1,	Support OTA.bin generation in GCC post build
+		
+		2,	Support PowerTracking by PowerIndex in MP mode
+		
+		3,	Optimize WPA3 related codes
+		
+		4,	Fix WIFI bug
+			Reason: security vulnerabilities to prevent buffer overflow
+			
+		5,	Update usb vendor code
+		
+		6,	Support SDIO HS downward compatible with DS
+		
+		7,	Optimize mesh user api for sync mode
+		
+		8,	Support more GPIO selection type in antenna diversity
+		
+		9,	Support API to enable and disable wifi 40M
+		
+		10,	Enable AMPDU for better compatibility
+		
+		11, Support Websocket new APIs to set protocol, version and customer token\
+		
+		12,	Update usb phy parameter for USB IF
+		
+		12, Optimize Antenna Diversity in MP mode
+		 
+		13,	Sync channel plan table with RF team
+		
+		14,	Optimize BLE error log
+
+	Git 210106_39e0d1af to Git 210204_78d4b568:
+		1,	Optimize potential risk of sprintf and strcpy
+		
+		2,	Fix wifi bug
+			Symptom:	wifi get mac address is wrong and wifi MP driver is not working normally
+			Reason:		Software bug, snprintf parameter use wrong value
+			
+		3,	Fixed the bug of device_mutex_free() function
+		
+		4,	Enable CONFIG_WPS2 default
+		
+		5,	BLE remove useless macro
+		
+	Git 210204_78d4b568 to Git 210311_9c6f8545:
+		1,	Fix FreeRTOS bug：
+			Delete timer stop cmd in timer task to prevent timer delete first and set later， this will cause wild pointer
+		
+		2,	Optimize shell task stack size to save memory
+			
+		3,	Fix wlan vulnerability reported by VDOO
+		
+		4,	Fix hardfault because usb power on fail
+		
+		5,	Fix bt mesh user cmd thread hanging.
+
+		6， Optimize IAR postbuild
+		
+		7， Add MP option for auto-build in GCC 
+		
+		8,	Optimize websocket send buffer recycle mechanism
+		
+		9，	Revise the RSIP mask entry size
+		
+		10, Optimize potential buffer overflow vulnerability of sprintf and strcpy
+		
+		11, Modify default BT mesh node cfg
+		
+		12, Optimize flash lock and unlock flow
+
+	Git 210311_9c6f8545 to Git 210407_733408e9:
+		1, Add USB HID Class and example
+		
+		2, Decouple USB and V2L2 library with Freertos 
+		
+		3, Optimize CM backtrace code
+		
+		4, Support path and url length define by user in websocket
+		
+		5, Add Efuse logic map read and write API
+		
+		6, Support WIFI concurrent mode with BLE coexistence
+		
+		7, Add WPA TKIP AES Mixed mode in scan result
+		
+		8, Support Chunked decode in HTTP
+		
+		9, Optimize GPIO irq handle for two interrupts interval less than 60us
+		
+		10, Fix Channel plan setting useless in EFUSE with none BIT7 set
+		
+		11,	Fix tickless always enter fail in longrun test
+		
+		12, Update RDP example
+		
+		13, Seperate SecurityBoot and SecurityImage2 with different EFUSE control BIT
+		
+	Git 210407_733408e9 to Git 210413_fe817a24:	
+		1,	Fix WIFI Bug
+				Symptom:	Timer Task may block when sta leaving in softAP mode
+				Reason:		Timer queue length is only 10, station leaving will cause del timer event more than 10, so need to increase timer queue length
+	
+	Git 210413_fe817a24 to Git 210428_13a21db4:
+		1,	Improve the compensation of thermal effect on BLE TX power
+		
+	Git 210428_13a21db4 to Git 210603_743b77de:	
+		1,	Support 802.11 KVR
+		
+		2,	Add Boot Reason bit in OTA reset function
+		
+		3,	Add US, MX, CL and AU's channel plan
+		
+		4,	Update usb phy read write api
+
+		5,	Support Read large websocket data when the fin field is not set in first packet
+		
+		6,	Disable PMF function in SoftAP mode
+		
+		7,	Add wifi simple connect API
+		
+		8,	Support IAR debug reset when wifi is running
+		
+		9,	Update HTTP related code
+		
+		10,	Fix BadAlloc vulnerabilities in FreeRTOS
+		
+		11,	Fix rx packet miss bug when packet is special length from special AP
+		
+		12,	Update Audio related code
+		
+		13,	Fix BLE Bug
+			Symptom: Change the delete order of task and message queue when BT deinit.
+			Reason: Delete message queue first may cause hardfault in some cases.
+		
+		14,	Fix BLE Bug
+			Symptom: Disconnect two BLE links at the same time may cause error.
+			Reason: Controller do not support disconnect two BLE links at the same time.
+		
+		15,	Optimize BLE Mesh
+			Reason: Update BLE Mesh SDK to support Mesh 1.1.
+			
+		16,	Fix Security Vulnerabilities in	Fragment and Aggregation attack
+			CVE-2020-24586
+			CVE-2020-24587
+			CVE-2020-24588
+			CVE-2020-26139
+			CVE-2020-26140
+			CVE-2020-26141 
+			CVE-2020-26142
+			CVE-2020-26143
+			CVE-2020-26144
+			CVE-2020-26145
+			CVE-2020-26146
+			CVE-2020-26147
+		

@@ -8,51 +8,44 @@
  */
 #include "ameba_soc.h"
 #include "main.h"
+#include "rtc_api.h"
 
- VOID RTC_Handler(u32 Data)
- {
-	 RTC_TimeTypeDef RTC_TimeStruct;
-	 
-	 /*clear alarm flag*/
-	 RTC_AlarmClear();
-	 
-	 RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
-	 DBG_8195A("RTC_ISR time: %d:%d:%d:%d (%d) \n", RTC_TimeStruct.RTC_Days,
-			 RTC_TimeStruct.RTC_Hours,
-			 RTC_TimeStruct.RTC_Minutes,
-			 RTC_TimeStruct.RTC_Seconds,
-			 RTC_TimeStruct.RTC_H12_PMAM);
+#include <time.h>
+#include "timer_api.h"
+
+ alarm_irq_handler rtc_handler(void)
+ { 	
+ 	time_t t;
+	struct tm *timeinfo;
+	
+ 	t = rtc_read();
+	timeinfo = localtime(&t);
+
+	DBG_8195A("alarm time = %d-%d-%d %d:%d:%d\n", 
+            timeinfo->tm_year, timeinfo->tm_mon, timeinfo->tm_mday, timeinfo->tm_hour,
+            timeinfo->tm_min,timeinfo->tm_sec);
  }
 
 void rtc_alarm_en(void)
 {
-	RTC_InitTypeDef RTC_InitStruct_temp;
-	RTC_AlarmTypeDef RTC_AlarmStruct_temp;
-	RTC_TimeTypeDef RTC_TimeStruct;
+	time_t t = 0;
+	struct tm *timeinfo;
+	alarm_t alarm;
 
-	/*enable RTC*/
-	RTC_ClokSource(0);
-	RTC_StructInit(&RTC_InitStruct_temp);
-	RTC_Init(&RTC_InitStruct_temp);
+	rtc_init();
+	rtc_write(t);
+	timeinfo = localtime(&t);
 
-	RTC_TimeStructInit(&RTC_TimeStruct);
-	RTC_SetTime(RTC_Format_BIN, &RTC_TimeStruct);
-		
-	/* set alarm */
-	RTC_AlarmStructInit(&RTC_AlarmStruct_temp);
-	RTC_AlarmStruct_temp.RTC_AlarmTime.RTC_Days = 1;
-	RTC_AlarmStruct_temp.RTC_AlarmTime.RTC_Hours = 1;
-	RTC_AlarmStruct_temp.RTC_AlarmTime.RTC_Minutes = 1;
-	RTC_AlarmStruct_temp.RTC_AlarmTime.RTC_Seconds = 0;
-	RTC_AlarmStruct_temp.RTC_AlarmMask = RTC_AlarmMask_Hours | RTC_AlarmMask_Minutes;
-	RTC_AlarmStruct_temp.RTC_Alarm2Mask = RTC_Alarm2Mask_Days;
+	DBG_8195A("now time = %d-%d-%d %d:%d:%d\n", 
+            timeinfo->tm_year, timeinfo->tm_mon, timeinfo->tm_mday, timeinfo->tm_hour,
+            timeinfo->tm_min,timeinfo->tm_sec);
 	
-	RTC_SetAlarm(RTC_Format_BIN, &RTC_AlarmStruct_temp);
-	RTC_AlarmCmd(ENABLE);
+	alarm.hour = 0;
+	alarm.yday = 0;
+	alarm.min = 0;
+	alarm.sec = 10;
+	rtc_set_alarm(&alarm, (alarm_irq_handler) rtc_handler);
 	
-	InterruptRegister((IRQ_FUN)RTC_Handler, RTC_IRQ, NULL, 5);
-	InterruptEn(RTC_IRQ, 5);
-
 	vTaskDelete(NULL);
 }
 

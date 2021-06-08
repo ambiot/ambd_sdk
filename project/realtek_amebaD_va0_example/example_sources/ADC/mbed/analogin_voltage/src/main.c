@@ -55,7 +55,8 @@ main (
 	u32 addressGain = 0x1D2;
 
 	uint16_t offset, gain;
-	
+
+
 	for (index = 0; index< 2; index++) {
 		EFUSE_PMAP_READ8(0, addressOffset+index, EfuseBuf + index, L25EOUTVOLTAGE);
 	}

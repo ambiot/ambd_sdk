@@ -134,12 +134,8 @@ spi_t spi_master;
 #else
 spi_t spi_slave;
 #endif
-/**
-  * @brief  Main program.
-  * @param  None
-  * @retval None
-  */
-void main(void)
+
+void spi_multislave_task(void* param)
 {
     int Counter = 0;
     int i;
@@ -249,5 +245,23 @@ void main(void)
 #endif
 
     DBG_8195A("SPI Demo finished.\n");
-    for(;;);
+
+    vTaskDelete(NULL);
+}
+
+/**
+  * @brief  Main program.
+  * @param  None 
+  * @retval None
+  */
+void main(void)
+{
+	if(xTaskCreate(spi_multislave_task, ((const char*)"spi_multislave_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
+		printf("\n\r%s xTaskCreate(spi_multislave_task) failed", __FUNCTION__);
+
+        vTaskStartScheduler();
+	while(1){
+		vTaskDelay( 1000 / portTICK_RATE_MS );
+	}
+	
 }

@@ -195,6 +195,8 @@ int  flash_read_word(flash_t *obj, u32 address, u32 * data)
 	
 //	FLASH_RxData(0, address, 4, data);
 	assert_param(data != NULL);
+
+	FLASH_Write_Lock();
 	
 	u32 offset_to_align = address & 0x03;
 	u32 read_data;
@@ -214,6 +216,8 @@ int  flash_read_word(flash_t *obj, u32 address, u32 * data)
 	}else{
 		* data = HAL_READ32(SPI_FLASH_BASE, address);
 	}
+
+	FLASH_Write_Unlock();
 	
 	return 1;
 }
@@ -285,6 +289,8 @@ int  flash_stream_read(flash_t *obj, u32 address, u32 len, u8 * data)
 	u8 *ptr;
 	u8 *pbuf;
 
+	FLASH_Write_Lock();
+
 	offset_to_align = address & 0x03;
 	pbuf = data;
 	if (offset_to_align != 0) {
@@ -332,6 +338,8 @@ int  flash_stream_read(flash_t *obj, u32 address, u32 len, u8 * data)
 			pbuf++;
 		}        
 	}
+
+	FLASH_Write_Unlock();
 
 	return 1;
 }

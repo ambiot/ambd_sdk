@@ -28,8 +28,10 @@
 
 //------------------------------------- ---CONFIG Parameters-----------------------------------------------//
 static u8 *sp_tx_buf = NULL;
-static u8 sp_zero_buf[SP_ZERO_BUF_SIZE];
-
+//The size of this buffer should be multiples of 32 and its head address should align to 32 
+//to prevent problems that may occur when CPU and DMA access this area simultaneously. 
+static u8 sp_zero_buf[SP_ZERO_BUF_SIZE]__attribute__((aligned(32)));
+static int GDMA_flag = 0;
 static SP_InitTypeDef SP_InitStruct;
 static SP_GDMA_STRUCT SPGdmaStruct;
 static SP_OBJ sp_obj;
@@ -141,10 +143,18 @@ static void sp_tx_complete(void *Data)
 	sp_release_tx_page();
 	tx_addr = (u32)sp_get_ready_tx_page();
 	tx_length = sp_get_ready_tx_length();
-	GDMA_SetSrcAddr(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum, tx_addr);
-	GDMA_SetBlkSize(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum, tx_length>>2);
 	
-	GDMA_Cmd(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum, ENABLE);
+	if(GDMA_flag == 0) {
+		AUDIO_SP_TXGDMA_Restart(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum, tx_addr, tx_length);
+	} else {
+		GDMA_ChnlFree(SPGdmaStruct.SpTxGdmaInitStruct.GDMA_Index, SPGdmaStruct.SpTxGdmaInitStruct.GDMA_ChNum);
+		AUDIO_SP_TdmaCmd(AUDIO_SPORT_DEV, DISABLE);
+		AUDIO_SP_TxStart(AUDIO_SPORT_DEV, DISABLE);
+		RCC_PeriphClockCmd(APBPeriph_AUDIOC, APBPeriph_AUDIOC_CLOCK, DISABLE);
+		RCC_PeriphClockCmd(APBPeriph_SPORT, APBPeriph_SPORT_CLOCK, DISABLE);
+		CODEC_DeInit(APP_LINE_OUT);		
+		PLL_PCM_Set(DISABLE);		
+	}
 }
 
 static void sp_rx_complete(void *data, char* pbuf)
@@ -324,7 +334,6 @@ void audio_play_sd_amr(u8* filename){
 		else{
 			sp_conf_hal(&sp_obj);
 		}
-		
 		sp_init_tx_variables(amr_type);
 
 		/*configure Sport according to the parameters*/
@@ -336,11 +345,9 @@ void audio_play_sd_amr(u8* filename){
 		
 		AUDIO_SP_TdmaCmd(AUDIO_SPORT_DEV, ENABLE);
 		AUDIO_SP_TxStart(AUDIO_SPORT_DEV, ENABLE);
-
 		tx_addr = (u32)sp_get_ready_tx_page();
 		tx_length = sp_get_ready_tx_length();
 		AUDIO_SP_TXGDMA_Init(0, &SPGdmaStruct.SpTxGdmaInitStruct, &SPGdmaStruct, (IRQ_FUN)sp_tx_complete, (u8*)tx_addr, tx_length);
-
 	}else{
 		memset(header, 0, 9);
 		f_lseek(&m_file[0], 0);
@@ -448,7 +455,6 @@ void audio_play_sd_amr(u8* filename){
 			Decoder_Interface_Decode(amr, buffer, outbuffer, 0);
 		else if(amr_type == AMR_WB)
 			D_IF_decode(amr, buffer, outbuffer, 0);
-
 		/* Convert to little endian and write to wav */
 		ptr = littleendian;
 		for (i = 0; i < frame_size; i++) {
@@ -478,7 +484,6 @@ void audio_play_sd_amr(u8* filename){
 			}
 #endif
 	}while(1);
-
 	tim2 = rtw_get_current_time();
 	printf("decoding finished (Heap used: 0x%x, Time passed: %dms)\n", start_heap - xPortGetFreeHeapSize(), (tim2-tim1));
 	printf("PCM done\n");
@@ -489,11 +494,8 @@ void audio_play_sd_amr(u8* filename){
 		D_IF_exit(amr);
 
 exit:
+	GDMA_flag = 1;
 	DelayMs(100);
-	AUDIO_SP_TdmaCmd(AUDIO_SPORT_DEV, DISABLE);
-	AUDIO_SP_TxStart(AUDIO_SPORT_DEV, DISABLE);	
-	GDMA_Cmd(SPGdmaStruct.SpTxGdmaInitStruct.GDMA_Index, SPGdmaStruct.SpTxGdmaInitStruct.GDMA_ChNum, DISABLE);
-	GDMA_ChnlFree(SPGdmaStruct.SpTxGdmaInitStruct.GDMA_Index, SPGdmaStruct.SpTxGdmaInitStruct.GDMA_ChNum);
 
 	if(sp_tx_buf)
 		free(sp_tx_buf);
@@ -800,10 +802,21 @@ unreg:
 #endif
 
 void example_audio_amr_thread(void* param){
-	printf("Audio codec AMR demo begin......\n"); 
-	audio_play_sd_amr(AMRNB_FILE_NAME);
-	vTaskDelay(1000);
-	audio_play_sd_amr(AMRWB_FILE_NAME);
+	printf("Audio codec AMR demo begin......\n");
+	for(int i = 0; i < 10; i++){	
+		audio_play_sd_amr(AMRNB_FILE_NAME);
+		audio_inited = 0;
+		vTaskDelay(1000);
+		GDMA_flag = 0;
+	}
+	
+	for(int i = 0; i < 10; i++){	
+		audio_play_sd_amr(AMRWB_FILE_NAME);
+		audio_inited = 0;
+		vTaskDelay(1000);
+		GDMA_flag = 0;
+	}
+	printf("play over\n");
 #if 	AMR_ENC_EN
 	vTaskDelay(1000);
 	amrnb_enc_sd_wav(WAV_FILE_NAME);

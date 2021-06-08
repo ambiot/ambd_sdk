@@ -23,6 +23,8 @@ Setup Guide
 ~~~~~~~~~~~
         In platform_opts.h, please set #define CONFIG_EXAMPLE_HTTPD  1
         In lwipopts.h, please set #define SO_REUSE  1
+		For HTTPS, please set #define USE_HTTPS    1 in example_httpd.c
+		For HTTPS, MBEDTLS_SSL_MAX_CONTENT_LEN in config_rsa.h may need to be increased.
 
 Parameter Setting and Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -39,7 +41,7 @@ AmebaPro and AmebaZ2 only support MBEDTLS.
                         	#define POLARSSL_CERTS_C  		#define MBEDTLS_CERTS_C
 								or
                         	#define POLARSSL_SSL_SRV_C		#define MBEDTLS_SSL_SRV_C
-			For AmebaPro and Ameba-Z2:
+			For AmebaPro, Ameba-Z2 and AmebaD:
 				#define MBEDTLS_CERTS_C
 				#define MBEDTLS_SSL_SRV_C
 
@@ -56,5 +58,8 @@ Supported List
 ~~~~~~~~~~~~~~
 [Supported List]
         Supported IC :
-                Ameba-pro, Ameba-Z, Ameba-1, Ameba-Z2
-
+                Ameba-pro, Ameba-Z, Ameba-1, Ameba-Z2, AmebaD
+Trouble Shooting
+~~~~~~~~~~~~~~
+         'ERROR: mbedtls_ssl_handshake -29312' & 'ERROR: httpd_tls_new_handshake'
+         Solution: In config_rsa.h or config_all.h, increase the value of MBEDTLS_SSL_MAX_CONTENT_LEN, the maximum value is 16384.

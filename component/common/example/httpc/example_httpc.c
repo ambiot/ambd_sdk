@@ -59,8 +59,17 @@ static void example_httpc_thread(void *param)
 							break;
 						}
 
-						if(conn->response.content_len && (total_size >= conn->response.content_len))
-							break;
+                        char chunk[] = "chunked";
+                        /* chunked read */
+                        if((conn->response.trans_enc) && (memcmp(conn->response.trans_enc, chunk, strlen(chunk)) == 0)){
+                            if(0 == conn->response.trans_chunk_len){
+                                break;
+                            }
+                        }
+                        else{
+    						if(conn->response.content_len && (total_size >= conn->response.content_len))
+    							break;
+                        }
 					}
 				}
 			}
@@ -118,8 +127,18 @@ static void example_httpc_thread(void *param)
 							break;
 						}
 
-						if(conn->response.content_len && (total_size >= conn->response.content_len))
-							break;
+
+                        char chunk[] = "chunked";
+                        /* chunked read */
+                        if((conn->response.trans_enc) && (memcmp(conn->response.trans_enc, chunk, strlen(chunk)) == 0)){
+                            if(0 == conn->response.trans_chunk_len){
+                                break;
+                            }
+                        }
+                        else{
+    						if(conn->response.content_len && (total_size >= conn->response.content_len))
+    							break;
+                        }
 					}
 				}
 			}

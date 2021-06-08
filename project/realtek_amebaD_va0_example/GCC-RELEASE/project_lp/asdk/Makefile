@@ -23,6 +23,7 @@ export ABS_ROOTDIR MAKE_INCLUDE_GEN HOSTCC
 ifeq ($(COMPILEOS_CYGWIN),Cygwin)
 HOSTNAME_APP = /usr/bin/hostname
 PADTOOL      = $(UTILITYDIR)/imgpad.exe
+LBITS := $(shell getconf LONG_BIT)
 else
 HOSTNAME_APP = $(which hostname)
 PADTOOL      = $(UTILITYDIR)/imgpadl
@@ -57,8 +58,8 @@ endif
 ROM_LD = $(ROOTDIR)/ld/rlx8721d_rom.ld
 
 .PHONY: all build_target_folder menuconfig clean build_libraries package_prebuilt_rom_objs ucps_image2
-
 LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_application_lp.a
+
 
 image2:LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_wifi_fw.a
 ucps_image2:LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_wifi_ucps_fw.a
@@ -78,6 +79,12 @@ lib_all: build_target_folder copy_ld_img2 check_toolchain build_info.h make_subd
 #*****************************************************************************#
 
 build_target_folder:
+ifeq ($(COMPILEOS_CYGWIN),Cygwin)
+ifneq ("$(LBITS)", "32")
+	@echo ONLY 32-BIT CYGWIN IS SUPPORTED!
+	@exit -1
+endif
+endif
 	@if [ -d $(BUILD_TARGET_FOLDER) ]; then echo "$(BUILD_TARGET_FOLDER) exist"; else $(MKDIR) -p $(BUILD_TARGET_FOLDER); fi
 	@if [ -d $(IMAGE_TARGET_FOLDER) ]; then echo "$(IMAGE_TARGET_FOLDER) exist"; else $(MKDIR) -p $(IMAGE_TARGET_FOLDER); fi
 	@if [ -d $(BUILD_TARGET_RAM_FOLDER) ]; then echo "$(BUILD_TARGET_RAM_FOLDER) exist"; else $(MKDIR) $(BUILD_TARGET_RAM_FOLDER); fi
@@ -168,12 +175,16 @@ linker_image2:
 	$(UTILITYDIR)/pad.sh $(IMAGE_TARGET_FOLDER)/km0_image2_all.bin
 
 	$(UTILITYDIR)/image_tool/imagetool.sh $(IMAGE_TARGET_FOLDER)/km0_image2_all.bin $(KM4_BUILDDIR)/asdk/image
+	
+	#@if [ -f $(IMAGE_TARGET_FOLDER)/km0_km4_image2.bin ]; then \
+		#$(OTAPREPENDTOOL) $(IMAGE_TARGET_FOLDER)/km0_km4_image2.bin $(KM4_BUILDDIR)/asdk/image; \
+	#fi
 
 	@echo "========== Image manipulating end =========="
 
 linker_loader:
 	@echo "========= linker loader start ========="
-	$(LD) $(LD_ARG) target_loader.axf $(RAM_OBJS_LIST) $(LINK_ROM_LIB)  -Wl,--whole-archive -lbootloader_lp -Wl,--no-whole-archive 
+	$(LD) $(LD_ARG) target_loader.axf $(RAM_OBJS_LIST) $(LINK_ROM_LIB) -Wl,--whole-archive -lbootloader_lp -Wl,--no-whole-archive 
 
 	$(MOVE) text.map $(IMAGE_TARGET_FOLDER)/text_loader.map
 	$(MOVE) target_loader.axf $(IMAGE_TARGET_FOLDER)
@@ -217,7 +228,8 @@ linker_loader:
 #*****************************************************************************#
 
 menuconfig:
-	cp $(CONFIGDIR)/config.in $(CONFIGDIR)/config.in.old -f
+
+	cp -f $(CONFIGDIR)/config.in $(CONFIGDIR)/config.in.old
 ifeq ($(COMPILEOS_CYGWIN),Cygwin)
 	@cp $(LXDIALOG_CYGWIN_STATIC) $(SCRIPTSDIR)/lxdialog/lxdialog.exe
 else
@@ -448,9 +460,11 @@ endif
 #              COPY flashloader into flashdownload folder                     #
 #*****************************************************************************#
 copy_flashloader:
-	$(COPY) $(IMAGE_TARGET_FOLDER)/target_loader.axf $(GNU_SCRIPT)/acut_loader/target_FPGA.axf -f
-	$(COPY) $(IMAGE_TARGET_FOLDER)/ram_1.bin $(GNU_SCRIPT)/acut_loader/flash_loader_ram_1.bin -f
+
+	$(COPY) -f $(IMAGE_TARGET_FOLDER)/target_loader.axf $(GNU_SCRIPT)/acut_loader/target_FPGA.axf
+	$(COPY) -f $(IMAGE_TARGET_FOLDER)/ram_1.bin $(GNU_SCRIPT)/acut_loader/flash_loader_ram_1.bin
 
 copy_imgtool_flashloader:
-	$(COPY) $(IMAGE_TARGET_FOLDER)/target_loader.axf $(TARGETDIR)/imgtool_floader/image/target_FPGA.axf -f
-	$(COPY) $(IMAGE_TARGET_FOLDER)/ram_1.bin $(TARGETDIR)/imgtool_floader/image/imgtool_flashloader_amebad.bin -f
+
+	$(COPY) -f $(IMAGE_TARGET_FOLDER)/target_loader.axf $(TARGETDIR)/imgtool_floader/image/target_FPGA.axf
+	$(COPY) -f $(IMAGE_TARGET_FOLDER)/ram_1.bin $(TARGETDIR)/imgtool_floader/image/imgtool_flashloader_amebad.bin

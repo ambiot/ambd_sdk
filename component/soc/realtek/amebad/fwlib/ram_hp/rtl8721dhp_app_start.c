@@ -9,20 +9,22 @@
 
 #include "ameba_soc.h"
 #include "rtl8721d_system.h"
+#include "psram_reserve.h"
 #if defined ( __ICCARM__ )
 #pragma section=".ram_image2.bss"
 #pragma section=".ram_image2.nocache.data"
 #pragma section=".psram.bss"
 
-SECTION(".data") u8* __bss_start__;
-SECTION(".data") u8* __bss_end__;
-SECTION(".data") u8* __ram_nocache_start__;
-SECTION(".data") u8* __ram_nocache_end__;
-SECTION(".data") u8* __psram_bss_start__;
-SECTION(".data") u8* __psram_bss_end__;
+SECTION(".data") u8* __bss_start__ = 0;
+SECTION(".data") u8* __bss_end__ = 0;
+SECTION(".data") u8* __ram_nocache_start__ = 0;
+SECTION(".data") u8* __ram_nocache_end__ = 0;
+SECTION(".data") u8* __psram_bss_start__ = 0;
+SECTION(".data") u8* __psram_bss_end__ = 0;
 #endif
 extern int main(void);
 extern u32 GlobalDebugEnable;
+struct _driver_call_os_func_map driver_call_os_func_map;
 void NS_ENTRY BOOT_IMG3(void);
 extern void INT_HardFault_C(uint32_t mstack[], uint32_t pstack[], uint32_t lr_value, uint32_t fault_id);
 void app_init_psram(void);
@@ -105,7 +107,24 @@ u32 app_mpu_nocache_init(void)
 	mpu_cfg.attr_idx = MPU_MEM_ATTR_IDX_NC;
 	mpu_region_cfg(mpu_entry, &mpu_cfg);
 
+	/* set No-Security PSRAM Memory Write-Back */
+    mpu_entry = mpu_entry_alloc();
+    mpu_cfg.region_base = 0x02000000;
+    mpu_cfg.region_size = 0x400000;
+    mpu_cfg.xn = MPU_EXEC_ALLOW;
+    mpu_cfg.ap = MPU_UN_PRIV_RW;
+    mpu_cfg.sh = MPU_NON_SHAREABLE;
+    mpu_cfg.attr_idx = MPU_MEM_ATTR_IDX_WB_T_RWA;
+    mpu_region_cfg(mpu_entry, &mpu_cfg);
+
 	return 0;
+}
+
+u32 app_mpu_s_nocache_init(void)
+{
+#if defined (configENABLE_TRUSTZONE) && (configENABLE_TRUSTZONE == 1U)
+		mpu_s_no_cache_init();
+#endif
 }
 
 VOID app_vdd1833_detect(VOID)
@@ -128,12 +147,35 @@ void _init(void) {}
 
 void INT_HardFault_Patch_C(uint32_t mstack[], uint32_t pstack[], uint32_t lr_value, uint32_t fault_id)
 {
-	DBG_8195A("\r\nHard Fault Patch\r\n");
-	
-	/*fix rom code error*/
-	if (!(lr_value & 0x04)) 
+	u8 IsPstack = 0;
+
+	DBG_8195A("\r\nHard Fault Patch (Non-secure)\r\n");
+
+	/* EXC_RETURN.S, 1: original is Secure, 0: original is Non-secure */
+	if (lr_value & BIT(6)) {					//Taken from S
+		DBG_8195A("\nException taken from Secure to Non-secure.\nSecure stack is used to store context." 
+			"It can not be dumped from non-secure side for security reason!!!\n");
+
+		while(1);
+	} else {									//Taken from NS
+		if (lr_value & BIT(3)) {				//Thread mode
+			if (lr_value & BIT(2)) {			//PSP
+				IsPstack = 1;
+			}
+		}
+	}
+
+#if defined(CONFIG_EXAMPLE_CM_BACKTRACE) && CONFIG_EXAMPLE_CM_BACKTRACE
+	cm_backtrace_fault(IsPstack ? pstack : mstack, lr_value);
+	while(1);
+#else
+
+	if(IsPstack)
 		mstack = pstack;
+
 	INT_HardFault_C(mstack, pstack, lr_value, fault_id);
+#endif	
+	
 }
 
 VOID
@@ -221,6 +263,7 @@ u32 app_psram_suspend(u32 expected_idle_time, void *param)
 	psram_ca = &PSRAM_CA[0];
 
 	if((SLEEP_PG == pmu_get_sleep_type()) || (FALSE == psram_dev_config.psram_dev_retention)) {
+		g_Psram_heap_inited = 0;
 		/*Close PSRAM 1.8V power to save power*/
 		temp = HAL_READ32(SYSTEM_CTRL_BASE_LP, REG_AON_LDO_CTRL1);
 		temp &= ~(BIT_LDO_PSRAM_EN);
@@ -283,15 +326,13 @@ void app_init_psram(void)
 	HAL_WRITE32(PSRAM_BASE, 0, 0);
 	assert_param(0 == HAL_READ32(PSRAM_BASE, 0));
 
-	if(SYSCFG_CUT_VERSION_A != SYSCFG_CUTVersion()) {
-		if(_FALSE == PSRAM_calibration())
-			return;
+	if(_FALSE == PSRAM_calibration())
+		return;
 
-		if(FALSE == psram_dev_config.psram_dev_cal_enable) {
-			temp = PSRAM_PHY_REG_Read(REG_PSRAM_CAL_CTRL);
-			temp &= (~BIT_PSRAM_CFG_CAL_EN);
-			PSRAM_PHY_REG_Write(REG_PSRAM_CAL_CTRL, temp);
-		}
+	if(FALSE == psram_dev_config.psram_dev_cal_enable) {
+		temp = PSRAM_PHY_REG_Read(REG_PSRAM_CAL_CTRL);
+		temp &= (~BIT_PSRAM_CFG_CAL_EN);
+		PSRAM_PHY_REG_Write(REG_PSRAM_CAL_CTRL, temp);
 	}
 
 #if defined ( __ICCARM__ )
@@ -316,7 +357,7 @@ static void* app_psram_load_ns()
 
 	/* load psram code+data into PSRAM */
 	if((PsramHdr->image_size != 0) && \
-		(PsramHdr->image_addr == 0x02000000) && \
+		(PsramHdr->image_addr == 0x02000020) && \
 		(PsramHdr->signature[0] == 0x35393138) && \
 		(PsramHdr->signature[1] == 0x31313738)) {
 
@@ -329,6 +370,13 @@ static void* app_psram_load_s()
 #if defined (configENABLE_TRUSTZONE) && (configENABLE_TRUSTZONE == 1U)
 	load_psram_image_s();
 #endif
+}
+
+/*initialize driver call os_function map*/
+static void app_driver_call_os_func_init(void)
+{
+	driver_call_os_func_map.driver_enter_critical = vPortEnterCritical;
+	driver_call_os_func_map.driver_exit_critical = vPortExitCritical;
 }
 
 // The Main App entry point
@@ -387,10 +435,14 @@ extern void __libc_init_array(void);
 
 	mpu_init();
 	app_mpu_nocache_init();
+	app_mpu_s_nocache_init();
+
 	app_vdd1833_detect();
 	memcpy_gdma_init();
 	//retention Ram space should not exceed 0xB0
 	assert_param(sizeof(RRAM_TypeDef) <= 0xB0);
+
+	app_driver_call_os_func_init();
 
 	main(); /* project/xxxx/src/main.c */
 }

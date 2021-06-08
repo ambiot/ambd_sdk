@@ -377,6 +377,7 @@ static void prvInitialiseNewTimer(	const char * const pcTimerName,			/*lint !e97
 	}
 }
 /*-----------------------------------------------------------*/
+static void	prvProcessCommands( TimerHandle_t xTimer, const BaseType_t xCommandID, const TickType_t xOptionalValue );
 
 BaseType_t xTimerGenericCommand( TimerHandle_t xTimer, const BaseType_t xCommandID, const TickType_t xOptionalValue, BaseType_t * const pxHigherPriorityTaskWoken, const TickType_t xTicksToWait )
 {
@@ -384,6 +385,13 @@ BaseType_t xReturn = pdFAIL;
 DaemonTaskMessage_t xMessage;
 
 	configASSERT( xTimer );
+
+	// Added by Realtek to prevent timer thread blocked
+	if( ( xTaskGetCurrentTaskHandle() == ( void * ) xTimerTaskHandle ) && ( ( xCommandID == tmrCOMMAND_STOP ) || ( xCommandID == tmrCOMMAND_CHANGE_PERIOD ) ) )
+	{
+		prvProcessCommands( xTimer, xCommandID, xOptionalValue );
+		return pdPASS;
+	}
 
 	/* Send a message to the timer service task to perform a particular action
 	on a particular timer definition. */
@@ -850,6 +858,63 @@ TickType_t xTimeNow;
 					break;
 			}
 		}
+	}
+}
+
+// Added by Realtek to prevent timer thread blocked
+static void	prvProcessCommands( TimerHandle_t xTimer, const BaseType_t xCommandID, const TickType_t xOptionalValue )
+{
+Timer_t *pxTimer = ( Timer_t * ) xTimer;
+TickType_t xTimeNow = xTaskGetTickCount();;
+
+	if( listIS_CONTAINED_WITHIN( NULL, &( pxTimer->xTimerListItem ) ) == pdFALSE )
+	{
+		/* The timer is in a list, remove it. */
+		( void ) uxListRemove( &( pxTimer->xTimerListItem ) );
+	}
+
+	switch( xCommandID )
+	{
+		case tmrCOMMAND_STOP :
+			/* The timer has already been removed from the active list. */
+			pxTimer->ucStatus &= ~tmrSTATUS_IS_ACTIVE;
+			break;
+
+		case tmrCOMMAND_CHANGE_PERIOD :
+			pxTimer->ucStatus |= tmrSTATUS_IS_ACTIVE;
+			pxTimer->xTimerPeriodInTicks = xOptionalValue;
+			( void ) prvInsertTimerInActiveList( pxTimer, ( xTimeNow + pxTimer->xTimerPeriodInTicks ), xTimeNow, xTimeNow );
+			break;
+
+		case tmrCOMMAND_DELETE :
+			#if ( configSUPPORT_DYNAMIC_ALLOCATION == 1 )
+			{
+				/* The timer has already been removed from the active list,
+				just free up the memory if the memory was dynamically
+				allocated. */
+				if( ( pxTimer->ucStatus & tmrSTATUS_IS_STATICALLY_ALLOCATED ) == ( uint8_t ) 0 )
+				{
+					vPortFree( pxTimer );
+				}
+				else
+				{
+					pxTimer->ucStatus &= ~tmrSTATUS_IS_ACTIVE;
+				}
+			}
+			#else
+			{
+				/* If dynamic allocation is not enabled, the memory
+				could not have been dynamically allocated. So there is
+				no need to free the memory - just mark the timer as
+				"not active". */
+				pxTimer->ucStatus &= ~tmrSTATUS_IS_ACTIVE;
+			}
+			#endif /* configSUPPORT_DYNAMIC_ALLOCATION */
+			break;
+
+		default	:
+			/* Don't expect to get here. */
+			break;
 	}
 }
 /*-----------------------------------------------------------*/

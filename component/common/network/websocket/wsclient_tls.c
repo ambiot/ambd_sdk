@@ -109,6 +109,7 @@ exit:
 
 		if((ret = mbedtls_net_connect(server_fd, host, port_str, MBEDTLS_NET_PROTO_TCP)) != 0){
 			printf("\n[WSCLIENT] ERROR: net_connect %d\n", ret);
+			free(port_str);
 			goto exit;
 		}
 
@@ -128,6 +129,11 @@ exit:
 
 		mbedtls_ssl_conf_authmode(conf, MBEDTLS_SSL_VERIFY_NONE);
 		mbedtls_ssl_conf_rng(conf, ws_random, NULL);
+
+		if(ret = mbedtls_ssl_conf_max_frag_len(conf, MBEDTLS_SSL_MAX_FRAG_LEN_4096) < 0) {
+			printf("\n[WSCLIENT] ERROR: mbedtls_ssl_conf_max_frag_len %d\n", ret);
+			goto exit;
+		}
 
 		if((ret = mbedtls_ssl_setup(ssl, conf)) != 0) {
 			printf("\n[WSCLIENT] ERROR: ssl_setup %d\n", ret);

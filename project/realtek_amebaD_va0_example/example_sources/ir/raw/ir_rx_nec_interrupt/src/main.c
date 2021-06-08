@@ -172,7 +172,7 @@ void Driver_IR_Init(void)
   * @param   No parameter.
   * @return  void
   */
- void IR_RX_thread(void)
+ void IR_RX_thread(void* param)
  {
 	IR_Cmd(IR_DEV, IR_InitStruct.IR_Mode, DISABLE);
 	Driver_IR_Init();
@@ -188,7 +188,7 @@ void Driver_IR_Init(void)
 		if (xSemaphoreTake(IR_Recv_end_sema, 10 * configTICK_RATE_HZ)) {
 			//rx end
 			u32 result;
-			result = IR_NECDecode(IR_InitStruct.IR_Freq, &data, &IR_DataStruct);
+			result = IR_NECDecode(IR_InitStruct.IR_Freq, (uint8_t *)&data, &IR_DataStruct);
 			ir_code[0] = data[0];
 			ir_code[1] = data[2];
 			DBG_8195A("result %d RX %2x%2x\n",result, ir_code[1],ir_code[0]);

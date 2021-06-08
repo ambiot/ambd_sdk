@@ -40,7 +40,7 @@ void dma_free(void)
 	USI_UARTTXDMACmd(USI_DEV, DISABLE);
 }
 
-void uart_clock_send_string(UART_TypeDef* UartDEV, char *pstr)
+void uart_clock_send_string(USI_TypeDef* UartDEV, char *pstr)
 {
 	int32_t ret=0;
 	u32 UartIndex;
@@ -48,7 +48,7 @@ void uart_clock_send_string(UART_TypeDef* UartDEV, char *pstr)
 	
 	USI_UARTTXDMAConfig(UartDEV, 8);
 	USI_UARTTXDMACmd(UartDEV, ENABLE);
-	ret=USI_UARTTXGDMA_Init(UartIndex, &GDMA_InitStruct, USI_DEV, uart_clock_send_string_done,pstr,_strlen(pstr));
+	ret=USI_UARTTXGDMA_Init(UartIndex, &GDMA_InitStruct, USI_DEV, (IRQ_FUN)uart_clock_send_string_done, pstr, _strlen(pstr));
 	NVIC_SetPriority(GDMA_GetIrqNum(0, GDMA_InitStruct.GDMA_ChNum), 12);	
  
 	if (ret == 0) {
@@ -115,5 +115,4 @@ void main(void)
 		DelayMs(3000);        
 	}
 }
-
 

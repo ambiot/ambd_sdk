@@ -23,8 +23,10 @@ SECTIONS
 
 	.ram_image2.text :
 	{
+		__ram_text_start__ = .;
 		*(.image2.ram.text*)
 		*(.image2.net.ram.text*)
+		__ram_text_end__ = .;
 	} > BD_RAM_NS
 
 	.ram_image2.data : 
@@ -55,11 +57,12 @@ SECTIONS
 
 	.ram_heap.data : 
 	{
+		. = ALIGN (32);
 		*(.bfsram.data*)
 		end = .;
 		*(.heap.stdlib*)
 		. = . + 4096;
-	
+		__bfsram_end__ = .;
 	} > BD_RAM_NS
 
 	.xip_image2.text : 
@@ -126,16 +129,20 @@ SECTIONS
 	{
 		__psram_image2_text_start__ = .;
 		*(.psram.text*)
+		__psram_image2_text_end__ = .;
 	} > PSRAM_NS
 
 	.psram_image2.data : 
 	{
+		. = ALIGN (32);
 		*(.psram.data*)
+		. = ALIGN (32);
 		*(.psram.rodata*)
 	} > PSRAM_NS
   
 	.psram_image2.bss :
 	{
+		. = ALIGN (32);
 		__psram_bss_start__ = .;
 		*(.psram.bss*)
 		__psram_bss_end__ = .;
@@ -143,6 +150,9 @@ SECTIONS
 
 	.psram_heap.data : 
 	{
+		. = ALIGN (32);
 		*(.psram.heap*)
 	} > PSRAM_NS
 }
+
+__sram_end__ = ORIGIN(BD_RAM_NS) + LENGTH(BD_RAM_NS);

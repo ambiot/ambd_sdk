@@ -6,31 +6,25 @@ include $(MAKE_INCLUDE_GEN)
 #*****************************************************************************#
 #                               VARIABLES	                              #
 #*****************************************************************************#
-DIR_OTG = $(BASEDIR)/component/soc/realtek/amebad/fwlib/usb_otg/device
-DIR_CORE = $(DIR_OTG)/core/src
-DIR_COMP = $(DIR_OTG)/composite/src
-IFLAGS += -I$(DIR_CORE)/../inc
-IFLAGS += -I$(DIR_COMP)/../inc
+DIR = $(BASEDIR)/component/soc/realtek/amebad/fwlib/usb_otg/device/src
+IFLAGS += -I$(DIR)/../inc
 
-vpath %.c $(DIR_CORE) $(DIR_COMP)
+vpath %.c $(DIR)
 
 #*****************************************************************************#
 #                               Source FILE LIST                              #
 #*****************************************************************************#
-CSRC += $(DIR_CORE)/dwc_common_os.c \
-	$(DIR_CORE)/dwc_otg_cil.c \
-	$(DIR_CORE)/dwc_otg_cil_intr.c \
-	$(DIR_CORE)/dwc_otg_common.c \
-	$(DIR_CORE)/dwc_otg_driver.c \
-	$(DIR_CORE)/dwc_otg_driver_rom.c \
-	$(DIR_CORE)/usb.c \
-	$(DIR_CORE)/dwc_otg_pcd.c \
-	$(DIR_CORE)/dwc_otg_pcd_intr.c \
-	$(DIR_CORE)/dwc_otg_pcd_os.c \
-	$(DIR_CORE)/usb_ep_autoconfig.c \
-	$(DIR_COMP)/usb_composite_rom.c \
-        $(DIR_COMP)/usb_config_rom.c \
-        $(DIR_COMP)/usb_multi.c
+CSRC += $(DIR)/dwc_otg_cil.c \
+	$(DIR)/dwc_otg_cil_intr.c \
+	$(DIR)/dwc_otg_common.c \
+	$(DIR)/dwc_otg_driver.c \
+	$(DIR)/dwc_otg_driver_rom.c \
+	$(DIR)/dwc_otg_pcd.c \
+	$(DIR)/dwc_otg_pcd_intr.c \
+	$(DIR)/dwc_otg_pcd_os.c \
+	$(DIR)/usb_ep_autoconfig.c \
+	$(DIR)/usb_composite.c \
+	$(DIR)/usb.c
 	
 #*****************************************************************************#
 #                               Object FILE LIST                              #
@@ -56,9 +50,10 @@ CORE_TARGETS:	$(OBJS)
 #                        RULES TO CLEAN TARGETS                               #
 #*****************************************************************************#
 clean: CLEAN_OBJS
-	$(REMOVE) *.o
-	$(REMOVE) *.i
-	$(REMOVE) *.s
 	$(REMOVE) *.d
+	$(REMOVE) *.i
+	$(REMOVE) *.o
+	$(REMOVE) *.s
+	$(REMOVE) *.su
 
 -include $(DEPS)

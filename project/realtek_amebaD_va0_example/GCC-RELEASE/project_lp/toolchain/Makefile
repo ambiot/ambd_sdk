@@ -25,10 +25,14 @@ ifeq ($(COMPILEOS),$(LINUX_OS))
 	#LZM for GCC Server build & Cygwin Download
 	#$(MKDIR) -p cygwin
 	#tar -jxvf asdk/asdk-4.9.3-m4-EL-rtos-n2.1-a16ft-150617-cygwin.tar.bz2 -C cygwin/
-else
+else ifeq ($(COMPILEOS_CYGWIN),Cygwin)
 	if [ ! -f $(KM4_BUILDDIR)/toolchain/asdk/asdk-6.4.1-cygwin-newlib-build-2778-i686.tar.bz2 ] ; then cat $(KM4_BUILDDIR)/toolchain/asdk/asdk-6.4.1-cygwin-newlib-build-2778-i686.tar.bz2* > $(KM4_BUILDDIR)/toolchain/asdk/asdk-6.4.1-cygwin-newlib-build-2778-i686.tar.bz2; fi;\
 	$(MKDIR) -p cygwin
 	tar -jxvf $(KM4_BUILDDIR)/toolchain/asdk/asdk-6.4.1-cygwin-newlib-build-2778-i686.tar.bz2 -C cygwin/
+else ifeq ($(COMPILEOS),$(DARWIN_OS))
+	@echo Toolchain running
+	$(MKDIR) -p darwin
+	tar -jxvf $(KM4_BUILDDIR)/toolchain/asdk/asdk-6.5.0-darwin-newlib-build-999+-10.13.tar.bz2 -C darwin/
 endif
 
 else

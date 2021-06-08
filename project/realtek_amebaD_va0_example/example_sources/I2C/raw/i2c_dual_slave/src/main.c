@@ -47,7 +47,7 @@ uint8_t	i2cdatasrc[I2C_DATA_LENGTH];
 uint8_t	i2cdatadst[I2C_DATA_LENGTH];
 uint8_t	i2cdatardsrc[I2C_DATA_LENGTH];
 uint8_t	i2cdatarddst[I2C_DATA_LENGTH];
-I2C_InitTypeDef I2CInitDat[2];
+I2C_InitTypeDef I2CInitData[2];
 
 //#define I2C_MASTER_DEVICE
 
@@ -57,6 +57,7 @@ I2C_InitTypeDef I2CInitDat[2];
 i2c_t   i2cmaster;
 i2c_t   i2cslave;
 
+void i2c_Send_restart(I2C_TypeDef *I2Cx, u8* pBuf, u8 len, u8 restart);
 /**
   * @brief  Initializes the I2C device, include clock/function/I2C registers.
   * @param  obj: i2c object define in application software.
@@ -82,16 +83,16 @@ void i2c_Init(i2c_t *obj, PinName sda, PinName scl)
 	obj->I2Cx = I2C_DEV_TABLE[i2c_idx].I2Cx;
 	
 	/* Set I2C Device Number */
-	I2CInitDat[obj->i2c_idx].I2CIdx = i2c_idx;
+	I2CInitData[obj->i2c_idx].I2CIdx = i2c_idx;
 
 	/* Load I2C default value */
-	I2C_StructInit(&I2CInitDat[obj->i2c_idx]);
+	I2C_StructInit(&I2CInitData[obj->i2c_idx]);
 
 	/* Assign I2C Pin Mux */
-	I2CInitDat[obj->i2c_idx].I2CMaster     = I2C_MASTER_MODE;
-	I2CInitDat[obj->i2c_idx].I2CSpdMod     = I2C_SS_MODE;
-	I2CInitDat[obj->i2c_idx].I2CClk        = 100;
-	I2CInitDat[obj->i2c_idx].I2CAckAddr    = 0;    
+	I2CInitData[obj->i2c_idx].I2CMaster     = I2C_MASTER_MODE;
+	I2CInitData[obj->i2c_idx].I2CSpdMod     = I2C_SS_MODE;
+	I2CInitData[obj->i2c_idx].I2CClk        = 100;
+	I2CInitData[obj->i2c_idx].I2CAckAddr    = 0;    
 
 	
 	/* I2C Pin Mux Initialization */
@@ -101,7 +102,7 @@ void i2c_Init(i2c_t *obj, PinName sda, PinName scl)
 	PAD_PullCtrl(sda, GPIO_PuPd_UP);               
 	PAD_PullCtrl(scl, GPIO_PuPd_UP);
 	/* I2C HAL Initialization */
-	I2C_Init(obj->I2Cx, &I2CInitDat[obj->i2c_idx]);
+	I2C_Init(obj->I2Cx, &I2CInitData[obj->i2c_idx]);
 
 	/* I2C Enable Module */
 	I2C_Cmd(obj->I2Cx, ENABLE);
@@ -115,30 +116,30 @@ void i2c_Init(i2c_t *obj, PinName sda, PinName scl)
   */
 void i2c_Frequency(i2c_t *obj, int hz) 
 {
-	uint16_t i2c_default_clk    = (uint16_t) I2CInitDat[obj->i2c_idx].I2CClk;
+	uint16_t i2c_default_clk    = (uint16_t) I2CInitData[obj->i2c_idx].I2CClk;
 	uint16_t i2c_user_clk       = (uint16_t) (hz/1000);
 
 	if (i2c_default_clk != i2c_user_clk) {
 		/* Deinit I2C first */
 		I2C_Cmd(obj->I2Cx, DISABLE);
 		if (i2c_user_clk <= 100) {
-			I2CInitDat[obj->i2c_idx].I2CSpdMod = I2C_SS_MODE;
+			I2CInitData[obj->i2c_idx].I2CSpdMod = I2C_SS_MODE;
 		}
 		else if ((i2c_user_clk > 100) && (i2c_user_clk <= 400)) {
-			I2CInitDat[obj->i2c_idx].I2CSpdMod = I2C_FS_MODE;
+			I2CInitData[obj->i2c_idx].I2CSpdMod = I2C_FS_MODE;
 		}
 		else if (i2c_user_clk > 400) {
-			I2CInitDat[obj->i2c_idx].I2CSpdMod = I2C_HS_MODE;
+			I2CInitData[obj->i2c_idx].I2CSpdMod = I2C_HS_MODE;
 		}
 		else {
-			I2CInitDat[obj->i2c_idx].I2CSpdMod = I2C_SS_MODE;
+			I2CInitData[obj->i2c_idx].I2CSpdMod = I2C_SS_MODE;
 		}
 
 		/* Load the user defined I2C clock */
-		I2CInitDat[obj->i2c_idx].I2CClk = i2c_user_clk;
+		I2CInitData[obj->i2c_idx].I2CClk = i2c_user_clk;
 
 		/* Init I2C now */
-		I2C_Init(obj->I2Cx, &I2CInitDat[obj->i2c_idx]);
+		I2C_Init(obj->I2Cx, &I2CInitData[obj->i2c_idx]);
 		I2C_Cmd(obj->I2Cx, ENABLE);     
 	}
 }
@@ -178,10 +179,10 @@ int i2c_Write(i2c_t *obj, int address, const char *data, int length, int stop)
 
 		/* Load the user defined I2C target slave address */
 		i2c_target_addr[obj->i2c_idx] = address;
-		I2CInitDat[obj->i2c_idx].I2CAckAddr = address;
+		I2CInitData[obj->i2c_idx].I2CAckAddr = address;
 
 		/* Init I2C now */
-		I2C_Init(obj->I2Cx, &I2CInitDat[obj->i2c_idx]);
+		I2C_Init(obj->I2Cx, &I2CInitData[obj->i2c_idx]);
 		I2C_Cmd(obj->I2Cx, ENABLE);   
 	}
 
@@ -210,10 +211,10 @@ int i2c_Read(i2c_t *obj, int address, char *data, int length, int stop)
 
 		/* Load the user defined I2C target slave address */
 		i2c_target_addr[obj->i2c_idx] = address;
-		I2CInitDat[obj->i2c_idx].I2CAckAddr = address;
+		I2CInitData[obj->i2c_idx].I2CAckAddr = address;
 
 		/* Init I2C now */
-		I2C_Init(obj->I2Cx, &I2CInitDat[obj->i2c_idx]);
+		I2C_Init(obj->I2Cx, &I2CInitData[obj->i2c_idx]);
 		I2C_Cmd(obj->I2Cx, ENABLE);   
 	}
 
@@ -229,10 +230,10 @@ int i2c_Read(i2c_t *obj, int address, char *data, int length, int stop)
 
 			/* Load the user defined I2C target slave address */
 			i2c_target_addr[obj->i2c_idx] = address;
-			I2CInitDat[obj->i2c_idx].I2CAckAddr = address;
+			I2CInitData[obj->i2c_idx].I2CAckAddr = address;
 			
 			/* Init I2C now */		
-			I2C_Init(obj->I2Cx, &I2CInitDat[obj->i2c_idx]);
+			I2C_Init(obj->I2Cx, &I2CInitData[obj->i2c_idx]);
 			I2C_Cmd(obj->I2Cx, ENABLE); 		
 		}
 	}
@@ -287,7 +288,7 @@ void i2c_Send_restart(I2C_TypeDef *I2Cx, u8* pBuf, u8 len, u8 restart)
   */
 void i2c_Slave_address(i2c_t *obj, int idx, uint32_t address, uint32_t mask) 
 {
-	uint16_t i2c_default_addr   = (uint16_t) I2CInitDat[obj->i2c_idx].I2CAckAddr;
+	uint16_t i2c_default_addr   = (uint16_t) I2CInitData[obj->i2c_idx].I2CAckAddr;
 	uint16_t i2c_user_addr      = (uint16_t) address;
 
 	if (i2c_default_addr != i2c_user_addr) {
@@ -295,10 +296,10 @@ void i2c_Slave_address(i2c_t *obj, int idx, uint32_t address, uint32_t mask)
 		I2C_Cmd(obj->I2Cx, DISABLE);
 
 		/* Load the user defined I2C clock */
-		I2CInitDat[obj->i2c_idx].I2CAckAddr    = i2c_user_addr;
+		I2CInitData[obj->i2c_idx].I2CAckAddr    = i2c_user_addr;
 
 		/* Init I2C now */
-		I2C_Init(obj->I2Cx, &I2CInitDat[obj->i2c_idx]);
+		I2C_Init(obj->I2Cx, &I2CInitData[obj->i2c_idx]);
 		I2C_Cmd(obj->I2Cx, ENABLE);  
 	}
 }
@@ -428,12 +429,12 @@ void main(void)
 	DBG_8195A("Slave addr=%x\n",MBED_I2C_SLAVE_ADDR0);
 	_memset(&i2cslave, 0x00, sizeof(i2c_t));
 	i2c_Init(&i2cslave, MBED_I2C_SLV_SDA ,MBED_I2C_SLV_SCL);
-    i2c_Frequency(&i2cslave,MBED_I2C_BUS_CLK);
-    i2c_Slave_address(&i2cslave, 0, MBED_I2C_SLAVE_ADDR0, 0xFF);
+	i2c_Frequency(&i2cslave,MBED_I2C_BUS_CLK);
+	i2c_Slave_address(&i2cslave, 0, MBED_I2C_SLAVE_ADDR0, 0xFF);
     
 	I2C_Cmd(i2cslave.I2Cx, DISABLE);
-	I2CInitDat[i2cslave.i2c_idx].I2CMaster = I2C_SLAVE_MODE;
-	I2C_Init(i2cslave.I2Cx, &I2CInitDat[i2cslave.i2c_idx]);
+	I2CInitData[i2cslave.i2c_idx].I2CMaster = I2C_SLAVE_MODE;
+	I2C_Init(i2cslave.I2Cx, &I2CInitData[i2cslave.i2c_idx]);
 	I2C_Cmd(i2cslave.I2Cx, ENABLE);
 
 	// Master write - Slave read

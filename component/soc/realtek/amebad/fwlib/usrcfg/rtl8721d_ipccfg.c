@@ -68,7 +68,7 @@ const IPC_INIT_TABLE  ipc_init_config[] =
 	{IPC_USER_DATA,		shell_switch_ipc_int,		(VOID*) NULL},//channel 0: IPC_INT_CHAN_SHELL_SWITCH
 	{IPC_USER_DATA,		fw_flow_ipc_int,				(VOID*) IPCM4_DEV},//channel 1: IPC_INT_CHAN_WIFI_FW
 	{IPC_USER_DATA,		FLASH_Write_IPC_Int,		(VOID*) NULL},//channel 2: IPC_INT_CHAN_FLASHPG_REQ
-	{IPC_USER_POINT,	km4_tickless_ipc_int,		(VOID*) NULL},//channel 3: IPC_INT_KM4_TICKLESS_INDICATION
+	{IPC_USER_DATA,		NULL,						(VOID*) NULL},//channel 3: Reserved for Realtek use
 	{IPC_USER_DATA,		NULL,						(VOID*) NULL},//channel 4: Reserved for Realtek use
 	{IPC_USER_DATA,		NULL,						(VOID*) NULL},//channel 5: Reserved for Realtek use
 	{IPC_USER_DATA,		NULL,						(VOID*) NULL},//channel 6: Reserved for Realtek use
@@ -96,7 +96,7 @@ const IPC_INIT_TABLE  ipc_init_config[] =
 	{IPC_USER_DATA,		NULL,						(VOID*) NULL},//channel 28: Reserved for Customer use
 	{IPC_USER_DATA,		NULL,						(VOID*) NULL},//channel 29: Reserved for Customer use
 	{IPC_USER_DATA,		NULL,						(VOID*) NULL},//channel 30: Reserved for Customer use
-	{IPC_USER_DATA,		NULL,						(VOID*) NULL},//channel 31: Reserved for Customer use
+	{IPC_USER_POINT,    km4_tickless_ipc_int,		(VOID*) NULL},//channel 31: IPC_INT_KM4_TICKLESS_INDICATION
 
 	{0xFFFFFFFF,		OFF,								OFF},	/* Table end */
 };

@@ -12,7 +12,7 @@
 #include "main.h"
 #include "rtl8721d_usi_ssi.h"
 
-#define TEST_BUF_SIZE	256
+#define TEST_BUF_SIZE	256 //for dma mode, buffer size should be multiple of 32-byte
 #define DataFrameSize		8
 #define dfs_mask			0xFF	
 
@@ -29,8 +29,9 @@
 #define USI_SPI_SCLK	PA_30
 #define USI_SPI_CS	PA_28
 
-SRAM_NOCACHE_DATA_SECTION u8 MasterTxBuf[TEST_BUF_SIZE];
-SRAM_NOCACHE_DATA_SECTION u8 MasterRxBuf[TEST_BUF_SIZE];
+/* for dma mode, start address of buffer should be 32-byte aligned*/
+u8 MasterTxBuf[TEST_BUF_SIZE] __attribute__((aligned(32)));
+u8 MasterRxBuf[TEST_BUF_SIZE] __attribute__((aligned(32)));
 
 #define USI_SPI_DMA_RX_EN           (1<<0)
 #define USI_SPI_DMA_TX_EN           (1<<1)
@@ -120,6 +121,8 @@ static void USISsiDmaTxIrqHandle (P_USISSI_OBJ pUSISsiObj)
 /* GDMA Rx IRQ Handler */
 static void USISsiDmaRxIrqHandle (P_USISSI_OBJ pUSISsiObj)
 {
+	u32 Length = pUSISsiObj->RxLength;
+	u32* pRxData = pUSISsiObj->RxData;
 	PGDMA_InitTypeDef GDMA_InitStruct;
 
 	GDMA_InitStruct = &pUSISsiObj->USISsiRxGdmaInitStruct;
@@ -127,6 +130,8 @@ static void USISsiDmaRxIrqHandle (P_USISSI_OBJ pUSISsiObj)
 	/* Clear Pending ISR */
 	GDMA_ClearINT(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum);
 	GDMA_Cmd(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum, DISABLE);
+
+	DCache_Invalidate((u32) pRxData, Length);
 
 	USI_SSI_SetDmaEnable(pUSISsiObj->usi_dev, DISABLE, USI_RX_DMA_ENABLE);
 	
@@ -146,14 +151,14 @@ void USISsiMasterWriteReadStreamDma(P_USISSI_OBJ pUSISsiObj, char *tx_buffer, ch
 	pUSISsiObj->RxLength = length;
 	pUSISsiObj->RxData = (void*)rx_buffer;
 
-	USI_SSI_RXGDMA_Init(0, &pUSISsiObj->USISsiRxGdmaInitStruct, pUSISsiObj, USISsiDmaRxIrqHandle, rx_buffer, length);
+	USI_SSI_RXGDMA_Init(0, &pUSISsiObj->USISsiRxGdmaInitStruct, pUSISsiObj, (IRQ_FUN)USISsiDmaRxIrqHandle, rx_buffer, length);
 	USI_SSI_SetDmaEnable(pUSISsiObj->usi_dev, ENABLE, USI_RX_DMA_ENABLE);
 
 	pUSISsiObj->TxLength = length;
 	pUSISsiObj->TxData = (void*)tx_buffer;
 	
 	USI_SSI_SetDmaEnable(pUSISsiObj->usi_dev, ENABLE, USI_TX_DMA_ENABLE);
-	USI_SSI_TXGDMA_Init(0, &pUSISsiObj->USISsiTxGdmaInitStruct, pUSISsiObj, USISsiDmaTxIrqHandle, tx_buffer, length);
+	USI_SSI_TXGDMA_Init(0, &pUSISsiObj->USISsiTxGdmaInitStruct, pUSISsiObj, (IRQ_FUN)USISsiDmaTxIrqHandle, tx_buffer, length);
 }
 
 
@@ -165,7 +170,7 @@ void USISsiMasterReadStreamDma(P_USISSI_OBJ pUSISsiObj, char *rx_buffer, u32 len
 	pUSISsiObj->RxLength = length;
 	pUSISsiObj->RxData = (void*)rx_buffer;
 
-	USI_SSI_RXGDMA_Init(0, &pUSISsiObj->USISsiRxGdmaInitStruct, pUSISsiObj, USISsiDmaRxIrqHandle, rx_buffer, length);
+	USI_SSI_RXGDMA_Init(0, &pUSISsiObj->USISsiRxGdmaInitStruct, pUSISsiObj, (IRQ_FUN)USISsiDmaRxIrqHandle, rx_buffer, length);
 	USI_SSI_SetDmaEnable(pUSISsiObj->usi_dev, ENABLE, USI_RX_DMA_ENABLE);
 	
 	/* as Master mode, it need to push data to TX FIFO to generate clock out then the slave can transmit data out */
@@ -199,7 +204,7 @@ void USISsiFree(P_USISSI_OBJ pUSISsiObj)
 }
 
 
-void main(void)
+void usi_spi_dma_task(void* param)
 {
 
 	u32 SclkPhase = USI_SPI_SCPH_TOGGLES_IN_MIDDLE;
@@ -293,7 +298,25 @@ void main(void)
 
 	DBG_8195A("USI SPI Master Demo Finished.\n");
 	DBG_8195A("\r\nMaster Result is %s\r\n", (result1 && result2) ? "success" : "fail");
-	for(;;);
 
+	vTaskDelete(NULL);
+
+}
+
+/**
+  * @brief  Main program.
+  * @param  None
+  * @retval None
+  */
+void main(void)
+{
+	if(xTaskCreate(usi_spi_dma_task, ((const char*)"usi_spi_dma_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
+		printf("\n\r%s xTaskCreate(usi_spi_dma_task) failed", __FUNCTION__);
+
+	vTaskStartScheduler();
+	while(1){
+		vTaskDelay( 1000 / portTICK_RATE_MS );
+	}
+	
 }
 

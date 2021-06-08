@@ -1,6 +1,6 @@
 
 include $(MAKE_INCLUDE_GEN)
-
+IFLAGS               += -I$(BASEDIR)/component/common/network/libcoap/include
 
 .PHONY: all clean
 
@@ -20,6 +20,7 @@ CSRC +=  \
 	$(DIR)/ssl_client_ext.c \
 	$(DIR)/http_client.c \
 	$(DIR)/xml.c \
+	$(DIR)/cJSON.c \
 	#$(DIR)/webserver.c
 
 #*****************************************************************************#

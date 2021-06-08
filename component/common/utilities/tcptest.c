@@ -320,7 +320,7 @@ int tcp_server_func(struct iperf_data_t iperf_data)
 		end_time = xTaskGetTickCount();
 		total_size+=recv_size;
 		report_size+=recv_size;
-		if( (iperf_data.report_interval != DEFAULT_REPORT_INTERVAL) && ((end_time - report_start_time) >= (configTICK_RATE_HZ * iperf_data.report_interval)) && ((end_time - report_start_time) <= (configTICK_RATE_HZ * (iperf_data.report_interval + 1)))) {
+		if((iperf_data.report_interval != DEFAULT_REPORT_INTERVAL) && ((end_time - report_start_time) >= (configTICK_RATE_HZ * iperf_data.report_interval))) {
 			printf("\n\r%s: Receive %d KBytes in %d ms, %d Kbits/sec",__func__, (uint32_t) (report_size/KB),(uint32_t) (end_time-report_start_time),((uint32_t) (report_size*8)/(end_time - report_start_time)));
 			report_start_time = end_time;
 			report_size = 0;
@@ -355,7 +355,8 @@ int udp_client_func(struct iperf_data_t iperf_data)
 	struct iperf_udp_client_hdr client_hdr = {0};
     	u32_t now; 
     	uint32_t id_cnt = 0; 
-
+	int tos_value = (int)iperf_data.tos_value;// fix optlen check fail issue in lwip_setsockopt_impl
+	
 	udp_client_buffer = pvPortMalloc(iperf_data.buf_size);
 	if(!udp_client_buffer){
 		printf("\n\r[ERROR] %s: Alloc buffer failed",__func__);
@@ -381,8 +382,11 @@ int udp_client_func(struct iperf_data_t iperf_data)
 	printf("\n\r%s: Server IP=%s, port=%d", __func__,iperf_data.server_ip, iperf_data.port);
 	printf("\n\r%s: Create socket fd = %d", __func__,iperf_data.client_fd);
 
-	lwip_setsockopt(iperf_data.client_fd,IPPROTO_IP,IP_TOS,&iperf_data.tos_value,sizeof(iperf_data.tos_value));
-
+	if(setsockopt(iperf_data.client_fd,IPPROTO_IP,IP_TOS,&tos_value,sizeof(tos_value)) != 0){
+		printf("\n\r[ERROR] %s: Set sockopt failed", __func__);
+		goto Exit1;
+	}
+	
 	client_hdr.numThreads = htonl(0x00000001);
 	client_hdr.mPort = htonl(iperf_data.port);
 	client_hdr.bufferlen = 0;
@@ -525,7 +529,7 @@ int udp_client_func(struct iperf_data_t iperf_data)
 			break; 
 		}
 	}
-//Exit1:
+Exit1:
 	close(iperf_data.client_fd);
 Exit2:
 	printf("\n\r%s: Close client socket",__func__);

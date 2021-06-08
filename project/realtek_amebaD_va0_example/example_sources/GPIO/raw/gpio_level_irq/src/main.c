@@ -62,15 +62,15 @@ void main(void)
 
 	port_num =  PORT_NUM(GPIO_IRQ_LEVEL_PIN);
 	if (port_num == GPIO_PORT_A) {
-		InterruptRegister(GPIO_INTHandler, GPIOA_IRQ, GPIOA_BASE, 10);		
+		InterruptRegister((IRQ_FUN)GPIO_INTHandler, GPIOA_IRQ, (u32)GPIOA_BASE, 10);		
 		InterruptEn(GPIOA_IRQ, 10);
 	} else {
-		InterruptRegister(GPIO_INTHandler, GPIOB_IRQ, GPIOB_BASE, 10);		
+		InterruptRegister((IRQ_FUN)GPIO_INTHandler, GPIOB_IRQ, (u32)GPIOB_BASE, 10);		
 		InterruptEn(GPIOB_IRQ, 10);
 	}
  
 	GPIO_Init(&GPIO_InitStruct_IRQ);
-	GPIO_UserRegIrq(GPIO_IRQ_LEVEL_PIN, gpio_level_irq_handler, (&GPIO_InitStruct_IRQ));
+	GPIO_UserRegIrq(GPIO_IRQ_LEVEL_PIN, (VOID *)gpio_level_irq_handler, (&GPIO_InitStruct_IRQ));
 	GPIO_INTConfig(GPIO_IRQ_LEVEL_PIN, ENABLE);
 	
 	// init gpio source pin

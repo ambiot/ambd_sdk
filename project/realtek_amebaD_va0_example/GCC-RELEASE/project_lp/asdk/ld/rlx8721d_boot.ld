@@ -41,6 +41,7 @@ SECTIONS
 		__image1_bss_start__ = .;
 		KEEP(*(.boot.ram.bss*))
 		KEEP(*(.boot.ram.end.bss*))
+		*(.bss*)
 		__image1_bss_end__ = .;
 	} > BOOTLOADER_RAM
 

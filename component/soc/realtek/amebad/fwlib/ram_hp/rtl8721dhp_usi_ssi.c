@@ -567,6 +567,8 @@ BOOL USI_SSI_TXGDMA_Init(
 
 	assert_param(GDMA_InitStruct != NULL);
 
+	DCache_CleanInvalidate((u32)pTxData, Length);
+
 	GdmaChnl = GDMA_ChnlAlloc(0, CallbackFunc, (u32)CallbackData, 12);//ACUT is 0x10, BCUT is 12
 	if (GdmaChnl == 0xFF) {
 		// No Available DMA channel
@@ -664,6 +666,8 @@ USI_SSI_RXGDMA_Init(
 	u8 GdmaChnl;
 
 	assert_param(GDMA_InitStruct != NULL);
+
+	DCache_CleanInvalidate((u32) pRxData, Length);
 	
 	GdmaChnl = GDMA_ChnlAlloc(0, CallbackFunc, (u32)CallbackData, 12);//ACUT is 0x10, BCUT is 12
 	if (GdmaChnl == 0xFF) {

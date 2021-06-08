@@ -20,7 +20,7 @@
 #define UART_RX    _PB_21
 #define USI_DEV        USI0_DEV
 
-volatile char rc=0;
+u8 rc=0;
 volatile int tx_flag=0;
 
 void uart_send_string( char *pstr)
@@ -84,7 +84,7 @@ void main(void)
 	uart_send_string("Hello World!!\n");
 	uart_send_string("\r\n8195a$");
 	
-	InterruptRegister((IRQ_FUN)uart_irq, USI_DEV_TABLE[usi_uart_index].IrqNum, USI_DEV, 10);
+	InterruptRegister((IRQ_FUN)uart_irq, USI_DEV_TABLE[usi_uart_index].IrqNum, (u32)USI_DEV, 10);
 	InterruptEn(USI_DEV_TABLE[usi_uart_index].IrqNum, 10);
 	LineSts = USI_TX_FIFO_OVERFLOW_INTER | USI_RX_FIFO_OVERFLOW_INTER | USI_UART_PARITY_ERROR_INTER | USI_UART_STOP_ERROR_INTER;
 	USI_UARTINTConfig(USI_DEV, USI_TX_FIFO_ALMOST_EMPTY_INTER|USI_RX_FIFO_ALMOST_FULL_INTER | USI_RX_FIFO_TIMEOUT_INTER|LineSts, ENABLE);

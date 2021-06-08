@@ -36,7 +36,7 @@ extern void at_qr_code_init(void);
 extern void at_isp_init(void);
 #if (CONFIG_JOYLINK || CONFIG_GAGENT || CONFIG_QQ_LINK || 	\
 	(defined(CONFIG_AIRKISS_CLOUD) && CONFIG_AIRKISS_CLOUD) || CONFIG_ALINK || \
-	(defined(CONFIG_HILINK) && CONFIG_HILINK) || (defined(CONFIG_MIIO) && CONFIG_MIIO))
+	(defined(CONFIG_HILINK) && CONFIG_HILINK) || (defined(CONFIG_MIIO) && CONFIG_MIIO) || (defined(CONFIG_LINKKIT_AWSS) && CONFIG_LINKKIT_AWSS))
 extern void at_cloud_init(void);
 #endif
 void at_log_init(void);
@@ -104,7 +104,7 @@ log_init_t log_init_table[] = {
 #endif
 
 #if (CONFIG_JOYLINK || CONFIG_GAGENT || CONFIG_QQ_LINK || (defined(CONFIG_AIRKISS_CLOUD) && \
-	CONFIG_AIRKISS_CLOUD) || CONFIG_ALINK || (defined(CONFIG_HILINK) && CONFIG_HILINK) || (defined(CONFIG_MIIO) && CONFIG_MIIO))
+	CONFIG_AIRKISS_CLOUD) || CONFIG_ALINK || (defined(CONFIG_HILINK) && CONFIG_HILINK) || (defined(CONFIG_MIIO) && CONFIG_MIIO) || (defined(CONFIG_LINKKIT_AWSS) && CONFIG_LINKKIT_AWSS))
 	at_cloud_init,
 #endif	
 };
@@ -235,7 +235,7 @@ void* log_handler(char *cmd)
 	param = strtok(NULL, "\0");
 #endif
 	if(token && (strlen(token) <= 4))
-		strcpy(tok, token);
+		strncpy(tok, token, sizeof(tok));
 	else{
 		//printf("\n\rAT Cmd format error!\n");
 		return NULL;
@@ -265,7 +265,7 @@ int parse_param(char *buf, char **argv)
 
 	if(buf == NULL)
 		goto exit;
-	strcpy(temp_buf, buf);
+	strncpy(temp_buf, buf, sizeof(temp_buf));
 	
 	while((argc < MAX_ARGC) && (*buf_pos != '\0')) {
 		while((*buf_pos == ',') || (*buf_pos == '[') || (*buf_pos == ']')){
@@ -395,21 +395,21 @@ int print_help_handler(char *cmd){
 #if CONFIG_LOG_SERVICE_LOCK
 void log_service_lock(void)
 {
-	rtw_down_sema(&log_service_sema);
+	rtw_down_sema((_sema *)(&log_service_sema));
 }
 
 u32 log_service_lock_timeout(u32 ms)
 {
-	return rtw_down_timeout_sema(&log_service_sema, ms);
+	return rtw_down_timeout_sema((_sema *)(&log_service_sema), ms);
 }
 
 void log_service_unlock(void)
 {
-	rtw_up_sema(&log_service_sema);
+	rtw_up_sema((_sema *)(&log_service_sema));
 }
 
 void log_service_lock_init(void){
-	rtw_init_sema(&log_service_sema, 1);
+	rtw_init_sema((_sema *)(&log_service_sema), 1);
 }
 #endif
 

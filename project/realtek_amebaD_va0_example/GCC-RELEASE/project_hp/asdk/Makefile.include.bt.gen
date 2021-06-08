@@ -13,24 +13,22 @@ IFLAGS += \
    -I$(BLEDIR)/sdk/inc/bluetooth/profile/server \
    -I$(BLEDIR)/sdk/inc/stack \
    -I$(BLEDIR)/sdk/board/amebad/src \
+   -I$(BLEDIR)/sdk/board/amebad/src/data_uart \
    -I$(BLEDIR)/sdk/board/amebad/src/hci \
    -I$(BLEDIR)/sdk/board/amebad/src/vendor_cmd \
    -I$(BLEDIR)/sdk/board/amebad/lib \
-   -I$(BLEDIR)/sdk/board/common/inc
-
-IFLAGS += \
-   -I$(BLEDIR)/sdk/example/ble_central \
-   -I$(BLEDIR)/sdk/example/ble_scatternet \
-   -I$(BLEDIR)/sdk/board/amebad/src/data_uart \
+   -I$(BLEDIR)/sdk/board/common/inc \
    -I$(BLEDIR)/sdk/src/mcu/module/data_uart_cmd
 
 IFLAGS += \
-   -I$(BLEDIR)/sdk/example/ble_peripheral
-
-IFLAGS += \
-   -I$(BLEDIR)/../../application/airsync/1.0.4 \
+   -I$(BLEDIR)/sdk/example/ble_peripheral \
+   -I$(BLEDIR)/sdk/example/ble_central \
+   -I$(BLEDIR)/sdk/example/ble_scatternet \
+   -I$(BLEDIR)/sdk/example/bt_beacon \
+   -I$(BLEDIR)/sdk/example/bt_config \
    -I$(BLEDIR)/sdk/example/bt_airsync_config \
-   -I$(BLEDIR)/sdk/example/bt_config
-
-IFLAGS += \
-   -I$(BLEDIR)/sdk/example/bt_beacon
+   -I$(BLEDIR)/../../application/airsync/1.0.4 \
+   -I$(BLEDIR)/sdk/example/bt_breeze \
+   -I$(BLEDIR)/../../application/breeze/include \
+   -I$(BLEDIR)/sdk/example/bt_mesh_multiple_profile/provisioner_multiple_profile \
+   -I$(BLEDIR)/sdk/example/bt_mesh_multiple_profile/device_multiple_profile

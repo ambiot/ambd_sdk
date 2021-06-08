@@ -19,10 +19,9 @@
 #define UART_TX    PA_18	//UART0  TX
 #define UART_RX    PA_19   //UART0  RX
 
-#define SRX_BUF_SZ 100
+#define SRX_BUF_SZ 32*5      /*note that dma mode buffer length should be integral multiple of 32 bytes*/
+char rx_buf[SRX_BUF_SZ]__attribute__((aligned(32)))={0};  /*note that dma mode buffer address should be 32 bytes aligned*/
 
-SRAM_NOCACHE_DATA_SECTION
-char rx_buf[SRX_BUF_SZ]={0};
 volatile uint32_t tx_busy=0;
 volatile uint32_t rx_done=0;
 
@@ -55,7 +54,7 @@ void uart_send_string(serial_t *sobj, char *pstr)
 	}
 }
 
-void main(void)
+void maintask(void)
 {
 	serial_t    sobj;
 	int ret;
@@ -83,5 +82,15 @@ void main(void)
 			ret = serial_recv_stream_dma_timeout(&sobj, rx_buf, 0,500,NULL);
 		}
 	}
+}
+
+void main(void)
+{
+	if (pdTRUE != xTaskCreate( (TaskFunction_t)maintask, "RAW_GTIMER_DEMO_TASK", (2048 /4), (void *)NULL, (tskIDLE_PRIORITY + 1), NULL))
+	{
+		DiagPrintf("Create RAW_GTIMER_DEMO_TASK Err!!\n");
+	}
+	
+	vTaskStartScheduler();
 }
 

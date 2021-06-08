@@ -18,7 +18,7 @@
 #define dfs_mask		0xFF
 #define Mode			0
 #define SCLK_FREQ		100000
-#define TEST_BUF_SIZE	512
+#define TEST_BUF_SIZE	512 //for dma mode, buffer size should be multiple of 32-byte
 
 /*SPIx pin location:
 
@@ -59,10 +59,11 @@ SPI1:
 #define SPI1_SCLK  PB_6
 #define SPI1_CS    PB_7
 
-SRAM_NOCACHE_DATA_SECTION u16 MasterTxBuf[TEST_BUF_SIZE];
-SRAM_NOCACHE_DATA_SECTION u16 MasterRxBuf[TEST_BUF_SIZE];
-SRAM_NOCACHE_DATA_SECTION u16 SlaveTxBuf[TEST_BUF_SIZE];
-SRAM_NOCACHE_DATA_SECTION u16 SlaveRxBuf[TEST_BUF_SIZE];
+/* for dma mode, start address of buffer should be 32-byte aligned*/
+u16 MasterTxBuf[TEST_BUF_SIZE] __attribute__((aligned(32)));
+u16 MasterRxBuf[TEST_BUF_SIZE] __attribute__((aligned(32)));
+u16 SlaveTxBuf[TEST_BUF_SIZE] __attribute__((aligned(32)));
+u16 SlaveRxBuf[TEST_BUF_SIZE] __attribute__((aligned(32)));
 
 volatile int MasterTxDone;
 volatile int MasterRxDone;
@@ -133,15 +134,11 @@ void SsiPrint(u16 *pSrc, u16 *pDst, u32 Length)
 	}
 }
 
-/**
-  * @brief  Main program.
-  * @param  None
-  * @retval None
-  */
+
 spi_t spi_master;
 spi_t spi_slave;
 
-void main(void)
+void spi_dma_task(void* param)
 {
 
 	/* SPI1 is as Master */
@@ -190,9 +187,9 @@ void main(void)
 		MasterRxDone = 0;
 		SlaveRxDone = 0;
 		
-		spi_slave_read_stream_dma(&spi_slave, SlaveRxBuf, trans_bytes);
-		spi_slave_write_stream_dma(&spi_slave, SlaveTxBuf, trans_bytes);
-		spi_master_write_read_stream_dma(&spi_master, MasterTxBuf, MasterRxBuf, trans_bytes);
+		spi_slave_read_stream_dma(&spi_slave, (char*)SlaveRxBuf, trans_bytes);
+		spi_slave_write_stream_dma(&spi_slave, (char*)SlaveTxBuf, trans_bytes);
+		spi_master_write_read_stream_dma(&spi_master,(char*) MasterTxBuf, (char*)MasterRxBuf, trans_bytes);
 
 		i=0;
 		while((MasterRxDone && SlaveRxDone) == 0) {
@@ -221,8 +218,8 @@ void main(void)
 
 		spi_flush_rx_fifo(&spi_master);
 
-		spi_slave_write_stream_dma(&spi_slave, SlaveTxBuf, trans_bytes);
-		spi_master_read_stream_dma(&spi_master, MasterRxBuf, trans_bytes);
+		spi_slave_write_stream_dma(&spi_slave, (char*)SlaveTxBuf, trans_bytes);
+		spi_master_read_stream_dma(&spi_master, (char*)MasterRxBuf, trans_bytes);
 
 		i=0;
 		while(MasterRxDone == 0) {
@@ -244,6 +241,24 @@ void main(void)
 
 	DBG_8195A("SPI Demo finished.\n");
 
-	for(;;);
+	vTaskDelete(NULL);
 }
+
+/**
+  * @brief  Main program.
+  * @param  None
+  * @retval None
+  */
+void main(void)
+{
+	if(xTaskCreate(spi_dma_task, ((const char*)"spi_dma_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
+		printf("\n\r%s xTaskCreate(spi_dma_task) failed", __FUNCTION__);
+
+        vTaskStartScheduler();
+	while(1){
+		vTaskDelay( 1000 / portTICK_RATE_MS );
+	}
+	
+}
+
 

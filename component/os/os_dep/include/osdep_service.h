@@ -730,6 +730,8 @@ int rtw_push_to_xqueue( _xqueue* queue, void* message, u32 timeout_ms );
  */
 int rtw_pop_from_xqueue( _xqueue* queue, void* message, u32 timeout_ms );
 
+int rtw_peek_from_xqueue( _xqueue* queue, void* message, u32 timeout_ms );
+
 /**
  * @brief  Delete a queue - freeing all the memory allocated for storing of messages placed on the queue.
  * @param[in] queue: The handle to the queue to be deleted.
@@ -1011,6 +1013,13 @@ void rtw_delete_task(struct task_struct * task);
  * @return  None
  */
 void rtw_wakeup_task(struct task_struct *task);
+
+void rtw_set_priority_task(void* task, u32 NewPriority );
+
+int rtw_get_priority_task(void* task);
+void rtw_suspend_task (void* task);
+
+void rtw_resume_task (void* task);
 
 /**
  * @brief  This function creates a new worker thread.
@@ -1348,6 +1357,7 @@ struct osdep_service_ops {
 	int (*rtw_init_xqueue)( _xqueue* queue, const char* name, u32 message_size, u32 number_of_messages );
 	int (*rtw_push_to_xqueue)( _xqueue* queue, void* message, u32 timeout_ms );
 	int (*rtw_pop_from_xqueue)( _xqueue* queue, void* message, u32 timeout_ms );
+	int (*rtw_peek_from_xqueue)( _xqueue* queue, void* message, u32 timeout_ms );
 	int (*rtw_deinit_xqueue)( _xqueue* queue );
 	u32	(*rtw_get_current_time)(void);
 	u32 (*rtw_systime_to_ms)(u32 systime);
@@ -1375,6 +1385,10 @@ struct osdep_service_ops {
 	int (*rtw_create_task)(struct task_struct *task, const char *name, u32 stack_size, u32 priority, thread_func_t func, void *thctx);
 	void (*rtw_delete_task)(struct task_struct *task);
 	void (*rtw_wakeup_task)(struct task_struct *task);
+	void (*rtw_set_priority_task)(void* task, u32 NewPriority);	
+	int (*rtw_get_priority_task)(void* task);
+	void (*rtw_suspend_task)(void* task);
+	void (*rtw_resume_task)(void* task);
 	
 #if 0	//TODO
 	void (*rtw_init_delayed_work)(struct delayed_work *dwork, work_func_t func, const char *name);
@@ -1421,6 +1435,7 @@ struct osdep_service_ops {
 	void (*rtw_wakelock_timeout)(u32 timeoutMs);
 	u8 (*rtw_get_scheduler_state)(void);
 	void (*rtw_create_secure_context)(u32 secure_stack_size);
+	void* (*rtw_get_current_TaskHandle)(void);
 };
 
 #ifdef __cplusplus

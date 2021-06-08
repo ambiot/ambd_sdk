@@ -1009,6 +1009,8 @@ BOOL USI_UARTTXGDMA_Init(
 	u8 GdmaChnl;
 	
 	assert_param(GDMA_InitStruct != NULL);
+
+	DCache_CleanInvalidate((u32)pTxBuf, TxCount);
 	
 	GdmaChnl = GDMA_ChnlAlloc(0, (IRQ_FUN)CallbackFunc, (u32)CallbackData, 12);//ACUT is 0x10, BCUT is 12
 	if (GdmaChnl == 0xFF) {
@@ -1079,6 +1081,8 @@ BOOL USI_UARTRXGDMA_Init(
 	USI_TypeDef * pUSIx;
 	
 	assert_param(GDMA_InitStruct != NULL);
+
+	DCache_CleanInvalidate((u32)pRxBuf, RxCount);
 	
 	GdmaChnl = GDMA_ChnlAlloc(0, (IRQ_FUN)CallbackFunc, (u32)CallbackData, 12);//ACUT is 0x10, BCUT is 12
 	if (GdmaChnl == 0xFF) {

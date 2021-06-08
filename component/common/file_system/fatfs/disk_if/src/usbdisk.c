@@ -40,12 +40,10 @@ DSTATUS USB_disk_initialize(void){
 
 #if defined(CONFIG_PLATFORM_8721D)
 DSTATUS USB_disk_deinitialize(void){
-	MSC_RESULT res;
-	
 	if(!USB_STORAGE_READY)
 		return RES_NOTRDY;
 	
-	res = us_deinit();
+	us_deinit();
 	
 	return MSC_OK;
 }
@@ -91,14 +89,14 @@ DRESULT USB_disk_ioctl (BYTE cmd, void* buff){
 			res = RES_OK;
 			break;
 		case GET_SECTOR_COUNT:	/* Get media size (for only f_mkfs()) */
-			if(us_getcap(&last_blk_addr, &block_size) == MSC_OK){
+			if(us_getcap((u32 *)&last_blk_addr, (u32 *)&block_size) == MSC_OK){
 				*(DWORD*)buff = last_blk_addr + 1;
 				res = RES_OK;
 			}else
 				res = RES_ERROR;
 			break;
 		case GET_SECTOR_SIZE:	/* Get sector size (for multiple sector size (_MAX_SS >= 1024)) */
-			if(us_getcap(&last_blk_addr, &block_size) == MSC_OK){
+			if(us_getcap((u32 *)&last_blk_addr, (u32 *)&block_size) == MSC_OK){
 				*(WORD*)buff = block_size;
 				res = RES_OK;
 			}else
@@ -132,7 +130,7 @@ ll_diskio_drv USB_disk_Driver ={
 #if _USE_IOCTL == 1
 	.disk_ioctl = USB_disk_ioctl,
 #endif
-	.TAG = "USB"
+	.TAG = (unsigned char*)"USB"
 };
 
 #endif

@@ -60,7 +60,7 @@ void gpio_interrupt_enable(void)
 	GPIO_InitStruct.GPIO_ITPolarity = GPIO_INT_POLARITY_ACTIVE_HIGH;
 	GPIO_InitStruct.GPIO_ITDebounce = GPIO_INT_DEBOUNCE_ENABLE;
 		
-	InterruptRegister(GPIO_INTHandler, GPIOA_IRQ, GPIOA_BASE, 10);		
+	InterruptRegister(GPIO_INTHandler, GPIOA_IRQ, (u32)GPIOA_BASE, 10);		
 	InterruptEn(GPIOA_IRQ, 10);
 	
 	GPIO_Init(&GPIO_InitStruct);

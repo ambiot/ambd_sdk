@@ -9,7 +9,7 @@ Please follow the instructions for various options
 
 		--> FATFS_DISK_SD to 1 in platform_opts.h under CONFIG_EXAMPLE_FATFS and  FATFS_DISK_USB & FATFS_DISK_FLASH to 0
 		--> _MAX_SS to 512  for SD card in ffconf.h to define the maximum sector size supported
-		--> _USE_MKFS to 0 in ffconf.h  
+		--> _USE_MKFS to 1 in ffconf.h  
 
 	3. To read and write on EMMC card, set the parameters as below
 
@@ -47,14 +47,14 @@ Please follow the instructions for various options
 		--> Replace existing fatfs lib with latest r0.13c lib related files to IAR project 
 		--> For further details on new features, please refer to http://elm-chan.org/fsw/ff/00index_e.html
 
-	7. To read and write on Ameba Z2 Flash	
+	8. To read and write on Ameba Z2 Flash	
 		--> Follow the same steps as [4] except for starting address of on-board Ameba Z2 flash memory
 		--> The user can modify the starting address on platform_opts.h according to their requirements, by default 512 KB is allocated "#define FLASH_APP_BASE (0x200000 - 0xA9000)" out of 2MB flash memory 
 		--> If it is not defined on platform_opts.h, it will take #define FLASH_APP_BASE value from flash_fatfs.c with starting address as 0x180000 
 		--> Make sure the FATFS region on Flash doesn't conflict with reserved Flash region 
 		
-	8. To read and write on Ameba-D Flash
-		--> Follow the same steps as [4]
+	9. To read and write on Ameba-D Flash
+		--> Follow the same steps as [5]
 		
 
         

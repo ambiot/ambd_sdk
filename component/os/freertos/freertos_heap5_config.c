@@ -8,7 +8,7 @@
 
 //TODO: remove section when combine BD and BF
 //8710C uses the linker symbol to determine the SRAM region and PSRAM region
-#if ((defined CONFIG_PLATFORM_8195A) || (defined CONFIG_PLATFORM_8711B) || (defined CONFIG_PLATFORM_8721D))
+#if ((defined CONFIG_PLATFORM_8195A) || (defined CONFIG_PLATFORM_8711B))
 	#include "section_config.h"
 	SRAM_BF_DATA_SECTION
 	static unsigned char ucHeap[ configTOTAL_HEAP_SIZE ];
@@ -88,6 +88,51 @@
 
 #elif (defined CONFIG_PLATFORM_8721D)
 
+#if CONFIG_DYNAMIC_HEAP_SIZE
+
+#if defined(__ICCARM__)
+#undef configTOTAL_HEAP_SIZE 
+#undef configTOTAL_HEAP_ext_SIZE
+        
+        extern uint8_t __sram_end__[];
+        extern uint8_t RAMBSSHEAP$$Limit[];
+        
+#define configTOTAL_HEAP0_SIZE ((uint32_t)__sram_end__ - ((uint32_t)RAMBSSHEAP$$Limit))
+#define HEAP0_START (uint8_t*)RAMBSSHEAP$$Limit
+        
+    HeapRegion_t xHeapRegions[] =
+    {
+#if defined (ARM_CORE_CM0)
+        { (uint8_t*)0x00080A00, 0x1600 },   // KM0 ROM BSS just used RAM befor 0x000809ce
+#endif
+        { 0, 0 },     // Defines a block from ucHeap
+        { NULL, 0 }                     // Terminates the array.
+    };
+#elif defined(__GNUC__)
+#undef configTOTAL_HEAP_SIZE 
+#undef configTOTAL_HEAP_ext_SIZE
+        
+        extern uint8_t __sram_end__[];
+        extern uint8_t __bfsram_end__[];
+        
+#define configTOTAL_HEAP0_SIZE ((uint32_t)__sram_end__ - ((uint32_t)__bfsram_end__))
+#define HEAP0_START (uint8_t*)__bfsram_end__
+        
+    HeapRegion_t xHeapRegions[] =
+    {
+#if defined (ARM_CORE_CM0)
+        { (uint8_t*)0x00080A00, 0x1600 },   // KM0 ROM BSS just used RAM befor 0x000809ce
+#endif
+        { 0, 0 },     // Defines a block from ucHeap
+        { NULL, 0 }                     // Terminates the array.
+    };
+#endif
+
+#else
+	#include "section_config.h"
+	SRAM_BF_DATA_SECTION
+	static unsigned char ucHeap[ configTOTAL_HEAP_SIZE ];
+
 	HeapRegion_t xHeapRegions[] =
 	{
 	#if defined (ARM_CORE_CM0)
@@ -96,6 +141,9 @@
 		{ ucHeap, sizeof(ucHeap) }, 	// Defines a block from ucHeap
 		{ NULL, 0 } 					// Terminates the array.
 	};
+
+#endif
+
 
 #else
 	#error NOT SUPPORT CHIP
@@ -156,6 +204,12 @@ void os_heap_init(void)
 		}
 #if defined(configENABLE_TRUSTZONE) && (configENABLE_TRUSTZONE == 1)
 		secure_heap_init();
+#endif
+#elif defined(CONFIG_PLATFORM_8721D)
+#if CONFIG_DYNAMIC_HEAP_SIZE
+        xHeapRegions[ 0 ].xSizeInBytes = configTOTAL_HEAP0_SIZE;
+        xHeapRegions[ 0 ].pucStartAddress = (uint8_t*)HEAP0_START;
+
 #endif
 #endif
 		vPortDefineHeapRegions( xHeapRegions );	

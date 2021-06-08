@@ -1,6 +1,6 @@
 Example Description
 
-This example describes how to use SPI GDMA single-block continue TX.
+This example describes how to use SPI GDMA multi-block continue TX.
 
 The SPI Interface provides a "Serial Peripheral Interface" Master.
 
@@ -15,5 +15,6 @@ So pinmux as below:
     SPI1_CS   (PB_7)
 
 Note:
-	1) This example aims to demonstrate how the spi master continue TX use use single GDMA blocks.
+	1) This example aims to demonstrate how the spi master continue TX use use multi GDMA blocks.
 	2) Data array send times can be set through Macro define.
+	3) For dma mode, both CPU and dma have access to spi buffer. Start address of spi buffer should be 32-byte aligned and size of spi buffer should be multiple of 32 byte.

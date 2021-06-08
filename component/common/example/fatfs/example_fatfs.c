@@ -112,8 +112,8 @@ u8 RDBuf[TEST_SIZE];
 
 FRESULT list_files(char *);
 FRESULT del_dir(const TCHAR *path, int del_self);  
-FATFS 	fs_sd;
-FIL     m_file;
+static FATFS 	fs_sd;
+static FIL     m_file;
 /*
 SECTION(".lpddr.rodata")
 u8 WRBuf[TEST_SIZE]__attribute__((aligned(32)));
@@ -617,7 +617,13 @@ void example_fatfs_thread(void* param){
 	int test_result = 1;
 	int ret = 0;
 	int flash = 0;
+#if FATFS_DISK_USB
+	u8 test_info[]="\"Ameba test fatfs usb ~~~~\"";
+#elif FATFS_DISK_SD
 	u8 test_info[]="\"Ameba test fatfs sd card ~~~~\"";
+#elif FATFS_DISK_FLASH
+	u8 test_info[]="\"Ameba test fatfs flash ~~~~\"";
+#endif
 
 #if FATFS_DISK_USB
 	_usb_init();

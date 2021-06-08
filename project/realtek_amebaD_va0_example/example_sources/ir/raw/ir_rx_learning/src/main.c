@@ -452,7 +452,7 @@ void IR_learning_wave_capture(u32 key_index, uint32_t *rev_buf)
   * @param   No parameter.
   * @return  void
   */
- void IR_learning_thread(void)
+ void IR_learning_thread(void* param)
  {
 	IR_Cmd(IR_DEV, IR_InitStruct.IR_Mode, DISABLE);
 	IR_learning_begin();
@@ -484,7 +484,7 @@ void IR_learning_wave_capture(u32 key_index, uint32_t *rev_buf)
 		if (xSemaphoreTake(IR_learn_sema, 10 * configTICK_RATE_HZ)) {
 			if (g_ir_learn_packet.data_receive_completed) {
 				//TODO: receive complete
-				IR_learning_wave_capture(g_ir_learn_key_index, &recv_buf);
+				IR_learning_wave_capture(g_ir_learn_key_index, (uint32_t *)&recv_buf);
 				DBG_8195A("the number of IR data:%d\n", recv_buf[2]);	
 			}
 			else {

@@ -17,7 +17,12 @@ fi
 
 # Get Parameters
 IMAGE_FILENAME=$1
-filesize=$(stat -c "%s" $IMAGE_FILENAME)
+COMPILEOS=$(uname)
+if [ "$COMPILEOS" != "Darwin" ]; then
+        filesize=$(stat -c "%s" $IMAGE_FILENAME)
+else
+        filesize=$(stat -f%z $IMAGE_FILENAME)
+fi
 newsize=$((((($filesize - 1) >> 12) + 1) << 12))
 padcount=$(($newsize - $filesize))
 

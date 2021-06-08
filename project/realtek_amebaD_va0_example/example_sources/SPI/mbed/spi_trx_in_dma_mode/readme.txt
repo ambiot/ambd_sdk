@@ -18,4 +18,6 @@ So we connect them as below:
 
 After boot up, the master will send data to slave and shows result on LOG_OUT.
 
-Note:spi_idx should be asigned first in the initialization process,We use MBED_SPI1 for Master and MBED_SPI0 for Slave
+Note:
+1. spi_idx should be asigned first in the initialization process,We use MBED_SPI1 for Master and MBED_SPI0 for Slave
+2. for dma mode, both CPU and dma have access to spi buffer. Start address of spi buffer should be 32-byte aligned and size of spi buffer should be multiple of 32 byte.

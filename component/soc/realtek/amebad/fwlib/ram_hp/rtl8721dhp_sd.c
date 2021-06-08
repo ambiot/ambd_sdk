@@ -324,12 +324,10 @@ static SD_RESULT SD_GetOCR(u8 voltage_mismatch)
 	SDIOH_CmdTypeDef cmd_attr;
 	u8 resp_byte1;
 
-	card_info.is_sdhc_sdxc = 1;
-
 	resp_byte1 = SDIOH_GetResponse(SDIO_RESP1);
 
 	do{
-		cmd_attr.arg = 0x40FF8080;
+		cmd_attr.arg = 0x40FF8080;            //value of OCR
 		cmd_attr.idx = EMMC_CMD_SendOpCond;
 		cmd_attr.rsp_type = SDIOH_RSP_6B;
 		cmd_attr.rsp_crc_chk = DISABLE;
@@ -347,10 +345,16 @@ static SD_RESULT SD_GetOCR(u8 voltage_mismatch)
 
 		DelayMs(1);
 		
-		if(resp_byte1&BIT7) {
+		if(resp_byte1&BIT7) {              //bit7: busy bit
+			if(resp_byte1&BIT6){           //bit6: 1, sector mode(>2GB); 0, byte mode()
+				card_info.is_sdhc_sdxc = 1;
+			}else{
+				card_info.is_sdhc_sdxc = 0;
+			}
 			return HAL_OK;
 		}
 	}while(cnt--);
+	
 
 	return HAL_ERR_UNKNOWN;
 	
@@ -372,6 +376,8 @@ static u32 SD_GetCID(void)
 
 	/***** CMD2 *****/
 	_memset((void *)(pbuf), 0, SDIOH_C6R2_BUF_LEN);
+	DCache_CleanInvalidate((u32)pbuf, SDIOH_C6R2_BUF_LEN);
+
 	dma_cfg.op = SDIOH_DMA_READ;
 	dma_cfg.start_addr = ((u32)(pbuf))/8;
 	dma_cfg.blk_cnt = 1;
@@ -392,7 +398,7 @@ static u32 SD_GetCID(void)
 		return ret;
 	}
 
-	//DCache_Invalidate((u32)pbuf, SDIOH_C6R2_BUF_LEN);
+	DCache_Invalidate((u32)pbuf, SDIOH_C6R2_BUF_LEN);
 
 	ret = CmdRespError(SDIOH_RESP_R2, SD_CMD_AllSendCid);
 	if (ret != HAL_OK) {
@@ -426,7 +432,11 @@ static u32 SD_GetRCA(void)
 	SDIOH_CmdTypeDef cmd_attr;
 
 	/***** CMD3 *****/
+#if defined(SDIO) && (SDIO == SD) 	
 	cmd_attr.arg = 0;
+#else
+	cmd_attr.arg = 0x1;      //emmc card: RCA set by HOST.
+#endif
 	cmd_attr.idx = SD_CMD_SendRelAddr;
 	cmd_attr.rsp_type = SDIOH_RSP_6B;
 	cmd_attr.rsp_crc_chk = ENABLE;
@@ -463,6 +473,8 @@ static u32 SD_GetCSD(void)
 
 	/***** CMD9 *****/
 	_memset((void *)(pbuf), 0, SDIOH_C6R2_BUF_LEN);
+	DCache_CleanInvalidate((u32)pbuf, SDIOH_C6R2_BUF_LEN);
+
 	dma_cfg.op = SDIOH_DMA_READ;
 	dma_cfg.start_addr = ((u32)(pbuf))/8;
 	dma_cfg.blk_cnt = 1;
@@ -483,7 +495,7 @@ static u32 SD_GetCSD(void)
 		return ret;
 	}
 
-	//DCache_Invalidate((u32)pbuf, SDIOH_C6R2_BUF_LEN);
+	DCache_Invalidate((u32)pbuf, SDIOH_C6R2_BUF_LEN);
 
 	ret = CmdRespError(SDIOH_RESP_R2, SD_CMD_SendCsd);
 	if (ret != HAL_OK) {
@@ -605,7 +617,7 @@ static u32 SD_SetBusWidth(u8 bus_width)
 	wid_arg_4bit = 0x2;
 	wid_arg_1bit = 0x0;
 #else
-	wid_arg_4bit = 0x03B70100;   //EXT_CSD register B7 byte: 01, 4bit mode; 00, 1bit mode
+	wid_arg_4bit = 0x03B70100;   //03: set bit; B7:EXT_CSD register B7; byte: 01, 4bit mode; 
 	wid_arg_1bit = 0x03B70000;
 #endif
 	/***** ACMD6 (CMD6) *****/
@@ -662,7 +674,9 @@ static u32 SD_GetSCR(void)
 	}
 
 	/***** ACMD51 (CMD51) *****/
-	_memset((void *)(pbuf), 0, SDIOH_C6R2_BUF_LEN);    
+	_memset((void *)(pbuf), 0, SDIOH_C6R2_BUF_LEN);
+	DCache_CleanInvalidate((u32)pbuf, SDIOH_C6R2_BUF_LEN);
+
 	dma_cfg.op = SDIOH_DMA_READ;
 	dma_cfg.start_addr = ((u32)(pbuf))/8;
 	dma_cfg.blk_cnt = 1;
@@ -688,7 +702,7 @@ static u32 SD_GetSCR(void)
 		return HAL_ERR_UNKNOWN;
 	}
 
-	//DCache_Invalidate((u32)pbuf, SDIOH_C6R2_BUF_LEN);
+	DCache_Invalidate((u32)pbuf, SDIOH_C6R2_BUF_LEN);
 
 	ret = CmdRespError(SDIOH_RESP_R1, SD_CMD_SendScr);
 	if (ret != HAL_OK) {
@@ -742,7 +756,9 @@ static u32 SD_SwitchFunction(u8 mode, u8 speed, u8 *buf_32align)
 	}
 
 	/***** CMD6 *****/
-	_memset((void *)buf_32align, 0, SDIOH_C6R2_BUF_LEN);    
+	_memset((void *)buf_32align, 0, SDIOH_C6R2_BUF_LEN);
+	DCache_CleanInvalidate((u32)buf_32align, SDIOH_C6R2_BUF_LEN);
+
 	dma_cfg.op = SDIOH_DMA_READ;
 	dma_cfg.start_addr = ((u32)buf_32align)/8;
 	dma_cfg.blk_cnt = 1;
@@ -825,6 +841,8 @@ SD_RESULT SD_GetEXTCSD(u8 *pbuf)
 	SDIOH_CmdTypeDef cmd_attr;	
  
 	/***** CMD8 *****/
+	DCache_CleanInvalidate((u32)pbuf, SD_BLOCK_SIZE);
+
 	dma_cfg.op = SDIOH_DMA_READ;
 	dma_cfg.start_addr = ((u32)(pbuf))/8;
 	dma_cfg.blk_cnt = 1;
@@ -852,7 +870,7 @@ SD_RESULT SD_GetEXTCSD(u8 *pbuf)
 		return HAL_ERR_UNKNOWN;
 	}
 
-	//DCache_Invalidate((u32)card_info.ext_csd, SD_BLOCK_SIZE);
+	DCache_Invalidate((u32)pbuf, SD_BLOCK_SIZE);
 
 	ret = CmdRespError(SDIOH_RESP_R1, SD_CMD_SendIfCond);
 	
@@ -880,6 +898,8 @@ u32 SD_ReadBlock(uint8_t *readbuff, uint32_t BlockIdx)
 		start = (u32)(BlockIdx * SD_BLOCK_SIZE);
 
 	/***** CMD17 *****/
+	DCache_CleanInvalidate((u32)readbuff, SD_BLOCK_SIZE);
+
 	dma_cfg.op = SDIOH_DMA_READ;
 	dma_cfg.start_addr = ((u32)readbuff)/8;
 	dma_cfg.blk_cnt = 1;
@@ -937,6 +957,8 @@ u32 SD_ReadMultiBlocks(uint8_t *readbuff, uint32_t BlockIdx, uint32_t NumberOfBl
 		start = (u32)(BlockIdx * SD_BLOCK_SIZE);
 
 	/***** CMD18 *****/
+	DCache_CleanInvalidate((u32)readbuff, NumberOfBlocks * SD_BLOCK_SIZE);
+
 	dma_cfg.op = SDIOH_DMA_READ;
 	dma_cfg.start_addr = ((u32)readbuff)/8;
 	dma_cfg.blk_cnt = NumberOfBlocks;
@@ -985,7 +1007,7 @@ u32 SD_WriteBlock(uint8_t *writebuff, uint32_t BlockIdx)
 		start = (u32)(BlockIdx * SD_BLOCK_SIZE);
 
 	/***** CMD24 *****/
-	DCache_Clean((u32)writebuff, SD_BLOCK_SIZE);
+	DCache_CleanInvalidate((u32)writebuff, SD_BLOCK_SIZE);
 
 	dma_cfg.op = SDIOH_DMA_WRITE;
 	dma_cfg.start_addr = ((u32)writebuff)/8;
@@ -1071,7 +1093,7 @@ u32 SD_WriteMultiBlocks(uint8_t *writebuff, uint32_t BlockIdx, uint32_t NumberOf
 		return ret;
 	}
 #endif
-	DCache_Clean((u32)writebuff, NumberOfBlocks * SD_BLOCK_SIZE);
+	DCache_CleanInvalidate((u32)writebuff, NumberOfBlocks * SD_BLOCK_SIZE);
 
 	/***** CMD25 *****/
 	dma_cfg.op = SDIOH_DMA_WRITE;
@@ -1244,6 +1266,8 @@ u32 SD_GetSDStatus(u8 *buf_32align)
 
 	/***** ACMD13 (CMD13) *****/
 	_memset((void *)buf_32align, 0, SDIOH_C6R2_BUF_LEN);
+	DCache_CleanInvalidate((u32)buf_32align, SDIOH_C6R2_BUF_LEN);
+
 	dma_cfg.op = SDIOH_DMA_READ;
 	dma_cfg.start_addr = ((u32)buf_32align)/8;
 	dma_cfg.blk_cnt = 1;
@@ -1347,8 +1371,8 @@ u32 SD_GetSDStatus(u8 *buf_32align)
 				 }
 			 }
 		 } else {
-			 DBG_PRINTF(MODULE_SDIO, LEVEL_WARN, "This card doesn't support the specified speed mode !!\r\n");
-			 return HAL_ERR_HW;
+			 DBG_PRINTF(MODULE_SDIO, LEVEL_WARN, "This card doesn't support the specified speed mode, use current speed mode !!\r\n");
+			 return HAL_OK;
 		 }
 	 } else {
 		 DBG_PRINTF(MODULE_SDIO, LEVEL_WARN,"This card doesn't support CMD6 and can't switch the bus speed !!\r\n");
@@ -1548,10 +1572,12 @@ SD_RESULT SD_Init(void)
 {
 	u32 ret;
 	u8 voltage_mismatch = 0;
-
-	_memset(&card_info, 0, sizeof(SD_CardInfo));
-	card_info.sd_status = SD_NODISK;
-
+	
+	if(card_info.sd_status != SD_INSERT){
+		_memset(&card_info, 0, sizeof(SD_CardInfo));
+		card_info.sd_status = SD_NODISK;
+	}
+	
 	/* Configure pinmux */
 	SDIOH_Pinmux();
 

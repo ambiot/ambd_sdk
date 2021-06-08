@@ -136,15 +136,10 @@ void SsiPrint(u16 *pSrc, u16 *pDst, u32 Length)
 	}
 } 
 
-/**
-  * @brief  Main program.
-  * @param  None 
-  * @retval None
-  */
 spi_t spi_master;
 spi_t spi_slave;
 
-void main(void)
+void spi_interrupt_task(void* param)
 {
 
 	/* SPI1 is as Master */
@@ -194,9 +189,9 @@ void main(void)
 		MasterRxDone = 0;
 		SlaveRxDone = 0;
 
-		spi_slave_read_stream(&spi_slave, SlaveRxBuf, trans_bytes);
-		spi_slave_write_stream(&spi_slave, SlaveTxBuf, trans_bytes);
-		spi_master_write_read_stream(&spi_master, MasterTxBuf, MasterRxBuf, trans_bytes);
+		spi_slave_read_stream(&spi_slave, (char*)SlaveRxBuf, trans_bytes);
+		spi_slave_write_stream(&spi_slave, (char*)SlaveTxBuf, trans_bytes);
+		spi_master_write_read_stream(&spi_master, (char*)MasterTxBuf, (char*)MasterRxBuf, trans_bytes);
 		
 
 		i=0;
@@ -225,8 +220,8 @@ void main(void)
 
 		spi_flush_rx_fifo(&spi_master);
 
-		spi_slave_write_stream(&spi_slave, SlaveTxBuf, trans_bytes);
-		spi_master_read_stream(&spi_master, MasterRxBuf, trans_bytes);
+		spi_slave_write_stream(&spi_slave, (char*)SlaveTxBuf, trans_bytes);
+		spi_master_read_stream(&spi_master, (char*)MasterRxBuf, trans_bytes);
 
 		i=0;
 		while(MasterRxDone == 0) {
@@ -248,7 +243,23 @@ void main(void)
 
 	DBG_8195A("SPI Demo finished.\n");
 
-	for(;;);
+	vTaskDelete(NULL);
 
 }
 
+/**
+  * @brief  Main program.
+  * @param  None 
+  * @retval None
+  */
+void main(void)
+{
+	if(xTaskCreate(spi_interrupt_task, ((const char*)"spi_interrupt_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
+		printf("\n\r%s xTaskCreate(spi_interrupt_task) failed", __FUNCTION__);
+
+        vTaskStartScheduler();
+	while(1){
+		vTaskDelay( 1000 / portTICK_RATE_MS );
+	}
+	
+}

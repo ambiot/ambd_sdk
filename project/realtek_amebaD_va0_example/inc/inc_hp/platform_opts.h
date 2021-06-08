@@ -50,13 +50,19 @@
 /**
 * For common flash usage  
 */
-#define AP_SETTING_SECTOR		0x000FE000
-#define UART_SETTING_SECTOR		0x000FC000
-#define SPI_SETTING_SECTOR		0x000FC000
-#if defined(CONFIG_BAIDU_DUER) && CONFIG_BAIDU_DUER
-#define FAST_RECONNECT_DATA 	0x1FF000
+#if (defined(CONFIG_BAIDU_DUER) && CONFIG_BAIDU_DUER) || (defined(CONFIG_BT_MESH_PROVISIONER) && CONFIG_BT_MESH_PROVISIONER)	\
+	|| (defined(CONFIG_BT_MESH_PROVISIONER_MULTIPLE_PROFILE) && CONFIG_BT_MESH_PROVISIONER_MULTIPLE_PROFILE)	\
+	|| (defined(CONFIG_BT_MESH_DEVICE) && CONFIG_BT_MESH_DEVICE)	\
+	|| (defined(CONFIG_BT_MESH_DEVICE_MULTIPLE_PROFILE) && CONFIG_BT_MESH_DEVICE_MULTIPLE_PROFILE)
+#define UART_SETTING_SECTOR		0x001FA000
+#define AP_SETTING_SECTOR		0x001FB000
+#define FTL_PHY_PAGE_START_ADDR	0x001FC000
+#define FAST_RECONNECT_DATA 	0x001FF000
 #else
-#define FAST_RECONNECT_DATA 	0x105000
+#define UART_SETTING_SECTOR		0x000FC000
+#define AP_SETTING_SECTOR		0x000FE000
+#define FTL_PHY_PAGE_START_ADDR	0x00102000
+#define FAST_RECONNECT_DATA 	0x00105000
 #endif
 #define CONFIG_ENABLE_RDP		0
 
@@ -89,7 +95,9 @@
 /* For WPS and P2P */
 #define CONFIG_ENABLE_WPS		1
 #define CONFIG_ENABLE_P2P		0//on/off p2p cmd in log_service or interactive mode
-#define CONFIG_ENABLE_WPS_DISCOVERY	0
+#if CONFIG_ENABLE_WPS
+#define CONFIG_ENABLE_WPS_DISCOVERY	1
+#endif
 #if CONFIG_ENABLE_P2P
 #define CONFIG_ENABLE_WPS_AP		1
 #undef CONFIG_WIFI_IND_USE_THREAD
@@ -128,6 +136,11 @@
 #endif
 
 #define CONFIG_JOINLINK    0
+
+/*For MIMO pkt decode*/
+#define CONFIG_UNSUPPORT_PLCPHDR_RPT	0
+
+#define CONFIG_EXAMPLE_CM_BACKTRACE 0
 
 #endif //end of #if CONFIG_WLAN
 /*******************************************************************************/
@@ -173,13 +186,6 @@
 #endif
 #endif
 /******************End of iNIC configurations*******************/
-/* For Azure embedded iot hub telemetry example*/
-#define CONFIG_EXAMPLE_AZURE   0
-#if CONFIG_EXAMPLE_AZURE
-#undef WAIT_FOR_ACK
-#define WAIT_FOR_ACK
-#endif
-
 /* For Amazon FreeRTOS SDK example */
 #define CONFIG_EXAMPLE_AMAZON_FREERTOS   0
 
@@ -194,12 +200,34 @@
 
 /* For WIFI MAC MONITOR example */
 #define CONFIG_EXAMPLE_WIFI_MAC_MONITOR  0
+
+/* For WIFI Manager example */
+#define CONFIG_EXAMPLE_WIFI_MANAGER  0
+
+/* For cJSON example */
+#define CONFIG_EXAMPLE_CJSON         0
    
 /* For HTTP CLIENT example */
 #define CONFIG_EXAMPLE_HTTP_CLIENT  0
 
+/* For HTTP2 CLIENT example */
+#define CONFIG_EXAMPLE_HTTP2_CLIENT	0
+
+/* For HTTPC example */
+#define CONFIG_EXAMPLE_HTTPC	0
+
+/* For HTTPD example */
+#define CONFIG_EXAMPLE_HTTPD	0
+
 /* For MQTT example */
 #define CONFIG_EXAMPLE_MQTT				0
+
+/* for CoAP example*/
+#define CONFIG_EXAMPLE_COAP		0
+
+/* for lib CoAP example*/ 
+#define CONFIG_EXAMPLE_COAP_SERVER        0
+#define CONFIG_EXAMPLE_COAP_CLIENT        0
 
 /* For WiGadget example */
 #define CONFIG_EXAMPLE_WIGADGET			0
@@ -237,11 +265,26 @@
 /* For https ota update example */
 #define CONFIG_EXAMPLE_OTA_HTTPS	0
 
-/* For tcp keepalive example */
-#define CONFIG_EXAMPLE_TCP_KEEPALIVE	0
-
 /* For sd card ota update example */
 #define CONFIG_EXAMPLE_OTA_SDCARD    0
+#if CONFIG_EXAMPLE_OTA_SDCARD
+#define FATFS_DISK_SD 	1
+#endif
+
+/* For sdcard upload web server example */
+#define CONFIG_SDCARD_UPLOAD_HTTPD  0
+#if CONFIG_SDCARD_UPLOAD_HTTPD
+// fatfs version
+//#define FATFS_R_10C
+#define FATFS_R_13C
+// fatfs disk interface
+#define FATFS_DISK_USB	0
+#define FATFS_DISK_SD 	1
+#define FATFS_DISK_FLASH 	0
+#endif
+
+/* For tcp keepalive example */
+#define CONFIG_EXAMPLE_TCP_KEEPALIVE	0
 
 /* For sntp show time example */
 #define CONFIG_EXAMPLE_SNTP_SHOWTIME	0
@@ -250,19 +293,34 @@
 #define CONFIG_EXAMPLE_PPPOE            0
 
 /* For websocket client example */
-#define CONFIG_EXAMPLE_WEBSOCKET		0
+#define CONFIG_EXAMPLE_WEBSOCKET_CLIENT 	0
+
+/* For websocket server example */
+#define CONFIG_EXAMPLE_WEBSOCKET_SERVER 	0
 
 /*For promisc softap mode example */
 #define CONFIG_EXAMPLE_PROMISC_SOFTAP_CONFIG 0
 
-/* For wifi roaming examples */
-#define CONFIG_EXAMPLE_WIFI_ROAMING_PLUS 0
-
 /*For Audio example */
 #define CONFIG_EXAMPLE_AUDIO			0
 
+/*For wifi roaming example*/
+#define CONFIG_EXAMPLE_WIFI_ROAMING		0
+
+/*For wifi roaming plus example*/
+#define CONFIG_EXAMPLE_WIFI_ROAMING_PLUS		0
+
+/* For tickless wifi roaming examples */
+#define CONFIG_EXAMPLE_TICKLESS_WIFI_ROAMING 	0
+
+/*For wifi connection priority example*/
+#define CONFIG_EXAMPLE_CONN_PRI_COND			0
+
 /* For dct example */
 #define CONFIG_EXAMPLE_DCT			0
+
+/* For IPV6 example */
+#define CONFIG_EXAMPLE_IPV6			0
 
 #if CONFIG_EXAMPLE_AUDIO
 #define FATFS_DISK_SD 	1
@@ -283,7 +341,7 @@
 #define CONFIG_EXAMPLE_AUDIO_AMR_FLASH 0
 
 #define CONFIG_EXAMPLE_AUDIO_AC3		0
-#ifdef CONFIG_EXAMPLE_AUDIO_AC3	
+#if CONFIG_EXAMPLE_AUDIO_AC3	
 #define FATFS_DISK_SD	1
 #endif
 
@@ -329,6 +387,15 @@
 #define CONFIG_EXAMPLE_AUDIO_OPUS_DECODE 0
 
 #define CONFIG_EXAMPLE_AUDIO_OPUS_ENCODE 0
+#if CONFIG_EXAMPLE_AUDIO_OPUS_ENCODE
+#define FATFS_DISK_SD	1
+#endif
+
+#define CONFIG_EXAMPLE_AUDIO_OPUS 0
+#if CONFIG_EXAMPLE_AUDIO_OPUS
+#define FATFS_DISK_SD	1
+#endif
+
 /* For UART Module AT command example */
 #define CONFIG_EXAMPLE_UART_ATCMD	0
 #if CONFIG_EXAMPLE_UART_ATCMD
@@ -416,14 +483,6 @@
 #define ENABLE_EAP_SSL_VERIFY_CLIENT	0
 #endif
 /******************End of EAP configurations*******************/
-
-/* For usb mass storage example */
-#define CONFIG_EXAMPLE_USB_MASS_STORAGE		0
-
-/* For usb device isoc example */
-#define CONFIG_EXAMPLE_USB_ISOC_DEVICE			0
-/* For usb host vendor specific  example */
-#define CONFIG_EXAMPLE_USB_VENDOR_SPECIFIC		0
 
 /* For FATFS example*/
 #define CONFIG_EXAMPLE_FATFS			0
@@ -533,12 +592,69 @@ in lwip_opt.h for support uart adapter*/
 //#define CONFIG_EXAMPLE_COMPETITIVE_HEADPHONES_DONGLE	1
 #endif
 
+#if defined(CONFIG_USBD_HID)
+#define CONFIG_EXAMPLE_USBD_HID         1
+#endif
+
 #if defined(CONFIG_USBD_MSC)
 #define CONFIG_EXAMPLE_USBD_MSC         1
 #endif
 
 #if defined(CONFIG_USBD_CDC_ACM)
+#if defined(CONFIG_USBD_CDC_ACM_TP)
+#define CONFIG_EXAMPLE_USBD_CDC_ACM_TP     1
+#elif defined(CONFIG_USBD_CDC_ACM_RP)
+#define CONFIG_EXAMPLE_USBD_CDC_ACM_RP     1
+#else
 #define CONFIG_EXAMPLE_USBD_CDC_ACM     1
+#endif
+#endif
+
+#if defined(CONFIG_USBD_VENDOR)
+#define CONFIG_EXAMPLE_USBD_VENDOR      1
+#endif
+
+#if defined(CONFIG_USBH_MSC)
+#define CONFIG_EXAMPLE_USBH_MSC         1
+#if CONFIG_EXAMPLE_USBH_MSC
+#define CONFIG_FATFS_EN	                1
+#if CONFIG_FATFS_EN
+// fatfs version
+#define FATFS_R_10C
+// fatfs disk interface
+#define FATFS_DISK_USB	                1
+#define FATFS_DISK_SD 	                0
+#define FATFS_DISK_FLASH 	            0
+#endif
+#endif
+#endif
+
+#if defined(CONFIG_USBH_UVC)
+#define CONFIG_VIDEO_APPLICATION        1
+#define CONFIG_EXAMPLE_USBH_UVC         1
+#if CONFIG_EXAMPLE_USBH_UVC
+#define CONFIG_FATFS_EN                 0
+#if CONFIG_FATFS_EN
+// fatfs version
+#define FATFS_R_10C
+// fatfs disk interface
+#define FATFS_DISK_USB                  0
+#define FATFS_DISK_SD                   1
+#define FATFS_DISK_FLASH 	            0
+#endif
+#endif
+#endif
+
+#if defined(CONFIG_USBH_VENDOR)
+#define CONFIG_EXAMPLE_USBH_VENDOR      1
+#endif
+
+#if defined(CONFIG_USBH_CDC_ACM)
+#if defined(CONFIG_USBH_CDC_ACM_VERIFY)
+#define CONFIG_EXAMPLE_USBH_CDC_ACM_VERIFY 1
+#else
+#define CONFIG_EXAMPLE_USBH_CDC_ACM      1
+#endif
 #endif
 
 //#define CONFIG_EXAMPLE_COMPETITIVE_HEADPHONES		1
@@ -548,6 +664,16 @@ in lwip_opt.h for support uart adapter*/
 #define CONFIG_FAST_DHCP 1
 #else
 #define CONFIG_FAST_DHCP 0
+#endif
+
+/* For wlan repeater example */
+#define CONFIG_EXAMPLE_WLAN_REPEATER    0
+#if CONFIG_EXAMPLE_WLAN_REPEATER
+#define CONFIG_BRIDGE                   1
+#undef CONFIG_EXAMPLE_WLAN_FAST_CONNECT
+#define CONFIG_EXAMPLE_WLAN_FAST_CONNECT 1
+#else
+#define CONFIG_BRIDGE                   0
 #endif
 
 #endif

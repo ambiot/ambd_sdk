@@ -31,7 +31,8 @@ Result description
                 variable0: value0
                 variable1: value1
                 Delete variable0 success.
-                Remaining amount: 61
+                Remaining amount: 40 (for AmebaD)
+	Remaining amount: 61 (for others)
         if DCT is correctly used.
 
 Supported List

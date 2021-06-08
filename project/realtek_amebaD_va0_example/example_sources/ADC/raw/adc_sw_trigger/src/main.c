@@ -32,7 +32,8 @@ main (
 
 	u16 value, data, ch_idx;
 	int vol;
-	
+
+
 	for (index = 0; index< 2; index++) {
 		EFUSERead8(0, addressOffset+index, EfuseBuf + index, L25EOUTVOLTAGE);
 	}

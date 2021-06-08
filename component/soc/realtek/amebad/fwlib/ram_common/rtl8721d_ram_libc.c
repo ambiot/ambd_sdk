@@ -232,7 +232,7 @@ int _rtl_sprintf(char* str, const char* fmt, ...)
 		}
 	}
 
-	if (ConfigDebugClose == 1)
+	if ((ConfigDebugClose == 1) && (str == NULL))
 		return 0;
 	
 	return DiagVSprintf((char*)str, fmt, ((const int *)&fmt)+1);

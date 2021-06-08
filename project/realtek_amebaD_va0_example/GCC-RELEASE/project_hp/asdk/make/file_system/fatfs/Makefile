@@ -7,7 +7,7 @@ include $(MAKE_INCLUDE_GEN)
 #                               VARIABLES	                              #
 #*****************************************************************************#
 DIR = $(BASEDIR)/component/common/file_system/fatfs
-MODULE_IFLAGS += -I$(BASEDIR)/component/common/drivers/usb_class/host/storage/inc
+MODULE_IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/host/msc/inc
 MODULE_IFLAGS += -I$(BASEDIR)/component/common/drivers/sdio/realtek/sdio_host/inc
 #*****************************************************************************#
 #                               Source FILE LIST                              #

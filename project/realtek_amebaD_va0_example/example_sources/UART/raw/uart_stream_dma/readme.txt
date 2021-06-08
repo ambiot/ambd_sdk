@@ -17,3 +17,4 @@ set baud rate to 38400, 1 stopbit, no parity, no flow contorl.
 This example shows:
 1. The UART Rev DMA mode is used to receive characters from the PC, and then loopback them to the PC.
 
+Note that buffer length should be integral multiple of 32 bytes, and buffer address should be 32 bytes aligned when using DMA. 

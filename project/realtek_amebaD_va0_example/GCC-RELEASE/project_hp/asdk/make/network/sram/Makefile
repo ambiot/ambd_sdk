@@ -1,6 +1,6 @@
 
 include $(MAKE_INCLUDE_GEN)
-
+IFLAGS               += -I$(BASEDIR)/component/common/network/libcoap/include
 
 .PHONY: all clean
 
@@ -26,6 +26,9 @@ OBJS += \
 		$(LWIPDIR)/src/api/netbuf.o \
 		$(LWIPDIR)/port/realtek/freertos/sys_arch.o \
 		$(LWIPDIR)/port/realtek/freertos/ethernetif.o \
+		$(LWIPDIR)/port/realtek/freertos/br_rpt_handle.o \
+		$(LWIPDIR)/port/realtek/freertos/bridgeif.o \
+		$(LWIPDIR)/port/realtek/freertos/bridgeif_fdb.o \
 		$(WLANDRV)/src/osdep/lwip_intf.o \
 
 OBJS +=		\

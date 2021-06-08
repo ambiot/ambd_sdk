@@ -360,6 +360,14 @@ int wifi_get_sta_max_data_rate(__u8 * inidata_rate);
 int wifi_get_rssi(int *pRSSI);
 
 /**
+ * @brief  Retrieve the latest average beacon RSSI value.
+ * @param[out]  pRSSI: Points to the integer to store the RSSI value gotten from driver.
+ * @return  RTW_SUCCESS: If the RSSI is succesfully retrieved.
+ * @return  RTW_ERROR: If the RSSI is not retrieved.
+ */
+int wifi_get_bcn_rssi(int *pRSSI);
+
+/**
  * @brief  Set the listening channel for promiscuous mode.
  * @param[in]  channel: The desired channel.
  * @return  RTW_SUCCESS: If the channel is successfully set.
@@ -557,6 +565,16 @@ int wifi_set_lps_thresh(rtw_lps_thresh_t mode);
  */
 int wifi_set_lps_level(unsigned char lps_level);
 
+#ifdef LONG_PERIOD_TICKLESS
+/**
+ * @brief Set Smart PS
+ * @param[in] smartps: 0 is issue NULL data, 2 is issue PS-Poll
+ *
+ * @return  RTW_SUCCESS if setting Smart PS successful.
+ * @return  RTW_ERROR otherwise
+ */
+int wifi_set_lps_smartps(unsigned char smartps);
+#endif
 /**
  * @brief  Set Management Frame Protection Support.
  * @param[in] value: 
@@ -672,6 +690,20 @@ int wifi_scan(rtw_scan_type_t                    scan_type,
 int wifi_scan_networks(rtw_scan_result_handler_t results_handler, void* user_data);
 
 /**
+ * @brief  Initiate a scan to search for 802.11 networks, a higher level API based on wifi_scan
+ *			to simplify the scan operation. This API separate full scan channel to partial scan
+ *			each channel for concurrent mode. MCC means Multi-channel concurrent.
+ * @param[in]  results_handler: The callback function which will receive and process the result data.
+ * @param[in]  user_data: User specified data that will be passed directly to the callback function.
+ * @return  RTW_SUCCESS or RTW_ERROR
+ * @note  Callback must not use blocking functions, since it is called from the context of the RTW thread.
+ *			The callback, user_data variables will be referenced after the function returns.
+ *			Those variables must remain valid until the scan is completed.
+ *			The usage of this api can reference ATWS in atcmd_wifi.c.
+ */
+int wifi_scan_networks_mcc(rtw_scan_result_handler_t results_handler, void* user_data);
+
+/**
  * @brief  Initiate a scan to search for 802.11 networks with specified SSID.
  * @param[in]  results_handler: The callback function which will receive and process the result data.
  * @param[in]  user_data: User specified data that will be passed directly to the callback function.
@@ -684,6 +716,20 @@ int wifi_scan_networks(rtw_scan_result_handler_t results_handler, void* user_dat
  *			Those variables must remain valid until the scan is completed.
  */
 int wifi_scan_networks_with_ssid(int (results_handler)(char*, int, char *, void *), void* user_data, int scan_buflen, char* ssid, int ssid_len);
+
+/**
+ * @brief  Initiate a scan to search for 802.11 networks with specified SSID.
+ * @param[in]  results_handler: The callback function which will receive and process the result data.
+ * @param[in]  user_data: User specified data that will be passed directly to the callback function.
+ * @param[in]  scan_buflen: The length of the result storage structure.
+ * @param[in]  ssid: The SSID of target network.
+ * @param[in]  ssid_len: The length of the target network SSID.
+ * @return  RTW_SUCCESS or RTW_ERROR
+ * @note  Callback must not use blocking functions, since it is called from the context of the RTW thread. 
+ *			The callback, user_data variables will be referenced after the function returns. 
+ *			Those variables must remain valid until the scan is completed.
+ */
+int wifi_scan_networks_with_ssid_by_extended_security(int (results_handler)(char*, int, char *, void *), void* user_data, int scan_buflen, char* ssid, int ssid_len);
 
 /**
 * @brief  Set the channel used to be partial scanned.
@@ -1097,6 +1143,19 @@ extern u32 rtw_get_tsf(u32 Port);
 WL_BAND_TYPE wifi_get_band_type(void);
 
 
+#ifdef LOW_POWER_WIFI_CONNECT
+int wifi_set_psk_eap_interval(uint16_t psk_interval, uint16_t eap_interval);
+int wifi_set_null1_param(uint8_t check_period, uint8_t pkt_num, uint8_t limit, uint8_t interval);
+#endif
+
+/**
+ * @brief  Switch channel of softap and inform connected stations to keep wifi connection.
+ * @param[in]  new_channel: The channel number that softap will switch to.
+ * @return  RTW_SUCCESS: If switching channel is successful.
+ * @return  RTW_ERROR: If switching channel is failed.
+ */
+int wifi_ap_switch_chl_and_inform(unsigned char new_channel);
+
 #ifdef __cplusplus
   }
 #endif
@@ -1105,5 +1164,3 @@ WL_BAND_TYPE wifi_get_band_type(void);
 
 #endif // __WIFI_API_H
 
-//----------------------------------------------------------------------------//
-int wifi_set_tx_pause_data(unsigned int NewState);

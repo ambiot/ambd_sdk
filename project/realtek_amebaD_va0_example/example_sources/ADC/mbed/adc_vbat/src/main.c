@@ -57,7 +57,8 @@ VOID main (VOID)
 	u32 index;
 	u32 addressOffset = 0x1D4;
 	u32 addressGain = 0x1D6;
-	
+
+
 	for (index = 0; index< 2; index++) {
 		EFUSE_PMAP_READ8(0, addressOffset+index, EfuseBuf + index, L25EOUTVOLTAGE);
 	}

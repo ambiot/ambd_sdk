@@ -177,9 +177,11 @@ raw_input(struct pbuf *p, struct netif *inp)
             raw_pcbs = pcb;
           }
         } else {
+#ifndef LWIP_NOASSERT
           /* sanity-check that the receive callback did not alter the pbuf */
           LWIP_ASSERT("raw pcb recv callback altered pbuf payload pointer without eating packet",
             p->payload == old_payload);
+#endif
         }
       }
       /* no receive callback function was set for this raw PCB */

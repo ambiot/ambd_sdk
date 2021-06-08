@@ -1,7 +1,7 @@
 
 include $(MAKE_INCLUDE_GEN)
 
-.PHONY: lib lib_mp clean
+.PHONY: lib lib_mp lib_lp clean
 
 #*****************************************************************************#
 #                               VARIABLES	                              #
@@ -10,6 +10,7 @@ MODULE_IFLAGS = -I$(DIR)/hal/rtl8721d/little_driver/include/
 
 DIR = $(BASEDIR)/component/common/drivers/wlan/realtek/src
 lib_mp:GLOBAL_CFLAGS += -DCONFIG_MP_INCLUDED
+lib_lp:GLOBAL_CFLAGS += -DLOW_POWER_WIFI_CONNECT
 # OBJS_CONFIG: code run flash or sram based on config
 # OBJS: Flash code
 # OBJS_SRAM: SRAM code
@@ -90,6 +91,9 @@ lib: CORE_TARGETS COPY_RAM_OBJS
 lib_mp: CORE_TARGETS COPY_RAM_OBJS
 	$(AR) rvs lib_wlan_mp.a $(OBJS) $(OBJS_SRAM)
 	$(MOVE) -f lib_wlan_mp.a $(ROOTDIR)/lib/application
+lib_lp: CORE_TARGETS COPY_RAM_OBJS
+	$(AR) rvs lib_wlan_lp.a $(OBJS) $(OBJS_SRAM)
+	$(MOVE) -f lib_wlan_lp.a $(ROOTDIR)/lib/application
 #*****************************************************************************#
 #              GENERATE OBJECT FILE 
 #*****************************************************************************#

@@ -13,4 +13,4 @@ An XML example thread will be started automatically when booting.
 
 [Supported List]
 	Supported :
-	    Ameba-1, Ameba-z, Ameba-pro, Ameba-z2
+	    Ameba-1, Ameba-z, Ameba-pro, Ameba-z2, Ameba-D

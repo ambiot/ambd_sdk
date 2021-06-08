@@ -40,6 +40,9 @@
 #define CMB_CPU_ARM_CORTEX_M3          1
 #define CMB_CPU_ARM_CORTEX_M4          2
 #define CMB_CPU_ARM_CORTEX_M7          3
+#define CMB_CPU_REALTEK_KM0               4
+#define CMB_CPU_REALTEK_KM4               5
+#define CMB_CPU_REALTEK_TM9               6
 
 #define CMB_OS_PLATFORM_RTT            0
 #define CMB_OS_PLATFORM_UCOSII         1
@@ -47,7 +50,7 @@
 #define CMB_OS_PLATFORM_FREERTOS       3
 
 #define CMB_PRINT_LANGUAGE_ENGLISH     0
-#define CMB_PRINT_LANUUAGE_CHINESE     1
+#define CMB_PRINT_LANGUAGE_CHINESE     1
 
 /* name max length, default size: 32 */
 #ifndef CMB_NAME_MAX
@@ -148,6 +151,19 @@
 /* auxiliary fault status register */
 #ifndef CMB_NVIC_AFSR
 #define CMB_NVIC_AFSR                  (*(volatile unsigned short*)(0xE000ED3Cu))
+#endif
+
+/* secure fault status register */
+#ifndef CMB_NVIC_SFSR
+#define CMB_NVIC_SFSR                  (*(volatile unsigned int*)  (0xE000EDE4u))
+#endif
+/* secure fault address register */
+#ifndef CMB_NVIC_SFAR
+#define CMB_NVIC_SFAR                  (*(volatile unsigned int*)  (0xE000EDE8u))
+#endif
+/* floating-point context control register */
+#ifndef CMB_FPCCR_S
+#define CMB_FPCCR_S                    (*(volatile unsigned int*)  (0xE000EF34u))
 #endif
 
 /**
@@ -261,6 +277,22 @@ struct cmb_hard_fault_regs{
   } dfsr;                                // Debug Fault Status Register (0xE000ED30)
 
   unsigned int afsr;                     // Auxiliary Fault Status Register (0xE000ED3C), Vendor controlled (optional)
+  
+  #if (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_KM4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_TM9)
+  union {
+    unsigned int value;
+    struct {
+	unsigned int LSERR    : 1;         // Indicating an error occurred during lazy state
+	unsigned int SFARVALID: 1;         // Secure fault address is valid
+	unsigned int LSPERR   : 1;         // Indicating an SAU or IDAU violation occurred during the lazy preservation of floating-point state
+	unsigned int INVTRAN  : 1;         // Invalid transition flag
+	unsigned int AUVIOL   : 1;         // Attribution unit violation flag
+	unsigned int INVER    : 1;         // Invalid exception return flag
+	unsigned int INVIS    : 1;         // Invalid integrity signature flag
+	unsigned int INVEP    : 1;         // Invalid entry point
+	} bits;
+  } sfsr;                                // Secure Fault Status Register (0xE000EDE4)
+#endif
 };
 
 /* assert for developer. */
@@ -277,7 +309,7 @@ if (!(EXPR))                                                                   \
 #elif defined(__ICCARM__)
     #define CMB_ELF_FILE_EXTENSION_NAME          ".axf"
 #elif defined(__GNUC__)
-    #define CMB_ELF_FILE_EXTENSION_NAME          ".elf"
+    #define CMB_ELF_FILE_EXTENSION_NAME          ".axf"
 #else
     #error "not supported compiler"
 #endif
@@ -369,6 +401,25 @@ if (!(EXPR))                                                                   \
         __asm volatile ("MOV %0, sp\n" : "=r" (result) );
         return(result);
     }
+
+#if (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_KM0) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_KM4) || (CMB_CPU_PLATFORM_TYPE == CMB_CPU_REALTEK_TM9)
+    __attribute__( ( always_inline ) ) static inline uint32_t cmb_get_msp_ns(void) {
+        register uint32_t result;
+       __asm volatile ("MRS %0, msp_ns\n" : "=r" (result) );
+      return(result);
+    }
+    __attribute__( ( always_inline ) ) static inline uint32_t cmb_get_psp_ns(void) {
+        register uint32_t result;
+       __asm volatile ("MRS %0, psp_ns\n" : "=r" (result) );
+       return(result);
+    }
+    __attribute__( ( always_inline ) ) static inline uint32_t cmb_get_sp_ns(void) {
+        register uint32_t result;
+        __asm volatile ("MOV %0, sp_ns\n" : "=r" (result) );
+        return(result);
+    }
+#endif
+
 #else
     #error "not supported compiler"
 #endif

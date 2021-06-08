@@ -18,6 +18,9 @@ CSRC =	\
 	$(DIR)/rtl8721dhp_sha.c \
 	$(DIR)/rtl8721dhp_md5.c \
 	$(DIR)/rtl8721dhp_chacha_poly1305.c \
+	$(DIR)/rtl8721dhp_aes_ram.c \
+	$(DIR)/rtl8721dhp_des_ram.c \
+	$(DIR)/rtl8721dhp_crypto_ram.c \
 
 #*****************************************************************************#
 #                               Object FILE LIST                              #

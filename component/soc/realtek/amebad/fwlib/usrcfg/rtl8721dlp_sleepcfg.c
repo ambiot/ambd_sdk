@@ -21,6 +21,7 @@
 #include "ameba_soc.h"
 
 #ifdef CONFIG_SOC_PS_MODULE
+
 /* if X can wakeup dsleep, it can wakeup dstandby & sleep */
 /* if X can wakeup dstandby, it can wakeup sleep */
 PWRCFG_TypeDef sleep_wevent_config[]=
@@ -143,5 +144,6 @@ PSCFG_TypeDef ps_config = {
 	.km0_rtc_calibration = FALSE,
 	.km0_audio_pad_enable = TRUE,
 };
+
 #endif
 /******************* (C) COPYRIGHT 2016 Realtek Semiconductor *****END OF FILE****/

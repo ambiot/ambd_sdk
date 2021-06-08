@@ -22,6 +22,8 @@ Description
 Setup Guide
 ~~~~~~~~~~~
         In platform_opts.h, please set #define CONFIG_EXAMPLE_HTTPC 1
+		For HTTPS, please set #define USE_HTTPS    1 in example_httpc.c
+		For HTTPS, MBEDTLS_SSL_MAX_CONTENT_LEN in config_rsa.h may need to be increased.
 
 Parameter Setting and Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -38,7 +40,7 @@ Supported List
 ~~~~~~~~~~~~~~
 [Supported List]
         Supported IC :
-                Ameba-pro, Ameba-z2
+                Ameba-pro, Ameba-z2, AmebaD
  
 Trouble Shooting
 ~~~~~~~~~~~~~~

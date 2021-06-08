@@ -441,7 +441,7 @@ void uart_irq(uint32_t id, SerialIrq event)
 					data_cmd_sz = 0;
 					buf_count=0;
 					last_tickcnt = 0;
-					rtw_up_sema_from_isr(&log_rx_interrupt_sema);
+					rtw_up_sema_from_isr((_sema *)(&log_rx_interrupt_sema));
 				}
 				return;			
 			}
@@ -467,7 +467,7 @@ void uart_irq(uint32_t id, SerialIrq event)
 			if(buf_count>0){
 				rtw_memset(log_buf,'\0',LOG_SERVICE_BUFLEN);
 				strncpy(log_buf,(char *)&temp_buf[0],buf_count);
-				rtw_up_sema_from_isr(&log_rx_interrupt_sema);
+				rtw_up_sema_from_isr((_sema *)(&log_rx_interrupt_sema));
 				rtw_memset(temp_buf,'\0',buf_count);
 				is_data_cmd = _FALSE;
 				data_sz = 0;

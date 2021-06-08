@@ -31,8 +31,10 @@ static SP_GDMA_STRUCT SPGdmaStruct;
 static SP_OBJ sp_obj;
 static SP_TX_INFO sp_tx_info;
 
-static u8 sp_tx_buf[SP_DMA_PAGE_SIZE*SP_DMA_PAGE_NUM];
-static u8 sp_zero_buf[SP_ZERO_BUF_SIZE];
+//The size of this buffer should be multiples of 32 and its head address should align to 32 
+//to prevent problems that may occur when CPU and DMA access this area simultaneously. 
+static u8 sp_tx_buf[SP_DMA_PAGE_SIZE*SP_DMA_PAGE_NUM]__attribute__((aligned(32)));
+static u8 sp_zero_buf[SP_ZERO_BUF_SIZE]__attribute__((aligned(32)));
 
 u8 *sp_get_free_tx_page(void)
 {
@@ -41,7 +43,7 @@ u8 *sp_get_free_tx_page(void)
 	if (ptx_block->tx_gdma_own)
 		return NULL;
 	else{
-		return ptx_block->tx_addr;
+		return (u8*)ptx_block->tx_addr;
 	}
 }
 
@@ -49,7 +51,7 @@ void sp_write_tx_page(u8 *src, u32 length)
 {
 	pTX_BLOCK ptx_block = &(sp_tx_info.tx_block[sp_tx_info.tx_usr_cnt]);
 	
-	memcpy(ptx_block->tx_addr, src, length);
+	memcpy((void*)ptx_block->tx_addr, src, length);
 	ptx_block->tx_gdma_own = 1;
 	sp_tx_info.tx_usr_cnt++;
 	if (sp_tx_info.tx_usr_cnt == SP_DMA_PAGE_NUM){
@@ -78,11 +80,11 @@ u8 *sp_get_ready_tx_page(void)
 	
 	if (ptx_block->tx_gdma_own){
 		sp_tx_info.tx_empty_flag = 0;
-		return ptx_block->tx_addr;
+		return (u8*)ptx_block->tx_addr;
 	}
 	else{
 		sp_tx_info.tx_empty_flag = 1;
-		return sp_tx_info.tx_zero_block.tx_addr;	//for audio buffer empty case
+		return (u8*)sp_tx_info.tx_zero_block.tx_addr;	//for audio buffer empty case
 	}
 }
 
@@ -113,10 +115,11 @@ void sp_tx_complete(void *Data)
 	sp_release_tx_page();
 	tx_addr = (u32)sp_get_ready_tx_page();
 	tx_length = sp_get_ready_tx_length();
-	GDMA_SetSrcAddr(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum, tx_addr);
-	GDMA_SetBlkSize(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum, tx_length>>2);
+	//GDMA_SetSrcAddr(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum, tx_addr);
+	//GDMA_SetBlkSize(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum, tx_length>>2);
 
-	GDMA_Cmd(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum, ENABLE);
+	//GDMA_Cmd(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum, ENABLE);
+	AUDIO_SP_TXGDMA_Restart(GDMA_InitStruct->GDMA_Index, GDMA_InitStruct->GDMA_ChNum, tx_addr, tx_length);
 }
 
 void sp_rx_complete(void *data, char* pbuf)
@@ -182,7 +185,7 @@ static void sp_init_tx_variables(void)
 	
 	for(i=0; i<SP_DMA_PAGE_NUM; i++){
 		sp_tx_info.tx_block[i].tx_gdma_own = 0;
-		sp_tx_info.tx_block[i].tx_addr = sp_tx_buf+i*SP_DMA_PAGE_SIZE;
+		sp_tx_info.tx_block[i].tx_addr = (u32)sp_tx_buf+i*SP_DMA_PAGE_SIZE;
 		sp_tx_info.tx_block[i].tx_length = SP_DMA_PAGE_SIZE;
 	}
 }
@@ -218,7 +221,7 @@ void example_audio_spk_thread(void* param)
 	
 	tx_addr = (u32)sp_get_ready_tx_page();
 	tx_length = sp_get_ready_tx_length();
-	AUDIO_SP_TXGDMA_Init(0, &SPGdmaStruct.SpTxGdmaInitStruct, &SPGdmaStruct, (IRQ_FUN)sp_tx_complete, tx_addr, tx_length);
+	AUDIO_SP_TXGDMA_Init(0, &SPGdmaStruct.SpTxGdmaInitStruct, &SPGdmaStruct, (IRQ_FUN)sp_tx_complete, (u8*)tx_addr, tx_length);
 
 	while(1){
 		if(sp_get_free_tx_page()){
@@ -250,7 +253,7 @@ void main(void)
 	sp_obj.direction = APP_LINE_OUT;
 	if(xTaskCreate(example_audio_spk_thread, ((const char*)"example_audio_spk_thread"), 512, (void *)(&sp_obj), tskIDLE_PRIORITY + 1, NULL) != pdPASS)
 		printf("\n\r%s xTaskCreate(example_audio_spk_thread) failed", __FUNCTION__);
-
+     
 	vTaskStartScheduler();
 	while(1){
 		vTaskDelay( 1000 / portTICK_RATE_MS );
