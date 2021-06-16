@@ -1,0 +1,164 @@
+/*###ICF### Section handled by ICF editor, don't touch! ****/
+/*-Editor annotation file-*/
+/* IcfEditorFile="$TOOLKIT_DIR$\config\ide\IcfEditor\cortex_v1_0.xml" */
+/*-Specials-*/
+
+include "rtl8721dhp_rom_symbol_ns.icf";
+include "rtl8721d_memory_layout_is.icf";
+
+/*-Sizes-*/
+/*define symbol __ICFEDIT_size_cstack__   = 0x400;*/
+/*define symbol __ICFEDIT_size_heap__     = 0x800;*/
+/**** End of ICF editor section. ###ICF###*/
+
+define memory mem with size = 4G;
+define region IROM_region   		= mem:[from __ICFEDIT_region_HS_IROM_start__   to __ICFEDIT_region_HS_IROM_end__];
+define region IROM_NS_region   		= mem:[from __ICFEDIT_region_HS_IROM_NS_start__   to __ICFEDIT_region_HS_IROM_NS_end__];
+define region DROM_NS_region   		= mem:[from __ICFEDIT_region_HS_DROM_NS_start__   to __ICFEDIT_region_HS_DROM_NS_end__];
+define region DROM_region  		= mem:[from __ICFEDIT_region_HS_DROM_start__   to __ICFEDIT_region_HS_DROM_end__];
+define region ROMBSS_RAM_COM_region   	= mem:[from __ICFEDIT_region_HS_ROMBSS_RAM_COM_start__   to __ICFEDIT_region_HS_ROMBSS_RAM_COM_end__];
+define region ROMBSS_RAM_NS_region   	= mem:[from __ICFEDIT_region_HS_ROMBSS_RAM_NS_start__   to __ICFEDIT_region_HS_ROMBSS_RAM_NS_end__];
+define region RSVD_RAM_NS_region   	= mem:[from __ICFEDIT_region_HS_RSVD_RAM_NS_start__   to __ICFEDIT_region_HS_RSVD_RAM_NS_end__];
+define region MSP_RAM_NS_region   	= mem:[from __ICFEDIT_region_HS_MSP_RAM_NS_start__   to __ICFEDIT_region_HS_MSP_RAM_NS_end__];
+define region BD_RAM_NS_region   	= mem:[from __ICFEDIT_region_HS_BD_RAM_NS_start__   to __ICFEDIT_region_HS_BD_RAM_NS_end__];
+define region ROMBSS_RAM_S_region   	= mem:[from __ICFEDIT_region_HS_ROMBSS_RAM_S_start__   to __ICFEDIT_region_HS_ROMBSS_RAM_S_end__];
+define region BOOTLOADER_RAM_S_region   = mem:[from __ICFEDIT_region_HS_BOOTLOADER_RAM_S_start__   to __ICFEDIT_region_HS_BOOTLOADER_RAM_S_end__];
+define region MSP_RAM_S_region   	= mem:[from __ICFEDIT_region_HS_MSP_RAM_S_start__   to __ICFEDIT_region_HS_MSP_RAM_S_end__];
+define region EXTENTION_SRAM_region   	= mem:[from __ICFEDIT_region_HS_EXTENTION_SRAM_start__   to __ICFEDIT_region_HS_EXTENTION_SRAM_end__];
+define region PSRAM_NS_region   	= mem:[from __ICFEDIT_region_HS_PSRAM_NS_start__   to __ICFEDIT_region_HS_PSRAM_NS_end__];
+define region KM4_BOOT_region   	= mem:[from __ICFEDIT_region_HS_FLASH_BOOT_start__   to __ICFEDIT_region_HS_FLASH_BOOT_end__];
+define region KM4_IMG2_region   	= mem:[from __ICFEDIT_region_HS_FLASH_IMG2_start__   to __ICFEDIT_region_HS_FLASH_IMG2_end__];
+define region BTRACE_region   		= mem:[from __ICFEDIT_region_HS_BTRACE_start__   to __ICFEDIT_region_HS_BTRACE_end__];
+define region RETENTION_RAM_region   	= mem:[from __ICFEDIT_region_RETENTION_RAM_start__   to __ICFEDIT_region_RETENTION_RAM_end__];
+
+define exported symbol __sram_end__ = end(BD_RAM_NS_region);
+
+/*define block CSTACK    with alignment = 8, size = __ICFEDIT_size_cstack__   { };*/
+/*define block HEAP      with alignment = 8, size = __ICFEDIT_size_heap__     { };*/
+
+//initialize by copy { readwrite };
+//initialize by copy with packing = none { section __DLIB_PERTHREAD }; // Required in a multi-threaded application
+
+//do not initialize  { section * };
+do not initialize { readwrite };
+
+/****************************************
+ * ROM Section config                   *
+ ****************************************/
+keep { section .rom.text };
+place at start of IROM_NS_region   { readonly, section .rom.text };
+
+keep { section .rom.rodata };
+place at start of DROM_NS_region   { readonly, section .rom.rodata };
+
+/****************************************
+ * ROM BSS Section config                *
+ ****************************************/
+keep { section .hal.rom.bss };
+place at start of ROMBSS_RAM_COM_region  { readwrite, section .hal.rom.bss };
+
+keep { section .hal.ns_rom.bss };
+place at start of ROMBSS_RAM_NS_region  { readwrite, section .hal.ns_rom.bss };
+
+/****************************************
+ * BD RAM Section config                *
+ ****************************************/
+keep { section .image2.entry.data* };
+keep { section .image2.validate.rodata* };
+define block .ram_image2.entry with fixed order{section .image2.entry.data*,
+						section .image2.validate.rodata*,
+						};
+
+define block .ram_image2.text with fixed order{section .image2.ram.text*,
+						section .image2.net.ram.text*,
+						section privileged_functions
+						};
+
+define block SHT$$PREINIT_ARRAY { preinit_array };
+define block SHT$$INIT_ARRAY { init_array };
+define block CPP_INIT with fixed order { block SHT$$PREINIT_ARRAY,
+					block SHT$$INIT_ARRAY };
+define block .ram_image2.data with fixed order{ section .data*,
+						section DATA, 
+						section .iar.init_table,
+						section __DLIB_PERTHREAD,
+                                                block CPP_INIT,
+						};
+
+define block IMAGE2 with fixed order { block .ram_image2.entry,
+                                       block .ram_image2.text,
+                                       block .ram_image2.data,
+};
+
+define block .ram_image2.bss with fixed order{section .bss*,
+					      section COMMON,
+					     };
+
+
+define block .ram_image2.nocache.data with alignment = 32 {section .bdsram.data*};
+
+define block .ram_image2.bfsram.data with alignment = 32 {section .bfsram.data*};
+
+define block .ram_heap.data with fixed order { block .ram_image2.bfsram.data,
+                                               section .heap.stdlib*,
+                                             };
+define block RAMBSSHEAP with fixed order{zeroinit,
+                                    block .ram_image2.bss,
+                                    block .ram_image2.nocache.data,
+				    block .ram_heap.data,
+	                            section .heap*
+
+									};
+place at start of BD_RAM_NS_region   { readwrite, 
+                                    block IMAGE2,
+                                  };
+
+place in BD_RAM_NS_region{zeroinit,
+									block RAMBSSHEAP,
+									};
+
+
+/****************************************
+ * XIP Image2 Section config                *
+ ****************************************/
+keep { section .cmd.table.data* };
+define block .xip_image2.text with fixed order{ section .img2_custom_signature*,
+                                                section .text*,
+                                                /*	section .image2.net.ram.text*,	*/
+                                                section .rodata*,
+                                                section .cmd.table.data*,
+                                                section .debug_trace,
+						section CODE,
+						section Veneer,
+                                              };
+
+place at start of KM4_IMG2_region   {  readonly,
+					 block .xip_image2.text };
+
+/****************************************
+ * BT Trace Section config                *
+ ****************************************/
+keep { section .BTTRACE };
+"BTTRACE":
+place at start of BTRACE_region   {  readwrite,
+					 section .BTTRACE };
+
+/****************************************
+ * PSRAM Section config                *
+ ****************************************/
+define block .psram_image2.data with alignment = 32 {section .psram.data};
+define block IMG2_PSRAM with fixed order { 	section .psram.text,
+						block .psram_image2.data,
+					 	section .psram.rodata };
+keep { block IMG2_PSRAM };
+
+define block .psram_ns.bss with alignment = 32 {section .psram.bss};
+define block .psram_heap.data with alignment = 32 {section .psram.heap};
+
+place at start of PSRAM_NS_region   {  readwrite,
+					block IMG2_PSRAM,
+					block .psram_ns.bss,
+					block .psram_heap.data };
+
+define exported symbol __flash_text_start__ = __ICFEDIT_region_HS_FLASH_IMG2_start__;
+define exported symbol __psram_image2_text_start__ = __ICFEDIT_region_HS_PSRAM_NS_start__; 

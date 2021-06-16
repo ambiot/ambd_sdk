@@ -1,0 +1,116 @@
+/*###ICF### Section handled by ICF editor, don't touch! ****/
+/*-Editor annotation file-*/
+/* IcfEditorFile="$TOOLKIT_DIR$\config\ide\IcfEditor\cortex_v1_0.xml" */
+/*-Specials-*/
+
+include "rtl8721dlp_rom_symbol.icf";
+include "rtl8721d_memory_layout_is.icf";
+
+
+/*-Sizes-*/
+/*define symbol __ICFEDIT_size_cstack__   = 0x400;*/
+/*define symbol __ICFEDIT_size_heap__     = 0x800;*/
+/**** End of ICF editor section. ###ICF###*/
+
+define memory mem with size = 4G;
+define region IROM_region   = mem:[from __ICFEDIT_region_LS_IROM_start__   to __ICFEDIT_region_LS_IROM_end__];
+define region DROM_region   = mem:[from __ICFEDIT_region_LS_DROM_start__   to __ICFEDIT_region_LS_DROM_end__];
+define region ROM_BSS_region   = mem:[from __ICFEDIT_region_LS_ROMBSS_RAM_start__   to __ICFEDIT_region_LS_ROMBSS_RAM_end__];
+define region BOOT_RAM_region   = mem:[from __ICFEDIT_region_LS_BOOTLOADER_RAM_start__   to __ICFEDIT_region_LS_BOOTLOADER_RAM_end__];
+define region BD_RAM_region   = mem:[from __ICFEDIT_region_LS_BD_RAM_start__   to __ICFEDIT_region_LS_BD_RAM_end__];
+define region KM0_BOOT_region   = mem:[from __ICFEDIT_region_LS_FLASH_BOOT_start__   to __ICFEDIT_region_LS_FLASH_BOOT_end__];
+define region KM0_IMG2_region   = mem:[from __ICFEDIT_region_LS_FLASH_IMG2_start__   to __ICFEDIT_region_LS_FLASH_IMG2_end__];
+
+/*define block CSTACK    with alignment = 8, size = __ICFEDIT_size_cstack__   { };*/
+/*define block HEAP      with alignment = 8, size = __ICFEDIT_size_heap__     { };*/
+
+//initialize by copy { readwrite };
+//initialize by copy with packing = none { section __DLIB_PERTHREAD }; // Required in a multi-threaded application
+
+//do not initialize  { section * };
+do not initialize { readwrite };
+
+/****************************************
+ * ROM Section config                   *
+ ****************************************/
+keep { section .rom.text };
+place at start of IROM_region   { readonly, section .rom.text };
+
+keep { section .rom.rodata };
+place at start of DROM_region   { readonly, section .rom.rodata };
+
+/****************************************
+ * ROM BSS Section config                *
+ ****************************************/
+keep { section .hal.rom.bss };
+place at start of ROM_BSS_region  { readwrite, section .hal.rom.bss };
+
+/****************************************
+ * BOOT RAM Section config                *
+ ****************************************/
+keep { section .image1.entry.data* };
+keep { section .image1.validate.rodata* };
+keep { section .image1.rodata* };
+define block .ram_image1.entry with fixed order{section .image1.entry.data*,
+						section .image1.validate.rodata*,
+						section .image1.rodata*,
+						};
+
+keep { section .boot.ram.text* };
+keep { section .boot.rodata* };
+define block .ram_image1.text with fixed order{section .boot.ram.text*,
+						section .boot.rodata*,
+						section .text*,
+						section .rodata*,
+                                                section CODE,                                                
+						};
+
+keep { section .boot.ram.data* };
+define block .ram_image1.data with fixed order{section .boot.ram.data*,
+						section .data*,
+						section DATA, 
+						section .iar.init_table,
+						section __DLIB_PERTHREAD,
+						};
+
+keep { section .boot.ram.bss* };
+keep { section .boot.ram.end.bss* };
+define block .ram_image1.bss with fixed order{section .boot.ram.bss*,
+                                              section .boot.ram.end.bss*,
+                                              section .bss*,
+					      section COMMON,
+					      };
+
+
+define block IMAGE1 with fixed order { block .ram_image1.entry, block .ram_image1.text, block .ram_image1.data};
+place at start of BOOT_RAM_region   { readwrite, 
+                                    block IMAGE1,
+                                  };
+
+place in BOOT_RAM_region {zeroinit,
+                                    block .ram_image1.bss};
+
+/****************************************
+ * BD RAM Section config                *
+ ****************************************/
+keep { section .image2.entry.data* };
+keep { section .image2.validate.rodata* };
+define block .ram_image2.entry with fixed order{ section .image2.entry.data*,
+						 section .image2.validate.rodata*,
+						};
+                                                
+place at start of BD_RAM_region { block .ram_image2.entry };
+
+/****************************************
+ * XIP BOOT Section config                *
+ ****************************************/
+keep { section .flashboot.text* };
+define block .xip_image1.text with fixed order{ section .flashboot.text* };
+
+place at start of KM0_BOOT_region   {  readonly,
+					 block .xip_image1.text };
+
+
+define exported symbol __ls_flash_text_start__=__ICFEDIT_region_LS_FLASH_IMG2_start__;
+define exported symbol __hs_flash_text_start__=__ICFEDIT_region_HS_FLASH_IMG2_start__;
+

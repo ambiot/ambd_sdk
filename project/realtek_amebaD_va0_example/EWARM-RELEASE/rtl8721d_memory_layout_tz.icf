@@ -1,0 +1,76 @@
+/* KM0 RAM Layout */
+define symbol __ICFEDIT_region_LS_IROM_start__       	= 0x00000000;
+define symbol __ICFEDIT_region_LS_IROM_end__         	= 0x00018000-1;
+define symbol __ICFEDIT_region_LS_DROM_start__       	= 0x00020000;
+define symbol __ICFEDIT_region_LS_DROM_end__         	= 0x00024000-1;
+define symbol __ICFEDIT_region_LS_ROMBSS_RAM_start__       = 0x00080000;
+define symbol __ICFEDIT_region_LS_ROMBSS_RAM_end__        	= 0x00082000-1;
+define symbol __ICFEDIT_region_LS_BOOTLOADER_RAM_start__   = 0x00082000;
+define symbol __ICFEDIT_region_LS_BOOTLOADER_RAM_end__     = 0x00083000-1;
+define symbol __ICFEDIT_region_LS_BD_RAM_start__    	= 0x00083000;
+define symbol __ICFEDIT_region_LS_BD_RAM_end__      	= 0x0008F000-1;
+define symbol __ICFEDIT_region_LS_MSP_RAM_start__    	= 0x0008F000;
+define symbol __ICFEDIT_region_LS_MSP_RAM_end__      	= 0x00090000-1;
+
+/* KM4 RAM Layout */
+define symbol __ICFEDIT_region_HS_IROM_start__       	= 0x10100000;
+define symbol __ICFEDIT_region_HS_IROM_end__         	= 0x1010A000-1;
+define symbol __ICFEDIT_region_HS_IROM_NS_start__       	= 0x1010A000;
+define symbol __ICFEDIT_region_HS_IROM_NS_end__         	= 0x10140000-1;
+define symbol __ICFEDIT_region_HS_DROM_NS_start__       	= 0x101C0000;
+define symbol __ICFEDIT_region_HS_DROM_NS_end__         	= 0x101D4000-1;
+define symbol __ICFEDIT_region_HS_DROM_start__       	= 0x101D4000;
+define symbol __ICFEDIT_region_HS_DROM_end__         	= 0x101D8000-1;
+define symbol __ICFEDIT_region_HS_ROMBSS_RAM_COM_start__   = 0x10000000;
+define symbol __ICFEDIT_region_HS_ROMBSS_RAM_COM_end__     = 0x10001000-1;
+define symbol __ICFEDIT_region_HS_ROMBSS_RAM_NS_start__    = 0x10001000;
+define symbol __ICFEDIT_region_HS_ROMBSS_RAM_NS_end__      = 0x10002000-1;
+define symbol __ICFEDIT_region_HS_RSVD_RAM_NS_start__      = 0x10002000;
+define symbol __ICFEDIT_region_HS_RSVD_RAM_NS_end__        = 0x10004000-1;
+define symbol __ICFEDIT_region_HS_MSP_RAM_NS_start__       = 0x10004000;
+define symbol __ICFEDIT_region_HS_MSP_RAM_NS_end__         = 0x10005000-1;
+
+define symbol __ICFEDIT_region_HS_BD_RAM_NS_start__       	= 0x10005000;
+define symbol __ICFEDIT_region_HS_BD_RAM_NS_end__         	= 0x10077000-1;
+define symbol __ICFEDIT_region_HS_BD_RAM_S_start__       	= 0x10077000;
+define symbol __ICFEDIT_region_HS_BD_RAM_S_end__         	= 0x1007B000-1;
+define symbol __ICFEDIT_region_HS_BD_RAM_NSC_start__       = 0x1007B000;
+define symbol __ICFEDIT_region_HS_BD_RAM_NSC_end__         = 0x1007C000-1;
+define symbol __ICFEDIT_region_HS_ROMBSS_RAM_S_start__     = 0x1007C000;
+define symbol __ICFEDIT_region_HS_ROMBSS_RAM_S_end__       = 0x1007D000-1;
+define symbol __ICFEDIT_region_HS_BOOTLOADER_RAM_S_start__ = 0x1007D000;
+define symbol __ICFEDIT_region_HS_BOOTLOADER_RAM_S_end__   = 0x1007F000-1;
+define symbol __ICFEDIT_region_HS_MSP_RAM_S_start__       	= 0x1007F000;
+define symbol __ICFEDIT_region_HS_MSP_RAM_S_end__         	= 0x10080000-1;
+define symbol __ICFEDIT_region_HS_EXTENTION_SRAM_start__   = 0x100E0000;
+define symbol __ICFEDIT_region_HS_EXTENTION_SRAM_end__     = 0x10100000-1;
+
+define symbol __ICFEDIT_region_HS_PSRAM_NS_start__       	= 0x02000020;
+define symbol __ICFEDIT_region_HS_PSRAM_NS_end__         	= 0x02300000-1;
+define symbol __ICFEDIT_region_HS_PSRAM_S_start__       	= 0x02300000;
+define symbol __ICFEDIT_region_HS_PSRAM_S_end__         	= 0x02400000-1;
+
+define symbol __ICFEDIT_region_RETENTION_RAM_start__    = 0x000C0000;
+define symbol __ICFEDIT_region_RETENTION_RAM_end__      = 0x000C0400-1;
+
+define symbol __ICFEDIT_region_HS_BTRACE_start__       	= 0x08800000;
+define symbol __ICFEDIT_region_HS_BTRACE_end__         	= 0x08800000+0x400000-1;
+
+/* Flash Layout (Virtual Address) */
+define symbol __ICFEDIT_region_LS_FLASH_BOOT_start__ 	= 0x08000000+0x20;
+define symbol __ICFEDIT_region_LS_FLASH_BOOT_end__   	= 0x08002000-1;
+define symbol __ICFEDIT_region_HS_FLASH_BOOT_start__       	= 0x08004000+0x20;
+define symbol __ICFEDIT_region_HS_FLASH_BOOT_end__         	= 0x08006000-1;
+define symbol __ICFEDIT_region_LS_FLASH_IMG2_start__ 	= 0x0C000000+0x20;
+define symbol __ICFEDIT_region_LS_FLASH_IMG2_end__   	= 0x0E000000-1;
+define symbol __ICFEDIT_region_HS_FLASH_IMG2_start__       	= 0x0E000000+0x20;
+define symbol __ICFEDIT_region_HS_FLASH_IMG2_end__         	= 0x10000000-1;
+
+/* Flash Layout (Physical Address, used by Flashloader) */
+define symbol __ICFEDIT_region_LS_BOOT_PHY_start__ 	= __ICFEDIT_region_LS_FLASH_BOOT_start__ - 0x20;
+define symbol __ICFEDIT_region_LS_BOOT_PHY_end__   	= __ICFEDIT_region_LS_FLASH_BOOT_end__;
+define symbol __ICFEDIT_region_HS_BOOT_PHY_start__ 	= __ICFEDIT_region_HS_FLASH_BOOT_start__ - 0x20;
+define symbol __ICFEDIT_region_HS_BOOT_PHY_end__   	= __ICFEDIT_region_HS_FLASH_BOOT_end__;
+
+define symbol __ICFEDIT_region_IMG2_PHY_start__ 	= 0x08006000;
+define symbol __ICFEDIT_region_IMG2_PHY_end__   	= 0x10000000-1;

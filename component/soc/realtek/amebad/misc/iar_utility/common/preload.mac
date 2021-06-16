@@ -1,0 +1,77 @@
+__setup_system()
+{
+    __var tmp;
+
+    __hwReset(1);
+}
+
+execUserPreload()
+{
+    __message "User execUserPreload....";
+    __setup_system();
+}
+
+execUserSetup()
+{
+    //__var tmp;
+    //__message "User Setup....";
+    // if use normal reset, please unmark those 2 lines
+    //execUserPreload();
+    //__setup_system();
+    //__message "User __loadImage....";
+    //__loadImage("$TARGET_PATH$ ", 0, 0);
+}
+
+execUserReset()
+{
+    __var tmp;
+    __message "User Reset....";
+
+    // reset WiFi
+    tmp = __readMemory32(0x48000200, "Memory");
+    if((tmp & (0x1 << 4)) != 0){
+        tmp = __readMemory32(0x40000240, "Memory");
+        tmp = tmp & ~(0x1 << 24);
+        __writeMemory32(tmp, 0x40000240, "Memory");
+        tmp = __readMemory32(0x40080030, "Memory");
+        tmp = tmp & ~(0x1 << 15);
+        __writeMemory32(tmp, 0x40080030, "Memory");
+        tmp = __readMemory32(0x48000210, "Memory");
+        tmp = tmp & ~(0x1 << 12);
+        __writeMemory32(tmp, 0x48000210, "Memory");
+        tmp = __readMemory32(0x48000208, "Memory");
+        tmp = tmp & ~(0x1 << 12);
+        __writeMemory32(tmp, 0x48000208, "Memory");
+        tmp = __readMemory32(0x48000200, "Memory");
+        tmp = tmp | (0x1 << 20);
+        __writeMemory32(tmp, 0x48000200, "Memory");
+        tmp = __readMemory32(0x48000200, "Memory");
+        tmp = tmp & ~(0x1 << 4);
+        __writeMemory32(tmp, 0x48000200, "Memory");
+    }
+
+    tmp = __readMemory32(0x480003F8, "Memory")|((1<<25));     
+    __writeMemory32(tmp, 0x480003F8, "Memory");
+}
+
+execUserExecutionStopped()
+{
+    __message "execUserExecutionStopped....";
+
+    // disable WDT at debug break
+    __var tmp;
+    tmp = __readMemory32(0x40002800, "Memory");
+    tmp = tmp & ~(0x1 << 16);
+    __writeMemory32(tmp, 0x40002800, "Memory");
+}
+
+execUserExecutionStarted()
+{
+    __message "execUserExecutionStarted....";
+
+    // enable WDT after debug break
+    __var tmp;
+    tmp = __readMemory32(0x40002800, "Memory");
+    tmp = tmp | (0x1 << 16);
+    __writeMemory32(tmp, 0x40002800, "Memory");
+}

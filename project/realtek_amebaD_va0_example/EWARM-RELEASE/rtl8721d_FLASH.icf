@@ -1,0 +1,32 @@
+/*###ICF### Section handled by ICF editor, don't touch! ****/
+/*-Editor annotation file-*/
+/* IcfEditorFile="$TOOLKIT_DIR$\config\ide\IcfEditor\cortex_v1_0.xml" */
+/*-Specials-*/
+
+/*-Memory Regions-*/
+include "rtl8721d_memory_layout_tz.icf";
+
+/*-Sizes-*/
+define memory mem with size = 4G;
+
+define region _LS_BOOT_PHY_region   = mem:[from __ICFEDIT_region_LS_BOOT_PHY_start__   to __ICFEDIT_region_LS_BOOT_PHY_end__];
+define region _HS_BOOT_PHY_region   = mem:[from __ICFEDIT_region_HS_BOOT_PHY_start__   to __ICFEDIT_region_HS_BOOT_PHY_end__];
+define region _IMG2_PHY_region   = mem:[from __ICFEDIT_region_IMG2_PHY_start__   to __ICFEDIT_region_IMG2_PHY_end__];
+
+keep {section ls_boot};
+place at start of _LS_BOOT_PHY_region { readonly,
+                                        section ls_boot,
+                                   };
+
+keep {section hs_boot};
+place at start of _HS_BOOT_PHY_region { readonly,
+                                        section hs_boot,
+                                   };
+
+keep {section firmware};
+place at start of _IMG2_PHY_region { readonly,
+                                        section firmware,
+                                   };
+
+
+
