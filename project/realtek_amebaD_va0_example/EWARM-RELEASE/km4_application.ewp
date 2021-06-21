@@ -23957,6 +23957,7 @@
         <group>
             <name>ftl</name>
             <file>
+				<name>$PROJ_DIR$\..\..\..\component\common\file_system\ftl\ftl.c</name>
             </file>
         </group>
         <file>
