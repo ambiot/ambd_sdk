@@ -137,7 +137,7 @@ IFLAGS += -I$(BASEDIR)/component/common/audio/a52dec/libao
 IFLAGS += -I$(BASEDIR)/component/common/audio/opus-1.3.1/include
 IFLAGS += -I$(BASEDIR)/component/common/audio/opus-1.3.1/src
 IFLAGS += -I$(BASEDIR)/component/common/audio/opus-1.3.1/celt
-#CSRC += $(DIR)/audio_sport/audio_amr/example_audio_amr.c
+CSRC += $(DIR)/audio_sport/audio_amr/example_audio_amr.c
 #CSRC += $(DIR)/audio_sport/audio_mp3/example_audio_mp3.c
 #CSRC += $(DIR)/audio_sport/audio_helix_aac/example_audio_helix_aac.c
 #CSRC += $(DIR)/audio_sport/audio_helix_mp3/example_audio_helix_mp3.c
@@ -148,13 +148,13 @@ IFLAGS += -I$(BASEDIR)/component/common/audio/opus-1.3.1/celt
 #CSRC += $(DIR)/audio_sport/audio_flac/example_audio_flac.c
 #CSRC += $(DIR)/audio_sport/audio_ac3/example_audio_ac3.c
 #CSRC += $(DIR)/audio_sport/audio_ac3/a52dec.c
-#CSRC += $(DIR)/audio_sport/audio_recorder/example_audio_recorder.c
+CSRC += $(DIR)/audio_sport/audio_recorder/example_audio_recorder.c
 CSRC += $(DIR)/audio_sport/audio_amr_flash/example_audio_amr_flash.c
 CSRC += $(DIR)/audio_sport/audio_amr_flash/audio_play.c
 #CSRC += $(DIR)/audio_sport/example_audio_ekho.c
-#CSRC += $(DIR)/audio_sport/audio_signal_generate/example_audio_signal_generate.c
+CSRC += $(DIR)/audio_sport/audio_signal_generate/example_audio_signal_generate.c
 #CSRC += $(DIR)/audio_sport/audio_tts_cybron/example_audio_tts_cyberon.c
-#CSRC += $(DIR)/opus_encode_decode.c
+CSRC += $(DIR)/opus_encode_decode.c
 CSRC += $(DIR)/Psram_realloc.c
 endif
 
@@ -165,19 +165,19 @@ ifeq ($(CONFIG_USB_DEVICE_EN),y)
 #CSRC += $(DIR)/usbd_msc/example_usbd_msc.c
 #CSRC += $(DIR)/usbd_cdc_acm/example_usbd_cdc_acm.c
 #CSRC += $(DIR)/usbd_vendor/example_usbd_vendor.c
-CSRC += $(DIR)/usbd_hid_mouse/example_usbd_hid_mouse.c
+#CSRC += $(DIR)/usbd_hid_mouse/example_usbd_hid_mouse.c
 endif
 ifeq ($(CONFIG_USB_HOST_EN),y)
 #CSRC += $(DIR)/usbh_msc/example_usbh_msc.c
-CSRC += $(DIR)/usbh_uvc/example_usbh_uvc.c
+#CSRC += $(DIR)/usbh_uvc/example_usbh_uvc.c
 #CSRC += $(DIR)/usbh_vendor/example_usbh_vendor.c
-CSRC += $(DIR)/usbh_cdc_acm/example_usbh_cdc_acm.c
+#CSRC += $(DIR)/usbh_cdc_acm/example_usbh_cdc_acm.c
 endif
 endif
 
 ifeq ($(CONFIG_LINKKIT_AWSS), y)
 #linkkit
-CSRC += $(DIR)/linkkit/linkkit_awss_example.c
+#CSRC += $(DIR)/linkkit/linkkit_awss_example.c
 endif
 
 #*****************************************************************************#
