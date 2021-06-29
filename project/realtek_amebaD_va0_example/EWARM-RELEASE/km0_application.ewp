@@ -867,7 +867,7 @@
                 </option>
                 <option>
                     <name>IlinkAdditionalLibs</name>
-                    <state>$PROJ_DIR$\..\..\..\project\realtek_amebaD_va0_example\EWARM-RELEASE\Debug\Exe\km0_image\lib_application_lp.a</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>IlinkOverrideProgramEntryLabel</name>
@@ -1894,7 +1894,7 @@
                 </option>
                 <option>
                     <name>IlinkAdditionalLibs</name>
-                    <state>$PROJ_DIR$\..\..\..\project\realtek_amebaD_va0_example\EWARM-RELEASE\Debug\Exe\km0_image\lib_application_lp.a</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>IlinkOverrideProgramEntryLabel</name>
@@ -2212,6 +2212,10 @@
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\usrcfg\rtl8721dlp_pinmapcfg.c</name>
         </file>
         <file>
+        </file>
+        <file>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_lp\rtl8721dlp_simulation.c</name>
         </file>
         <file>
@@ -2226,15 +2230,17 @@
     </group>
     <group>
         <name>lib</name>
-        <file>
-            <name>$PROJ_DIR$\Debug\Exe\km0_image\lib_application_lp.a</name>
-        </file>
+<file>
+	<name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_application_lp.a</name>
+</file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_wifi_fw.a</name>
         </file>
     </group>
     <group>
         <name>misc</name>
+        <file>
+        </file>
     </group>
     <group>
         <name>os</name>

@@ -882,7 +882,7 @@
                 </option>
                 <option>
                     <name>IlinkAdditionalLibs</name>
-<state>$PROJ_DIR$\..\..\..\project\realtek_amebaD_va0_example\EWARM-RELEASE\Debug\Exe\km4_image\libbootloader_hp.a</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>IlinkOverrideProgramEntryLabel</name>
@@ -1984,7 +1984,7 @@
                 </option>
                 <option>
                     <name>IlinkAdditionalLibs</name>
-<state>$PROJ_DIR$\..\..\..\project\realtek_amebaD_va0_example\EWARM-RELEASE\Debug\Exe\km4_image\libbootloader_hp.a</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>IlinkOverrideProgramEntryLabel</name>
@@ -2207,8 +2207,10 @@
     </configuration>
     <group>
         <name>cmsis</name>
+<file>
+	<name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\libbootloader_hp.a</name>
+</file>
         <file>
-            <name>$PROJ_DIR$\Debug\Exe\km4_image\libbootloader_hp.a</name>
         </file>
         <file>
         </file>

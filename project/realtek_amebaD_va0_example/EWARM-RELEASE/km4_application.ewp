@@ -968,7 +968,7 @@
                 </option>
                 <option>
                     <name>IlinkAdditionalLibs</name>
-<state>$PROJ_DIR$\..\..\..\project\realtek_amebaD_va0_example\EWARM-RELEASE\Debug\Exe\km4_image\lib_application_hp.a</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>IlinkOverrideProgramEntryLabel</name>
@@ -2157,7 +2157,7 @@
                 </option>
                 <option>
                     <name>IlinkAdditionalLibs</name>
-<state>$PROJ_DIR$\..\..\..\project\realtek_amebaD_va0_example\EWARM-RELEASE\Debug\Exe\km4_image\lib_application_hp.a</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>IlinkOverrideProgramEntryLabel</name>
@@ -3345,7 +3345,7 @@
                 </option>
                 <option>
                     <name>IlinkAdditionalLibs</name>
-<state>$PROJ_DIR$\..\..\..\project\realtek_amebaD_va0_example\EWARM-RELEASE\Debug\Exe\km4_image\lib_application_hp.a</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>IlinkOverrideProgramEntryLabel</name>
@@ -4537,7 +4537,7 @@
                 </option>
                 <option>
                     <name>IlinkAdditionalLibs</name>
-<state>$PROJ_DIR$\..\..\..\project\realtek_amebaD_va0_example\EWARM-RELEASE\Debug\Exe\km4_image\lib_application_hp.a</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>IlinkOverrideProgramEntryLabel</name>
@@ -13043,9 +13043,9 @@
     </group>
     <group>
         <name>lib</name>
-	<file>
-            <name>$PROJ_DIR$\Debug\Exe\km4_image\lib_application_hp.a</name>
-        </file>
+<file>
+	<name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_application_hp.a</name>
+</file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\board\amebad\lib\btgap.a</name>
         </file>
@@ -23957,7 +23957,7 @@
         <group>
             <name>ftl</name>
             <file>
-				<name>$PROJ_DIR$\..\..\..\component\common\file_system\ftl\ftl.c</name>
+                <name>$PROJ_DIR$\..\..\..\component\common\file_system\ftl\ftl.c</name>
             </file>
         </group>
         <file>
