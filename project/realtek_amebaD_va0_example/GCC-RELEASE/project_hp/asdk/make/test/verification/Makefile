@@ -18,6 +18,13 @@ IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device/cdc_acm/inc
 IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device/msc/inc
 IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device/vendor/inc
 endif
+
+ifeq ($(CONFIG_USB_DEVICE_NEW_EN),y)
+IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/common_new
+IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device_new/cdc_acm
+IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device_new/core
+endif
+
 ifeq ($(findstring y, $(CONFIG_USBH_VERIFY) $(CONFIG_USBH_CLASS_VERIFY)), y)
 IFLAGS += -I$(TARGETDIR)/fwlib/usb_otg/host/inc
 IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/host/msc/inc
@@ -197,6 +204,14 @@ endif
 
 ifeq ($(CONFIG_USBD_CDC_ACM_RP),y)
 CSRC += $(DIR)/usb_otg/usbd_cdc_acm/example_usbd_cdc_acm_rx_tp.c
+endif
+
+ifeq ($(CONFIG_USBD_CDC_ACM_TP_NEW),y)
+CSRC += $(DIR)/usb_otg/usbd_cdc_acm_new/example_usbd_cdc_acm_tx_tp_new.c
+endif
+
+ifeq ($(CONFIG_USBD_CDC_ACM_RP_NEW),y)
+CSRC += $(DIR)/usb_otg/usbd_cdc_acm_new/example_usbd_cdc_acm_rx_tp_new.c
 endif
 
 ifeq ($(CONFIG_USBH_CDC_ACM_VERIFY),y)

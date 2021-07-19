@@ -151,6 +151,9 @@ endif
 ifeq ($(findstring y, $(CONFIG_USB_DEVICE_EN) $(CONFIG_USBD_VERIFY)), y)
 LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_usbd.a
 endif
+ifeq ($(CONFIG_USB_DEVICE_NEW_EN), y)
+#LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_usbd_new.a
+endif
 ifeq ($(CONFIG_V4L2_EN),y)
 LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_v4l2.a
 endif
@@ -248,6 +251,7 @@ make_subdirs_lib:
 	@make -C make/video/v4l2 all
 #	@make -C make/target/usb_otg/device/lib all
 #	@make -C make/target/usb_otg/host/lib all
+#	@make -C make/target/usb_otg/device_new/lib all
 #	@make -C make/ui/emwin/emWinLibrary/GUI lib
 
 #*****************************************************************************#

@@ -21,9 +21,13 @@ endif
 ifeq ($(CONFIG_USB_HOST_EN),y)
 	make -C host all
 endif
-	
+
+ifeq ($(CONFIG_USB_DEVICE_NEW_EN),y)
+	make -C device_new all
+endif
+
 #*****************************************************************************#
-#              GENERATE OBJECT FILE 
+#              GENERATE OBJECT FILE
 #*****************************************************************************#
 CORE_TARGETS: $(OBJS)
 
@@ -31,9 +35,10 @@ CORE_TARGETS: $(OBJS)
 #*****************************************************************************#
 #                        RULES TO CLEAN TARGETS                               #
 #*****************************************************************************#
-clean: 
+clean:
 	make -C device clean
 	make -C host clean
+	make -C device_new clean
 
 -include $(DEPS)
 

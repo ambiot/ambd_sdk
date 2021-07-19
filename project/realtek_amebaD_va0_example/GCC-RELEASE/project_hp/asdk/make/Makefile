@@ -31,7 +31,7 @@ ifeq ($(CONFIG_GUI_EN),y)
 endif
 
 ifeq ($(CONFIG_LINKKIT_AWSS),y)
-	@make -C linkkit all
+#	@make -C linkkit all
 endif
 	#@make -C bootloader all
 	@make -C app all

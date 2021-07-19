@@ -13,6 +13,8 @@
 #include "app_flags.h"
 #include "os_msg.h"
 #include "os_sched.h"
+#include "os_mem.h"
+#include "profile_server.h"
 
 #define BLE_PRINT	printf
 
@@ -296,6 +298,34 @@ int ble_peripheral_at_cmd_bond_information(int argc, char **argv)
 	return 0;
 }
 
+int ble_peripheral_send_indi_notification(int argc, char **argv)
+{
+	(void) argc;
+
+	u8 conn_id = atoi(argv[1]);
+	u8 service_id = atoi(argv[2]);
+	u16 attrib_index = hex_str_to_int(strlen(argv[3]), (s8 *) argv[3]);
+	u8 type = atoi(argv[4]);
+	int length = hex_str_to_int(strlen(argv[5]), (s8 *) argv[5]);
+
+	if(length == -1){
+		printf("\n\rError:value length should be hexadecimal and start with '0X' or '0x'\r\n");
+		return -1;
+	}
+	u8 *data = (u8 *)os_mem_alloc(0,length * sizeof(u8));
+
+	for(u8 i = 0; i < length; ++ i){
+		data[i] = hex_str_to_int(strlen(argv[i + 6]), (s8 *)argv[i + 6]);
+	}
+
+	server_send_data(conn_id, service_id, attrib_index, data,length, (T_GATT_PDU_TYPE)type);
+	
+	if(data != NULL)
+		os_mem_free(data);
+
+	return 0;
+}
+
 int ble_peripheral_app_handle_at_cmd(uint16_t subtype, void *arg)
 {
 	int argc = 0;
@@ -317,6 +347,9 @@ int ble_peripheral_app_handle_at_cmd(uint16_t subtype, void *arg)
 			break;
 		case BT_ATCMD_BOND_INFORMATION:
 			ble_peripheral_at_cmd_bond_information(argc, argv);
+			break;
+		case BT_ATCMD_SEND_INDI_NOTI:
+			ble_peripheral_send_indi_notification(argc, argv);
 			break;
 		default:
 			break;

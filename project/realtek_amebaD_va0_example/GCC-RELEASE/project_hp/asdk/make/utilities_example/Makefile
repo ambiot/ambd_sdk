@@ -36,6 +36,12 @@ IFLAGS += -I$(BASEDIR)/component/common/media/mmfv2
 endif
 endif
 
+ifeq ($(CONFIG_USB_DEVICE_NEW_EN),y)
+IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/common_new
+IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device_new/core
+IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device_new/cdc_acm
+endif
+
 .PHONY: all clean
 
 #*****************************************************************************#
@@ -172,6 +178,9 @@ ifeq ($(CONFIG_USB_HOST_EN),y)
 #CSRC += $(DIR)/usbh_uvc/example_usbh_uvc.c
 #CSRC += $(DIR)/usbh_vendor/example_usbh_vendor.c
 #CSRC += $(DIR)/usbh_cdc_acm/example_usbh_cdc_acm.c
+endif
+ifeq ($(CONFIG_USB_DEVICE_NEW_EN),y)
+#CSRC += $(DIR)/usbd_cdc_acm_new/example_usbd_cdc_acm_new.c
 endif
 endif
 

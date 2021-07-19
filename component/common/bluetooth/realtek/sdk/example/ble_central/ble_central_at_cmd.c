@@ -16,6 +16,7 @@
 #include "os_msg.h"
 #include <platform_stdlib.h>
 #include "os_sched.h"
+#include "os_mem.h"
 
 #if defined(CONFIG_BT_CENTRAL) && CONFIG_BT_CENTRAL
 #include "ble_central_app_flags.h"
@@ -724,27 +725,28 @@ int ble_central_at_cmd_write(int argc, char **argv)
 	u8 conn_id;
 	u8 write_type;
 	u16 handle;
-	u16 length;
-	u8 data[512] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+	int length;
 
 	conn_id = atoi(argv[1]);
 	write_type = atoi(argv[2]);
 	handle = hex_str_to_int(strlen(argv[3]), (s8 *)argv[3]);
 	length = hex_str_to_int(strlen(argv[4]), (s8 *)argv[4]);
 
-	//if(argc == 6){	
-		//hex_str_to_bd_addr(strlen(argv[5]), argv[5], data);
-	//}
-	if(argc > 5)
-	{
-        for (uint8_t i = 0; i < argc - 5; ++i)
-        {
-            data[i] = hex_str_to_int(strlen(argv[i + 5]), (s8 *)argv[i + 5]);
-        }
+	if(length == -1){
+		printf("\n\rError:value length should be hexadecimal and start with '0X' or '0x'\r\n");
+		return -1;
+	}
+	u8 *data = (u8 *)os_mem_alloc(0,length * sizeof(u8));
+
+	for(u8 i = 0; i < length; ++ i){
+		data[i] = hex_str_to_int(strlen(argv[i + 5]), (s8 *)argv[i + 5]);
 	}
 	
-     T_GAP_CAUSE ret = gcs_attr_write(conn_id, (T_GATT_WRITE_TYPE)write_type, handle,
-                                     length, data);
+	T_GAP_CAUSE ret = gcs_attr_write(conn_id, (T_GATT_WRITE_TYPE)write_type, handle,
+									 length, data);
+
+	if(data != NULL)
+		os_mem_free(data);
 	(void) ret;
 	return 0;
 }

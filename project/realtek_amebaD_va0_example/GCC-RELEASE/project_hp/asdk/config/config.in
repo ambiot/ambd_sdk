@@ -171,7 +171,9 @@ mainmenu_option next_comment
 comment '< CONFIG USB '
 bool "Enable USB"                 		        CONFIG_USB_OTG_EN
 if [ "$CONFIG_USB_OTG_EN" = "y" ]; then
+
 choice 'USB OTG Type'             "USB_OTG_DEVICE_MODE  CONFIG_USB_DEVICE_EN \
+                                   USB_OTG_DEVICE_MODE_NEW	CONFIG_USB_DEVICE_NEW_EN \
                                    USB_OTG_HOST_MODE    CONFIG_USB_HOST_EN \
                                   "USB_OTG_DEVICE_MODE
 
@@ -182,6 +184,11 @@ choice 'USB Device Type'         "USB_DEVICE_AUDIO      CONFIG_USBD_AUDIO \
                                   USB_DEVICE_MSC        CONFIG_USBD_MSC \
                                   USB_DEVICE_VENDOR     CONFIG_USBD_VENDOR \
                                  "
+fi
+
+if [ "$CONFIG_USB_DEVICE_NEW_EN" = "y" ]; then
+choice 'USB Device Type'         "USB_DEVICE_CDC_ACM		CONFIG_USBD_CDC_ACM \
+                                 "USB_DEVICE_CDC_ACM
 fi
 
 if [ "$CONFIG_USB_HOST_EN" = "y" ]; then
@@ -251,6 +258,7 @@ if [ "$CONFIG_PER_TEST" = "y" ]; then
 	choice 'USB Verify Type'	"USB_HOST_Verify_Mode    CONFIG_USBH_VERIFY \
 								USB_DEVICE_Verify_Mode    CONFIG_USBD_VERIFY \
 								USB_DEVICE_CLASS_Verify_Mode	CONFIG_USBD_CLASS_VERIFY \
+								USB_DEVICE_CLASS_NEW_Verify_Mode	CONFIG_USBD_CLASS_VERIFY_NEW \
 								USB_HOST_CLASS_Verify_Mode	CONFIG_USBH_CLASS_VERIFY \
 								"
 	
@@ -259,6 +267,14 @@ if [ "$CONFIG_PER_TEST" = "y" ]; then
 	choice 'USBD CDC ACM Test'  "CDC_TX_Performance_Test      CONFIG_USBD_CDC_ACM_TP \
 								CDC_RX_Performance_Test    CONFIG_USBD_CDC_ACM_RP \
 								"
+	fi
+	fi
+
+	if [ "$CONFIG_USBD_CLASS_VERIFY_NEW" = "y" ]; then
+	if [ "$CONFIG_USBD_CDC_ACM" = "y" ]; then
+	choice 'USBD CDC ACM NEW Test'  "CDC_TX_Performance_Test_New    CONFIG_USBD_CDC_ACM_TP_NEW \
+									CDC_RX_Performance_Test_New    CONFIG_USBD_CDC_ACM_RP_NEW \
+									"
 	fi
 	fi
 

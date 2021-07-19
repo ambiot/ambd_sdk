@@ -93,6 +93,8 @@ bool CycQueueWrite(uint8_t *pWriteBuf, uint16_t length)
     bool     ret = true;
     uint32_t s;
 
+    s = os_lock();
+	
     if (cyc_buffer == NULL)
     {
        // DiagPutChar("cyc_buffer is init\r\n");
@@ -100,11 +102,10 @@ bool CycQueueWrite(uint8_t *pWriteBuf, uint16_t length)
         if(cyc_buffer == NULL)
         {
             APP_PRINT_ERROR0("cyc_buffer is NULL, malloc fail");
+            os_unlock(s);
             return false;
         }
     }
-
-    s = os_lock();
 
     if (CycQueueRemainSize() >= length)
     {

@@ -605,6 +605,10 @@ in lwip_opt.h for support uart adapter*/
 #define CONFIG_EXAMPLE_USBD_CDC_ACM_TP     1
 #elif defined(CONFIG_USBD_CDC_ACM_RP)
 #define CONFIG_EXAMPLE_USBD_CDC_ACM_RP     1
+#elif defined(CONFIG_USBD_CDC_ACM_TP_NEW)
+#define CONFIG_EXAMPLE_USBD_CDC_ACM_TP_NEW     1
+#elif defined(CONFIG_USBD_CDC_ACM_RP_NEW)
+#define CONFIG_EXAMPLE_USBD_CDC_ACM_RP_NEW     1
 #else
 #define CONFIG_EXAMPLE_USBD_CDC_ACM     1
 #endif

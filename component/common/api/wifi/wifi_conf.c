@@ -384,7 +384,7 @@ static void wifi_disconn_hdl( char* buf, int buf_len, int flags, void* userdata)
 			if(rtw_join_status & JOIN_NO_NETWORKS)
 				error_flag = RTW_NONE_NETWORK;
 
-			else if(rtw_join_status == 0)
+			else if(rtw_join_status == JOIN_CONNECTING)
 		 		error_flag = RTW_CONNECT_FAIL;
 
 		}else if(join_user_data->network_info.security_type == RTW_SECURITY_WPA2_AES_PSK){
@@ -392,7 +392,7 @@ static void wifi_disconn_hdl( char* buf, int buf_len, int flags, void* userdata)
 			if(rtw_join_status & JOIN_NO_NETWORKS)
 				error_flag = RTW_NONE_NETWORK;
 
-			else if(rtw_join_status == 0)
+			else if(rtw_join_status == JOIN_CONNECTING)
 		 		error_flag = RTW_CONNECT_FAIL;
 
 			else if(rtw_join_status == (JOIN_COMPLETE | JOIN_SECURITY_COMPLETE | JOIN_ASSOCIATED | JOIN_AUTHENTICATED | JOIN_LINK_READY | JOIN_CONNECTING))
@@ -3061,6 +3061,24 @@ void wifi_autoreconnect_hdl(rtw_security_t security_type,
 	param->password = password;
 	param->password_len = password_len;
 	param->key_id = key_id;
+
+	if(wifi_autoreconnect_task.task != NULL){
+		dhcp_stop(&xnetif[0]);
+		u32 start_tick = rtw_get_current_time();
+		while(1){
+			rtw_msleep_os(2);		
+			u32 passing_tick = rtw_get_current_time() - start_tick;
+			if(rtw_systime_to_sec(passing_tick) >= 2){
+				RTW_API_INFO("\r\n Create wifi_autoreconnect_task timeout \r\n");
+				return;
+			}
+			
+			if(wifi_autoreconnect_task.task == NULL){
+				break;
+			}
+		}
+	}
+
 	//xTaskCreate(wifi_autoreconnect_thread, (const char *)"wifi_autoreconnect", 512, &param, tskIDLE_PRIORITY + 1, NULL);
 	rtw_create_task(&wifi_autoreconnect_task, (const char *)"wifi_autoreconnect", 512, tskIDLE_PRIORITY + 1, wifi_autoreconnect_thread, param);
 }

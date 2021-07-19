@@ -168,7 +168,7 @@ void app_handle_conn_state_evt(uint8_t conn_id, T_GAP_CONN_STATE new_state, uint
             {
                 APP_PRINT_ERROR1("app_handle_conn_state_evt: connection lost cause 0x%x", disc_cause);
             }
-			printf("\n\r[BLE peripheral] BT Disconnected, start ADV\n\r");
+			printf("\n\r[BLE peripheral] BT Disconnected, cause 0x%x, start ADV\n\r", disc_cause);
             le_adv_start();
         }
         break;
@@ -286,7 +286,7 @@ void app_handle_conn_param_update_evt(uint8_t conn_id, uint8_t status, uint16_t 
     case GAP_CONN_PARAM_UPDATE_STATUS_FAIL:
         {
             APP_PRINT_ERROR1("app_handle_conn_param_update_evt update failed: cause 0x%x", cause);	
-		    printf("app_handle_conn_param_update_evt update failed: cause 0x%x", cause);
+		    printf("app_handle_conn_param_update_evt update failed: cause 0x%x\r\n", cause);
         }
         break;
 
@@ -371,7 +371,7 @@ void app_handle_gap_msg(T_IO_MSG *p_gap_msg)
             le_bond_get_display_key(conn_id, &display_value);
             APP_PRINT_INFO1("GAP_MSG_LE_BOND_PASSKEY_DISPLAY:passkey %d", display_value);
             le_bond_passkey_display_confirm(conn_id, GAP_CFM_CAUSE_ACCEPT);
-		    printf("GAP_MSG_LE_BOND_PASSKEY_DISPLAY:passkey %d", display_value);
+		    printf("GAP_MSG_LE_BOND_PASSKEY_DISPLAY:passkey %d\r\n", display_value);
         }
         break;
 
@@ -381,7 +381,7 @@ void app_handle_gap_msg(T_IO_MSG *p_gap_msg)
             conn_id = gap_msg.msg_data.gap_bond_user_conf.conn_id;
             le_bond_get_display_key(conn_id, &display_value);
             APP_PRINT_INFO1("GAP_MSG_LE_BOND_USER_CONFIRMATION: passkey %d", display_value);
-            printf("GAP_MSG_LE_BOND_USER_CONFIRMATION: passkey %d", display_value);
+            printf("GAP_MSG_LE_BOND_USER_CONFIRMATION: passkey %d\r\n", display_value);
             //le_bond_user_confirm(conn_id, GAP_CFM_CAUSE_ACCEPT);
         }
         break;
@@ -392,7 +392,7 @@ void app_handle_gap_msg(T_IO_MSG *p_gap_msg)
             conn_id = gap_msg.msg_data.gap_bond_passkey_input.conn_id;
             APP_PRINT_INFO1("GAP_MSG_LE_BOND_PASSKEY_INPUT: conn_id %d", conn_id);
             //le_bond_passkey_input_confirm(conn_id, passkey, GAP_CFM_CAUSE_ACCEPT);
-		    printf("GAP_MSG_LE_BOND_PASSKEY_INPUT: conn_id %d", conn_id);
+		    printf("GAP_MSG_LE_BOND_PASSKEY_INPUT: conn_id %d\r\n", conn_id);
         }
         break;
 #if F_BT_LE_SMP_OOB_SUPPORT
@@ -486,13 +486,21 @@ T_APP_RESULT app_profile_callback(T_SERVER_ID service_id, void *p_data)
                             p_param->event_data.send_data_result.service_id,
                             p_param->event_data.send_data_result.attrib_idx,
                             p_param->event_data.send_data_result.credits);
+            printf("\n\rPROFILE_EVT_SEND_DATA_COMPLETE: conn_id %d, cause 0x%x, service_id %d, attrib_idx 0x%x, credits %d\r\n",
+                            p_param->event_data.send_data_result.conn_id,
+                            p_param->event_data.send_data_result.cause,
+                            p_param->event_data.send_data_result.service_id,
+                            p_param->event_data.send_data_result.attrib_idx,
+                            p_param->event_data.send_data_result.credits);
             if (p_param->event_data.send_data_result.cause == GAP_SUCCESS)
             {
                 APP_PRINT_INFO0("PROFILE_EVT_SEND_DATA_COMPLETE success");
+                printf("PROFILE_EVT_SEND_DATA_COMPLETE success\r\n");
             }
             else
             {
                 APP_PRINT_ERROR0("PROFILE_EVT_SEND_DATA_COMPLETE failed");
+                printf("PROFILE_EVT_SEND_DATA_COMPLETE failed\r\n");
             }
             break;
 
@@ -512,22 +520,26 @@ T_APP_RESULT app_profile_callback(T_SERVER_ID service_id, void *p_data)
                 case SIMP_NOTIFY_INDICATE_V3_ENABLE:
                     {
                         APP_PRINT_INFO0("SIMP_NOTIFY_INDICATE_V3_ENABLE");
+                        printf("\n\rSIMP_NOTIFY_INDICATE_V3_ENABLE\r\n");
                     }
                     break;
 
                 case SIMP_NOTIFY_INDICATE_V3_DISABLE:
                     {
                         APP_PRINT_INFO0("SIMP_NOTIFY_INDICATE_V3_DISABLE");
+                        printf("\n\rSIMP_NOTIFY_INDICATE_V3_DISABLE\r\n");
                     }
                     break;
                 case SIMP_NOTIFY_INDICATE_V4_ENABLE:
                     {
                         APP_PRINT_INFO0("SIMP_NOTIFY_INDICATE_V4_ENABLE");
+                        printf("\n\rSIMP_NOTIFY_INDICATE_V4_ENABLE\r\n");
                     }
                     break;
                 case SIMP_NOTIFY_INDICATE_V4_DISABLE:
                     {
                         APP_PRINT_INFO0("SIMP_NOTIFY_INDICATE_V4_DISABLE");
+                        printf("\n\rSIMP_NOTIFY_INDICATE_V4_DISABLE\r\n");
                     }
                     break;
                 default:
@@ -542,6 +554,7 @@ T_APP_RESULT app_profile_callback(T_SERVER_ID service_id, void *p_data)
                 {
                     uint8_t value[2] = {0x01, 0x02};
                     APP_PRINT_INFO0("SIMP_READ_V1");
+                    printf("SIMP_READ_V1: value 0x%x 0x%x\r\n", value[0],value[1]);
                     simp_ble_service_set_parameter(SIMPLE_BLE_SERVICE_PARAM_V1_READ_CHAR_VAL, 2, &value);
                 }
             }
@@ -554,6 +567,13 @@ T_APP_RESULT app_profile_callback(T_SERVER_ID service_id, void *p_data)
                     {
                         APP_PRINT_INFO2("SIMP_WRITE_V2: write type %d, len %d", p_simp_cb_data->msg_data.write.write_type,
                                         p_simp_cb_data->msg_data.write.len);
+                        printf("\n\rSIMP_WRITE_V2: write type %d, len %d\r\n", p_simp_cb_data->msg_data.write.write_type,
+                                        p_simp_cb_data->msg_data.write.len);
+                        printf("SIMP_WRITE_V2 value:");
+                        for(int i = 0; i < p_simp_cb_data->msg_data.write.len; i ++){
+                            printf("0x%2x ", *(p_simp_cb_data->msg_data.write.p_value + i));
+                        }
+                        printf("\n\r");
                     }
                     break;
                 default:
@@ -578,12 +598,14 @@ T_APP_RESULT app_profile_callback(T_SERVER_ID service_id, void *p_data)
                 case BAS_NOTIFY_BATTERY_LEVEL_ENABLE:
                     {
                         APP_PRINT_INFO0("BAS_NOTIFY_BATTERY_LEVEL_ENABLE");
+                        printf("\n\rBAS_NOTIFY_BATTERY_LEVEL_ENABLE\r\n");
                     }
                     break;
 
                 case BAS_NOTIFY_BATTERY_LEVEL_DISABLE:
                     {
                         APP_PRINT_INFO0("BAS_NOTIFY_BATTERY_LEVEL_DISABLE");
+                        printf("\n\rBAS_NOTIFY_BATTERY_LEVEL_DISABLE\r\n");
                     }
                     break;
                 default:
@@ -598,6 +620,7 @@ T_APP_RESULT app_profile_callback(T_SERVER_ID service_id, void *p_data)
                 {
                     uint8_t battery_level = 90;
                     APP_PRINT_INFO1("BAS_READ_BATTERY_LEVEL: battery_level %d", battery_level);
+                    printf("BAS_READ_BATTERY_LEVEL: battery_level 0x%x\r\n", battery_level);
                     bas_set_parameter(BAS_PARAM_BATTERY_LEVEL, 1, &battery_level);
                 }
             }

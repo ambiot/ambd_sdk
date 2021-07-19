@@ -9,7 +9,7 @@ We recommand the flow items:
 Patch List:
 	1. Full Patch:
 		sdk-amebad_v6.2C-RC.tar.gz
-		6.2_patch_integrated_210604_7d7d3c19.zip
+		6.2_patch_integrated_210714_317d518b.zip
 		
 	2. Single Patch:
 		sdk-amebad_v6.2C-RC.tar.gz
@@ -27,6 +27,8 @@ Patch List:
 		6.2_critical_patch_210413_733408e9_to_fe817a24.zip
 		6.2_critical_patch_210428_fe817a24_to_13a21db4.zip
 		6.2_critical_patch_210604_13a21db4_to_7d7d3c19.zip
+		6.2_critical_patch_210714_7d7d3c19_to_317d518b.zip
+		
 		
 Critical Patch List:
 	6.2c to Git 200529_aa1d394c:
@@ -514,4 +516,32 @@ Critical Patch List:
 			CVE-2020-26145
 			CVE-2020-26146
 			CVE-2020-26147
+			
+	Git 210603_743b77de to Git 210714_317d518b:	
+		1,	Fix memory leak when call wifi off api or change wifi mode
+		
+		2,	Add BLE mesh ota size for commandline && increase blob size in mesh dfu capability.
+
+		3,	Add BLE send indication and notification ATCMD.
+		
+		4,	update emwin driver encrypted compressed package and LCDC example
+		
+		5,	Add check chip package & psram and read resistor value api
+		
+		6,	Modificate BLE poll message retry times when no update message received for lpn
+		
+		7,	Fix bt init/deinit memory leak.
+		
+		8,	Add api to get chip package type
+		
+		9,	Fix wpa3 connect fail issue cause of not removing pmksa cache
+		
+		10,	Update update bb/rf parameters for latest laws and regulations
+		
+		11,	Add create task protection to avoid recreate task in wifi autoreconnect hdl
+		
+		12,	Fix websocket corner case about endless loop in ws_poll 
+
+
+
 		

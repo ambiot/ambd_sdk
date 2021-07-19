@@ -135,6 +135,7 @@ uint8_t bt_command_type(uint16_t command_type)
 		}
 	}
 	break;
+	case BT_COMMAND_SEND_INDI_NOTI:
 	case BT_COMMAND_MODIFY_ADV_INTERVAL: {
 		if (!((bt_cmd_type & PERIPHERAL_BIT) >> 6) && !((bt_cmd_type & SCATTERNET_BIT) >> 5) && !((bt_cmd_type & MESH_BIT) >> 1)) {
 			return 0;
@@ -710,6 +711,42 @@ exit:
 	AT_PRINTK("[ATBA] Modify adv interval:ATBA=adv_interval_max,adv_interval_min");
 	AT_PRINTK("[ATBA] Modify adv interval:ATBA=1600,1600");
 }
+
+void fATBe(void *arg)
+{
+	int argc = 0;
+	char *argv[MAX_ARGC] = {0};
+
+	memset(bt_at_cmd_buf, 0, 256);
+
+	if (arg) {
+		strncpy(bt_at_cmd_buf, arg, sizeof(bt_at_cmd_buf));
+		argc = parse_param(bt_at_cmd_buf, argv);
+	} else {
+		goto exit;
+	}
+
+	if (argc < 7) {
+		AT_PRINTK("[AT_PRINTK] ERROR: input parameter error!\n\r");
+		goto exit;
+	}
+
+	if (!bt_command_type(BT_COMMAND_SEND_INDI_NOTI)) {
+		AT_PRINTK("[AT_PRINTK] ERROR: command type error!\n\r");
+		goto exit;
+	}
+
+	bt_at_cmd_send_msg(BT_ATCMD_SEND_INDI_NOTI, bt_at_cmd_buf);
+	return;
+
+exit:
+	AT_PRINTK("[ATBe] server send indication or notification");
+	AT_PRINTK("[ATBe] ATBe=conn_id,service_id,attribute_index,type,length,p_value");
+	AT_PRINTK("[ATBe] simple ble service send indication:ATBe=0,1,0xa,2,0x1,0x1");
+	AT_PRINTK("[ATBe] simple ble service send notification:ATBe=0,1,0x7,1,0x2,0x1,0x2");
+	AT_PRINTK("[ATBe] bas service send notification:ATBe=0,2,0x2,1,0x1,0x1");
+}
+
 #endif
 
 #if ((defined(CONFIG_BT_CENTRAL) && CONFIG_BT_CENTRAL) || \
@@ -1415,6 +1452,7 @@ log_item_t at_bt_items[ ] = {
 	{"ATBp", fATBp, {NULL, NULL}}, // Start/stop BLE peripheral
 #endif
 	{"ATBA", fATBA, {NULL, NULL}}, // Modify adv interval
+	{"ATBe", fATBe, {NULL, NULL}}, //BLE send indiaction/notification
 #endif
 #if ((defined(CONFIG_BT_CENTRAL) && CONFIG_BT_CENTRAL) || \
 	(defined(CONFIG_BT_PERIPHERAL) && CONFIG_BT_PERIPHERAL) || \

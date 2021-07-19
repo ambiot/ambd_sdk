@@ -284,7 +284,7 @@ void bt_config_wifi_init(void)
 	BC_cmd_task_init();
 
 	if (BC_status_monitor_task_hdl == NULL) {
-		if(os_task_create(&BC_status_monitor_task_hdl, (char const *)"BC_status_monitor", BC_status_monitor, NULL, 512, 1) != true){
+		if(os_task_create(&BC_status_monitor_task_hdl, (char const *)"BC_status_monitor", BC_status_monitor, NULL, 1024, 1) != true){
 			BC_printf("[%s] Create BC_status_monitor failed", __FUNCTION__);
 		}
 	}
