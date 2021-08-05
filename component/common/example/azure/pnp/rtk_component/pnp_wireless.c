@@ -725,9 +725,15 @@ static rtw_result_t app_scan_result_handler( rtw_scan_handler_result_t* malloced
 				( record->security == RTW_SECURITY_WPA2_AES_PSK ) ? "WPA2 AES" :
 				( record->security == RTW_SECURITY_WPA2_TKIP_PSK ) ? "WPA2 TKIP" :
 				( record->security == RTW_SECURITY_WPA2_MIXED_PSK ) ? "WPA2 Mixed" :
+#if defined(CONFIG_PLATFORM_8721D)
+				( record->security == RTW_SECURITY_WPA_WPA2_TKIP_PSK) ? "WPA/WPA2 TKIP" :
+				( record->security == RTW_SECURITY_WPA_WPA2_AES_PSK) ? "WPA/WPA2 AES" :
+				( record->security == RTW_SECURITY_WPA_WPA2_MIXED_PSK) ? "WPA/WPA2 Mixed" :
+#elif defined(CONFIG_PLATFORM_8710C)
 				( record->security == RTW_SECURITY_WPA_WPA2_MIXED ) ? "WPA/WPA2 AES" :
-				//( record->security == RTW_SECURITY_WPA2_ENTERPRISE ) ? "WPA2 Enterprise" :
-				//( record->security == RTW_SECURITY_WPA_WPA2_ENTERPRISE ) ? "WPA/WPA2 Enterprise" : 
+#endif
+				( record->security == RTW_SECURITY_WPA2_ENTERPRISE ) ? "WPA2 Enterprise" :
+				( record->security == RTW_SECURITY_WPA_WPA2_ENTERPRISE ) ? "WPA/WPA2 Enterprise" : 
 #ifdef CONFIG_SAE_SUPPORT
 				( record->security == RTW_SECURITY_WPA3_AES_PSK) ? "WP3-SAE AES" :
 #endif

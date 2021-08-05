@@ -299,14 +299,9 @@ int cycle(MQTTClient* c, Timer* timer)
                     len = MQTTSerialize_ack(c->buf, c->buf_size, PUBREC, 0, msg.id);
                 if (len <= 0)
                     rc = FAILURE;
-                else {
-#if 1
-                    sendPacket(c, len, timer);
-#else
-                    // it's odd that ACK PUB also need success
+                else
                     rc = sendPacket(c, len, timer);
-#endif
-                }
+
                 if (rc == FAILURE)
                     goto exit; // there was a problem
             }

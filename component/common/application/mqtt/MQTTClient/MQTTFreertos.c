@@ -115,7 +115,7 @@ int FreeRTOS_read(Network* n, unsigned char* buffer, int len, int timeout_ms)
 	TimeOut_t xTimeOut;
 	int recvLen = 0;
 
-	int so_error;
+	int so_error = 0;
 	socklen_t errlen = sizeof(so_error);
 
 	vTaskSetTimeOutState(&xTimeOut); /* Record the time at which this function was entered. */
@@ -132,22 +132,18 @@ int FreeRTOS_read(Network* n, unsigned char* buffer, int len, int timeout_ms)
 		setsockopt(n->my_socket, SOL_SOCKET, SO_RCVTIMEO, &xTicksToWait, sizeof(xTicksToWait)); 
 #endif
 #if (MQTT_OVER_SSL)
-		if (n->use_ssl) {
+		if (n->use_ssl)
 			rc = ssl_read(n->ssl, buffer + recvLen, len - recvLen);
-
-			getsockopt(n->my_socket, SOL_SOCKET, SO_ERROR, &so_error, &errlen);
-			if (so_error && so_error != EAGAIN) {
-				n->disconnect(n);
-			}
-		} else
+		else
 #endif
-		rc = recv(n->my_socket, buffer + recvLen, len - recvLen, 0);
+			rc = recv(n->my_socket, buffer + recvLen, len - recvLen, 0);
+
 		if (rc > 0)
 			recvLen += rc;
 		else if (rc < 0)
 		{
 			getsockopt(n->my_socket, SOL_SOCKET, SO_ERROR, &so_error, &errlen);
-			if (so_error != EAGAIN) {
+			if (so_error && (so_error != EAGAIN)) {
 				n->disconnect(n);
 			}
 			recvLen = rc;
@@ -164,7 +160,7 @@ int FreeRTOS_write(Network* n, unsigned char* buffer, int len, int timeout_ms)
 	TimeOut_t xTimeOut;
 	int sentLen = 0;
 
-	int so_error;
+	int so_error = 0;
 	socklen_t errlen = sizeof(so_error);
 
 	vTaskSetTimeOutState(&xTimeOut); /* Record the time at which this function was entered. */
@@ -181,22 +177,18 @@ int FreeRTOS_write(Network* n, unsigned char* buffer, int len, int timeout_ms)
 		setsockopt(n->my_socket, SOL_SOCKET, SO_SNDTIMEO, &xTicksToWait, sizeof(xTicksToWait));
 #endif
 #if (MQTT_OVER_SSL)
-		if (n->use_ssl) {
+		if (n->use_ssl)
 			rc = ssl_write(n->ssl, buffer + sentLen, len - sentLen);
-
-			getsockopt(n->my_socket, SOL_SOCKET, SO_ERROR, &so_error, &errlen);
-			if (so_error && so_error != EAGAIN) {
-				n->disconnect(n);
-			}
-		} else
+		else
 #endif
-		rc = send(n->my_socket, buffer + sentLen, len - sentLen, 0);
+			rc = send(n->my_socket, buffer + sentLen, len - sentLen, 0);
+
 		if (rc > 0)
 			sentLen += rc;
 		else if (rc < 0)
 		{
-			getsockopt(n->my_socket, SOL_SOCKET, SO_ERROR, &so_error, &len);
-			if (so_error != EAGAIN) {
+			getsockopt(n->my_socket, SOL_SOCKET, SO_ERROR, &so_error, &errlen);
+			if (so_error && (so_error != EAGAIN)) {
 				n->disconnect(n);
 			}
 			sentLen = rc;
@@ -210,17 +202,19 @@ int FreeRTOS_write(Network* n, unsigned char* buffer, int len, int timeout_ms)
 
 void FreeRTOS_disconnect(Network* n)
 {
-	shutdown(n->my_socket, SHUT_RDWR);
-	close(n->my_socket);
-	n->my_socket = -1;
+	if (n->my_socket >= 0) {
+		shutdown(n->my_socket, SHUT_RDWR);
+		close(n->my_socket);
+		n->my_socket = -1;
 
 #if (MQTT_OVER_SSL)
-	if (n->use_ssl) {
-		ssl_free(n->ssl);
-		free(n->ssl);
-		n->ssl = NULL;
-	}
+		if (n->use_ssl) {
+			ssl_free(n->ssl);
+			free(n->ssl);
+			n->ssl = NULL;
+		}
 #endif
+	}
 }
 
 
@@ -325,6 +319,7 @@ int NetworkConnect(Network* n, char* addr, int port)
 	if ((retVal = connect(n->my_socket, (struct sockaddr*)&sAddr, sizeof(sAddr))) < 0)
 	{
 		close(n->my_socket);
+		n->my_socket = -1;
 		mqtt_printf(MQTT_DEBUG, "Connect failed!!");
 		goto exit;
 	}
@@ -462,7 +457,7 @@ int FreeRTOS_read(Network* n, unsigned char* buffer, int len, int timeout_ms)
 	TimeOut_t xTimeOut;
 	int recvLen = 0;
 
-	int so_error;
+	int so_error = 0;
 	socklen_t errlen = sizeof(so_error);
 
 	vTaskSetTimeOutState(&xTimeOut); /* Record the time at which this function was entered. */
@@ -479,22 +474,18 @@ int FreeRTOS_read(Network* n, unsigned char* buffer, int len, int timeout_ms)
 		setsockopt(n->my_socket, SOL_SOCKET, SO_RCVTIMEO, &xTicksToWait, sizeof(xTicksToWait)); 
 #endif
 #if (MQTT_OVER_SSL)
-		if (n->use_ssl) {
+		if (n->use_ssl)
 			rc = mbedtls_ssl_read(n->ssl, buffer + recvLen, len - recvLen);
-
-			//getsockopt(n->my_socket, SOL_SOCKET, SO_ERROR, &so_error, &errlen);
-			//if (so_error && so_error != EAGAIN) {
-			//	n->disconnect(n);
-			//}
-		} else
+		else
 #endif
-		rc = recv(n->my_socket, buffer + recvLen, len - recvLen, 0);
+			rc = recv(n->my_socket, buffer + recvLen, len - recvLen, 0);
+
 		if (rc > 0)
 			recvLen += rc;
 		else if (rc < 0)
 		{
 			getsockopt(n->my_socket, SOL_SOCKET, SO_ERROR, &so_error, &errlen);
-			if (so_error != EAGAIN) {
+			if (so_error && (so_error != EAGAIN)) {
 				n->disconnect(n);
 			}
 			recvLen = rc;
@@ -511,7 +502,7 @@ int FreeRTOS_write(Network* n, unsigned char* buffer, int len, int timeout_ms)
 	TimeOut_t xTimeOut;
 	int sentLen = 0;
 
-	int so_error;
+	int so_error = 0;
 	socklen_t errlen = sizeof(so_error);
 
 	vTaskSetTimeOutState(&xTimeOut); /* Record the time at which this function was entered. */
@@ -528,22 +519,18 @@ int FreeRTOS_write(Network* n, unsigned char* buffer, int len, int timeout_ms)
 		setsockopt(n->my_socket, SOL_SOCKET, SO_SNDTIMEO, &xTicksToWait, sizeof(xTicksToWait));
 #endif
 #if (MQTT_OVER_SSL)
-		if (n->use_ssl) {
+		if (n->use_ssl)
 			rc = mbedtls_ssl_write(n->ssl, buffer + sentLen, len - sentLen);
-
-			//getsockopt(n->my_socket, SOL_SOCKET, SO_ERROR, &so_error, &errlen);
-			//if (so_error && so_error != EAGAIN) {
-			//	n->disconnect(n);
-			//}
-		} else
+		else
 #endif
-		rc = send(n->my_socket, buffer + sentLen, len - sentLen, 0);
+			rc = send(n->my_socket, buffer + sentLen, len - sentLen, 0);
+
 		if (rc > 0)
 			sentLen += rc;
 		else if (rc < 0)
 		{
-			getsockopt(n->my_socket, SOL_SOCKET, SO_ERROR, &so_error, (socklen_t *)&len);
-			if (so_error != EAGAIN) {
+			getsockopt(n->my_socket, SOL_SOCKET, SO_ERROR, &so_error, &errlen);
+			if (so_error && (so_error != EAGAIN)) {
 				n->disconnect(n);
 			}
 			sentLen = rc;
@@ -557,21 +544,22 @@ int FreeRTOS_write(Network* n, unsigned char* buffer, int len, int timeout_ms)
 
 void FreeRTOS_disconnect(Network* n)
 {
-	shutdown(n->my_socket, SHUT_RDWR);
-	close(n->my_socket);
-	n->my_socket = -1;
+	if (n->my_socket >= 0){
+		shutdown(n->my_socket, SHUT_RDWR);
+		close(n->my_socket);
+		n->my_socket = -1;
 
 #if (MQTT_OVER_SSL)
-	if (n->use_ssl) {
-		mbedtls_ssl_free(n->ssl);
-		if(n->conf)
+		if (n->use_ssl) {
+			mbedtls_ssl_free(n->ssl);
 			mbedtls_ssl_config_free(n->conf);
-		free(n->ssl);
-		free(n->conf);
-		n->ssl = NULL;
-		n->conf = NULL;
-	}
+			free(n->ssl);
+			free(n->conf);
+			n->ssl = NULL;
+			n->conf = NULL;
+		}
 #endif
+	}
 }
 
 
@@ -692,6 +680,7 @@ int NetworkConnect(Network* n, char* addr, int port)
 	if ((retVal = connect(n->my_socket, (struct sockaddr*)&sAddr, sizeof(sAddr))) < 0)
 	{
 		close(n->my_socket);
+		n->my_socket = -1;
 		mqtt_printf(MQTT_DEBUG, "Connect failed!!");
 		goto exit;
 	}
@@ -726,9 +715,13 @@ int NetworkConnect(Network* n, char* addr, int port)
 			goto err;
 		}
 
-		mbedtls_ssl_conf_own_cert(n->conf, client_crt, client_rsa);
 		mbedtls_ssl_set_bio(n->ssl, &n->my_socket, mbedtls_net_send, mbedtls_net_recv, NULL);
 		mbedtls_ssl_conf_rng(n->conf, my_random, NULL);	
+
+		if(mbedtls_ssl_conf_max_frag_len(n->conf, MBEDTLS_SSL_MAX_FRAG_LEN_4096) < 0) {
+			printf("ssl conf max frag len failed!");
+			goto err;
+		}
 
 		if((mbedtls_ssl_setup(n->ssl, n->conf)) != 0) {
 			mqtt_printf(MQTT_DEBUG,"mbedtls_ssl_setup failed!");
@@ -764,22 +757,35 @@ int NetworkConnect(Network* n, char* addr, int port)
 			}
 			mbedtls_x509_crt_init(client_crt);
 
+#if !defined(configENABLE_TRUSTZONE) || (configENABLE_TRUSTZONE == 0) || !defined(CONFIG_SSL_CLIENT_PRIVATE_IN_TZ) || (CONFIG_SSL_CLIENT_PRIVATE_IN_TZ == 0)
 			client_rsa = (mbedtls_pk_context *) mbedtls_calloc( sizeof(mbedtls_pk_context), 1);
 			if ( client_rsa == NULL ) {
 				mqtt_printf(MQTT_DEBUG, "malloc client_rsa failed!");
 				goto err;
 			}
 			mbedtls_pk_init(client_rsa);
+#endif
 
 			if ( mbedtls_x509_crt_parse(client_crt, (const unsigned char *)n->clientCA, strlen(n->clientCA)+1) != 0 ) {
 				mqtt_printf(MQTT_DEBUG, "parse client_crt failed!");
 				goto err;
 			}
 
+#if defined(configENABLE_TRUSTZONE) && (configENABLE_TRUSTZONE == 1) && defined(CONFIG_SSL_CLIENT_PRIVATE_IN_TZ) && (CONFIG_SSL_CLIENT_PRIVATE_IN_TZ == 1)
+			extern mbedtls_pk_context* NS_ENTRY secure_mbedtls_pk_parse_key(void);
+			client_rsa = secure_mbedtls_pk_parse_key();
+			if ( client_rsa == NULL ) {
+				mqtt_printf(MQTT_DEBUG, "parse client_rsa failed!");
+				goto err;
+			}
+#else
 			if ( mbedtls_pk_parse_key(client_rsa, (const unsigned char *)n->private_key, strlen(n->private_key)+1, NULL, 0) != 0 ) {
 				mqtt_printf(MQTT_DEBUG, "parse client_rsa failed!");
 				goto err;
 			}
+#endif
+
+			mbedtls_ssl_conf_own_cert(n->conf, client_crt, client_rsa);
 		}
 	
 		retVal = mbedtls_ssl_handshake(n->ssl);
@@ -792,8 +798,13 @@ int NetworkConnect(Network* n, char* addr, int port)
 	}
 
 	if (client_rsa) {
+#if defined(configENABLE_TRUSTZONE) && (configENABLE_TRUSTZONE == 1) && defined(CONFIG_SSL_CLIENT_PRIVATE_IN_TZ) && (CONFIG_SSL_CLIENT_PRIVATE_IN_TZ == 1)
+		extern void NS_ENTRY secure_mbedtls_pk_free(mbedtls_pk_context *pk);
+		secure_mbedtls_pk_free(client_rsa);
+#else
 		mbedtls_pk_free(client_rsa);
 		mbedtls_free(client_rsa);
+#endif
 	}
 	if (client_crt) {
 		mbedtls_x509_crt_free(client_crt);
@@ -807,8 +818,13 @@ int NetworkConnect(Network* n, char* addr, int port)
 
 err:
 	if (client_rsa) {
+#if defined(configENABLE_TRUSTZONE) && (configENABLE_TRUSTZONE == 1) && defined(CONFIG_SSL_CLIENT_PRIVATE_IN_TZ) && (CONFIG_SSL_CLIENT_PRIVATE_IN_TZ == 1)
+		extern void NS_ENTRY secure_mbedtls_pk_free(mbedtls_pk_context *pk);
+		secure_mbedtls_pk_free(client_rsa);
+#else
 		mbedtls_pk_free(client_rsa);
 		mbedtls_free(client_rsa);
+#endif
 	}
 	if (client_crt) {
 		mbedtls_x509_crt_free(client_crt);

@@ -23,56 +23,59 @@ Prerequisites
 
 
 Getting Start
------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------	
+1. Include Azure example codes for building
 [GCC]
-	To enable Azure IoT example in this sdk
-		1. Use "make menuconfig" command to open menuconfig terminal and select "MQTT Config" -> "Enable MQTT" to enable MQTT Stack.
-		2. Manually uncomment "@make -C azure_emb all" in [project_hp\asdk\make\application\Makefile] to include azure-sdk-for-c library for building.
-		3. Manually uncomment below source file in [project_hp\asdk\make\utilities_example\Makefile] to include azure iot example for building.
-			CSRC += $(DIR)/azure/example_azure_iot_common.c
-			CSRC += $(DIR)/azure/example_azure_iot_entry.c
-			CSRC += $(DIR)/azure/example_azure_iot_hub_c2d.c
-			CSRC += $(DIR)/azure/example_azure_iot_hub_methods.c
-			CSRC += $(DIR)/azure/example_azure_iot_hub_pnp.c
-			CSRC += $(DIR)/azure/example_azure_iot_hub_pnp_component.c
-			CSRC += $(DIR)/azure/example_azure_iot_hub_sas_telemetry.c
-			CSRC += $(DIR)/azure/example_azure_iot_hub_telemetry.c
-			CSRC += $(DIR)/azure/example_azure_iot_hub_twin.c
-			CSRC += $(DIR)/azure/example_azure_iot_rtk_pnp_sas.c
-			CSRC += $(DIR)/azure/example_azure_iot_rtk_pnp_x509.c
-			CSRC += $(DIR)/azure/example_azure_iot_provisioning.c
-			CSRC += $(DIR)/azure/example_azure_iot_provisioning_sas.c
-			CSRC += $(DIR)/azure/pnp/pnp_mqtt_message.c
-			CSRC += $(DIR)/azure/pnp/pnp_protocol.c
-			CSRC += $(DIR)/azure/pnp/sample_component/pnp_device_info_component.c
-			CSRC += $(DIR)/azure/pnp/sample_component/pnp_thermostat_component.c
-			CSRC += $(DIR)/azure/pnp/rtk_message/pnp_common_message.c
-			CSRC += $(DIR)/azure/pnp/rtk_component/pnp_audio.c
-			CSRC += $(DIR)/azure/pnp/rtk_component/pnp_bluetooth.c
-			CSRC += $(DIR)/azure/pnp/rtk_component/pnp_device_info.c
-			CSRC += $(DIR)/azure/pnp/rtk_component/pnp_gpio.c
-			CSRC += $(DIR)/azure/pnp/rtk_component/pnp_lcd.c
-			CSRC += $(DIR)/azure/pnp/rtk_component/pnp_memory.c
-			CSRC += $(DIR)/azure/pnp/rtk_component/pnp_system.c
-			CSRC += $(DIR)/azure/pnp/rtk_component/pnp_video.c
-			CSRC += $(DIR)/azure/pnp/rtk_component/pnp_wireless.c
-		4. Enable CONFIG_EXAMPLE_AZURE in [inc_hp\platform_opts.h] to start the example.
-		5. Select example in [example_azure_iot_entry.h] and configure your own setting in the example. Please refer to the "Azure Example Description" and "Realtek Pnp Example Description"section.
-		6. If you are using X509 certificate encrypted with EC cryptography, please enable below define in [config_rsa.h]. (Default use MbedTLS-2.4.0)
-			MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED
-			MBEDTLS_ASN1_WRITE_C
-			MBEDTLS_ECDH_C
-			MBEDTLS_ECDSA_C
-			MBEDTLS_ECP_C
+	i. Use "make menuconfig" command to open menuconfig terminal and select "MQTT Config" -> "Enable MQTT" to enable MQTT Stack.
+	ii. Manually uncomment "@make -C azure_emb all" in [project_hp\asdk\make\application\Makefile] to include azure-sdk-for-c library for building.
+	iii. Manually uncomment below source file in [project_hp\asdk\make\utilities_example\Makefile] to include azure iot example for building.
+		CSRC += $(DIR)/azure/example_azure_iot_common.c
+		CSRC += $(DIR)/azure/example_azure_iot_entry.c
+		CSRC += $(DIR)/azure/example_azure_iot_hub_c2d.c
+		CSRC += $(DIR)/azure/example_azure_iot_hub_methods.c
+		CSRC += $(DIR)/azure/example_azure_iot_hub_pnp.c
+		CSRC += $(DIR)/azure/example_azure_iot_hub_pnp_component.c
+		CSRC += $(DIR)/azure/example_azure_iot_hub_sas_telemetry.c
+		CSRC += $(DIR)/azure/example_azure_iot_hub_telemetry.c
+		CSRC += $(DIR)/azure/example_azure_iot_hub_twin.c
+		CSRC += $(DIR)/azure/example_azure_iot_rtk_pnp_sas.c
+		CSRC += $(DIR)/azure/example_azure_iot_rtk_pnp_x509.c
+		CSRC += $(DIR)/azure/example_azure_iot_provisioning.c
+		CSRC += $(DIR)/azure/example_azure_iot_provisioning_sas.c
+		CSRC += $(DIR)/azure/pnp/pnp_mqtt_message.c
+		CSRC += $(DIR)/azure/pnp/pnp_protocol.c
+		CSRC += $(DIR)/azure/pnp/sample_component/pnp_device_info_component.c
+		CSRC += $(DIR)/azure/pnp/sample_component/pnp_thermostat_component.c
+		CSRC += $(DIR)/azure/pnp/rtk_message/pnp_common_message.c
+		CSRC += $(DIR)/azure/pnp/rtk_component/pnp_audio.c
+		CSRC += $(DIR)/azure/pnp/rtk_component/pnp_bluetooth.c
+		CSRC += $(DIR)/azure/pnp/rtk_component/pnp_device_info.c
+		CSRC += $(DIR)/azure/pnp/rtk_component/pnp_gpio.c
+		CSRC += $(DIR)/azure/pnp/rtk_component/pnp_lcd.c
+		CSRC += $(DIR)/azure/pnp/rtk_component/pnp_memory.c
+		CSRC += $(DIR)/azure/pnp/rtk_component/pnp_system.c
+		CSRC += $(DIR)/azure/pnp/rtk_component/pnp_video.c
+		CSRC += $(DIR)/azure/pnp/rtk_component/pnp_wireless.c
+[IAR]
+	i. Rename km4_application_azure.ewp to km4_application.ewp so that project_hp.eww will default read Azure project. This .ewp file includes mqtt stack, azure embedded c sdk and all azure iot examples.
 
-	Next, Build and flash your image to the EVB.
-	When example start running
-		1. Use AT command to connect to WiFi manually. Input the below command step by step on terminal. After WiFi connected the example will proceed.
-			ATW0=[your AP ssid]
-			ATW1=[your AP passphrase. Exclude this command if AP is OPEN mode]
-			ATWC
-		2. Check the example and interact with it.
-		
+2. Enable CONFIG_EXAMPLE_AZURE in [inc_hp\platform_opts.h] to start the example.
+3. Select example in [example_azure_iot_entry.h] and configure your own setting in the example. Please refer to the "Azure Example Description" and "Realtek Pnp Example Description"section.
+4. If you are using X509 certificate encrypted with EC cryptography, please enable below define in [config_rsa.h]. (Default use MbedTLS-2.4.0)
+	MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED
+	MBEDTLS_ASN1_WRITE_C
+	MBEDTLS_ECDH_C
+	MBEDTLS_ECDSA_C
+	MBEDTLS_ECP_C
+
+Next, Build and flash your image to the EVB.
+When example start running
+	1. Use AT command to connect to WiFi manually. Input the below command step by step on terminal. After WiFi connected the example will proceed.
+		ATW0=[your AP ssid]
+		ATW1=[your AP passphrase. Exclude this command if AP is OPEN mode]
+		ATWC
+	2. Check the example and interact with it.
+
 Azure IoT Service Configuration
 -----------------------------------------------------------------------------------------------------------------------------------
 Here we introduce some required steps to prepare for your IoT Service. For Azure IoT Examples, it is recommended to set up Azure IoT Hub and DPS on your Azure Service Portal for testing. And for AmebaD IoT Hub Plug and Play Examples, you can either choose to connect to Azure IoT Hub/DPS or connect to Azure IoT Central for more simple deployment.

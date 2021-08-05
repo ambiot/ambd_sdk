@@ -493,7 +493,7 @@ static void handle_device_twin_message(
     MQTTMessage const* receive_message,
     az_iot_hub_client_twin_response const* twin_response)
 {
-	uint8_t* message_buf;
+	uint8_t* message_buf = NULL;
 	az_span message_span;
 
 	//If there are more then one component properties in the recieved payload, the payload buffer may be overwrited.
@@ -502,7 +502,7 @@ static void handle_device_twin_message(
 	message_buf = (uint8_t*)malloc(receive_message->payloadlen * sizeof(uint8_t)+1);
 	memcpy(message_buf, receive_message->payload, receive_message->payloadlen);
 	message_span = az_span_create(message_buf, receive_message->payloadlen);
-	
+
 	// Invoke appropriate action per response type (3 types only).
 	switch (twin_response->response_type)
 	{
