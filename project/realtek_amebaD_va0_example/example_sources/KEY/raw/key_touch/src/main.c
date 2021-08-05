@@ -56,7 +56,7 @@ static void app_keyscan_data_process(u32 ksdata)
 	u32 col = (ksdata & BIT_KS_COL_INDEX) >> 0;
 	u32 press = (ksdata & BIT_KS_PRESS_EVENT) >> 8;
 	
-	DBG_8195A("ksdata:%x (row:%x col:%x press:%x) \n", ksdata, row, col, press);
+	DiagPrintf("ksdata:%x (row:%x col:%x press:%x) \n", ksdata, row, col, press);
 }
 
 static void app_keyscan_irq_handler(void)
@@ -74,21 +74,21 @@ static void app_keyscan_irq_handler(void)
 		temp = KeyScan_GetDataNum(KEYSCAN_DEV);
 		KeyScan_Read(KEYSCAN_DEV, ksdata, temp);
 
-		DBG_8195A("SCAN_EVENT_INT FIFO Data:");
+		DiagPrintf("SCAN_EVENT_INT FIFO Data:");
 		for(tempi = 0; tempi < temp; tempi++) {
 			app_keyscan_data_process(ksdata[tempi]);
 		}
 	}
 
 	if (intr_status & BIT_KS_SCAN_FINISH_INT_STATUS) {
-		DBG_8195A("KEYSCAN BIT_KS_SCAN_FINISH_INT_STATUS Intr\n");
+		DiagPrintf("KEYSCAN BIT_KS_SCAN_FINISH_INT_STATUS Intr\n");
 	}
 
 	if (intr_status & BIT_KS_ALL_RELEASE_INT_STATUS) {
 		temp = KeyScan_GetDataNum(KEYSCAN_DEV);
 		KeyScan_Read(KEYSCAN_DEV, ksdata, temp);
 
-		DBG_8195A("ALL RELEASE \n");
+		DiagPrintf("ALL RELEASE \n");
 		for(tempi = 0; tempi < temp; tempi++) {
 			app_keyscan_data_process(ksdata[tempi]);
 		}
@@ -118,7 +118,7 @@ static void app_keyscan_init(void)
 		}
 	}
 
-	//DBG_8195A("app_keyscan_init column_sel:%08x, row_sel:%08x\n", column_sel, row_sel);
+	//DiagPrintf("app_keyscan_init column_sel:%08x, row_sel:%08x\n", column_sel, row_sel);
 
 	/* keyscan not used */
 	if ((column_sel == 0) || (row_sel == 0)) {
@@ -157,26 +157,26 @@ static void app_captouch_irq_handler(void)
 	
 	for(ch=0; ch<5; ch++) {
 		if(IntStatus & CT_CHX_PRESS_INT(ch)) {
-			DBG_8195A("Key	%x press \n",ch);
+			DiagPrintf("Key	%x press \n",ch);
 			pmu_set_sysactive_time(5);
 			pmu_set_dsleep_active_time(10*1000); //10s lock
 		}
 
 		if(IntStatus & CT_CHX_RELEASE_INT(ch)) {
-			DBG_8195A("Key	%x release \n", ch);
+			DiagPrintf("Key	%x release \n", ch);
 			pmu_set_sysactive_time(5);
 			pmu_set_dsleep_active_time(10*1000); //10s lock
 		}
 	}
 
 	if(IntStatus & BIT_CT_FIFO_OVERFLOW_INT) {
-		DBG_8195A("BIT_CT_FIFO_OVERFLOW_INT \n");
+		DiagPrintf("BIT_CT_FIFO_OVERFLOW_INT \n");
 	}
 	
 	if(IntStatus & BIT_CT_OVER_P_NOISE_THRESHOLD_INT) {		
 		CapTouch_DbgDumpETC(CAPTOUCH_DEV, 0);
 		
-		DBG_8195A("BIT_CT_OVER_P_NOISE_THRESHOLD_INT \n");
+		DiagPrintf("BIT_CT_OVER_P_NOISE_THRESHOLD_INT \n");
 		CapTouch_Cmd(CAPTOUCH_DEV, DISABLE);
 		CapTouch_Cmd(CAPTOUCH_DEV, ENABLE);
 
@@ -185,7 +185,7 @@ static void app_captouch_irq_handler(void)
 	
 	/* when press it will come over and over ?? */
 	if(IntStatus & BIT_CT_OVER_N_NOISE_THRESHOLD_INT) {
-		//DBG_8195A("BIT_CT_OVER_N_NOISE_THRESHOLD_INT \n");
+		//DiagPrintf("BIT_CT_OVER_N_NOISE_THRESHOLD_INT \n");
 	}
 }
 
@@ -227,7 +227,7 @@ static void app_captouch_init(void)
 	temp &= ~BIT_AON_PMC_EN_SNOZ2NORM;
 	HAL_WRITE32(SYSTEM_CTRL_BASE_LP, REG_AON_PM_OPT, temp);
 
-	//DBG_8195A("km4 app_captouch_init dslp_wakeup:%x \n", dslp_wakeup);
+	//DiagPrintf("km4 app_captouch_init dslp_wakeup:%x \n", dslp_wakeup);
 }
 
 void main(void)

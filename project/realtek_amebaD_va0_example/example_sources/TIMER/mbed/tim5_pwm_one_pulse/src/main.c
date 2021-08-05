@@ -45,7 +45,7 @@ void gpio_int_ISR (u32 data, u32 event)
 {
 	GPIO_InitTypeDef *gpio_irq_pin = (GPIO_InitTypeDef *)data;
 		
-	DBG_8195A("%s pin:%d ==> event=%d\n", __FUNCTION__, gpio_irq_pin->GPIO_Pin, event);    
+	DiagPrintf("%s pin:%d ==> event=%d\n", __FUNCTION__, gpio_irq_pin->GPIO_Pin, event);    
 }
 
 void gpio_interrupt_enable(void)
@@ -90,7 +90,7 @@ void tim5_pwm_one_pulse(void)
 void main(void)
 {
 	if(xTaskCreate( (TaskFunction_t)tim5_pwm_one_pulse, "TIM5 PWM ONE PULSE DEMO", (2048/4), NULL, (tskIDLE_PRIORITY + 1), NULL)!= pdPASS) {
-			DBG_8195A("Cannot create tim5 pwm one pulse mode demo task\n\r");
+			DiagPrintf("Cannot create tim5 pwm one pulse mode demo task\n\r");
 	}
 
 	vTaskStartScheduler();

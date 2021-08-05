@@ -221,6 +221,11 @@ IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/mbedtls-2.4.0/
 IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/mbedtls_ram_map/rom
 IFLAGS               += -I$(BASEDIR)/component/common/application/amazon/amazon-freertos/lib/include/private
 
+#CoAP
+IFLAGS               += -I$(BASEDIR)/component/common/example/coap
+IFLAGS               += -I$(BASEDIR)/component/common/network/coap
+IFLAGS               += -I$(BASEDIR)/component/common/network/coap/include
+
 #AZURE
 IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/c-utility/inc
 IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/c-utility/pal/inc

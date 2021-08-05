@@ -158,7 +158,7 @@ u8 *sp_get_ready_tx_page(void)
 		return ptx_block->tx_addr;
 	}
 	else{
-		DBG_8195A("empty\n");
+		DiagPrintf("empty\n");
 		sp_tx_info.tx_empty_flag = 1;
 		return sp_tx_info.tx_zero_block.tx_addr;	//for audio buffer empty case
 	}
@@ -223,7 +223,7 @@ u8 *sp_get_free_rx_page(void)
 		return prx_block->rx_addr;
 	}
 	else{
-		DBG_8195A("full\n");
+		DiagPrintf("full\n");
 		sp_rx_info.rx_full_flag = 1;
 		return sp_rx_info.rx_full_block.rx_addr;	//for audio buffer full case
 	}
@@ -359,7 +359,7 @@ static void sp_init_hal(pSP_OBJ psp_obj)
 			div = 48;
 			break;
 		default:
-			DBG_8195A("sample rate not supported!!\n");
+			DiagPrintf("sample rate not supported!!\n");
 			break;
 	}
 	PLL_Div(div);
@@ -417,7 +417,7 @@ void example_audio_ppm_conf_thread(void* param)
 	u32 rx_length;
 	pSP_OBJ psp_obj = (pSP_OBJ)param;
 	
-	DBG_8195A("Audio ppm configuration demo begin......\n");
+	DiagPrintf("Audio ppm configuration demo begin......\n");
 
 	ppm_conf_timer = xTimerCreate((signed const char *)"PPM_CONF_Timer",
 		portMAX_DELAY, _FALSE, NULL, sp_ppm_conf_timer_isr);
@@ -471,7 +471,7 @@ void main(void)
 	sp_obj.mono_stereo = CH_STEREO;
 	sp_obj.direction = APP_AMIC_IN|APP_LINE_OUT;
 	if(xTaskCreate(example_audio_ppm_conf_thread, ((const char*)"example_audio_ppm_conf_thread"), 512, (void *)(&sp_obj), tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(example_audio_ppm_conf_thread) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(example_audio_ppm_conf_thread) failed", __FUNCTION__);
 
 	vTaskStartScheduler();
 	while(1){

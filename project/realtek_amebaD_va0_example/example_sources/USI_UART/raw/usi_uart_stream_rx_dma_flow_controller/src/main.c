@@ -72,7 +72,7 @@ void uart_dma_send(char *pstr,u32 len)
 	NVIC_SetPriority(GDMA_GetIrqNum(0, GDMA_InitStruct.GDMA_ChNum), 12);	
 
 	 if (!ret ) {
-		DBG_8195A("%s Error(%d)\n", __FUNCTION__, ret);        
+		DiagPrintf("%s Error(%d)\n", __FUNCTION__, ret);        
 		tx_busy = 0;
 	}
 }

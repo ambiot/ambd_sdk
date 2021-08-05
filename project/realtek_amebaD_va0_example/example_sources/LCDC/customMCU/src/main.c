@@ -74,7 +74,7 @@ void main(void)
 	bsp_touch__init();
 	BSP_LCD_Init();
 		
-		DBG_8195A("draw point test\n");
+		DiagPrintf("draw point test\n");
 		/*-------------------------draw point*/
 		LCD_Clear(WHITE);
 		for(i=0; i<lcddev.height;i++) {
@@ -86,7 +86,7 @@ void main(void)
 		HalDelayUs(1000);
 		LCD_Clear(WHITE);
 
-				DBG_8195A("draw line test\n");
+				DiagPrintf("draw line test\n");
 		/*-------------------------draw line*/
 		POINT_COLOR = BLUE;
 		for(i=0;i<100;i++) {
@@ -99,7 +99,7 @@ void main(void)
 		}
 		LCD_Clear(WHITE);
 
-		DBG_8195A("draw circle test\n");
+		DiagPrintf("draw circle test\n");
 		/*draw circle*/
 		POINT_COLOR = BLUE;
 		for(i=0;i< ((lcddev.width/2>lcddev.height/2)?lcddev.height/2:lcddev.width/2);i++) {
@@ -118,7 +118,7 @@ void main(void)
 			HalDelayUs(5000);
 		}
 
-		DBG_8195A("fill color test\n");
+		DiagPrintf("fill color test\n");
 		/*fill color*/
 		Temp = lcddev.height/3;
 		for(i=0; i<3;i++) {
@@ -141,14 +141,14 @@ void main(void)
 		xpt2046_touch_data.state = TOUCH_RELEASE ;
 
 		bsp_touch__scan();
-		//DBG_8195A("state:%d\n", xpt2046_touch_data.state);
+		//DiagPrintf("state:%d\n", xpt2046_touch_data.state);
 		
 		if(xpt2046_touch_data.state == TOUCH_PRESS){
 
 			pointx = xpt2046_touch_data.x;
 			pointy  = xpt2046_touch_data.y;
 			
-			//DBG_8195A("point: %d,%d\n", pointx, pointy);
+			//DiagPrintf("point: %d,%d\n", pointx, pointy);
 			LCD_Draw_Circle(pointx, pointy, 1);
 			LCD_Draw_Circle(pointx, pointy, 2);
 			LCD_Fast_DrawPoint(pointx, pointy, RED);

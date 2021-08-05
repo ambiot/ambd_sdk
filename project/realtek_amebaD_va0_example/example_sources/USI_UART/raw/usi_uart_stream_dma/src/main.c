@@ -64,7 +64,7 @@ void uart_dma_send(char *pstr,u32 len)
 	NVIC_SetPriority(GDMA_GetIrqNum(0, GDMA_InitStruct.GDMA_ChNum), 12);	
 
 	if (!ret ) {
-		DBG_8195A("%s Error(%d)\n", __FUNCTION__, ret);        
+		DiagPrintf("%s Error(%d)\n", __FUNCTION__, ret);        
 		tx_busy = 0;
 	}
 }
@@ -118,11 +118,11 @@ void main(void)
 		rx_buf[i]=0;
     	}
 	i=0;
-	DBG_8195A("receive 13 bytes\r\n");
+	DiagPrintf("receive 13 bytes\r\n");
 	ret=uart_dma_recv(rx_buf,13);
 	
 	 if (!ret) {
-		DBG_8195A(" %s: Recv Error(%d)\n", __FUNCTION__, ret);        
+		DiagPrintf(" %s: Recv Error(%d)\n", __FUNCTION__, ret);        
 		rx_done = 1;
 	}
 
@@ -137,12 +137,12 @@ void main(void)
 	    		}
             /* Wait for inputing x character to initiate DMA. 
                8 for this example*/
-               	DBG_8195A("rx_len=%d\r\n", len);
+               	DiagPrintf("rx_len=%d\r\n", len);
 			ret = uart_dma_recv(rx_buf, len);
 			rx_buf[len] = 0;    // end of string
 
 			if (!ret) {
-				DBG_8195A(" %s: Recv Error(%d)\n", __FUNCTION__, ret);        
+				DiagPrintf(" %s: Recv Error(%d)\n", __FUNCTION__, ret);        
 				rx_done = 1;
 			}
 		}

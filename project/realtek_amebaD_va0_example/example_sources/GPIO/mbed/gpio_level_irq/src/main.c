@@ -31,7 +31,7 @@ void gpio_level_irq_handler (uint32_t id, gpio_irq_event event)
 
     if (*level == IRQ_LOW )
     {
-        DBG_8195A("low level event\r\n");
+        DiagPrintf("low level event\r\n");
 
         // Change to listen to high level event
         *level = IRQ_HIGH;
@@ -39,7 +39,7 @@ void gpio_level_irq_handler (uint32_t id, gpio_irq_event event)
     }
     else if (*level == IRQ_HIGH)
     {
-        DBG_8195A("high level event\r\n");
+        DiagPrintf("high level event\r\n");
 
         // Change to listen to low level event
         *level = IRQ_LOW;

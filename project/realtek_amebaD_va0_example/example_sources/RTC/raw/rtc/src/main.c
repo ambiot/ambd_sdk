@@ -87,9 +87,9 @@ static u8 days_in_month (u8 month, u8 year)
 		/* Convert to timestamp(seconds from 1970.1.1 00:00:00)*/
 		seconds = mktime(timeinfo);
 		
-		DBG_8195A("Time as seconds since January 1, 1970 = %d\n", seconds);
-		DBG_8195A("Time as a basic string = %s", ctime(&seconds));
-		DBG_8195A("Time as a custom formatted string = %d-%d-%d %d:%d:%d\n\n", 
+		DiagPrintf("Time as seconds since January 1, 1970 = %d\n", seconds);
+		DiagPrintf("Time as a basic string = %s", ctime(&seconds));
+		DiagPrintf("Time as a custom formatted string = %d-%d-%d %d:%d:%d\n\n", 
 			timeinfo->tm_year, timeinfo->tm_mon, timeinfo->tm_mday, timeinfo->tm_hour,
 			timeinfo->tm_min,timeinfo->tm_sec);
 

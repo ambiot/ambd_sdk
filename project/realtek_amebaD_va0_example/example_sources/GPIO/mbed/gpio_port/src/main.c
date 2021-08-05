@@ -76,7 +76,7 @@ void main(void)
         } 
 
         if (value_old != value_new) {
-            DBG_8195A("0x%x\r\n", value_new);
+            DiagPrintf("0x%x\r\n", value_new);
             value_old = value_new;
         }
         wait_ms(50);

@@ -27,9 +27,9 @@ VOID tim5_capture_ISR(u32 channel)
 		cnt = 0;
 
 		if(val2 > val1)
-			DBG_8195A("frequency: %d\n", 40000000/(val2 - val1));
+			DiagPrintf("frequency: %d\n", 40000000/(val2 - val1));
 		else
-			DBG_8195A("frequency: %d\n", 40000000/(PWM_PERIOD + 1 - val1 + val2));
+			DiagPrintf("frequency: %d\n", 40000000/(PWM_PERIOD + 1 - val1 + val2));
 	}
 
 	RTIM_INTClear(TIM5);
@@ -93,7 +93,7 @@ void tim5_capture_pwm(void)
 void main(void)
 {
 	if(xTaskCreate( (TaskFunction_t)tim5_capture_pwm, "TIM5 CAPTURE PWM DEMO", (2048/4), NULL, (tskIDLE_PRIORITY + 1), NULL)!= pdPASS) {
-			DBG_8195A("Cannot create tim5 capture pwm demo task\n\r");
+			DiagPrintf("Cannot create tim5 capture pwm demo task\n\r");
 	}
 
 	vTaskStartScheduler();

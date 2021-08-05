@@ -133,7 +133,7 @@ static void sp_init_hal(pSP_OBJ psp_obj)
 			div = 48;
 			break;
 		default:
-			DBG_8195A("sample rate not supported!!\n");
+			DiagPrintf("sample rate not supported!!\n");
 			break;
 	}
 	PLL_Div(div);
@@ -179,10 +179,10 @@ void example_audio_resample_thread(void* param)
 
 	app_init_psram();
 	
-	DBG_8195A("Audio resample demo begin......\n");
+	DiagPrintf("Audio resample demo begin......\n");
 	memcpy((char*)voice_sample, (char*)pcm_data, sizeof(pcm_data));
 	resample_size = sample_size/3;
-	DBG_8195A("sample size: %d, resample size: %d......\n", sample_size, resample_size);
+	DiagPrintf("sample size: %d, resample size: %d......\n", sample_size, resample_size);
 	ResampleReset48khzTo16khz(&state);
 
 	sp_init_hal(psp_obj);
@@ -232,7 +232,7 @@ void main(void)
 	sp_obj.mono_stereo = CH_MONO;
 	sp_obj.direction = APP_LINE_OUT;
 	if(xTaskCreate(example_audio_resample_thread, ((const char*)"example_audio_resample_thread"), 1024, (void *)(&sp_obj), tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(example_audio_resample_thread) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(example_audio_resample_thread) failed", __FUNCTION__);
 
 	vTaskStartScheduler();
 	while(1){

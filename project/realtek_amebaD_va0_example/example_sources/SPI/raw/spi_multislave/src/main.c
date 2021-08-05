@@ -90,7 +90,7 @@ static u32 spi_interrupt(void *Adaptor)
 	SSI_SetIsrClean(spi_obj->spi_dev, InterruptStatus);
 
 	if (InterruptStatus & (BIT_ISR_TXOIS | BIT_ISR_RXUIS | BIT_ISR_RXOIS | BIT_ISR_MSTIS)) {
-		DBG_8195A("[INT] Tx/Rx Warning %x ", InterruptStatus);
+		DiagPrintf("[INT] Tx/Rx Warning %x ", InterruptStatus);
 	}
 	if ((InterruptStatus & BIT_ISR_RXFIS) ) {
 		u32 TransLen = 0;
@@ -158,7 +158,7 @@ void dump_data(u8 *start, u32 size, char * strHeader)
 	16 bytes per line
 	*/
 	if (strHeader)
-	   DBG_8195A ("%s", strHeader);
+	   DiagPrintf ("%s", strHeader);
 
 	column = size % 16;
 	row = (size / 16) + 1;
@@ -169,22 +169,22 @@ void dump_data(u8 *start, u32 size, char * strHeader)
 		max = (index == row - 1) ? column : 16;
 		if ( max==0 ) break; /* If we need not dump this line, break it. */
 
-		DBG_8195A ("\n[%08x] ", line);
+		DiagPrintf ("\n[%08x] ", line);
 
 		//Hex
 		for (index2 = 0; index2 < max; index2++)
 		{
 		    if (index2 == 8)
-		    DBG_8195A ("  ");
-		    DBG_8195A ("%02x ", (u8) buf[index2]);
+		    DiagPrintf ("  ");
+		    DiagPrintf ("%02x ", (u8) buf[index2]);
 		}
 
 		if (max != 16)
 		{
 		    if (max < 8)
-		        DBG_8195A ("  ");
+		        DiagPrintf ("  ");
 		    for (index2 = 16 - max; index2 > 0; index2--)
-		        DBG_8195A ("   ");
+		        DiagPrintf ("   ");
 		}
 
 	}
@@ -311,7 +311,7 @@ void spi_multislave_task(void* param)
 
 
     while (Counter < TEST_LOOP) {
-        DBG_8195A("======= Test Loop %d =======\r\n", Counter);
+        DiagPrintf("======= Test Loop %d =======\r\n", Counter);
 
         if(Counter % 2){
             for (i=0;i<TEST_BUF_SIZE;i++) {
@@ -339,19 +339,19 @@ void spi_multislave_task(void* param)
             DelayMs(1000);
         } 
 	
-        DBG_8195A("SPI Master Write Test==>\r\n");
+        DiagPrintf("SPI Master Write Test==>\r\n");
         TrDone = 0;
 
  		Spi_master_write_stream(&spi_master, TestBuf, TEST_BUF_SIZE);
 
 
         i=0;
-        DBG_8195A("SPI Master Wait Write Done...\r\n");
+        DiagPrintf("SPI Master Wait Write Done...\r\n");
         while(TrDone == 0) {
             DelayMs(100);
             i++;
         }
-        DBG_8195A("SPI Master Write Done!!\r\n");
+        DiagPrintf("SPI Master Write Done!!\r\n");
 		if(Counter % 2){
 			GPIO_WriteBit(SPI_GPIO_CS0, 1);
 			GPIO_WriteBit(SPI_GPIO_CS1, 0);
@@ -366,7 +366,7 @@ void spi_multislave_task(void* param)
 	/* free spi master */
 	Spi_free(&spi_master);
 
-    DBG_8195A("SPI Master Test <==\r\n");
+    DiagPrintf("SPI Master Test <==\r\n");
 
 
 #else
@@ -399,14 +399,14 @@ void spi_multislave_task(void* param)
 	
 
     while (SSI_Busy(spi_slave.spi_dev)) {
-        DBG_8195A("Wait SPI Bus Ready...\r\n");
+        DiagPrintf("Wait SPI Bus Ready...\r\n");
         DelayMs(1000);
     }
 
     while (Counter < TEST_LOOP) {
-        DBG_8195A("======= Test Loop %d =======\r\n", Counter);
+        DiagPrintf("======= Test Loop %d =======\r\n", Counter);
         _memset(TestBuf, 0, TEST_BUF_SIZE);
-		DBG_8195A("SPI Slave Read Test ==>\r\n");
+		DiagPrintf("SPI Slave Read Test ==>\r\n");
 		
         TrDone = 0;
 
@@ -417,13 +417,13 @@ void spi_multislave_task(void* param)
 
 
 		i=0;
-		DBG_8195A("SPI Slave Wait Read Done...\r\n");
+		DiagPrintf("SPI Slave Wait Read Done...\r\n");
 		while(TrDone == 0) {
 			DelayMs(100);
 			i++;
 
 			if (i>150) {
-				DBG_8195A("SPI Slave Wait Timeout\r\n");
+				DiagPrintf("SPI Slave Wait Timeout\r\n");
 				break;
 			}
 		}
@@ -437,7 +437,7 @@ void spi_multislave_task(void* param)
 	
 #endif
 
-    DBG_8195A("SPI Demo finished.\n");
+    DiagPrintf("SPI Demo finished.\n");
 
     vTaskDelete(NULL);
 }
@@ -450,7 +450,7 @@ void spi_multislave_task(void* param)
 void main(void)
 {
 	if(xTaskCreate(spi_multislave_task, ((const char*)"spi_multislave_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(spi_multislave_task) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(spi_multislave_task) failed", __FUNCTION__);
 
 	vTaskStartScheduler();
 	while(1){

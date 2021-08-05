@@ -24,7 +24,7 @@ static void flash_test_task(void *param)
 	{
 		device_mutex_lock(RT_DEV_LOCK_FLASH);
 		val32_to_read = HAL_READ32(SPI_FLASH_BASE, address);
-		DBG_8195A("Read Data 0x%x\n", val32_to_read);
+		DiagPrintf("Read Data 0x%x\n", val32_to_read);
 
 		FLASH_Write_Lock();
 		FLASH_Erase(EraseSector, address);
@@ -36,12 +36,12 @@ static void flash_test_task(void *param)
 
 		device_mutex_unlock(RT_DEV_LOCK_FLASH);
 
-		DBG_8195A("Read Data 0x%x\n", val32_to_read);
+		DiagPrintf("Read Data 0x%x\n", val32_to_read);
 
 		// verify result
 		result = (val32_to_write == val32_to_read) ? 1 : 0;
-		//printf("\r\nResult is %s\r\n", (result) ? "success" : "fail");
-		DBG_8195A("\r\nResult is %s\r\n", (result) ? "success" : "fail");
+		//DiagPrintf("\r\nResult is %s\r\n", (result) ? "success" : "fail");
+		DiagPrintf("\r\nResult is %s\r\n", (result) ? "success" : "fail");
 		result = 0;
 	}
 
@@ -51,7 +51,7 @@ static void flash_test_task(void *param)
 void main(void)
 {
 	if(xTaskCreate(flash_test_task, ((const char*)"flash_test_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(flash_test_task) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(flash_test_task) failed", __FUNCTION__);
 
 	vTaskStartScheduler();
 	while(1){

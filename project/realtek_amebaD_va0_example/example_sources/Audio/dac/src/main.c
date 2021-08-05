@@ -134,7 +134,7 @@ static void sp_init_hal(pSP_OBJ psp_obj)
 			div = 48;
 			break;
 		default:
-			DBG_8195A("sample rate not supported!!\n");
+			DiagPrintf("sample rate not supported!!\n");
 			break;
 	}
 	PLL_Div(div);
@@ -175,7 +175,7 @@ void example_audio_dac_thread(void* param)
 	u32 tx_length;
 	pSP_OBJ psp_obj = (pSP_OBJ)param;
 	
-	DBG_8195A("Audio dac demo begin......\n");
+	DiagPrintf("Audio dac demo begin......\n");
 
 	sp_init_hal(psp_obj);
 	
@@ -191,7 +191,7 @@ void example_audio_dac_thread(void* param)
 	AUDIO_SP_TdmaCmd(AUDIO_SPORT_DEV, ENABLE);
 	AUDIO_SP_TxStart(AUDIO_SPORT_DEV, ENABLE);
 
-	DBG_8195A("\nPlay bird sing on memory.\n");
+	DiagPrintf("\nPlay bird sing on memory.\n");
 
 	tx_addr = (u32)sp_get_ready_tx_page();
 	tx_length = sp_get_ready_tx_length();
@@ -221,7 +221,7 @@ void main(void)
 	sp_obj.mono_stereo = CH_STEREO;
 	sp_obj.direction = APP_LINE_OUT;
 	if(xTaskCreate(example_audio_dac_thread, ((const char*)"example_audio_dac_thread"), 512, (void *)(&sp_obj), tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(example_audio_dac_thread) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(example_audio_dac_thread) failed", __FUNCTION__);
 
 	vTaskStartScheduler();
 	while(1){

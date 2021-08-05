@@ -166,16 +166,16 @@ void uart_test_demo(void *param)
         	ret = uart_int_recv(&uart_obj, rx_buf, 13, 1000,(void *)Release_CPU );
 
 		if (ret < 13) {
-			DBG_8195A("Serial Rcv Timeout, Got %d bytes\n", ret);
+			DiagPrintf("Serial Rcv Timeout, Got %d bytes\n", ret);
 		}else if(ret==13){
-			DBG_8195A("Recv all 13 Bytes");
+			DiagPrintf("Recv all 13 Bytes");
 		}else{
-			DBG_8195A("!!!!!!!!!!!!!!!!!!Recv: %d\n", ret);
+			DiagPrintf("!!!!!!!!!!!!!!!!!!Recv: %d\n", ret);
 			vTaskDelay(1000);
 		}
 
 		if (ret > 0) {
-			DBG_8195A("send received strings: \n");
+			DiagPrintf("send received strings: \n");
 			rx_buf[ret] = 0x00; // end of string
 			uart_send_string(&uart_obj, rx_buf);
 		}
@@ -186,7 +186,7 @@ void main(void)
 {
 	// create demo Task
 	if(xTaskCreate( (TaskFunction_t)uart_test_demo, "uart test demo", (2048/2), (void *)NULL, (tskIDLE_PRIORITY + 1), NULL)!= pdPASS) {
-		DBG_8195A("Cannot create uart test demo task\n\r");
+		DiagPrintf("Cannot create uart test demo task\n\r");
 		goto end_demo;
 	}
 

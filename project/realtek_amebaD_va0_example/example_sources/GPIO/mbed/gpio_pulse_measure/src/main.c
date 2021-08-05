@@ -38,7 +38,7 @@ void gpio_demo_irq_handler (uint32_t id, gpio_irq_event event)
         gpio_irq_set_event(&gpio_irq, IRQ_RISE);
         irq_rise = 1;
 
-        DBG_8195A("%d\n", (fall_time-rise_time));
+        DiagPrintf("%d\n", (fall_time-rise_time));
     }
 }
 

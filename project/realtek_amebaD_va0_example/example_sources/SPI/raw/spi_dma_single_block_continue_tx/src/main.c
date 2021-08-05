@@ -139,7 +139,7 @@ void spi_singleblock_task(void* param)
 		*((u8*)MasterTxBuf + i) = i;
 		}
 
-	DBG_8195A("----------------------------------------\n");
+	DiagPrintf("----------------------------------------\n");
 	
 	MasterTxDone = 0;
 
@@ -154,7 +154,7 @@ void spi_singleblock_task(void* param)
 		DelayMs(100);
 		i++;
 		if (i>150) {
-			DBG_8195A("SPI Timeout\r\n");
+			DiagPrintf("SPI Timeout\r\n");
 			break;
 		}
 	}
@@ -162,7 +162,7 @@ void spi_singleblock_task(void* param)
 	Spi_free(&spi_master);
 
 
-    DBG_8195A("SPI Demo finished.\n");
+    DiagPrintf("SPI Demo finished.\n");
 
 	vTaskDelete(NULL);
 
@@ -176,7 +176,7 @@ void spi_singleblock_task(void* param)
 void main(void)
 {
 	if(xTaskCreate(spi_singleblock_task, ((const char*)"spi_singleblock_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(spi_singleblock_task) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(spi_singleblock_task) failed", __FUNCTION__);
 
 	vTaskStartScheduler();
 	while(1){

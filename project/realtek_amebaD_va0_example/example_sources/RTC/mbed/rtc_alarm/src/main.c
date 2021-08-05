@@ -21,7 +21,7 @@
  	t = rtc_read();
 	timeinfo = localtime(&t);
 
-	DBG_8195A("alarm time = %d-%d-%d %d:%d:%d\n", 
+	DiagPrintf("alarm time = %d-%d-%d %d:%d:%d\n", 
             timeinfo->tm_year, timeinfo->tm_mon, timeinfo->tm_mday, timeinfo->tm_hour,
             timeinfo->tm_min,timeinfo->tm_sec);
  }
@@ -36,7 +36,7 @@ void rtc_alarm_en(void)
 	rtc_write(t);
 	timeinfo = localtime(&t);
 
-	DBG_8195A("now time = %d-%d-%d %d:%d:%d\n", 
+	DiagPrintf("now time = %d-%d-%d %d:%d:%d\n", 
             timeinfo->tm_year, timeinfo->tm_mon, timeinfo->tm_mday, timeinfo->tm_hour,
             timeinfo->tm_min,timeinfo->tm_sec);
 	
@@ -52,7 +52,7 @@ void rtc_alarm_en(void)
  int main() 
  {
 	if(xTaskCreate( (TaskFunction_t)rtc_alarm_en, "RTC ALARM DEMO", (2048/4), NULL, (tskIDLE_PRIORITY + 1), NULL)!= pdPASS) {
-			DBG_8195A("Cannot create rtc alarm demo task\n\r");
+			DiagPrintf("Cannot create rtc alarm demo task\n\r");
 	}
 
 	vTaskStartScheduler();

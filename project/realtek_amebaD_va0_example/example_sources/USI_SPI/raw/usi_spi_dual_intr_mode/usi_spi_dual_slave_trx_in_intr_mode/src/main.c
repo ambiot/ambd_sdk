@@ -71,7 +71,7 @@ void USISsiPrint(u8 *pSrc, u8 *pDst, u32 Length)
 	int Index;
 
 	for(Index = 0; Index < Length; Index++){
-		DBG_8195A("%x: %x ---- %x\n",Index, pSrc[Index] & dfs_mask, pDst[Index]);
+		DiagPrintf("%x: %x ---- %x\n",Index, pSrc[Index] & dfs_mask, pDst[Index]);
 	}
 }
 
@@ -238,7 +238,7 @@ void usi_spi_interrupt_task(void* param)
 	/**
 	* Slave write/read
 	*/
-	DBG_8195A("----------- Slave write/read -----------\n");
+	DiagPrintf("----------- Slave write/read -----------\n");
 
 		RxCompleteFlag = 0;
 		TxCompleteFlag = 0;
@@ -251,7 +251,7 @@ void usi_spi_interrupt_task(void* param)
 			DelayMs(100);
 			i++;
 			if (i>150) {
-				DBG_8195A("USI SPI Slave Wait Timeout\r\n");
+				DiagPrintf("USI SPI Slave Wait Timeout\r\n");
 				break;
 			}
 		}
@@ -262,7 +262,7 @@ void usi_spi_interrupt_task(void* param)
 	/**
 	* Slave write
 	*/
-	DBG_8195A("----------- Slave write -----------\n");
+	DiagPrintf("----------- Slave write -----------\n");
 
 		TxCompleteFlag = 0;
 
@@ -273,7 +273,7 @@ void usi_spi_interrupt_task(void* param)
 			DelayMs(100);
 			i++;
 			if (i>150) {
-				DBG_8195A("USI SPI Slave Timeout\r\n");
+				DiagPrintf("USI SPI Slave Timeout\r\n");
 				result = 0;
 				break;
 			}
@@ -283,8 +283,8 @@ void usi_spi_interrupt_task(void* param)
 	/* free USI_SPI */
 	USISsiFree(pUSISsiObj);
 
-	DBG_8195A("USI SPI Slave Demo Finished.\n");
-	DBG_8195A("\r\nSlave Result is %s\r\n", result ? "success" : "fail");
+	DiagPrintf("USI SPI Slave Demo Finished.\n");
+	DiagPrintf("\r\nSlave Result is %s\r\n", result ? "success" : "fail");
 
 	vTaskDelete(NULL);
 
@@ -298,7 +298,7 @@ void usi_spi_interrupt_task(void* param)
 void main(void)
 {
 	if(xTaskCreate(usi_spi_interrupt_task, ((const char*)"usi_spi_interrupt_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(usi_spi_interrupt_task) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(usi_spi_interrupt_task) failed", __FUNCTION__);
 
 	vTaskStartScheduler();
 	while(1){

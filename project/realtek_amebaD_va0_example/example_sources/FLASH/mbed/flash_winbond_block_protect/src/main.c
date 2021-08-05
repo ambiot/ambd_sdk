@@ -28,25 +28,25 @@ void main(void)
     }
 
     for(loop = 0; loop < 8; loop++) {
-        DBG_8195A("Test Address = %x\n", address);
+        DiagPrintf("Test Address = %x\n", address);
         flash_erase_sector(&flash, address);
         flash_burst_write(&flash, address, length, &write_data1[0]);
         flash_stream_read(&flash, address, length, &buff[0]);
 
-        DBG_8195A("Before Lock\n");
+        DiagPrintf("Before Lock\n");
 
         for(i = 0; i<length;i++) {
            if(write_data1[i] != buff[i]) {
-                DBG_8195A("Error : Write Data is = %x, Read Data is %x\n", write_data1[i],buff[i]);
+                DiagPrintf("Error : Write Data is = %x, Read Data is %x\n", write_data1[i],buff[i]);
                 result1 = 0;
             }
         }
         if(result1 == 1)
-            DBG_8195A("Success 1\n");
+            DiagPrintf("Success 1\n");
         
-        DBG_8195A("Lock last 8 blocks\n");
+        DiagPrintf("Lock last 8 blocks\n");
         result2 = 1;
-        DBG_8195A("Status Register Before Setting= %x\n", flash_get_status(&flash));
+        DiagPrintf("Status Register Before Setting= %x\n", flash_get_status(&flash));
 
         flash_set_status(&flash, 0x10);//Protect upper 512KB, 0x180000h~0x1FFFFFh
 
@@ -56,16 +56,16 @@ void main(void)
         flash_stream_read(&flash, address, length, &buff[0]);
             for(i = 0; i < length; i++) {
                if(write_data1[i] != buff[i]){ 
-                    DBG_8195A("Error : Write Data1 is = %x, Write Data2 is = %x, Read Data is %x\n", write_data1[i], write_data2[i], buff[i]); 
+                    DiagPrintf("Error : Write Data1 is = %x, Write Data2 is = %x, Read Data is %x\n", write_data1[i], write_data2[i], buff[i]); 
                     result2 = 0;
                 }
             }
         if(result2 == 1)
-            DBG_8195A("Success 2\n");  
+            DiagPrintf("Success 2\n");  
 
-        DBG_8195A("Unlock\n");
+        DiagPrintf("Unlock\n");
         result3 = 1;
-        DBG_8195A("Status Register Before Setting= %x\n", flash_get_status(&flash));
+        DiagPrintf("Status Register Before Setting= %x\n", flash_get_status(&flash));
 
         flash_set_status(&flash, flash_get_status(&flash) & 0x0); //Unlock the protected block   
 
@@ -77,21 +77,21 @@ void main(void)
 
         for(i = 0; i<length;i++){
            if(write_data2[i] != buff[i]){
-                DBG_8195A("Error : Write Data is = %x, Read Data is %x\n",write_data2[i],buff[i]);
+                DiagPrintf("Error : Write Data is = %x, Read Data is %x\n",write_data2[i],buff[i]);
                 result3 = 0;
             }
         }
         if(result3 == 1)
-            DBG_8195A("Success 3\n");
+            DiagPrintf("Success 3\n");
 
         flash_reset_status(&flash);//make sure the status register is reset if users would like to reload code
 
-        DBG_8195A("Status Register After Reset= %x\n", flash_get_status(&flash));
-        DBG_8195A("Result is %s\r\n\n", (result1 && result2 && result3) ? "success" : "fail");
+        DiagPrintf("Status Register After Reset= %x\n", flash_get_status(&flash));
+        DiagPrintf("Result is %s\r\n\n", (result1 && result2 && result3) ? "success" : "fail");
         address += 0x10000;
     }
 
-    DBG_8195A("Test Done\n");
+    DiagPrintf("Test Done\n");
     
     for(;;);
         

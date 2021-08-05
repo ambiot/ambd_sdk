@@ -215,7 +215,7 @@ void test_tx_complete(void *data, char *pbuf)
     count++;
     if ((count&1023) == 1023)
     {
-         DBG_8195A("%s \n", __func__);
+         DiagPrintf("%s \n", __func__);
     }
 
     ptx_buf = i2s_get_tx_page(obj);
@@ -245,7 +245,7 @@ void test_rx_complete(void *data, char* pbuf)
     count++;
     if ((count&1023) == 1023)
     {
-         DBG_8195A("%s \n", __func__);
+         DiagPrintf("%s \n", __func__);
     }
 
     //ptx_buf = i2s_get_tx_page(obj);

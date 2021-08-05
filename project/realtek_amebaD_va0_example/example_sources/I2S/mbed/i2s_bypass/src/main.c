@@ -68,7 +68,7 @@ void test_rx_complete(void *data, char* pbuf)
     count++;
     if ((count&1023) == 1023)
     {
-         DBG_8195A("%s \n", __func__);
+         DiagPrintf("%s \n", __func__);
     }
 
     //DCache_Invalidate(((u32)(pbuf) & CACHE_LINE_ADDR_MSK), (I2S_DMA_PAGE_SIZE + CACHE_LINE_SIZE));

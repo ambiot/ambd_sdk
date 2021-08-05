@@ -170,7 +170,7 @@ void SsiPrint(u8 *pSrc, u8 *pDst, u32 Length)
 	int Index;
 
 	for(Index = 0;Index < Length; Index++){
-		DBG_8195A("%x: %x ---- %x\n",Index, pSrc[Index] & dfs_mask, pDst[Index]);
+		DiagPrintf("%x: %x ---- %x\n",Index, pSrc[Index] & dfs_mask, pDst[Index]);
 	}
 }
 
@@ -379,7 +379,7 @@ void spi_interrupt_task(void* param)
     /**
      * Master write/read, Slave read/write
      */
-    DBG_8195A("------Master write/read, Slave read/write-------\n");
+    DiagPrintf("------Master write/read, Slave read/write-------\n");
 			
 		MasterRxDone = 0;
 		SlaveRxDone = 0;
@@ -393,7 +393,7 @@ void spi_interrupt_task(void* param)
 	        DelayMs(100);
 	        i++;
 	        if (i>150) {
-	            DBG_8195A("SPI Slave Wait Timeout\r\n");
+	            DiagPrintf("SPI Slave Wait Timeout\r\n");
 	            break;
 	        }
 	    }
@@ -406,7 +406,7 @@ void spi_interrupt_task(void* param)
     /**
      * Master read, Slave write
      */
-    DBG_8195A("-----------Master read, Slave write------------\n");
+    DiagPrintf("-----------Master read, Slave write------------\n");
       
 		MasterRxDone = 0;
 
@@ -421,7 +421,7 @@ void spi_interrupt_task(void* param)
 			DelayMs(100);
 			i++;
 			if (i>150) {
-				DBG_8195A("SPI Master Wait Timeout\r\n");
+				DiagPrintf("SPI Master Wait Timeout\r\n");
 				break;
 			}
 		}
@@ -429,12 +429,12 @@ void spi_interrupt_task(void* param)
 		SsiPrint(SlaveTxBuf, MasterRxBuf, TEST_BUF_SIZE);
 		result3 = SsiDataCompare(SlaveTxBuf, MasterRxBuf, TEST_BUF_SIZE);
 
-	DBG_8195A("\r\nResult is %s\r\n", (result1 && result2 && result3) ? "success" : "fail");
+	DiagPrintf("\r\nResult is %s\r\n", (result1 && result2 && result3) ? "success" : "fail");
 	
 	Spi_free(&spi_master);
 	Spi_free(&spi_slave);
 
-    DBG_8195A("SPI Demo finished.\n");
+    DiagPrintf("SPI Demo finished.\n");
 
     vTaskDelete(NULL);
 
@@ -448,7 +448,7 @@ void spi_interrupt_task(void* param)
 void main(void)
 {
 	if(xTaskCreate(spi_interrupt_task, ((const char*)"spi_interrupt_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(spi_interrupt_task) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(spi_interrupt_task) failed", __FUNCTION__);
 
         vTaskStartScheduler();
 	while(1){
