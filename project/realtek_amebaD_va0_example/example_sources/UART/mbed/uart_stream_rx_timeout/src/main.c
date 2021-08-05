@@ -45,7 +45,7 @@ void uart_send_string(serial_t *sobj, char *pstr)
 	tx_busy = 1;
 	ret = serial_send_stream(sobj, pstr, _strlen(pstr));
 	if (ret != 0) {
-		DBG_8195A("%s Error(%d)\n", __FUNCTION__, ret);
+		DiagPrintf("%s Error(%d)\n", __FUNCTION__, ret);
 		tx_busy = 0;
 	}
 }
@@ -85,7 +85,7 @@ void uart_test_demo(void *param)
     #endif
 	
         if (ret < 100) {
-		DBG_8195A("Serial Rcv Timeout, Got %d bytes\n", ret);
+		DiagPrintf("Serial Rcv Timeout, Got %d bytes\n", ret);
         }
 
         if (ret > 0) {
@@ -99,7 +99,7 @@ void main(void)
 {
 	// create demo Task
 	if(xTaskCreate( (TaskFunction_t)uart_test_demo, "uart test demo", (2048/2), (void *)NULL, (tskIDLE_PRIORITY + 1), NULL)!= pdPASS) {
-		DBG_8195A("Cannot create uart test demo task\n\r");
+		DiagPrintf("Cannot create uart test demo task\n\r");
 		goto end_demo;
 	}
 

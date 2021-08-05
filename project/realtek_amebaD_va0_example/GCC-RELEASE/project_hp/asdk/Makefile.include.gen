@@ -221,6 +221,29 @@ IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/mbedtls-2.4.0/
 IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/mbedtls_ram_map/rom
 IFLAGS               += -I$(BASEDIR)/component/common/application/amazon/amazon-freertos/lib/include/private
 
+#CoAP
+IFLAGS               += -I$(BASEDIR)/component/common/example/coap
+IFLAGS               += -I$(BASEDIR)/component/common/network/coap
+IFLAGS               += -I$(BASEDIR)/component/common/network/coap/include
+
+#AZURE
+IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/c-utility/inc
+IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/c-utility/pal/inc
+IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/c-utility/pal/generic
+IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/c-utility/pal/linux
+IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/c-utility/adapters
+IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/deps/azure-macro-utils-c/inc
+IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/deps/uhttp/inc
+IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/deps/umock-c/inc
+IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/iothub_client/inc
+IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/uamqp/inc
+IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/umqtt/inc
+IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/iothub_client/inc/internal
+IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/deps/parson
+IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/provisioning_client/inc
+
+#AZURE_EMB
+IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-sdk-for-c/sdk/inc
 #temp for git server code
 IFLAGS               += -I$(BASEDIR)/component/common/mbed/targets/hal/rtl8721d/
 IFLAGS               += -I$(BASEDIR)/component/common/mbed/targets/hal/rtl8721d/include

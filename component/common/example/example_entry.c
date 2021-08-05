@@ -88,8 +88,8 @@
 #include <pppoe/example_pppoe.h>
 #endif
 
-#if defined(CONFIG_EXAMPLE_AZURE_IOT_HUB) && CONFIG_EXAMPLE_AZURE_IOT_HUB
-#include <azure_iot_hub/example_azure_iot_hub.h>
+#if defined(CONFIG_EXAMPLE_AZURE) && CONFIG_EXAMPLE_AZURE 
+#include <azure/example_azure_iot_entry.h>
 #endif
 
 #if defined(CONFIG_EXAMPLE_GOOGLE_NEST) && CONFIG_EXAMPLE_GOOGLE_NEST
@@ -777,10 +777,10 @@ void example_entry(void)
     example_amazon_awsiot();
 #endif
 
-#if defined(CONFIG_EXAMPLE_AZURE_IOT_HUB) && CONFIG_EXAMPLE_AZURE_IOT_HUB
-    example_iot_hub();
-#endif
-    
+#if defined(CONFIG_EXAMPLE_AZURE) && CONFIG_EXAMPLE_AZURE 
+    example_azure();
+#endif    
+
 #if CONFIG_ALINK
 	example_alink();
 #endif

@@ -49,7 +49,7 @@ void uart_send_string(serial_t *sobj, char *pstr)
 	tx_busy = 1;
 	ret = serial_send_stream_dma(sobj, pstr, _strlen(pstr));
 	if (ret != 0) {
-		DBG_8195A("%s Error(%d)\n", __FUNCTION__, ret);       
+		DiagPrintf("%s Error(%d)\n", __FUNCTION__, ret);       
 		tx_busy = 0;
 	}
 }
@@ -73,12 +73,12 @@ void maintask(void)
 		rx_buf[j]=0;
     	}
 
-	DBG_8195A("receive 13 bytes\r\n", rx_buf);
+	DiagPrintf("receive 13 bytes\r\n", rx_buf);
 
 	ret = serial_recv_stream_dma(&sobj, rx_buf, 13);
 
 	if (ret) {
-		DBG_8195A(" %s: Recv Error(%d)\n", __FUNCTION__, ret);        
+		DiagPrintf(" %s: Recv Error(%d)\n", __FUNCTION__, ret);        
 		rx_done = 1;
 	}
 
@@ -93,12 +93,12 @@ void maintask(void)
 			}
            		/* Wait for inputing x character to initiate DMA. 
                	8 for this example*/
-            		DBG_8195A("rx_len=%d\r\n", len);
+            		DiagPrintf("rx_len=%d\r\n", len);
             		ret = serial_recv_stream_dma(&sobj, rx_buf, len);
             		rx_buf[len] = 0;    // end of string
 
 			if (ret) {
-				DBG_8195A(" %s: Recv Error(%d)\n", __FUNCTION__, ret);        
+				DiagPrintf(" %s: Recv Error(%d)\n", __FUNCTION__, ret);        
                 		rx_done = 1;
             		}
 

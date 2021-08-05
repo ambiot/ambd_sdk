@@ -19,7 +19,7 @@ void gpio_demo_irq_handler (uint32_t id, u32 event)
 {
     gpio_t *gpio_led;
 
-    DBG_8195A("%s==>\n", __FUNCTION__);
+    DiagPrintf("%s==>\n", __FUNCTION__);
     gpio_led = (gpio_t *)id;
 
     led_ctrl = !led_ctrl;

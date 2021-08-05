@@ -115,7 +115,7 @@ void spi_task(void* param)
 	/**
 	* Master read/write, Slave read/write
 	*/
-	DBG_8195A("--------------------------------------------------------\n");
+	DiagPrintf("--------------------------------------------------------\n");
 	for(Counter = 0, TestData = 0x01; Counter < TestingTimes; Counter++)
 	{
 		/* master write */
@@ -126,7 +126,7 @@ void spi_task(void* param)
 		while (!SSI_Readable(SPI1_DEV));
 		ReadData = (int)SSI_ReadData(SPI1_DEV);
 
-		DBG_8195A("Master write: %02X, read: %02X\n", TestData, ReadData);
+		DiagPrintf("Master write: %02X, read: %02X\n", TestData, ReadData);
 		if (TestData - 1 != ReadData) {
 			result = 0;
 		}
@@ -140,7 +140,7 @@ void spi_task(void* param)
 		while (!SSI_Readable(SPI0_DEV));
 		ReadData = (int)SSI_ReadData(SPI0_DEV);
 
-		DBG_8195A("Slave  write: %02X, read: %02X\n", TestData, ReadData);
+		DiagPrintf("Slave  write: %02X, read: %02X\n", TestData, ReadData);
 		if (TestData - 1 != ReadData) {
 			result = 0;
 		}
@@ -151,7 +151,7 @@ void spi_task(void* param)
 	/**
 	* Master write, Slave read
 	*/
-	DBG_8195A("--------------------------------------------------------\n");
+	DiagPrintf("--------------------------------------------------------\n");
 	for(Counter = 0, TestData = 0xFF; Counter < TestingTimes; Counter++)
 	{
 		/* master write */
@@ -162,8 +162,8 @@ void spi_task(void* param)
 		while (!SSI_Readable(SPI0_DEV));
 		ReadData = (int)SSI_ReadData(SPI0_DEV);
 
-		DBG_8195A("Master write: %02X\n", TestData);
-		DBG_8195A("Slave  read : %02X\n", ReadData);
+		DiagPrintf("Master write: %02X\n", TestData);
+		DiagPrintf("Slave  read : %02X\n", ReadData);
 		if (TestData != ReadData) {
 			result = 0;
 		}
@@ -176,8 +176,8 @@ void spi_task(void* param)
 	/* free SPI0 */
 	SSI_Cmd(SPI0_DEV, DISABLE);
 
-	DBG_8195A("SPI Demo finished.\n");
-	DBG_8195A("\r\nResult is %s\r\n", (result) ? "success" : "fail");
+	DiagPrintf("SPI Demo finished.\n");
+	DiagPrintf("\r\nResult is %s\r\n", (result) ? "success" : "fail");
 
 	vTaskDelete(NULL);
 
@@ -191,7 +191,7 @@ void spi_task(void* param)
 void main(void)
 {
 	if(xTaskCreate(spi_task, ((const char*)"spi_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(spi_task) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(spi_task) failed", __FUNCTION__);
 
 	vTaskStartScheduler();
 	while(1){

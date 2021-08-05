@@ -121,12 +121,12 @@ void sp_hp_det_timer_isr(void)
 	if (GPIO_ReadDataBit(hp_det_pin) == GPIO_PIN_LOW)
 	{
 		hp_det_flag = 1;
-		DBG_8195A("headphone inseted\n");
+		DiagPrintf("headphone inseted\n");
 	}	
 	else
 	{
 		hp_det_flag = 0;
-		DBG_8195A("headphone removed\n");
+		DiagPrintf("headphone removed\n");
 	}
 }
 
@@ -159,7 +159,7 @@ static void sp_init_hal(pSP_OBJ psp_obj)
 			div = 48;
 			break;
 		default:
-			DBG_8195A("sample rate not supported!!\n");
+			DiagPrintf("sample rate not supported!!\n");
 			break;
 	}
 	PLL_Div(div);
@@ -173,12 +173,12 @@ static void sp_init_hal(pSP_OBJ psp_obj)
 	if (GPIO_ReadDataBit(hp_det_pin) == GPIO_PIN_LOW)
 	{
 		hp_det_flag = 1;
-		DBG_8195A("init state: headphone inserted\n");
+		DiagPrintf("init state: headphone inserted\n");
 	}
 	else
 	{
 		hp_det_flag = 0;
-		DBG_8195A("init state: headphone removed\n");
+		DiagPrintf("init state: headphone removed\n");
 	}
 	GPIO_InitStruct_temp.GPIO_Pin = hp_det_pin;
 	GPIO_InitStruct_temp.GPIO_Mode = GPIO_Mode_INT;
@@ -226,7 +226,7 @@ void example_audio_hp_det_thread(void* param)
 	u32 tx_length;
 	pSP_OBJ psp_obj = (pSP_OBJ)param;
 	
-	DBG_8195A("Audio hp det demo begin......\n");
+	DiagPrintf("Audio hp det demo begin......\n");
 
 	hp_det_timer = xTimerCreate((signed const char *)"HP_DET_Timer",
 		portMAX_DELAY, _FALSE, NULL, (TimerCallbackFunction_t)sp_hp_det_timer_isr);
@@ -251,7 +251,7 @@ void example_audio_hp_det_thread(void* param)
 
 	while(1){	
 		while(!sp_hp_detect());
-		DBG_8195A("\nPlay bird sing on memory.\n");
+		DiagPrintf("\nPlay bird sing on memory.\n");
 		while(sp_hp_detect()){
 			if(sp_get_free_tx_page()){
 				sp_write_tx_page((u8 *)birds_sing+i*SP_DMA_PAGE_SIZE, SP_DMA_PAGE_SIZE);
@@ -277,7 +277,7 @@ void main(void)
 	sp_obj.mono_stereo = CH_STEREO;
 	sp_obj.direction = APP_LINE_OUT;
 	if(xTaskCreate(example_audio_hp_det_thread, ((const char*)"example_audio_hp_det_thread"), 512, (void *)(&sp_obj), tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(example_audio_hp_det_thread) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(example_audio_hp_det_thread) failed", __FUNCTION__);
 
 	vTaskStartScheduler();
 	while(1){

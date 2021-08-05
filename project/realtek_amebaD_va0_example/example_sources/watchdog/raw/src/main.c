@@ -14,7 +14,7 @@
 #include "wdt_api.h"
 
 #define RUN_CALLBACK_IF_WATCHDOG_BARKS (0)
-#define printf	DBG_8195A
+#define DiagPrintf	DiagPrintf
 
 void dummy_task() {
     int i=0;
@@ -23,25 +23,25 @@ void dummy_task() {
 }
 
 void small_task() {
-    printf("\r\ndoing small task...\r\n");
+    DiagPrintf("\r\ndoing small task...\r\n");
     dummy_task();
-    printf("refresh watchdog\r\n\r\n");
+    DiagPrintf("refresh watchdog\r\n\r\n");
     WDG_Refresh();
 }
 
 void big_task() {
    int i=0;
-   printf("\r\ndoing big task...\r\n");
+   DiagPrintf("\r\ndoing big task...\r\n");
     for (i=0; i<10; i++) {
         DiagPrintf("doing dummy task %d\r\n", i);
         dummy_task();
     }
-    printf("refresh watchdog\r\n\r\n");
+    DiagPrintf("refresh watchdog\r\n\r\n");
     WDG_Refresh();
 }
 
 void my_watchdog_irq_handler(uint32_t id) {
-    printf("watchdog barks!!!\r\n");
+    DiagPrintf("watchdog barks!!!\r\n");
     WDG_Cmd(DISABLE);
 }
 

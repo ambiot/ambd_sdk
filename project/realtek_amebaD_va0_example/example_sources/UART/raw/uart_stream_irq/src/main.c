@@ -105,7 +105,7 @@ u32 uart_irq(IN VOID *data)
 	break;
 
 	default:
-		DBG_8195A("interrupt id=%d\n",IntId);
+		DiagPrintf("interrupt id=%d\n",IntId);
 	}
 	return 0;
 }

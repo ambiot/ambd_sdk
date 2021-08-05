@@ -186,6 +186,23 @@
 #endif
 #endif
 /******************End of iNIC configurations*******************/
+
+/* For Azure Examples */
+#define CONFIG_USE_AZURE_EMBEDDED_C        1
+#if CONFIG_USE_AZURE_EMBEDDED_C
+/* For Azure embedded iot examples*/
+#define CONFIG_EXAMPLE_AZURE   0
+#if CONFIG_EXAMPLE_AZURE
+#undef WAIT_FOR_ACK
+#define WAIT_FOR_ACK
+#endif
+#else
+/* For Azure iot hub telemetry example*/
+#define CONFIG_EXAMPLE_AZURE_IOTHUB_TELEMETRY      0
+/* For Azure iot hub x509 example*/
+#define CONFIG_EXAMPLE_AZURE_IOTHUB_X509     0
+#endif
+
 /* For Amazon FreeRTOS SDK example */
 #define CONFIG_EXAMPLE_AMAZON_FREERTOS   0
 

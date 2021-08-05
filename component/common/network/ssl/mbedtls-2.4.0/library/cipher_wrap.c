@@ -75,6 +75,17 @@
 
 #include "device_lock.h"
 
+#if defined(CONFIG_BUILD_SECURE) && (CONFIG_BUILD_SECURE == 1)
+#if defined(__ICCARM__)
+extern void (__cmse_nonsecure_call *ns_device_mutex_lock)(uint32_t);
+extern void (__cmse_nonsecure_call *ns_device_mutex_unlock)(uint32_t);
+#else
+extern void __attribute__((cmse_nonsecure_call)) (*ns_device_mutex_lock)(uint32_t);
+extern void __attribute__((cmse_nonsecure_call)) (*ns_device_mutex_unlock)(uint32_t);
+#endif
+#define device_mutex_lock ns_device_mutex_lock
+#define device_mutex_unlock ns_device_mutex_unlock
+#endif
 
 #if defined(MBEDTLS_GCM_C)
 /* shared by all GCM ciphers */

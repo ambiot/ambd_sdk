@@ -33,15 +33,15 @@ void main(void)
 
     for(i = 0; i<length;i++){
        if(data[i] != buff[i]){
-            DBG_8195A("Error Addr %x, Write Data is = %x, Read Data is %x\n", address, data[i],buff[i]);
+            DiagPrintf("Error Addr %x, Write Data is = %x, Read Data is %x\n", address, data[i],buff[i]);
             result = 0;
         }
     }
     if(result == 1)
-        DBG_8195A("Success 1\n");
+        DiagPrintf("Success 1\n");
 
     result = 1;
-    DBG_8195A("Status Register Before Setting= %x\n", flash_get_status(&flash));
+    DiagPrintf("Status Register Before Setting= %x\n", flash_get_status(&flash));
 
     flash_set_status(&flash, 0x4);//Protect hte last block (for MX25L1606E, please refer to datasheets for different flash)
 
@@ -55,15 +55,15 @@ void main(void)
       flash_stream_read(&flash, address, length, &buff[0]);
         for(i = 0; i<length;i++){
            if(data[i] != buff[i]){
-                DBG_8195A("Error Addr %x, Write Data is = %x, Read Data is %x\n", address, data[i],buff[i]);
+                DiagPrintf("Error Addr %x, Write Data is = %x, Read Data is %x\n", address, data[i],buff[i]);
                 result = 0;
             }
         }
     if(result == 1)
-        DBG_8195A("Success 2\n");   
+        DiagPrintf("Success 2\n");   
 
     result = 1;
-    DBG_8195A("Status Register Before Setting= %x\n", flash_get_status(&flash));
+    DiagPrintf("Status Register Before Setting= %x\n", flash_get_status(&flash));
 
     flash_set_status(&flash, flash_get_status(&flash) & (~0x4)); //Unlock the protected block   
 
@@ -75,18 +75,18 @@ void main(void)
 
     for(i = 0; i<length;i++){
        if(data[i] != buff[i]){
-            DBG_8195A("Error Addr %x, Write Data is = %x, Read Data is %x\n", address, data[i],buff[i]);
+            DiagPrintf("Error Addr %x, Write Data is = %x, Read Data is %x\n", address, data[i],buff[i]);
             result = 0;
         }
     }
     if(result == 1)
-        DBG_8195A("Success 3\n");
+        DiagPrintf("Success 3\n");
 
     flash_reset_status(&flash);//make sure the status register is reset if users would like to reload code
 
-    DBG_8195A("Status Register After Reset= %x\n", flash_get_status(&flash));
+    DiagPrintf("Status Register After Reset= %x\n", flash_get_status(&flash));
 
-    DBG_8195A("Test Done\n");
+    DiagPrintf("Test Done\n");
     
     for(;;);
         

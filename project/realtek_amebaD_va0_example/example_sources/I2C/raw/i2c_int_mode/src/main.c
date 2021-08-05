@@ -299,7 +299,7 @@ void main(void)
 	}
 
 #ifdef I2C_MASTER_DEVICE
-	DBG_8195A("Slave addr=%x\n", MBED_I2C_SLAVE_ADDR0);
+	DiagPrintf("Slave addr=%x\n", MBED_I2C_SLAVE_ADDR0);
 	_memset(&i2cmaster, 0x00, sizeof(i2c_ts));
 	
 	i2cmaster.I2Cint.i2c_idx = I2C_Index_Get(MBED_I2C_MTR_SDA);
@@ -310,14 +310,14 @@ void main(void)
 	RtkI2CInit(&i2cmaster, MBED_I2C_MTR_SDA, MBED_I2C_MTR_SCL);
 
 	// Master write - Slave read
-	DBG_8195A("\r\nMaster write int mode>>>\n");	
+	DiagPrintf("\r\nMaster write int mode>>>\n");	
 	i2cmaster.pbuf = i2cdatasrc;
 	i2cmaster.datalength = length;
 	I2C_INTConfig(i2cmaster.I2Cint.I2Cx, (BIT_IC_INTR_MASK_M_TX_ABRT  | 
 		BIT_IC_INTR_MASK_M_TX_EMPTY | BIT_IC_INTR_MASK_M_TX_OVER), ENABLE);
 
 #else //I2C_SLAVE_DEVICE
-	DBG_8195A("Slave addr=%x\n", MBED_I2C_SLAVE_ADDR0);
+	DiagPrintf("Slave addr=%x\n", MBED_I2C_SLAVE_ADDR0);
 	_memset(&i2cslave, 0x00, sizeof(i2c_ts));
 	
 	i2cslave.I2Cint.i2c_idx = I2C_Index_Get(MBED_I2C_SLV_SDA);
@@ -326,7 +326,7 @@ void main(void)
 	RtkI2CInit(&i2cslave, MBED_I2C_SLV_SDA, MBED_I2C_SLV_SCL);
 
 	// Master write - Slave read
-	DBG_8195A("\r\nSlave read>>>\n");
+	DiagPrintf("\r\nSlave read>>>\n");
 	i2cslave.pbuf = i2cdatadst;
 	i2cslave.datalength = length;
 	I2C_INTConfig(i2cslave.I2Cint.I2Cx, (BIT_IC_INTR_MASK_M_RX_FULL | BIT_IC_INTR_MASK_M_RX_OVER |
@@ -350,7 +350,7 @@ void main(void)
 	}
 	
 #ifdef I2C_MASTER_DEVICE
-	DBG_8195A("Slave addr=%x\n", MBED_I2C_SLAVE_ADDR0);
+	DiagPrintf("Slave addr=%x\n", MBED_I2C_SLAVE_ADDR0);
 	_memset(&i2cmaster, 0x00, sizeof(i2c_ts));
 	
 	i2cmaster.I2Cint.i2c_idx = I2C_Index_Get(MBED_I2C_MTR_SDA);
@@ -360,7 +360,7 @@ void main(void)
 	RtkI2CInit(&i2cmaster, MBED_I2C_MTR_SDA,MBED_I2C_MTR_SCL);
 
 	// Master write - Slave read
-	DBG_8195A("\r\nMaster read int mode>>>\n");	
+	DiagPrintf("\r\nMaster read int mode>>>\n");	
 	i2cmaster.pbuf = i2cdatarddst;
 	i2cmaster.datalength = length;
 	I2C_INTConfig(i2cmaster.I2Cint.I2Cx, (BIT_IC_INTR_MASK_M_RX_FULL | BIT_IC_INTR_MASK_M_RX_OVER |
@@ -374,7 +374,7 @@ void main(void)
 	}
 	
 #else //I2C_SLAVE_DEVICE
-	DBG_8195A("Slave addr=%x\n",MBED_I2C_SLAVE_ADDR0);
+	DiagPrintf("Slave addr=%x\n",MBED_I2C_SLAVE_ADDR0);
 	_memset(&i2cslave, 0x00, sizeof(i2c_ts));
 	
 	i2cslave.I2Cint.i2c_idx = I2C_Index_Get(MBED_I2C_SLV_SDA);
@@ -384,7 +384,7 @@ void main(void)
 	RtkI2CInit(&i2cslave, MBED_I2C_SLV_SDA, MBED_I2C_SLV_SCL);
 
 	// Master write - Slave read
-	DBG_8195A("\r\nSlave send>>>\n");
+	DiagPrintf("\r\nSlave send>>>\n");
 	i2cslave.pbuf = i2cdatardsrc;
 	i2cslave.datalength = length;
 	I2C_INTConfig(i2cslave.I2Cint.I2Cx, (BIT_IC_INTR_MASK_M_TX_ABRT | BIT_IC_INTR_MASK_M_TX_OVER | 

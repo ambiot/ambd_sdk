@@ -639,7 +639,7 @@ static void handle_device_twin_message(
     az_iot_hub_client_twin_response const* twin_response)
 {
 	bool is_twin_get = false;
-	uint8_t* message_buf;
+	uint8_t* message_buf = NULL;
 	az_span message_span;
 
 	//If there are more then one component properties in the recieved payload, the payload buffer may be overwrited.

@@ -35,7 +35,7 @@ void uart_recv_string_done(uint32_t id)
 {
 	serial_t    *sobj = (void*)id;
 	rx_done = 1;
-	DBG_8195A("recv timeout\n");
+	DiagPrintf("recv timeout\n");
 }
 
 void uart_send_string(serial_t *sobj, char *pstr)
@@ -49,7 +49,7 @@ void uart_send_string(serial_t *sobj, char *pstr)
 	tx_busy = 1;
 	ret = serial_send_stream_dma(sobj, pstr, _strlen(pstr));
 	if (ret != 0) {
-		DBG_8195A("%s Error(%d)\n", __FUNCTION__, ret);        
+		DiagPrintf("%s Error(%d)\n", __FUNCTION__, ret);        
 		tx_busy = 0;
 	}
 }

@@ -31,7 +31,7 @@ typedef struct gdma_s gdma_t;
 gdma_t gdma;
 
 void dma_done_handler( ) {
-    DBG_8195A("DMA Copy Done!!\r\n");
+    DiagPrintf("DMA Copy Done!!\r\n");
     dma_done = 1;
 }
 
@@ -63,7 +63,7 @@ int main(void)
 	ch_num = GDMA_ChnlAlloc(gdma.index, (IRQ_FUN) Dma_memcpy_int, (u32)(&gdma), 10);
 
 	if (0xFF == ch_num) {
-		DBG_8195A("%s: Cannot allocate a GDMA Channel\n", __FUNCTION__);
+		DiagPrintf("%s: Cannot allocate a GDMA Channel\n", __FUNCTION__);
 		return;
 	}
 	gdma.user_cb = (IRQ_FUN)dma_done_handler;
@@ -83,7 +83,7 @@ int main(void)
 	GDMA_InitStruct.GDMA_Index = gdma.index;
 	GDMA_InitStruct.GDMA_IsrType = (TransferType|ErrType);
 
-	DBG_8195A( "%s: ==> Src=0x%x Dst=0x%x Len=%d\r\n", __FUNCTION__, TestBuf1+DMA_SRC_OFFSET, TestBuf2+DMA_DST_OFFSET, DMA_CPY_LEN);
+	DiagPrintf( "%s: ==> Src=0x%x Dst=0x%x Len=%d\r\n", __FUNCTION__, TestBuf1+DMA_SRC_OFFSET, TestBuf2+DMA_DST_OFFSET, DMA_CPY_LEN);
 	
 	if ((((u32)(TestBuf1+DMA_SRC_OFFSET)& 0x03)==0) &&	(((u32)(TestBuf2+DMA_DST_OFFSET) & 0x03)==0) && ((DMA_CPY_LEN & 0x03)== 0)) {
 		/* 4-bytes aligned, move 4 bytes each transfer */
@@ -103,7 +103,7 @@ int main(void)
 	GDMA_InitStruct.GDMA_SrcAddr = (u32)(TestBuf1+DMA_SRC_OFFSET);
 	GDMA_InitStruct.GDMA_DstAddr = (u32)(TestBuf2+DMA_DST_OFFSET);     
 	
-	DBG_8195A("GDMA_InitStruct->GDMA_BlockSize = %d\n", GDMA_InitStruct.GDMA_BlockSize);
+	DiagPrintf("GDMA_InitStruct->GDMA_BlockSize = %d\n", GDMA_InitStruct.GDMA_BlockSize);
 
 	GDMA_Init(gdma.index, gdma.ch_num, &GDMA_InitStruct);
 	GDMA_Cmd(gdma.index, gdma.ch_num, ENABLE);

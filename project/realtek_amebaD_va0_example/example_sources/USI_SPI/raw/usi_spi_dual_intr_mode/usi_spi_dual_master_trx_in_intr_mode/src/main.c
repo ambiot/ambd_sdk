@@ -86,7 +86,7 @@ void USISsiPrint(u8 *pSrc, u8 *pDst, u32 Length)
 	int Index;
 
 	for(Index = 0; Index < Length; Index++){
-		DBG_8195A("%x: %x ---- %x\n",Index, pSrc[Index] & dfs_mask, pDst[Index]);
+		DiagPrintf("%x: %x ---- %x\n",Index, pSrc[Index] & dfs_mask, pDst[Index]);
 	}
 }
 
@@ -258,7 +258,7 @@ void usi_spi_interrupt_task(void* param)
 	/**
 	* Master write/read
 	*/
-	DBG_8195A("----------- Master write/read -----------\n");
+	DiagPrintf("----------- Master write/read -----------\n");
 
 		RxCompleteFlag = 0;
 		TxCompleteFlag = 0;
@@ -270,7 +270,7 @@ void usi_spi_interrupt_task(void* param)
 			DelayMs(100);
 			i++;
 			if (i>150) {
-				DBG_8195A("USI SPI Master Wait Timeout\r\n");
+				DiagPrintf("USI SPI Master Wait Timeout\r\n");
 				break;
 			}
 		}
@@ -281,7 +281,7 @@ void usi_spi_interrupt_task(void* param)
 	/**
 	* Master read
 	*/
-	DBG_8195A("----------- Master read -----------\n");
+	DiagPrintf("----------- Master read -----------\n");
 
 		RxCompleteFlag = 0;
 
@@ -296,7 +296,7 @@ void usi_spi_interrupt_task(void* param)
 			DelayMs(100);
 			i++;
 			if (i>150) {
-				DBG_8195A("USI SPI Master Timeout\r\n");
+				DiagPrintf("USI SPI Master Timeout\r\n");
 				break;
 			}
 		}
@@ -308,8 +308,8 @@ void usi_spi_interrupt_task(void* param)
 	/* free USI_SPI */
 	USISsiFree(pUSISsiObj);
 
-	DBG_8195A("USI SPI Master Demo Finished.\n");
-	DBG_8195A("\r\nMaster Result is %s\r\n", (result1 && result2) ? "success" : "fail");
+	DiagPrintf("USI SPI Master Demo Finished.\n");
+	DiagPrintf("\r\nMaster Result is %s\r\n", (result1 && result2) ? "success" : "fail");
 
 	vTaskDelete(NULL);
 
@@ -323,7 +323,7 @@ void usi_spi_interrupt_task(void* param)
 void main(void)
 {
 	if(xTaskCreate(usi_spi_interrupt_task, ((const char*)"usi_spi_interrupt_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(usi_spi_interrupt_task) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(usi_spi_interrupt_task) failed", __FUNCTION__);
 
 	vTaskStartScheduler();
 	while(1){

@@ -33,7 +33,6 @@
 #include "pnp/rtk_component/pnp_video.h"
 #include "pnp/rtk_component/pnp_wireless.h"
 
-
 #define ID_SCOPE "[ID Scope]"	
 #define REGISTRATION_ID "[Registration ID]"
 
@@ -179,7 +178,7 @@ static void handle_device_twin_message(
     MQTTMessage const* receive_message,
     az_iot_hub_client_twin_response const* twin_response)
 {
-	uint8_t* message_buf;
+	uint8_t* message_buf = NULL;
 	az_span message_span;
 
 	//If there are more then one component properties in the recieved payload, the payload buffer may be overwrited.
@@ -209,7 +208,7 @@ static void handle_device_twin_message(
 			IOT_SAMPLE_LOG("Message Type: Reported Properties");
 			break;
 	}
-	
+
 	if(message_buf)
 	{
 		free(message_buf);

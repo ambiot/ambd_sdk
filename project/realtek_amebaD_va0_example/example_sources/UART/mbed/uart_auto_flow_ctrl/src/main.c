@@ -61,10 +61,10 @@ void main(void)
 	serial_format(&sobj, 8, ParityNone, 1);
 	serial_rx_fifo_level(&sobj, FifoLvHalf);
 	serial_set_flow_control(&sobj, FlowControlNone, 0, 0);    // Pin assignment can be ignored when autoflow control function is disabled
-	DBG_8195A("CHANGE");
+	DiagPrintf("CHANGE");
 	for (i=0;i<1000;i++) {
 		// Tide Break
-		DBG_8195A("Wait peer ready...\r\n");
+		DiagPrintf("Wait peer ready...\r\n");
 		serial_putc(&sobj, i+1);
 		if (serial_readable(&sobj)) {
 			rc = (int)serial_getc(&sobj);
@@ -83,7 +83,7 @@ void main(void)
 	serial_set_flow_control(&sobj, FlowControlRTSCTS, UART_RTS, UART_CTS);    // Pin assignment is ignored
 
 	if (rx_side) {
-		DBG_8195A("UART Flow Control: RX ==>\r\n");
+		DiagPrintf("UART Flow Control: RX ==>\r\n");
 		_memset(buffer, 0, UART_BUF_SIZE);
 		i = 0;
 		j = 0;
@@ -97,20 +97,20 @@ void main(void)
                 		if ((i&0xf) == 0) {
 					// Make some delay to cause the RX FIFO full and then trigger flow controll
                     			DelayMs(100);
-                    			DBG_8195A("UART RX got %d bytes\r\n", i);
+                    			DiagPrintf("UART RX got %d bytes\r\n", i);
                 		}
                 		j=0;
             		} else {
                 		DelayMs(10);
                 		j++;
                 		if (j== 1000) {
-                    			DBG_8195A("UART RX Failed, Got %d bytes\r\n", i);
+                    			DiagPrintf("UART RX Failed, Got %d bytes\r\n", i);
                    	 		break;
                 		}
             		}
         	}
 	} else {
-		DBG_8195A("UART Flow Control: TX ==>\r\n");
+		DiagPrintf("UART Flow Control: TX ==>\r\n");
 		DelayMs(500);
 		serial_putc(&sobj, 255);
 		DelayMs(500);
@@ -122,7 +122,7 @@ void main(void)
 			serial_putc(&sobj, buffer[i]);
 		}
 	}
-	DBG_8195A("UART Flow Control Test Done!\r\n");
+	DiagPrintf("UART Flow Control Test Done!\r\n");
 	while (1);
 }
 
