@@ -853,13 +853,6 @@ example_hilink();
         example_duer();
 #endif
 
-#if defined(CONFIG_BT) && CONFIG_BT
-	// do not start example if defined BT MP or WIFI MP
-	#if !(defined(CONFIG_MP_INCLUDED))
-	bt_example_init();
-	#endif
-#endif
-
 #if defined(CONFIG_EXAMPLE_USB_MASS_STORAGE) && CONFIG_EXAMPLE_USB_MASS_STORAGE
 	example_mass_storage();
 #endif

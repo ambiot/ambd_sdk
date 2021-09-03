@@ -184,6 +184,7 @@ ASM_OBJS = $(notdir $(ASMSRC:.S=.o))
 #all: CORE_TARGETS
 all: CORE_TARGETS COPY_RAM_OBJS
 	$(AR) rvs lib_cmsis_dsp.a $(OBJS) $(ASM_OBJS)
+	$(FROMELF) --strip-debug lib_cmsis_dsp.a
 	$(MOVE) -f lib_cmsis_dsp.a $(ROOTDIR)/lib/application
 #*****************************************************************************#
 #              GENERATE OBJECT FILE 

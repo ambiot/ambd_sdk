@@ -46,6 +46,7 @@ OBJS = $(notdir $(CSRC:.c=.o))
 #*****************************************************************************#
 all: CORE_TARGETS COPY_RAM_OBJS
 	$(AR) rvs lib_mmfv2.a $(OBJS)
+	$(FROMELF) --strip-debug lib_mmfv2.a
 	$(MOVE) -f lib_mmfv2.a $(ROOTDIR)/lib/application
 	
 #*****************************************************************************#

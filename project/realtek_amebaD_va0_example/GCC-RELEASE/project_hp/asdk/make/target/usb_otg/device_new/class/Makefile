@@ -14,6 +14,9 @@ IFLAGS += -I$(DEV_DIR)/core
 ifeq ($(CONFIG_USBD_CDC_ACM),y)
 DIR = $(DEV_DIR)/cdc_acm
 endif
+ifeq ($(CONFIG_USBD_HID),y)
+DIR = $(DEV_DIR)/hid
+endif
 IFLAGS += -I$(DIR)
 
 vpath %.c $(DIR)
@@ -23,6 +26,9 @@ vpath %.c $(DIR)
 #*****************************************************************************#
 ifeq ($(CONFIG_USBD_CDC_ACM),y)
 CSRC = $(DIR)/usbd_cdc_acm.c
+endif
+ifeq ($(CONFIG_USBD_HID),y)
+CSRC = $(DIR)/usbd_hid.c
 endif
 
 #*****************************************************************************#

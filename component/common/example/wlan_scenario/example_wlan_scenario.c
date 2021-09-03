@@ -1235,6 +1235,7 @@ static rtw_result_t scan_result_handler(rtw_scan_handler_result_t* malloced_scan
                                  ( record->security == RTW_SECURITY_WPA_WPA2_AES_PSK) ? "WPA/WPA2 AES" :
                                  ( record->security == RTW_SECURITY_WPA_WPA2_MIXED_PSK) ? "WPA/WPA2 Mixed" :
                                  ( record->security == RTW_SECURITY_WPA3_AES_PSK ) ? "WPA3 AES" :
+                                 ( record->security == RTW_SECURITY_WPA2_WPA3_MIXED) ? "WPA2/WPA3-SAE AES" :
                                  "Unknown");
     		printf( " %s ", record->SSID.val);
     		printf("\r\n");

@@ -224,16 +224,16 @@ void ble_scatternet_app_handle_conn_state_evt(uint8_t conn_id, T_GAP_CONN_STATE 
 
             data_uart_print("Disconnect conn_id %d, cause 0x%x\r\n", conn_id, disc_cause);
 ///judge the type of disconnect is central or peripheral,if peripheral,start ADV	
-			if (ble_scatternet_app_link_table[conn_id].role == 2){
+			if (ble_scatternet_app_link_table[conn_id].role == GAP_LINK_ROLE_SLAVE){
 				data_uart_print("As peripheral,recieve disconncect,please start ADV\r\n");
 				ret = le_adv_start();
 				if(ret == GAP_CAUSE_SUCCESS)
 					data_uart_print("\n\rSTART ADV!!\n");
 			}
 				
-			if (ble_scatternet_app_link_table[conn_id].role == 1)
+			if (ble_scatternet_app_link_table[conn_id].role == GAP_LINK_ROLE_MASTER)
 				ble_scatternet_central_app_max_links --;
-			else
+			else if (ble_scatternet_app_link_table[conn_id].role == GAP_LINK_ROLE_SLAVE)
 				ble_scatternet_peripheral_app_max_links --;
 
             memset(&ble_scatternet_app_link_table[conn_id], 0, sizeof(T_APP_LINK));
@@ -247,9 +247,9 @@ void ble_scatternet_app_handle_conn_state_evt(uint8_t conn_id, T_GAP_CONN_STATE 
             //get device role
             if (le_get_conn_info(conn_id, &conn_info)){
 				ble_scatternet_app_link_table[conn_id].role = conn_info.role;
-				if (ble_scatternet_app_link_table[conn_id].role == 1)
+				if (ble_scatternet_app_link_table[conn_id].role == GAP_LINK_ROLE_MASTER)
 					ble_scatternet_central_app_max_links ++;
-				else
+				else if (ble_scatternet_app_link_table[conn_id].role == GAP_LINK_ROLE_SLAVE)
 					ble_scatternet_peripheral_app_max_links ++;
             }
 	        data_uart_print("Connected success conn_id %d\r\n", conn_id);

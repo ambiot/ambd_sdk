@@ -40,6 +40,7 @@ ifeq ($(CONFIG_USB_DEVICE_NEW_EN),y)
 IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/common_new
 IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device_new/core
 IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device_new/cdc_acm
+IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device_new/hid
 endif
 
 .PHONY: all clean
@@ -181,6 +182,7 @@ ifeq ($(CONFIG_USB_HOST_EN),y)
 endif
 ifeq ($(CONFIG_USB_DEVICE_NEW_EN),y)
 #CSRC += $(DIR)/usbd_cdc_acm_new/example_usbd_cdc_acm_new.c
+#CSRC += $(DIR)/usbd_hid_mouse_new/example_usbd_hid_mouse_new.c
 endif
 endif
 

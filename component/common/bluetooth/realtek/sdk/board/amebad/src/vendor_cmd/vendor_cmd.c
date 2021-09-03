@@ -169,16 +169,16 @@ void app_gap_vendor_callback(uint8_t cb_type, void *p_cb_data)
     case GAP_MSG_VENDOR_EVT_INFO:
         {
 		//format: subcode + status + payload(for wifi)
-            uint16_t subcode;
+            uint8_t subcode;
             uint8_t *p = cb_data.p_gap_vendor_evt_info->param;
-            LE_STREAM_TO_UINT16(subcode, p);
+            LE_STREAM_TO_UINT8(subcode, p);
             APP_PRINT_INFO1("GAP_MSG_VENDOR_EVT_INFO: param_len %d",
                             cb_data.p_gap_vendor_evt_info->param_len);
 
             switch(subcode)
             {
                 case HCI_VENDOR_PTA_AUTO_REPORT_EVENT:
-                    bt_coex_handle_specific_evt(p,cb_data.p_gap_vendor_evt_info->param_len - 2);
+                    bt_coex_handle_specific_evt(p + 1,cb_data.p_gap_vendor_evt_info->param_len - 2);
                     break;
                 default:
                     break;

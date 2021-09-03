@@ -341,13 +341,13 @@ GLOBAL_CFLAGS += -gdwarf-3
 GLOBAL_CFLAGS += -nostartfiles
 GLOBAL_CFLAGS += -nodefaultlibs
 GLOBAL_CFLAGS += -nostdlib
-GLOBAL_CFLAGS += -O2
+GLOBAL_CFLAGS += -Os
 GLOBAL_CFLAGS += -D__FPU_PRESENT
 
 GLOBAL_CFLAGS += -gdwarf-3
 GLOBAL_CFLAGS += -fstack-usage
 GLOBAL_CFLAGS += -fdata-sections
-#GLOBAL_CFLAGS += -ffunction-sections
+GLOBAL_CFLAGS += -ffunction-sections
 GLOBAL_CFLAGS += -nostartfiles
 GLOBAL_CFLAGS += -nostdlib
 GLOBAL_CFLAGS += -Wall
@@ -404,7 +404,7 @@ LD_ARG += -L$(ROOTDIR)/lib/
 LD_ARG += -L$(ROOTDIR)/lib/application
 LD_ARG += -T$(BUILD_TARGET_FOLDER)/rlx8721d.ld 
 
-LD_ARG += -O2
+LD_ARG += -Os
 LD_ARG += -march=armv8-m.main+dsp
 LD_ARG += -mthumb
 LD_ARG += -mcmse
@@ -499,6 +499,7 @@ RENAME_LOADER_OBJS:
 	OBJ_LIST=$(ls *.o)
 	for obj_file in $(OBJS) $(ASM_OBJS); do \
 		$(FROMELF) --rename-section .rodata.str1.4=.boot.rodata.str1.4 $$obj_file $$obj_file; \
+		$(FROMELF) --rename-section .rodata.str1.1=.boot.rodata.str1.1 $$obj_file $$obj_file; \
 	done \
 
 RENAME_CODE2SRAM:
@@ -518,7 +519,7 @@ NETWORK_RENAME_CODE2SRAM:
 #*****************************************************************************#
 
 %.o:%.c
-	$(CC) -ffunction-sections $(GLOBAL_CFLAGS) $(MODULE_IFLAGS) $<  -o $@
+	$(CC) $(GLOBAL_CFLAGS) $(MODULE_IFLAGS) $<  -o $@
 
 #*****************************************************************************#
 #              RULES TO GENERATE OBJECT FILE FROM .CPP FILE                   #

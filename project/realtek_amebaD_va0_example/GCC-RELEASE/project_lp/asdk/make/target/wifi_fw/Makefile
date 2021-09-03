@@ -84,6 +84,7 @@ OBJS = $(notdir $(CSRC:.c=.o))
 # Define the Rules to build the core targets
 all: CORE_TARGETS COPY_RAM_OBJS
 	$(AR) rvs lib_wifi_fw.a $(OBJS)
+	$(FROMELF) --strip-debug lib_wifi_fw.a
 	$(MOVE) -f lib_wifi_fw.a $(ROOTDIR)/lib/application
 
 #*****************************************************************************#

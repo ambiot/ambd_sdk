@@ -52,6 +52,7 @@ OBJS = $(notdir $(CSRC:.c=.o))
 #*****************************************************************************#
 all: CORE_TARGETS COPY_RAM_OBJS
 	$(AR) rvs lib_eap.a $(OBJS)
+	$(FROMELF) --strip-debug lib_eap.a
 	$(MOVE) -f lib_eap.a $(ROOTDIR)/lib/application
 #*****************************************************************************#
 #              GENERATE OBJECT FILE 

@@ -27,7 +27,7 @@
 
 ALIGNMTO(32) static u8 ipsec_padding[64]  = { 0x0 };
 
-extern HAL_CRYPTO_ADAPTER crypto_engine ALIGNMTO(32);
+extern HAL_CRYPTO_ADAPTER crypto_engine;
 
 /**
   * @brief  Sequential hash process.

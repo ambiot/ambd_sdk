@@ -30,6 +30,7 @@ OBJS = $(notdir $(CSRC:.c=.o))
 # Define the Rules to build the core targets
 all: CORE_TARGETS COPY_RAM_OBJS
 	$(AR) rvs lib_rtsp.a $(OBJS)
+	$(FROMELF) --strip-debug lib_rtsp.a
 	$(MOVE) -f lib_rtsp.a $(ROOTDIR)/lib/application
 #*****************************************************************************#
 #              GENERATE OBJECT FILE 

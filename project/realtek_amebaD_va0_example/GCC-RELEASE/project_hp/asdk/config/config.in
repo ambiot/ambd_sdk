@@ -188,6 +188,7 @@ fi
 
 if [ "$CONFIG_USB_DEVICE_NEW_EN" = "y" ]; then
 choice 'USB Device Type'         "USB_DEVICE_CDC_ACM		CONFIG_USBD_CDC_ACM \
+								  USB_DEVICE_HID			CONFIG_USBD_HID\
                                  "USB_DEVICE_CDC_ACM
 fi
 

@@ -165,7 +165,7 @@ int BC_req_connect_hdl(uint8_t *ssid, uint8_t *password, uint8_t *bssid, rtw_sec
 	
 	//Check if in AP mode
 	wext_get_mode(WLAN0_NAME, &mode);
-	if(mode != IW_MODE_INFRA) {
+	if(mode != RTW_MODE_INFRA) {
         wifi_set_mode(RTW_MODE_STA);
 	}
 

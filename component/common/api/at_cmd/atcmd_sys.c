@@ -1455,7 +1455,7 @@ void fATSG(void *arg)
 		goto exit;
 	}
 
-	if(port != 0 || port != 1){
+	if(port != 0 && port != 1){
 		AT_DBG_MSG(AT_FLAG_GPIO, AT_DBG_ALWAYS, "[ATSG]: Invalid Port");
 		error_no = 3;
 		goto exit;

@@ -94,14 +94,14 @@ bool CycQueueWrite(uint8_t *pWriteBuf, uint16_t length)
     uint32_t s;
 
     s = os_lock();
-	
+
     if (cyc_buffer == NULL)
     {
-       // DiagPutChar("cyc_buffer is init\r\n");
+        //printf("cyc_buffer is init\r\n");
         MallocCycQueue();
         if(cyc_buffer == NULL)
         {
-            APP_PRINT_ERROR0("cyc_buffer is NULL, malloc fail");
+            printf("cyc_buffer is NULL, malloc fail\r\n");
             os_unlock(s);
             return false;
         }
@@ -160,7 +160,7 @@ bool MallocCycQueue()
 {
     if(cyc_buffer != NULL)
     {
-        APP_PRINT_ERROR0("cyc_buffer is not free");
+        printf("cyc_buffer is not free\r\n");
         FreeCycQueue();
     }
     cyc_buffer = os_mem_zalloc(RAM_TYPE_DATA_ON, MAX_BUFFER_SIZE);
@@ -178,9 +178,9 @@ bool MallocCycQueue()
  */
 void FreeCycQueue()
 {
-	if (cyc_buffer != NULL) {
-    	os_mem_free(cyc_buffer);
-	}
+    if (cyc_buffer != NULL) {
+        os_mem_free(cyc_buffer);
+    }
     pRead = 0;
     pWrite = 0;
     cyc_buffer = NULL;

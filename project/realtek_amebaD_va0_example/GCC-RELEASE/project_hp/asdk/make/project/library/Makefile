@@ -31,6 +31,7 @@ OBJS +=	\
 # Define the Rules to build the core targets
 all: CORE_TARGETS COPY_RAM_OBJS
 	$(AR) rvs lib_user.a $(OBJS) $(OBJS_SRAM)
+	$(FROMELF) --strip-debug lib_user.a
 	$(MOVE) -f lib_user.a $(ROOTDIR)/lib/application
 
 #*****************************************************************************#

@@ -36,6 +36,7 @@ OBJS = $(notdir $(CSRC:.c=.o))
 #*****************************************************************************#
 all: CORE_TARGETS COPY_RAM_OBJS
 	$(AR) rvs lib_rtp_codec.a $(OBJS)
+	$(FROMELF) --strip-debug lib_rtp_codec.a
 	$(MOVE) -f lib_rtp_codec.a $(ROOTDIR)/lib/application
 	
 #*****************************************************************************#

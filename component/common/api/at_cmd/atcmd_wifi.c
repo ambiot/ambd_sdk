@@ -218,10 +218,18 @@ static void print_scan_result( rtw_scan_result_t* record )
 			( record->security == RTW_SECURITY_WPA_WPA2_TKIP_PSK) ? "WPA/WPA2 TKIP" :
 			( record->security == RTW_SECURITY_WPA_WPA2_AES_PSK) ? "WPA/WPA2 AES" :
 			( record->security == RTW_SECURITY_WPA_WPA2_MIXED_PSK) ? "WPA/WPA2 Mixed" :
-			( record->security == RTW_SECURITY_WPA2_ENTERPRISE ) ? "WPA2 Enterprise" : 
-			( record->security == RTW_SECURITY_WPA_WPA2_ENTERPRISE ) ? "WPA/WPA2 Enterprise" : 
+			( record->security == RTW_SECURITY_WPA_TKIP_ENTERPRISE ) ? "WPA TKIP Enterprise" :
+			( record->security == RTW_SECURITY_WPA_AES_ENTERPRISE ) ? "WPA AES Enterprise" :
+			( record->security == RTW_SECURITY_WPA_MIXED_ENTERPRISE ) ? "WPA Mixed Enterprise" :
+			( record->security == RTW_SECURITY_WPA2_TKIP_ENTERPRISE ) ? "WPA2 TKIP Enterprise" :
+			( record->security == RTW_SECURITY_WPA2_AES_ENTERPRISE ) ? "WPA2 AES Enterprise" :
+			( record->security == RTW_SECURITY_WPA2_MIXED_ENTERPRISE ) ? "WPA2 Mixed Enterprise" :
+			( record->security == RTW_SECURITY_WPA_WPA2_TKIP_ENTERPRISE ) ? "WPA/WPA2 TKIP Enterprise" :
+			( record->security == RTW_SECURITY_WPA_WPA2_AES_ENTERPRISE ) ? "WPA/WPA2 AES Enterprise" :
+			( record->security == RTW_SECURITY_WPA_WPA2_MIXED_ENTERPRISE ) ? "WPA/WPA2 Mixed Enterprise" :
 #ifdef CONFIG_SAE_SUPPORT
 			( record->security == RTW_SECURITY_WPA3_AES_PSK) ? "WPA3-SAE AES" :
+			( record->security == RTW_SECURITY_WPA2_WPA3_MIXED) ? "WPA2/WPA3-SAE AES" :
 #endif
 			"Unknown",
 			record->signal_strength, MAC_ARG(record->BSSID.octet)   );
@@ -242,10 +250,18 @@ static void print_scan_result( rtw_scan_result_t* record )
 								 ( record->security == RTW_SECURITY_WPA_WPA2_TKIP_PSK) ? "WPA/WPA2 TKIP" :
 								 ( record->security == RTW_SECURITY_WPA_WPA2_AES_PSK) ? "WPA/WPA2 AES" :
 								 ( record->security == RTW_SECURITY_WPA_WPA2_MIXED_PSK) ? "WPA/WPA2 Mixed" :
-								 ( record->security == RTW_SECURITY_WPA2_ENTERPRISE ) ? "WPA2 Enterprise" :
-								 ( record->security == RTW_SECURITY_WPA_WPA2_ENTERPRISE ) ? "WPA/WPA2 Enterprise" : 
+								 ( record->security == RTW_SECURITY_WPA_TKIP_ENTERPRISE ) ? "WPA TKIP Enterprise" :
+								 ( record->security == RTW_SECURITY_WPA_AES_ENTERPRISE ) ? "WPA AES Enterprise" :
+								 ( record->security == RTW_SECURITY_WPA_MIXED_ENTERPRISE ) ? "WPA Mixed Enterprise" :
+								 ( record->security == RTW_SECURITY_WPA2_TKIP_ENTERPRISE ) ? "WPA2 TKIP Enterprise" :
+								 ( record->security == RTW_SECURITY_WPA2_AES_ENTERPRISE ) ? "WPA2 AES Enterprise" :
+								 ( record->security == RTW_SECURITY_WPA2_MIXED_ENTERPRISE ) ? "WPA2 Mixed Enterprise" :
+								 ( record->security == RTW_SECURITY_WPA_WPA2_TKIP_ENTERPRISE ) ? "WPA/WPA2 TKIP Enterprise" :
+								 ( record->security == RTW_SECURITY_WPA_WPA2_AES_ENTERPRISE ) ? "WPA/WPA2 AES Enterprise" :
+								 ( record->security == RTW_SECURITY_WPA_WPA2_MIXED_ENTERPRISE ) ? "WPA/WPA2 Mixed Enterprise" :
 #ifdef CONFIG_SAE_SUPPORT
 								 ( record->security == RTW_SECURITY_WPA3_AES_PSK) ? "WPA3-SAE AES" :
+								 ( record->security == RTW_SECURITY_WPA2_WPA3_MIXED) ? "WPA2/WPA3-SAE AES" :
 #endif
 								 "Unknown");
 
@@ -397,18 +413,6 @@ void fATWq(void *arg)
           argc = parse_param(buf, argv);
    }
 	cmd_dpp(argc, argv);
-}
-#endif
-
-#if defined(CONFIG_BT_CONFIG) && CONFIG_BT_CONFIG
-extern void bt_example_init(void);
-void fATWb(void *arg)
-{
-    int argc;
-    char *argv[MAX_ARGC] = {0};
-	
-    printf("[ATWb]:_AT_BT_CONFIG_\n\r");
-	bt_example_init();
 }
 #endif
 
@@ -857,12 +861,12 @@ void fATWA(void *arg){
 		ap.security_type = RTW_SECURITY_OPEN;
 	}
 	else{
-		if(ap.password_len <= RTW_MAX_PSK_LEN &&
+		if(ap.password_len <= RTW_WPA2_MAX_PSK_LEN &&
 			ap.password_len >= RTW_MIN_PSK_LEN){ 
 			ap.security_type = RTW_SECURITY_WPA2_AES_PSK;
-			if(ap.password_len == RTW_MAX_PSK_LEN){//password_len=64 means pre-shared key, pre-shared key should be 64 hex characters
+			if(ap.password_len == RTW_WPA2_MAX_PSK_LEN){//password_len=64 means pre-shared key, pre-shared key should be 64 hex characters
 				unsigned char i,j;
-				for(i = 0;i < 64;i++){
+				for(i = 0;i < RTW_WPA2_MAX_PSK_LEN;i++){
 					j = ap.password[i];
 					if(!((j >='0' && j<='9') || (j >='A' && j<='F') || (j >='a' && j<='f'))){
 						printf("[ATWA]Error: password should be 64 hex characters or 8-63 ASCII characters\n\r");
@@ -998,11 +1002,11 @@ static int _find_ap_from_scan_buf(char*buf, int buflen, char *target_ssid, void 
 			pwifi->channel = *(buf + plen + 13);
 			// security_mode offset = 11
 			security_mode = (u8)*(buf + plen + 11);
-			if(security_mode == IW_ENCODE_ALG_NONE)
+			if(security_mode == RTW_ENCODE_ALG_NONE)
 				pwifi->security_type = RTW_SECURITY_OPEN;
-			else if(security_mode == IW_ENCODE_ALG_WEP)
+			else if(security_mode == RTW_ENCODE_ALG_WEP)
 				pwifi->security_type = RTW_SECURITY_WEP_PSK;
-			else if(security_mode == IW_ENCODE_ALG_CCMP)
+			else if(security_mode == RTW_ENCODE_ALG_CCMP)
 				pwifi->security_type = RTW_SECURITY_WPA2_AES_PSK;
 			break;
 		}
@@ -1031,6 +1035,7 @@ static int _get_ap_security_mode(IN char * ssid, OUT rtw_security_t *security_mo
 	
 	return 0;
 }
+extern u8 rltk_wlan_channel_switch_announcement_is_enable(void);
 void fATWC(void *arg){
 	/* To avoid gcc warnings */
 	( void ) arg;
@@ -1065,7 +1070,7 @@ void fATWC(void *arg){
 	}
 	//Check if in AP mode
 	wext_get_mode(WLAN0_NAME, &mode);
-	if(mode == IW_MODE_MASTER) {
+	if(mode == RTW_MODE_MASTER) {
 #if CONFIG_LWIP_LAYER
 		dhcps_deinit();
 #endif
@@ -1339,12 +1344,12 @@ void fATWB(void *arg)
 	if(ap.password == NULL){
           ap.security_type = RTW_SECURITY_OPEN;
 	} else {
-		if(ap.password_len <= RTW_MAX_PSK_LEN &&
+		if(ap.password_len <= RTW_WPA2_MAX_PSK_LEN &&
 			ap.password_len >= RTW_MIN_PSK_LEN){ 
 			ap.security_type = RTW_SECURITY_WPA2_AES_PSK;
-			if(ap.password_len == RTW_MAX_PSK_LEN){//password_len=64 means pre-shared key, pre-shared key should be 64 hex characters
+			if(ap.password_len == RTW_WPA2_MAX_PSK_LEN){//password_len=64 means pre-shared key, pre-shared key should be 64 hex characters
 				unsigned char i,j;
-				for(i = 0;i < 64;i++){
+				for(i = 0;i < RTW_WPA2_MAX_PSK_LEN;i++){
 					j = ap.password[i];
 					if(!((j >='0' && j<='9') || (j >='A' && j<='F') || (j >='a' && j<='f'))){
 						printf("[ATWA]Error: password should be 64 hex characters or 8-63 ASCII characters\n\r");
@@ -2169,11 +2174,11 @@ static int _find_ap_from_scan_buf(char*buf, int buflen, char *target_ssid, void 
 			pwifi->channel = *(buf + plen + 13);
 			// security_mode offset = 11
 			security_mode = (u8)*(buf + plen + 11);
-			if(security_mode == IW_ENCODE_ALG_NONE)
+			if(security_mode == RTW_ENCODE_ALG_NONE)
 				pwifi->security_type = RTW_SECURITY_OPEN;
-			else if(security_mode == IW_ENCODE_ALG_WEP)
+			else if(security_mode == RTW_ENCODE_ALG_WEP)
 				pwifi->security_type = RTW_SECURITY_WEP_PSK;
-			else if(security_mode == IW_ENCODE_ALG_CCMP)
+			else if(security_mode == RTW_ENCODE_ALG_CCMP)
 				pwifi->security_type = RTW_SECURITY_WPA2_AES_PSK;
 			break;
 		}
@@ -2300,7 +2305,7 @@ void fATPN(void *arg)
 
 	//Check if in AP mode
 	wext_get_mode(WLAN0_NAME, &mode);
-	if(mode == IW_MODE_MASTER) {
+	if(mode == RTW_MODE_MASTER) {
 #if CONFIG_LWIP_LAYER
 		dhcps_deinit();
 #endif
@@ -2658,7 +2663,7 @@ void atcmd_wifi_write_info_to_flash(rtw_wifi_setting_t *setting, int enable)
 				}
 
 				memcpy(reconn.psk_essid, psk_essid[index], sizeof(reconn.psk_essid));
-				if (strlen(psk_passphrase64) == 64) {
+				if (strlen(psk_passphrase64) == IW_WPA2_PASSPHRASE_MAX_SIZE) {
 					memcpy(reconn.psk_passphrase, psk_passphrase64, sizeof(reconn.psk_passphrase));
 				} else {
 					memcpy(reconn.psk_passphrase, psk_passphrase[index], sizeof(reconn.psk_passphrase));
@@ -2740,7 +2745,7 @@ int atcmd_wifi_restore_from_flash(void)
 		
 		//Check if in AP mode
 		wext_get_mode(WLAN0_NAME, &mode);
-		if(mode == IW_MODE_MASTER) {
+		if(mode == RTW_MODE_MASTER) {
 #if CONFIG_LWIP_LAYER
 			dhcps_deinit();
 #endif

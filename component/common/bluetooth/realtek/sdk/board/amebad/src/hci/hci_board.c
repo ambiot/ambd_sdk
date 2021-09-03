@@ -635,7 +635,7 @@ void bt_reset(void)
 
 bool hci_board_init()
 {
-    bool ret=false;
+
 	
     if(!(wifi_is_up(RTW_STA_INTERFACE) || wifi_is_up(RTW_AP_INTERFACE))) {
         hci_board_debug("\nWIFI is off !Please restart BT after WIFI on!\n");

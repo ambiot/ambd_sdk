@@ -36,6 +36,7 @@ OBJS = $(notdir $(CSRC:.c=.o))
 #*****************************************************************************#
 all: CORE_TARGETS COPY_RAM_OBJS
 	$(AR) rvs lib_websocket.a $(OBJS)
+	$(FROMELF) --strip-debug lib_websocket.a
 	$(MOVE) -f lib_websocket.a $(ROOTDIR)/lib/application
 #*****************************************************************************#
 #              GENERATE OBJECT FILE 
