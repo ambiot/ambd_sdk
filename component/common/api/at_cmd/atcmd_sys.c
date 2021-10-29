@@ -1445,7 +1445,11 @@ void fATSG(void *arg)
 	port = argv[2][1];
 	num = strtoul(&argv[2][3], NULL, 0);
 	port -= 'A';
+#if defined(CONFIG_PLATFORM_8195A)
 	pin = (port << 4 | num);
+#else
+	pin = (port << 5 | num);
+#endif
 	AT_DBG_MSG(AT_FLAG_GPIO, AT_DBG_ALWAYS, "PORT: %s[%d]", argv[2], pin);
 	
 	if(gpio_set(pin) == 0xff)

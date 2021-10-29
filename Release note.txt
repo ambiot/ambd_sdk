@@ -9,7 +9,7 @@ We recommand the flow items:
 Patch List:
 	1. Full Patch:
 		sdk-amebad_v6.2C-RC.tar.gz
-		6.2_patch_integrated_210902_a3971d65.zip
+		6.2_patch_integrated_211022_d994187c.zip
 		
 	2. Single Patch:
 		sdk-amebad_v6.2C-RC.tar.gz
@@ -30,6 +30,7 @@ Patch List:
 		6.2_critical_patch_210714_7d7d3c19_to_317d518b.zip
 		6.2_critical_patch_210809_317d518b_to_a30eac93.zip
 		6.2_critical_patch_210902_a30eac93_to_a3971d65.zip
+		6.2_critical_patch_211022_a3971d65_to_d994187c.zip
 		
 Critical Patch List:
 	6.2c to Git 200529_aa1d394c:
@@ -591,3 +592,17 @@ Critical Patch List:
 		10,	Modify i2c data transfer type from u8 to u32 to avoid transfer data length can't be large than 255.
 		
 		11,	Add image header length to psram rsip mask size to avoid io driver error when psram image data size is 0.
+		
+	Git 210902_a3971d65 to Git 211022_d994187c:	
+		1, 	Fix bug when two client connect at same time and timeout at same time in softAP mode
+		2,	Add MSC and Vendor Class for USB new stack
+		3,	Fix RX frame refree issue when recv AMSDU packets
+		4,	Optimize TX throughput
+		5,	Update BT uplayer stack
+		6,	Fix WPS Failed due to double spinlock
+		7,	BLE Fix default setting of PHY but BT controller still has bug on set PHY
+		8,	Support EAP Fast
+		9,	Optimize IAR debug flow
+		10,	Add new API in websocket to support send large streams
+		11,	Update Aduio lib and Hardware setting
+		12,	Fix some compile warning

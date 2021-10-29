@@ -166,6 +166,14 @@ void app_le_gap_init(void)
 
     /* register gap message callback */
     le_register_app_cb(app_gap_callback);
+#if F_BT_LE_5_0_SET_PHY_SUPPORT
+	uint8_t phys_prefer = GAP_PHYS_PREFER_ALL;
+	uint8_t tx_phys_prefer = GAP_PHYS_PREFER_1M_BIT | GAP_PHYS_PREFER_2M_BIT;
+	uint8_t rx_phys_prefer = GAP_PHYS_PREFER_1M_BIT | GAP_PHYS_PREFER_2M_BIT;
+	le_set_gap_param(GAP_PARAM_DEFAULT_PHYS_PREFER, sizeof(phys_prefer), &phys_prefer);
+	le_set_gap_param(GAP_PARAM_DEFAULT_TX_PHYS_PREFER, sizeof(tx_phys_prefer), &tx_phys_prefer);
+	le_set_gap_param(GAP_PARAM_DEFAULT_RX_PHYS_PREFER, sizeof(rx_phys_prefer), &rx_phys_prefer);
+#endif
 }
 
 /**

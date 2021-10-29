@@ -2,6 +2,10 @@
 /*
  * Release Note
  */
+	v1.0.1.162
+	2021/09/18
+	1. Fix a bug for H4 when receive error data.
+	
 	v1.0.1.158
 	2021/07/23
 	1. Fix a bug for bte_deinit.

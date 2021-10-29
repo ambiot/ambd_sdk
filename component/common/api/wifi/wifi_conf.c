@@ -30,7 +30,7 @@ extern int inic_stop(void);
 #endif
 
 extern u8 rtw_get_band_type(void);
-extern int rtw_chip_band_type_check();
+extern int rtw_chip_band_type_check(void);
 
 /******************************************************
  *                    Constants

@@ -774,17 +774,17 @@ int ble_central_at_cmd_set_scan_param(int argc, char **argv)
 #if F_BT_LE_5_0_SET_PHY_SUPPORT
 int ble_central_at_cmd_set_phy(int argc, char **argv)
 {
-	(void) argc;
+    (void) argc;
     uint8_t conn_id;
-	uint8_t phys;
+    uint8_t phys;
     uint8_t all_phys;
     uint8_t tx_phys;
     uint8_t rx_phys;
     T_GAP_PHYS_OPTIONS phy_options = GAP_PHYS_OPTIONS_CODED_PREFER_S8;
     T_GAP_CAUSE cause;
-	conn_id = atoi(argv[1]);
-	phys = atoi(argv[2]);
-	if (phys == 0)//set PHY tx/rx support 1M
+    conn_id = atoi(argv[1]);
+    phys = atoi(argv[2]);
+    if (phys == 0) //set PHY tx/rx support 1M
     {
         all_phys = GAP_PHYS_PREFER_ALL;
         tx_phys = GAP_PHYS_PREFER_1M_BIT;
@@ -796,26 +796,38 @@ int ble_central_at_cmd_set_phy(int argc, char **argv)
         tx_phys = GAP_PHYS_PREFER_2M_BIT;
         rx_phys = GAP_PHYS_PREFER_2M_BIT;
     }
-    else if (phys == 2)//set PHY tx/rx support CODRD_S8
+    else if (phys == 2) //set PHY tx support 2M, rx support 1M
     {
         all_phys = GAP_PHYS_PREFER_ALL;
-        tx_phys = GAP_PHYS_PREFER_CODED_BIT;
-        rx_phys = GAP_PHYS_PREFER_CODED_BIT;
-        phy_options = GAP_PHYS_OPTIONS_CODED_PREFER_S8;
+        tx_phys = GAP_PHYS_PREFER_2M_BIT;
+        rx_phys = GAP_PHYS_PREFER_1M_BIT;
     }
-    else if (phys == 3)//set PHY tx/rx support CODRD_S2
+    else if (phys == 3) //set PHY tx support 1M, rx support 2M
+    {
+        all_phys = GAP_PHYS_PREFER_ALL;
+        tx_phys = GAP_PHYS_PREFER_1M_BIT;
+        rx_phys = GAP_PHYS_PREFER_2M_BIT;
+    }
+    else if (phys == 4) //set PHY tx/rx support CODED_S2
     {
         all_phys = GAP_PHYS_PREFER_ALL;
         tx_phys = GAP_PHYS_PREFER_CODED_BIT;
         rx_phys = GAP_PHYS_PREFER_CODED_BIT;
         phy_options = GAP_PHYS_OPTIONS_CODED_PREFER_S2;
     }
-    else //set PHY tx support 2M,rx support 1M
+    else if (phys == 5) //set PHY tx/rx support CODED_S8
     {
-        all_phys = GAP_PHYS_NO_PREFER_TX_BIT;
-        tx_phys = GAP_PHYS_PREFER_2M_BIT;
-        rx_phys = GAP_PHYS_PREFER_1M_BIT;
+        all_phys = GAP_PHYS_PREFER_ALL;
+        tx_phys = GAP_PHYS_PREFER_CODED_BIT;
+        rx_phys = GAP_PHYS_PREFER_CODED_BIT;
+        phy_options = GAP_PHYS_OPTIONS_CODED_PREFER_S8;
     }
+    else
+    {
+        printf("Error parameter!\r\n");
+        return -1;
+    }
+
     cause = le_set_phy(conn_id, all_phys, tx_phys, rx_phys, phy_options);
 
     return cause;

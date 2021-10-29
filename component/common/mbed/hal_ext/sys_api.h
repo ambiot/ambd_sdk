@@ -125,7 +125,7 @@ void sys_cpu_reset(void);
             4: PACKAGE_QFN56
             -1: UNKNOWN
   */
-int sys_chip_package_read();
+int sys_chip_package_read(void);
 
 /**
   * @brief check chip MCM PSRAM existance
@@ -134,7 +134,7 @@ int sys_chip_package_read();
             2: exist
             -1: unknown
   */
-int sys_chip_psram_check();
+int sys_chip_psram_check(void);
 
 /**
   * @brief check chip MCM FLASH existance
@@ -143,7 +143,7 @@ int sys_chip_psram_check();
             2: exist
             -1: unknown
   */
-int sys_chip_flash_check();
+int sys_chip_flash_check(void);
 
 /**
   * @brief check chip band type
@@ -152,7 +152,7 @@ int sys_chip_flash_check();
             2: dual band
             -1: unknown
   */
-int sys_chip_band_type_check();
+int sys_chip_band_type_check(void);
 
 /*\@}*/
 
