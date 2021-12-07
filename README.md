@@ -16,7 +16,7 @@ Click [http://cygwin.com](http://cygwin.com/) and download the ``Cygwin`` packag
 
    ![getstart0](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_1.png)
 
-   ![getstart1](https://rtd-debug.readthedocs.io/en/latest/_images/image2.png)
+   ![getstart1](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_2.png)
 
 > Note:
    For Linux, refer to [AN0400 Realtek Ameba-D Application Note.pdf](https://www.amebaiot.com/en/sdk-download-manual-8722dm/) to build the GCC development environment.  
