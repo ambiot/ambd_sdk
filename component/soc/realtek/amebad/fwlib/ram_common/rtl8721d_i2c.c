@@ -737,7 +737,7 @@ void I2C_SlaveWrite(I2C_TypeDef *I2Cx, u8* pBuf, u32 len)
 	}
 	while(((I2C_CheckFlagState(I2Cx, BIT_IC_STATUS_TFE)) == 0) &&((I2Cx->IC_RAW_INTR_STAT & BIT_IC_RAW_INTR_STAT_RX_DONE) == 0));
 	I2Cx->IC_CLR_INTR;
-
+}
 /**
   * @brief  Read data with special length in slave mode through the I2Cx peripheral.
   * @param  I2Cx: where I2Cx can be I2C0_DEV.
