@@ -184,7 +184,7 @@ linker_image2:
 
 linker_loader:
 	@echo "========= linker loader start ========="
-	$(LD) $(LD_ARG) target_loader.axf $(RAM_OBJS_LIST) $(LINK_ROM_LIB) -Wl,--whole-archive -lbootloader_lp -Wl,--no-whole-archive 
+	$(LD) $(LD_ARG) target_loader.axf $(RAM_OBJS_LIST) $(LINK_ROM_LIB) 
 
 	$(MOVE) text.map $(IMAGE_TARGET_FOLDER)/text_loader.map
 	$(MOVE) target_loader.axf $(IMAGE_TARGET_FOLDER)
