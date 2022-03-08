@@ -21,7 +21,6 @@ CSRC +=  \
 	$(DIR)/http_client.c \
 	$(DIR)/xml.c \
 	$(DIR)/cJSON.c \
-	#$(DIR)/webserver.c
 
 #*****************************************************************************#
 #                               Object FILE LIST                              #

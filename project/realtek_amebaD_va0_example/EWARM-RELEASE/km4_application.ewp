@@ -23994,9 +23994,6 @@
             <name>$PROJ_DIR$\..\..\..\component\common\utilities\tcptest.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\component\common\utilities\webserver.c</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\..\component\common\utilities\xml.c</name>
         </file>
     </group>
