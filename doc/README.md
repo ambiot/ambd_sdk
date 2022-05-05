@@ -4,13 +4,13 @@ For any questions, please visit our [website](https://www.amebaiot.com/en/) and 
 Please refer the following links for all online documents. [Standard SDK](https://www.amebaiot.com/en/ameba-sdk-summary/)
 
 ## Getting Started
-[Getting Started](https://www.amebaiot.com/en/ameba-sdk-getting-started-8722/)
+1. [Getting Started](https://www.amebaiot.com/en/ameba-sdk-getting-started-8722/)
 
 ## Key Documents
-[Datasheet](https://www.amebaiot.com/?s2member_file_download=UM0401_RTL872xD_Datasheet_v3.4.pdf)
-[User Manual](https://www.amebaiot.com/en/sdk-download-manual-8722dm/)
-[Release History](https://www.amebaiot.com/en/amebad-sdk-release-plan/)
+1. [Datasheet](https://www.amebaiot.com/?s2member_file_download=UM0401_RTL872xD_Datasheet_v3.4.pdf)
+2. [User Manual](https://www.amebaiot.com/en/sdk-download-manual-8722dm/)
+3. [Release History](https://www.amebaiot.com/en/amebad-sdk-release-plan/)
 
 ## Board HDK
-[Layout](https://www.amebaiot.com/hdk-download-8722dm/)
-[Schematic](https://www.amebaiot.com/hdk-download-8722dm/)
+1. [Layout](https://www.amebaiot.com/hdk-download-8722dm/)
+2. [Schematic](https://www.amebaiot.com/hdk-download-8722dm/)
