@@ -34,7 +34,7 @@ void uart_clock_send_string(serial_t *sobj, char *pstr)
 	int32_t ret=0;
 	ret = serial_send_stream_dma(sobj, pstr, _strlen(pstr));
 	if (ret != 0) {
-		DBG_8195A("%s Error(%d)\n", __FUNCTION__, ret);        
+		DiagPrintf("%s Error(%d)\n", __FUNCTION__, ret);        
 	}
 }
 

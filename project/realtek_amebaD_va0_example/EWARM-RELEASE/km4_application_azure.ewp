@@ -8837,9 +8837,6 @@
     </group>
     <group>
         <name>audio</name>
-<excluded>
-	<configuration>is</configuration>
-</excluded>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\common\audio\resample\resample_48khz.c</name>
         </file>
@@ -9072,9 +9069,6 @@
             </group>
             <group>
                 <name>bt_airsync_config</name>
-<excluded>
-	<configuration>is</configuration>
-</excluded>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\component\common\application\airsync\1.0.4\airsync_ble_service.c</name>
                 </file>
@@ -9105,9 +9099,6 @@
             </group>
             <group>
                 <name>bt_beacon</name>
-<excluded>
-	<configuration>is</configuration>
-</excluded>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_beacon\bt_beacon_app.c</name>
                 </file>
@@ -9224,16 +9215,10 @@
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\api\bt_mesh_user_api.c</name>
                         </file>
                         <file>
-                            <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\common\customer_dfu_service.c</name>
-                        </file>
-                        <file>
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\common\datatrans_app.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\model\delay_msg_rsp.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\common\dfudep_service.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\common\ping_app.c</name>
@@ -9280,11 +9265,8 @@
                     </group>
                     <group>
                         <name>common</name>
-                        <file>
+						<file>
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\api\device\device_idle_check.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\common\dfu_updater_app.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\common\light_server_app.c</name>
@@ -9458,16 +9440,10 @@
                     <group>
                         <name>common</name>
                         <file>
-                            <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\common\dfu_distributor_app.c</name>
-                        </file>
-                        <file>
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\common\generic_client_app.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\common\light_client_app.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\common\rmt_prov_client_app.c</name>
                         </file>
                     </group>
                     <group>
@@ -9479,16 +9455,7 @@
                     <group>
                         <name>model</name>
                         <file>
-                            <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\model\blob_transfer_client.c</name>
-                        </file>
-                        <file>
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\model\configuration_client.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\model\firmware_distribution_client.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\model\firmware_update_client.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\model\generic_battery_client.c</name>
@@ -9527,16 +9494,10 @@
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\model\light_hsl_client.c</name>
                         </file>
                         <file>
-                            <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\model\light_lc_client.c</name>
-                        </file>
-                        <file>
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\model\light_lightness_client.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\model\light_xyl_client.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\model\private_beacon_client.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\model\scene_client.c</name>
@@ -9931,16 +9892,10 @@
         </group>
         <group>
             <name>usb_class</name>
-<excluded>
-	<configuration>is</configuration>
-</excluded>
             <group>
                 <name>device</name>
                 <group>
                     <name>audio</name>
-<excluded>
-	<configuration>is</configuration>
-</excluded>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\audio\src\usb_f_uac1.c</name>
                     </file>
@@ -9949,12 +9904,6 @@
                     <name>cdc_acm</name>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\cdc_acm\src\usbd_cdc_acm.c</name>
-                    </file>
-                </group>
-                <group>
-                    <name>hid</name>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\hid\src\usbd_hid.c</name>
                     </file>
                 </group>
                 <group>
@@ -10127,7 +10076,6 @@
                                 <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\usb_otg\device\inc</state>
                                 <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\audio\inc</state>
                                 <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\cdc_acm\inc</state>
-                                <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\hid\inc</state>
                                 <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\msc\inc</state>
                                 <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\vendor\inc</state>
                                 <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\app\monitor\include</state>
@@ -10496,7 +10444,6 @@
                                 <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\cdc_acm\inc</state>
                                 <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\msc\inc</state>
                                 <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\vendor\inc</state>
-                                <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\hid\inc</state>
                                 <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\app\monitor\include</state>
                                 <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\app\xmodem</state>
                                 <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\swlib\include</state>
@@ -10863,7 +10810,6 @@
                                 <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\cdc_acm\inc</state>
                                 <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\msc\inc</state>
                                 <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\vendor\inc</state>
-                                <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\hid\inc</state>
                                 <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\app\monitor\include</state>
                                 <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\app\xmodem</state>
                                 <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\swlib\include</state>
@@ -11232,7 +11178,6 @@
                                 <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\cdc_acm\inc</state>
                                 <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\msc\inc</state>
                                 <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\vendor\inc</state>
-                                <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\hid\inc</state>
                                 <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\app\monitor\include</state>
                                 <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\app\xmodem</state>
                                 <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\swlib\include</state>
@@ -13037,6 +12982,7 @@
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_common\rtl8721d_ram_libc.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_common\rtl8721d_rand2.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_common\rtl8721d_rtc.c</name>
@@ -13090,10 +13036,13 @@
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_hp\rtl8721dhp_ota_ram.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_hp\rtl8721dhp_pmc.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_hp\rtl8721dhp_pmc_ram.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_hp\rtl8721dhp_psram.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_hp\rtl8721dhp_sd.c</name>
@@ -13131,9 +13080,6 @@
     </group>
     <group>
         <name>lib</name>
-<file>
-	<name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_application_hp.a</name>
-</file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\board\amebad\lib\btgap.a</name>
         </file>
@@ -13154,6 +13100,7 @@
             </excluded>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_ac3.a</name>
             <excluded>
                 <configuration>is</configuration>
                 <configuration>is (mp)</configuration>
@@ -13178,8 +13125,12 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_eap.a</name>
+            <excluded>
+                <configuration>is</configuration>
+            </excluded>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_ekho.a</name>
             <excluded>
                 <configuration>is</configuration>
                 <configuration>is (mp)</configuration>
@@ -13188,6 +13139,7 @@
             </excluded>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_gsm610.a</name>
             <excluded>
                 <configuration>is</configuration>
                 <configuration>is (mp)</configuration>
@@ -13196,6 +13148,7 @@
             </excluded>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_haac.a</name>
             <excluded>
                 <configuration>is</configuration>
                 <configuration>is (mp)</configuration>
@@ -13204,6 +13157,7 @@
             </excluded>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_hmp3.a</name>
             <excluded>
                 <configuration>is</configuration>
                 <configuration>is (mp)</configuration>
@@ -13218,6 +13172,7 @@
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_httpd.a</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_libogg.a</name>
             <excluded>
                 <configuration>is</configuration>
                 <configuration>is (mp)</configuration>
@@ -13238,6 +13193,7 @@
             </excluded>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_mp3.a</name>
             <excluded>
                 <configuration>is</configuration>
                 <configuration>is (mp)</configuration>
@@ -13255,6 +13211,7 @@
             </excluded>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_opusenc.a</name>
             <excluded>
                 <configuration>is</configuration>
                 <configuration>is (mp)</configuration>
@@ -13263,6 +13220,7 @@
             </excluded>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_opusfile.a</name>
             <excluded>
                 <configuration>is</configuration>
                 <configuration>is (mp)</configuration>
@@ -13280,6 +13238,7 @@
             </excluded>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_rtsp.a</name>
             <excluded>
                 <configuration>is</configuration>
                 <configuration>is (mp)</configuration>
@@ -13413,6 +13372,7 @@
     <group>
         <name>misc</name>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\rtl8721d_freertos_pmu.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\rtl8721d_ota.c</name>
@@ -13541,16 +13501,19 @@
                 <group>
                     <name>device</name>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\component\common\example\usbd_audio\example_usbd_audio.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\component\common\example\usbd_audio\example_usbd_audio_sp.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\component\common\example\usbd_cdc_acm\example_usbd_cdc_acm.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\component\common\example\usbd_msc\example_usbd_msc.c</name>
                     </file>
                     <file>
-                    </file>
-                    <file>
+                        <name>$PROJ_DIR$\..\..\..\component\common\example\usbd_vendor\example_usbd_vendor.c</name>
                     </file>
                     <configuration>
                         <name>is</name>
@@ -13704,7 +13667,6 @@
                                     <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\usb_otg\device\inc</state>
                                     <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\audio\inc</state>
                                     <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\cdc_acm\inc</state>
-                                    <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\hid\inc</state>
                                     <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\msc\inc</state>
                                     <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\vendor\inc</state>
                                     <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\app\monitor\include</state>
@@ -14073,7 +14035,6 @@
                                     <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\cdc_acm\inc</state>
                                     <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\msc\inc</state>
                                     <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\vendor\inc</state>
-                                    <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\hid\inc</state>
                                     <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\app\monitor\include</state>
                                     <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\app\xmodem</state>
                                     <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\swlib\include</state>
@@ -14440,7 +14401,6 @@
                                     <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\cdc_acm\inc</state>
                                     <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\msc\inc</state>
                                     <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\vendor\inc</state>
-                                    <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\hid\inc</state>
                                     <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\app\monitor\include</state>
                                     <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\app\xmodem</state>
                                     <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\swlib\include</state>
@@ -14809,7 +14769,6 @@
                                     <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\cdc_acm\inc</state>
                                     <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\msc\inc</state>
                                     <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\vendor\inc</state>
-                                    <state>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\hid\inc</state>
                                     <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\app\monitor\include</state>
                                     <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\app\xmodem</state>
                                     <state>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\swlib\include</state>
@@ -15024,12 +14983,16 @@
                 <group>
                     <name>host</name>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\component\common\example\usbh_cdc_acm\example_usbh_cdc_acm.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\component\common\example\usbh_msc\example_usbh_msc.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\component\common\example\usbh_uvc\example_usbh_uvc.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\component\common\example\usbh_vendor\example_usbh_vendor.c</name>
                     </file>
                     <configuration>
                         <name>is</name>
@@ -16511,6 +16474,7 @@
                 </group>
             </group>
             <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\audio_sport\audio_ac3\a52dec.c</name>
                 <excluded>
                     <configuration>is</configuration>
                     <configuration>is (mp)</configuration>
@@ -19564,6 +19528,7 @@
                 </excluded>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\audio_sport\audio_ac3\example_audio_ac3.c</name>
                 <excluded>
                     <configuration>is</configuration>
                     <configuration>is (mp)</configuration>
@@ -19590,6 +19555,7 @@
                 </excluded>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\audio_sport\audio_ekho\example_audio_ekho.c</name>
                 <excluded>
                     <configuration>is</configuration>
                     <configuration>is (mp)</configuration>
@@ -19598,6 +19564,7 @@
                 </excluded>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\audio_sport\audio_helix_aac\example_audio_helix_aac.c</name>
                 <excluded>
                     <configuration>is</configuration>
                     <configuration>is (mp)</configuration>
@@ -19606,6 +19573,7 @@
                 </excluded>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\audio_sport\audio_helix_mp3\example_audio_helix_mp3.c</name>
                 <excluded>
                     <configuration>is</configuration>
                     <configuration>is (mp)</configuration>
@@ -19614,6 +19582,7 @@
                 </excluded>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\audio_sport\audio_mp3\example_audio_mp3.c</name>
                 <excluded>
                     <configuration>is</configuration>
                     <configuration>is (mp)</configuration>
@@ -21160,10 +21129,13 @@
                 <name>$PROJ_DIR$\..\..\..\component\common\example\coap\example_coap.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\coap_client\example_coap_client.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\coap_server\example_coap_server.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\eap\example_eap.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\component\common\example\example_entry.c</name>
@@ -22600,6 +22572,7 @@
                 <name>$PROJ_DIR$\..\..\..\component\common\example\ota_http\example_ota_http.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\ota_https\example_ota_https.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\component\common\example\ota_sdcard\example_ota_sdcard.c</name>
@@ -22608,6 +22581,7 @@
                 <name>$PROJ_DIR$\..\..\..\component\common\example\rarp\example_rarp.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\sdcard_upload_httpd\example_sdcard_upload_httpd.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\component\common\example\sntp_showtime\example_sntp_showtime.c</name>
@@ -22637,6 +22611,7 @@
                 <name>$PROJ_DIR$\..\..\..\component\common\example\wifi_mac_monitor\example_wifi_mac_monitor.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\wifi_manager\example_wifi_manager.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\component\common\example\wifi_roaming\example_wifi_roaming.c</name>
@@ -22660,6 +22635,7 @@
                 <name>$PROJ_DIR$\..\..\..\component\common\example\xml\example_xml.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\audio_sport\audio_opus_decode\Psram_realloc.c</name>
             </file>
         </group>
         <group>

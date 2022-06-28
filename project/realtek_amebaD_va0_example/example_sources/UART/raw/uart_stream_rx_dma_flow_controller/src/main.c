@@ -31,7 +31,8 @@ GDMA_InitTypeDef GDMA_InitStruct;
 volatile u32 tx_busy=0;
 volatile u32 rx_done=0;
 volatile u32 wait_rx=0;
-
+
+
 u32 uart_get_idx(UART_TypeDef* UartDEV)
 {
 	if(UartDEV==UART0_DEV){
@@ -61,6 +62,7 @@ void uart_send_string_done(void)
 {
 	dma_free();
 	tx_busy = 0;
+	_memset((void *) rx_buf, 0, SRX_BUF_SZ);
 }
 
 void uart_recv_string_done(void)
@@ -85,7 +87,7 @@ void uart_dma_send(char *pstr,u32 len)
 	NVIC_SetPriority(GDMA_GetIrqNum(0, GDMA_InitStruct.GDMA_ChNum), 12);	
 
 	 if (!ret ) {
-		DBG_8195A("%s Error(%d)\n", __FUNCTION__, ret);        
+		DiagPrintf("%s Error(%d)\n", __FUNCTION__, ret);        
 		tx_busy = 0;
 	}
 }
@@ -135,12 +137,11 @@ void maintask(void)
 	UART_SetBaud(UART_DEV, 38400);
 	UART_RxCmd(UART_DEV, ENABLE);
 
-	for(i=0;i<SRX_BUF_SZ;i++){
-		rx_buf[i]=0;
-    	}
+	_memset((void *) rx_buf, 0, SRX_BUF_SZ);
+		
 	while (1) {
 		if (rx_done) {
-			uart_send_string( rx_buf);            
+			uart_send_string( rx_buf);
 			rx_done = 0;        
 		}
 		if(0==wait_rx&&0==tx_busy){

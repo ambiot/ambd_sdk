@@ -41,9 +41,9 @@ void IR_RX_recv(void)
 		duration = data & 0x7fffffff;
 
 		if (IR_DataStruct.bufLen >= 67) {
-			DBG_8195A("the waveform is inverse, you should set: \n");
-			DBG_8195A("IR_InitStruct.IR_RxCntThrType = IR_RX_COUNT_HIGH_LEVEL \n");
-			DBG_8195A("#define INVERSE_DATA in Ir_nec_protocol.h \n");
+			DiagPrintf("the waveform is inverse, you should set: \n");
+			DiagPrintf("IR_InitStruct.IR_RxCntThrType = IR_RX_COUNT_HIGH_LEVEL \n");
+			DiagPrintf("#define INVERSE_DATA in Ir_nec_protocol.h \n");
 			break;
 		}
 
@@ -191,10 +191,10 @@ void Driver_IR_Init(void)
 			result = IR_NECDecode(IR_InitStruct.IR_Freq, (uint8_t *)&data, &IR_DataStruct);
 			ir_code[0] = data[0];
 			ir_code[1] = data[2];
-			DBG_8195A("result %d RX %2x%2x\n",result, ir_code[1],ir_code[0]);
+			DiagPrintf("result %d RX %2x%2x\n",result, ir_code[1],ir_code[0]);
 		}
 		else {
-			DBG_8195A("rx timeout\n");
+			DiagPrintf("rx timeout\n");
 		}
 	} while (1);
 
@@ -213,7 +213,7 @@ void Driver_IR_Init(void)
 	}
 
 	if (pdTRUE != xTaskCreate( IR_RX_thread, (const char * const)"IR_RX_THREAD", 256, NULL, tskIDLE_PRIORITY + 5 , NULL))
-		DBG_8195A("create IR RX thread error\n");
+		DiagPrintf("create IR RX thread error\n");
 
 	vTaskStartScheduler();
  }

@@ -65,7 +65,7 @@ void usi_spi_task(void* param)
 	/**
 	* Slave write/read
 	*/
-	DBG_8195A("----------- Slave write/read -----------\n");
+	DiagPrintf("----------- Slave write/read -----------\n");
 	for(Counter = 0, TestData = 0x01; Counter < TestingTimes; Counter++)
 	{
 
@@ -77,7 +77,7 @@ void usi_spi_task(void* param)
 		while (!USI_SSI_Readable(USI0_DEV));
 		ReadData = (int)USI_SSI_ReadData(USI0_DEV);
 
-		DBG_8195A("Slave write: %x, read: %x\n", TestData, ReadData);
+		DiagPrintf("Slave write: %x, read: %x\n", TestData, ReadData);
 		if (TestData != ReadData) {
 			result = 0;
 		}
@@ -87,8 +87,8 @@ void usi_spi_task(void* param)
 	/* free USI_SPI */
 	USI_SSI_Cmd(USI0_DEV, DISABLE);
 
-	DBG_8195A("USI SPI Slave Demo Finished.\n");
-	DBG_8195A("\r\nSlave Result is %s\r\n", (result) ? "success" : "fail");
+	DiagPrintf("USI SPI Slave Demo Finished.\n");
+	DiagPrintf("\r\nSlave Result is %s\r\n", (result) ? "success" : "fail");
 
 	vTaskDelete(NULL);
 
@@ -102,7 +102,7 @@ void usi_spi_task(void* param)
 void main(void)
 {
 	if(xTaskCreate(usi_spi_task, ((const char*)"usi_spi_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(usi_spi_task) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(usi_spi_task) failed", __FUNCTION__);
 
 	vTaskStartScheduler();
 	while(1){

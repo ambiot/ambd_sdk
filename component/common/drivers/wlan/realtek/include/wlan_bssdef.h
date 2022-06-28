@@ -1,21 +1,17 @@
 /******************************************************************************
+ * Copyright (c) 2013-2016 Realtek Semiconductor Corp.
  *
- * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
- *                                        
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
- *
- *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  ******************************************************************************/
 #ifndef __WLAN_BSSDEF_H__
 #define __WLAN_BSSDEF_H__
@@ -599,6 +595,7 @@ typedef struct _WLAN_BCN_INFO
 {
 	/* these infor get from rtw_get_encrypt_info when
 	 * 	 * translate scan to UI */
+	u8	encryp_protocol_eap; //checking if using eap for previous connection
 	u8	encryp_protocol;	//ENCRYP_PROTOCOL_E: OPEN/WEP/WPA/WPA2/WAPI
 	int	group_cipher;		//WPA/WPA2 group cipher
 	int	pairwise_cipher;	//WPA/WPA2/WEP pairwise cipher

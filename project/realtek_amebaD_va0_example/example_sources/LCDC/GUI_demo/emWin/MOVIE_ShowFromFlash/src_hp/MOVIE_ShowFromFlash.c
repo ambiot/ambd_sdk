@@ -166,7 +166,7 @@ void MainTask(void) {
   // Get physical size of movie
   //
   if (GUI_MOVIE_GetInfoEx(_GetData, NULL, &Info) == 0) {
-  	DBG_8195A("movie:%d,%d,%d,%d\n", Info.msPerFrame,Info.NumFrames, Info.xSize, Info.ySize);
+  	DiagPrintf("movie:%d,%d,%d,%d\n", Info.msPerFrame,Info.NumFrames, Info.xSize, Info.ySize);
 	//GUI_MOVIE_SetPeriod(hMovie, 83);
     //
     // Check if display size fits

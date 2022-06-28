@@ -10,33 +10,33 @@ void app_dslp_wake(void)
 	u32 temp;
 	u32 aon_wake_event = SOCPS_AONWakeReason();
 
-	DBG_8195A("app_dslp_wake %x \n", aon_wake_event);
+	DiagPrintf("app_dslp_wake %x \n", aon_wake_event);
 
 	if(BIT_GPIO_WAKE_STS & aon_wake_event) {
 		temp = HAL_READ32(SYSTEM_CTRL_BASE, REG_AON_WAKE_GPIO_CTRL2);
 		HAL_WRITE32(SYSTEM_CTRL_BASE, REG_AON_WAKE_GPIO_CTRL2, temp);
-		DBG_8195A("DSLP GPIO wakeup %x\n", temp);
+		DiagPrintf("DSLP GPIO wakeup %x\n", temp);
 	}
 
 	if(BIT_AON_WAKE_TIM0_STS & aon_wake_event) {
 		SOCPS_AONTimerCmd(DISABLE);
-		DBG_8195A("DSLP Aontimer wakeup \n");
+		DiagPrintf("DSLP Aontimer wakeup \n");
 	}
 
 	if(BIT_RTC_WAKE_STS & aon_wake_event) {
-		DBG_8195A("DSLP RTC wakeup \n");
+		DiagPrintf("DSLP RTC wakeup \n");
 	}
 
 	if(BIT_DLPS_TSF_WAKE_STS & aon_wake_event) {
-		DBG_8195A("DSLP TSF wakeup \n");
+		DiagPrintf("DSLP TSF wakeup \n");
 	}
 	
 	if(BIT_KEYSCAN_WAKE_STS & aon_wake_event) {
-		DBG_8195A("DSLP KS wakeup\n");
+		DiagPrintf("DSLP KS wakeup\n");
 	}
 
 	if(BIT_CAPTOUCH_WAKE_STS & aon_wake_event) {
-		DBG_8195A("DSLP Touch wakeup %x\n", temp);
+		DiagPrintf("DSLP Touch wakeup %x\n", temp);
 	}
 
 	km4_boot_on();
@@ -213,7 +213,7 @@ u32 test_suspend(void)
 	u32 time = pmu_get_km4sleeptime(); /* unit ms */
 
 	if (time > 0x10000) {
-		DBG_8195A("enter dslp\r\n");
+		DiagPrintf("enter dslp\r\n");
 
 		/* if want to wake up from dslp, uncomment following two lines */ 
 		//SOCPS_AONTimer(10000);
@@ -266,7 +266,7 @@ int main(void)
 	app_init_debug();
 	
 	/* register a suspend function to get km4 sleep time and check if enter dslp or not */
-	pmu_register_sleep_callback(PMU_DEV_USER_BASE, test_suspend, NULL, NULL, NULL);
+	pmu_register_sleep_callback(PMU_DEV_USER_BASE, (PSM_HOOK_FUN)test_suspend, NULL, NULL, NULL);
 
 	//Enable Schedule
 	vTaskStartScheduler();

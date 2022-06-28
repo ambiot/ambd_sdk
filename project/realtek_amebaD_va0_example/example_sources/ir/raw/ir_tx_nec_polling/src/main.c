@@ -76,7 +76,7 @@ void IR_TX_thread(void* param)
 		tx_count = 0;
 		if(ir_code[0]++ >=255)
 			ir_code[1]++;
-		DBG_8195A("TX %2x%2x\n",ir_code[1],ir_code[0]);
+		DiagPrintf("TX %2x%2x\n",ir_code[1],ir_code[0]);
 
 		/* Encode by NEC protocol */		
 		data[0]= ir_code[0];
@@ -128,7 +128,7 @@ void main (void)
 	Board_IR_Init();
 	
 	if (pdTRUE != xTaskCreate( IR_TX_thread, (const char * const)"IR_TX_THREAD", 256, NULL, tskIDLE_PRIORITY + 5 , NULL))
-		DBG_8195A("creat IR TX thread error\n");
+		DiagPrintf("creat IR TX thread error\n");
 
 	vTaskStartScheduler();
 }

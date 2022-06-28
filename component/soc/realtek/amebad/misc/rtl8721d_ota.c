@@ -70,6 +70,8 @@
 
 // larger _MAX_SS would accelerate the OTA procedure
 #define SD_OTA_BUF_SIZE _MAX_SS
+#define OTA_FLASH_SECTOR_SIZE   4096
+
 
 void rtc_backup_timeinfo(void);
 sys_thread_t TaskOTA = NULL;
@@ -301,6 +303,164 @@ int  ota_writestream_user(u32 address, u32 len, u8 * data)
 	return 1;
 }
 
+#if RSIP_OTA_UPDATE
+IMAGE2_RAM_TEXT_SECTION
+void ota_erasesector_inner( u32 addr, u32 len)
+{
+	u32 sector_cnt;
+	u32 i;
+
+	sector_cnt = ((len - 1)/4096) + 1;
+
+	for( i = 0; i < sector_cnt; i++)
+    	FLASH_Erase(EraseSector, addr + i * 4096);
+    	Cache_Flush();
+}
+IMAGE2_RAM_TEXT_SECTION
+int  ota_writestream_inner(u32 address, u32 len, u8 * data)
+{
+	// Check address: 4byte aligned & page(256bytes) aligned
+	u32 page_begin = address &  (~0xff);                     
+	u32 page_end = (address + len) & (~0xff);
+	u32 page_cnt = ((page_end - page_begin) >> 8) + 1;
+
+	u32 addr_begin = address;
+	u32 addr_end = (page_cnt == 1) ? (address + len) : (page_begin + 0x100);
+	u32 size = addr_end - addr_begin;
+	u8 *buffer = data;
+	u8 write_data[12];
+	
+	u32 offset_to_align;
+	u32 read_word;
+	u32 i;
+
+//	FLASH_Write_Lock();
+	while(page_cnt){	
+		offset_to_align = addr_begin & 0x3;
+		
+		if(offset_to_align != 0){
+			FLASH_RxData(0, addr_begin - offset_to_align, 4, (u8*)&read_word);
+			
+			for(i = offset_to_align;i < 4;i++){
+				read_word = (read_word &  (~(0xff << (8*i)))) |( (*buffer) <<(8*i));
+				size--;
+				buffer++;
+				if(size == 0)
+					break;
+			}
+			FLASH_TxData12B(addr_begin - offset_to_align, 4, (u8*)&read_word);
+		}
+
+		addr_begin = (((addr_begin-1) >> 2) + 1) << 2;
+		for(;size >= 12 ;size -= 12){
+			_memcpy(write_data, buffer, 12);
+			FLASH_TxData12B(addr_begin, 12, write_data);
+			
+			buffer += 12;
+			addr_begin += 12;
+		}
+
+		for(;size >= 4; size -=4){
+			_memcpy(write_data, buffer, 4);			
+			FLASH_TxData12B(addr_begin, 4, write_data);
+			
+			buffer += 4;
+			addr_begin += 4;
+		}
+
+		if(size > 0){
+			FLASH_RxData(0, addr_begin, 4, (u8*)&read_word);
+			
+			for( i = 0;i < size;i++){
+				read_word = (read_word & (~(0xff << (8*i)))) | ((*buffer) <<(8*i));
+				buffer++;
+			}
+			FLASH_TxData12B(addr_begin, 4, (u8*)&read_word);
+		}
+
+		page_cnt--;
+		addr_begin = addr_end;
+		addr_end = (page_cnt == 1) ? (address + len) : (((addr_begin>>8) + 1)<<8);
+		size = addr_end - addr_begin;		
+	}
+
+	DCache_Invalidate(address, len);
+//	FLASH_Write_Unlock();
+
+	return 1;
+}
+IMAGE2_RAM_TEXT_SECTION
+int  ota_readstream_inner(u32 address, u32 len, u8 * data)
+{
+	assert_param(data != NULL);
+
+	u32 offset_to_align;
+	u32 i;
+	u32 read_word;
+	u8 *ptr;
+	u8 *pbuf;
+
+//	FLASH_Write_Lock();
+
+	offset_to_align = address & 0x03;
+	pbuf = data;
+	if (offset_to_align != 0) {
+		/* the start address is not 4-bytes aligned */
+		FLASH_RxData(0, address - offset_to_align, 4, (u8*)&read_word);
+		
+		ptr = (u8*)&read_word + offset_to_align;
+		offset_to_align = 4 - offset_to_align;
+		for (i=0;i<offset_to_align;i++) {
+			*pbuf = *(ptr+i);
+			pbuf++;
+			len--;
+			if (len == 0) {
+				break;
+			}
+		}
+	}
+
+	/* address = next 4-bytes aligned */
+	address = (((address-1) >> 2) + 1) << 2;
+
+	ptr = (u8*)&read_word;
+	if ((u32)pbuf & 0x03) {
+		while (len >= 4) {
+			FLASH_RxData(0, address, 4, (u8*)&read_word);
+			
+			for (i=0;i<4;i++) {
+				*pbuf = *(ptr+i);
+				pbuf++;
+			}
+			address += 4;
+			len -= 4;
+		}
+	} else {
+		while (len >= 4) {
+			FLASH_RxData(0, address, 4, pbuf);
+			
+			pbuf += 4;
+			address += 4;
+			len -= 4;
+		}
+	}
+
+	if (len > 0) {
+		FLASH_RxData(0, address, 4, (u8*)&read_word);
+		
+		for (i=0;i<len;i++) {
+			*pbuf = *(ptr+i);
+			pbuf++;
+		}        
+	}
+
+//	FLASH_Write_Unlock();
+
+	return 1;
+}
+#endif
+
+
 /**
   * @brief  get current image2 location
   * @param  none
@@ -349,6 +509,7 @@ void ota_rsip_mask(u32 addr, u32 len, u8 status)
 	RSIP_OTF_Mask(1, addr, NewImg2BlkSize, status);
 	DCache_Invalidate(addr, len);
 }
+
 
 /**
   * @brief  receive file_info from server. This operation is patched for the compatibility with ameba.
@@ -736,6 +897,169 @@ EXIT:
 	return res;
 }
 
+
+#if RSIP_OTA_UPDATE
+static inline void mmu_save(u32 MMUIdx, u32 *vAddrSt, u32 *vAddrEnd, u32 *ctrl, u32 *offset)
+{
+	RSIP_REG_TypeDef* RSIP = ((RSIP_REG_TypeDef *) RSIP_REG_BASE);
+
+    /* save 4 registers */
+	*vAddrSt = RSIP->FLASH_MMU[MMUIdx].MMU_ENTRYx_STRADDR;
+	*vAddrEnd = RSIP->FLASH_MMU[MMUIdx].MMU_ENTRYx_ENDADDR;
+	*offset = RSIP->FLASH_MMU[MMUIdx].MMU_ENTRYx_OFFSET;
+	*ctrl =  RSIP->FLASH_MMU[MMUIdx].MMU_ENTRYx_CTRL;
+}
+static inline void mmu_restore(u32 MMUIdx, u32 *vAddrSt, u32 *vAddrEnd, u32 *ctrl, u32 *offset)
+{
+	RSIP_REG_TypeDef* RSIP = ((RSIP_REG_TypeDef *) RSIP_REG_BASE);
+
+    /* save 4 registers */
+	RSIP->FLASH_MMU[MMUIdx].MMU_ENTRYx_STRADDR = *vAddrSt;
+	RSIP->FLASH_MMU[MMUIdx].MMU_ENTRYx_ENDADDR = *vAddrEnd;
+	RSIP->FLASH_MMU[MMUIdx].MMU_ENTRYx_OFFSET = *offset;
+	RSIP->FLASH_MMU[MMUIdx].MMU_ENTRYx_CTRL = *ctrl;
+}
+
+/**
+* @brief    encrypt the given ota area. 
+* @description:
+* ---------add step for encryption, following code all run in RAM:
+* ---------(1) read image header and parse km0_img2 & km4 img2 location in "ota_target_index" area.
+* ---------(2) enter critical segment for both km0&km4, disable MMU.
+* ---------(2) use the two MMU, one mapping km0_img2 to 0x0C000000, one mapping km4_img2 to 0x0E000000.
+* ---------(3) read out this all location using virtual address sector by sector, this is an encryption process.
+* ---------(4) write back the encrypted value to this area using flash physical address.
+* ---------(5) checksum once more, using virtual address readging
+* @param  otaHdr: point to the ota target header
+* @retval 1 means success, 0 means failure
+*/ 
+IMAGE2_RAM_TEXT_SECTION
+int encrypt_ota_area(update_ota_target_hdr *otaHdr)
+{
+    const unsigned int imgPhyAddr = otaHdr->FileImgHdr[0].FlashAddr;
+    const unsigned int imgPhyEnd = otaHdr->FileImgHdr[0].FlashAddr + otaHdr->FileImgHdr[0].ImgLen;
+    
+	IMAGE_HEADER seg_hdr[5];        /* They are segment of: km0_xip, km0_ram, km4_xip, km4_ram, km4_psram headers */
+    unsigned int curPhyAddr = otaHdr->FileImgHdr[0].FlashAddr;
+    unsigned int imgKm4PhyAddr = 0;
+    unsigned char signature_en[8] = {0,}, signature_raw[8] = {0,};
+
+    unsigned char *sectorBuff = (unsigned char *)ota_update_malloc(OTA_FLASH_SECTOR_SIZE);
+    unsigned int mmuRecord[2][4] = {{0, }, };
+    int res = 1, i = 0, j = 0;
+
+    printf("\n[%s]Encrypt starting...\n", __FUNCTION__);
+    if(!sectorBuff){
+        printf("[%s] Alloc buffer failed", __FUNCTION__);
+        goto exit;
+    }
+
+    /* read raw data and resolve the segment headers */
+    ota_rsip_mask(imgPhyAddr, otaHdr->FileImgHdr[0].ImgLen, ENABLE);
+    /* save the raw signature */
+    for(i = 0; i < 8; i++)
+        signature_raw[i] = HAL_READ8(imgPhyAddr, i);
+
+    /* resolve the segment header */
+    for(i = 0; i < 5; i++){
+        if(2 == i){
+            curPhyAddr = (((curPhyAddr - 1) >> 12) + 1) << 12;  /* 4k aligned */
+            imgKm4PhyAddr = curPhyAddr;
+        }
+        seg_hdr[i] = *(IMAGE_HEADER *)(curPhyAddr);
+        curPhyAddr += seg_hdr[i].image_size + IMAGE_HEADER_LEN;
+    }
+    ota_rsip_mask(imgPhyAddr, otaHdr->FileImgHdr[0].ImgLen, DISABLE);
+
+    /* save mmu 0/1 before encryption */
+    mmu_save(0, &mmuRecord[0][0], &mmuRecord[0][1], &mmuRecord[0][2], &mmuRecord[0][3]);
+    mmu_save(1, &mmuRecord[1][0], &mmuRecord[1][1], &mmuRecord[1][2], &mmuRecord[1][3]);
+
+    unsigned int switchImage_Flag = 0, VADDR = 0x0C000000, sectorCnt = 0;
+    curPhyAddr = imgPhyAddr;
+    FLASH_Write_Lock();
+    /* mapping virtual address to physic place */
+    RSIP_MMU_Config(0, VADDR, VADDR + (imgKm4PhyAddr - imgPhyAddr) - 1, 1, VADDR - imgPhyAddr);
+    /* all image deal sector by sector */
+    do {
+        /* read using virtual address */
+        for(i = 0; i < OTA_FLASH_SECTOR_SIZE; i++){
+            sectorBuff[i] = HAL_READ8(VADDR + sectorCnt * OTA_FLASH_SECTOR_SIZE, i);
+            if(j < 8){
+                signature_en[j] = sectorBuff[i];
+                sectorBuff[i] = 0xFF;
+                j++;
+            }
+        }
+        
+        /* write using physic address */
+        ota_erasesector_inner(curPhyAddr-SPI_FLASH_BASE, OTA_FLASH_SECTOR_SIZE);
+        if(ota_writestream_inner(curPhyAddr-SPI_FLASH_BASE, OTA_FLASH_SECTOR_SIZE, sectorBuff) < 0){
+            unsigned char errlog[] = "\n\r[encrypt_ota_area]flash write failure\n";
+            printf(errlog);
+            res = 0;
+            goto exit;
+        }
+
+        /* update to next sector */
+        curPhyAddr += OTA_FLASH_SECTOR_SIZE;
+        sectorCnt ++;
+
+        /* judge cross km0 and km4 and update index */
+        if(curPhyAddr < imgKm4PhyAddr){
+            /* it is in km0 segment */
+            continue ;
+        }
+        else{
+            if(0 == switchImage_Flag){
+                /* it is first time run into km4 segment */
+                VADDR = 0x0E000000;
+                sectorCnt = 0;
+                RSIP_MMU_Config(1, VADDR, VADDR + (imgPhyEnd - imgKm4PhyAddr) - 1, 1, VADDR - imgKm4PhyAddr);
+                switchImage_Flag = 1;
+            }
+        }
+    }while(curPhyAddr < imgPhyEnd);
+
+    /* check sum using virtual address */
+	unsigned int flash_checksum=0;
+    for(i = 0; i < 8; i++){
+        flash_checksum += signature_raw[i];
+    }
+    VADDR = 0x0C000000;
+    for(i = 0; i < imgKm4PhyAddr - imgPhyAddr - 8; i++){
+        flash_checksum += HAL_READ8(VADDR + 8, i);
+    }
+    VADDR = 0x0E000000;
+    for(i = 0; i < imgPhyEnd - imgKm4PhyAddr ; i++){
+        flash_checksum += HAL_READ8(VADDR, i);
+    }
+
+    /* restore the mmu 0/1 after all done */    
+    mmu_restore(0, &mmuRecord[0][0], &mmuRecord[0][1], &mmuRecord[0][2], &mmuRecord[0][3]);
+    mmu_restore(1, &mmuRecord[1][0], &mmuRecord[1][1], &mmuRecord[1][2], &mmuRecord[1][3]);
+
+    if(flash_checksum != otaHdr->FileImgHdr[0].Checksum) {
+        printf("[%s]checksum failure\n", __FUNCTION__);
+        res = 0;
+        goto exit;
+    }
+    else if(ota_writestream_inner(imgPhyAddr-SPI_FLASH_BASE, 8, signature_en) < 0){
+        printf("[%s]flash write signature failure\n", __FUNCTION__);
+        res = 0;
+        goto exit;
+    }
+    else
+        printf("[%s]Virtual checksum value: 0x%x\n", __FUNCTION__, flash_checksum);
+    
+exit:
+    FLASH_Write_Unlock();
+	if(sectorBuff)
+		ota_update_free(sectorBuff);
+
+    return res;
+}
+#endif
 /**
   * @brief	  update signature.
   * @param  addr: new image address
@@ -762,7 +1086,16 @@ u32 change_ota_signature(update_ota_target_hdr * pOtaTgtHdr, u32 ota_target_inde
 			goto error;
 		}
 	}
-	
+
+#if RSIP_OTA_UPDATE
+    /* encrypt the ota area */
+    if(0 == encrypt_ota_area(pOtaTgtHdr)){
+		printf("\n\r[%s] Encrypt failed", __FUNCTION__);
+		device_mutex_unlock(RT_DEV_LOCK_FLASH);
+		goto error;
+    }
+#endif
+
 	for(index = 0; index < pOtaTgtHdr->ValidImgCnt; index++) {
 		if(strncmp("OTA", (const char *)pOtaTgtHdr->FileImgHdr[index].ImgId, 3) == 0)
 			addr = IMG_ADDR[0][ota_old_index];

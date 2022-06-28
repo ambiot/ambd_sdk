@@ -52,7 +52,7 @@ void uart_clock_send_string(USI_TypeDef* UartDEV, char *pstr)
 	NVIC_SetPriority(GDMA_GetIrqNum(0, GDMA_InitStruct.GDMA_ChNum), 12);	
  
 	if (ret == 0) {
-		DBG_8195A("%s Error(%d)\n", __FUNCTION__, ret);        
+		DiagPrintf("%s Error(%d)\n", __FUNCTION__, ret);        
 	}
 }
 

@@ -25,12 +25,28 @@ extern "C" {
 #include <app_msg.h>
 #include <gap_le.h>
 #include <profile_server.h>
+#include <app_common_flags.h>
 
 /*============================================================================*
  *                              Variables
  *============================================================================*/
 extern T_SERVER_ID simp_srv_id; /**< Simple ble service id*/
 extern T_SERVER_ID bas_srv_id;  /**< Battery service id */
+
+/*============================================================================*
+ *                              Constants
+ *============================================================================*/
+/** @addtogroup  PERIPHERAL_APP
+    * @{
+    */
+#if (F_BT_LE_USE_RANDOM_ADDR == 1)
+typedef struct
+{
+	uint8_t 	 is_exist;
+	uint8_t 	 reserved;		   /**< remote BD type*/
+	uint8_t 	 bd_addr[GAP_BD_ADDR_LEN];	/**< remote BD */
+} T_APP_STATIC_RANDOM_ADDR;
+#endif
 
 /*============================================================================*
  *                              Functions
@@ -63,6 +79,26 @@ T_APP_RESULT app_profile_callback(T_SERVER_ID service_id, void *p_data);
   * @retval result @ref T_APP_RESULT
   */
 T_APP_RESULT app_gap_callback(uint8_t cb_type, void *p_cb_data);
+
+void app_vendor_callback(uint8_t cb_type, void *p_cb_data);
+
+#if (F_BT_LE_USE_RANDOM_ADDR == 1)
+/**
+ * @brief   Save static random address information into flash.
+ * @param[in] p_addr Pointer to the buffer for saving data.
+ * @retval 0 Save success.
+ * @retval other Failed.
+ */
+uint32_t ble_peripheral_app_save_static_random_address(T_APP_STATIC_RANDOM_ADDR *p_addr);
+
+/**
+  * @brief  Load static random address information from storage.
+  * @param[out]  p_addr Pointer to the buffer for loading data.
+  * @retval 0 Load success.
+  * @retval other Failed.
+  */
+uint32_t ble_peripheral_app_load_static_random_address(T_APP_STATIC_RANDOM_ADDR *p_addr);
+#endif
 
 #ifdef __cplusplus
 }

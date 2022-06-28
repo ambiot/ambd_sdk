@@ -36,7 +36,6 @@
 #include "os_sched.h"
 
 extern bool bt_trace_uninit(void);
-extern void wifi_btcoex_set_bt_on(void);
 extern uint8_t airsync_specific;
 
 /** @defgroup  PERIPH_DEMO_MAIN Peripheral Main
@@ -261,9 +260,6 @@ int bt_config_app_init(void)
 		os_delay(100);
 		le_get_gap_param(GAP_PARAM_DEV_STATE , &new_state);
 	} while (new_state.gap_init_state != GAP_INIT_STATE_STACK_READY);
-	
-	/*Start BT WIFI coexistence*/
-	wifi_btcoex_set_bt_on();
 	
 	if (bt_stack_already_on) {
 		bt_config_app_set_adv_data();

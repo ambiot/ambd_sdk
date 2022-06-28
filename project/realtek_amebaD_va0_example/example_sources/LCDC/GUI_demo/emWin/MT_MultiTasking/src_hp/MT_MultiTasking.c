@@ -283,13 +283,13 @@ void MainTask(void) {
   //
 
   	if (xTaskCreate((TaskFunction_t )_Task_0,(const char*)"Task_0", 2400, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		DBG_8195A("\n\r%s xTaskCreate(MainTask) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(MainTask) failed", __FUNCTION__);
 
 	if (xTaskCreate((TaskFunction_t )_Task_1,(const char*)"Task_1", 2400, NULL, tskIDLE_PRIORITY + 2, NULL) != pdPASS)
-		DBG_8195A("\n\r%s xTaskCreate(MainTask) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(MainTask) failed", __FUNCTION__);
 
 	if (xTaskCreate((TaskFunction_t )_GUI_Task,(const char*)"GUI_TASK", 2400, NULL, tskIDLE_PRIORITY + 3, NULL) != pdPASS)
-		DBG_8195A("\n\r%s xTaskCreate(GUI_TASK) failed\n");
+		DiagPrintf("\n\r%s xTaskCreate(GUI_TASK) failed\n");
 
 	
 	/* Enable Schedule, Start Kernel */

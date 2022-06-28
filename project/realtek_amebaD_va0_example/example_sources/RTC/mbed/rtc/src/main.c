@@ -21,11 +21,11 @@
         seconds = rtc_read();
         timeinfo = localtime(&seconds);
 
-        DBG_8195A("Time as seconds since January 1, 1970 = %d\n", seconds);
+        DiagPrintf("Time as seconds since January 1, 1970 = %d\n", seconds);
 
-        DBG_8195A("Time as a basic string = %s", ctime(&seconds));
+        DiagPrintf("Time as a basic string = %s", ctime(&seconds));
 
-        DBG_8195A("Time as a custom formatted string = %d-%d-%d %d:%d:%d\n", 
+        DiagPrintf("Time as a custom formatted string = %d-%d-%d %d:%d:%d\n", 
             timeinfo->tm_year, timeinfo->tm_mon, timeinfo->tm_mday, timeinfo->tm_hour,
             timeinfo->tm_min,timeinfo->tm_sec);
 

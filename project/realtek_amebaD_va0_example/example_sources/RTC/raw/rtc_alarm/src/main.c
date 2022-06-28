@@ -17,7 +17,7 @@
 	 RTC_AlarmClear();
 	 
 	 RTC_GetTime(RTC_Format_BIN, &RTC_TimeStruct);
-	 DBG_8195A("RTC_ISR time: %d:%d:%d:%d (%d) \n", RTC_TimeStruct.RTC_Days,
+	 DiagPrintf("RTC_ISR time: %d:%d:%d:%d (%d) \n", RTC_TimeStruct.RTC_Days,
 			 RTC_TimeStruct.RTC_Hours,
 			 RTC_TimeStruct.RTC_Minutes,
 			 RTC_TimeStruct.RTC_Seconds,
@@ -58,7 +58,7 @@ void rtc_alarm_en(void)
  int main() 
  {
 	if(xTaskCreate( (TaskFunction_t)rtc_alarm_en, "RTC ALARM DEMO", (2048/4), NULL, (tskIDLE_PRIORITY + 1), NULL)!= pdPASS) {
-			DBG_8195A("Cannot create rtc alarm demo task\n\r");
+			DiagPrintf("Cannot create rtc alarm demo task\n\r");
 	}
 
 	vTaskStartScheduler();

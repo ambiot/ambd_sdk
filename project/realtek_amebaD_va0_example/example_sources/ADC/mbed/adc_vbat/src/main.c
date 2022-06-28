@@ -36,14 +36,14 @@ void adc_vbat_en(void)
 
 	analogin_init(&adc_vbat, AD_7);
 
-	DBG_8195A("ADC:offset = 0x%x, gain = 0x%x\n", OFFSET, GAIN_DIV);
+	DiagPrintf("ADC:offset = 0x%x, gain = 0x%x\n", OFFSET, GAIN_DIV);
 
 	for (;;){
 		adc_read = analogin_read_u16(&adc_vbat);
 
 		voltage = AD2MV(adc_read, OFFSET, GAIN_DIV);
 
-		DBG_8195A("ADC_Vbat: 0x%x = %d mv\n", adc_read, voltage); 
+		DiagPrintf("ADC_Vbat: 0x%x = %d mv\n", adc_read, voltage); 
 		adc_delay();
 	}
 	analogin_deinit(&adc_vbat);
@@ -71,19 +71,19 @@ VOID main (VOID)
 
 	if (OFFSET == 0xFFFF) {
 		OFFSET = 0x9C4;
-		DBG_8195A("Default OFFSET!\n");
+		DiagPrintf("Default OFFSET!\n");
 	}
 
 	if (GAIN_DIV == 0xFFFF) {
 		GAIN_DIV = 7860;
-		DBG_8195A("Default GAIN_DIV!\n");
+		DiagPrintf("Default GAIN_DIV!\n");
 	}
 
-	DBG_8195A("OFFSET = %x\n", OFFSET);
-	DBG_8195A("GAIN_DIV = %x\n", GAIN_DIV);
+	DiagPrintf("OFFSET = %x\n", OFFSET);
+	DiagPrintf("GAIN_DIV = %x\n", GAIN_DIV);
 
 	if(xTaskCreate( (TaskFunction_t)adc_vbat_en, "ADC VBAT DEMO", (2048/4), NULL, (tskIDLE_PRIORITY + 1), NULL)!= pdPASS) {
-			DBG_8195A("Cannot create ADC Vbat demo task\n\r");
+			DiagPrintf("Cannot create ADC Vbat demo task\n\r");
 	}
 
 	vTaskStartScheduler();

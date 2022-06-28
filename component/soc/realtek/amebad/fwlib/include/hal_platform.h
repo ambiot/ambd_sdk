@@ -18,7 +18,7 @@
 #define _HAL_PLATFORM_
 
 #define ROMVERSION			0x01 /* ACUT is 0x01, BCUT is 0x02 ... */
-#define ROMVERSION_SUB		2 /* ROM sub version */
+#define ROMVERSION_SUB		3 /* ROM sub version */
 #define ROMINFORMATION		(ROMVERSION)
 
 #define HAL_READ32(base, addr)				rtk_le32_to_cpu(*((volatile u32*)(base + addr)))    

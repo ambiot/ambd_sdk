@@ -114,7 +114,7 @@ char ex_gspi_tx(u8 *pdata, u16 size, u8 type){
 	static int rx_cnt = 0;
 
 	// LOOPBACK
-	printf("receive package, size = %d (cnt = %d) heap=%d\n", size, ++rx_cnt, xPortGetFreeHeapSize());
+	DiagPrintf("receive package, size = %d (cnt = %d) heap=%d\n", size, ++rx_cnt, xPortGetFreeHeapSize());
 
 	struct spdio_buf_t *tx_buf = (struct spdio_buf_t *)rtw_malloc(sizeof(struct spdio_buf_t));
 	if(!tx_buf)
@@ -129,7 +129,7 @@ char ex_gspi_tx(u8 *pdata, u16 size, u8 type){
 	
 	tx_buf->buf_addr = (u32)N_BYTE_ALIGMENT((u32)(tx_buf->buf_allocated), SPDIO_DMA_ALIGN_4);
 
-	//printf("buf_addr = %x\n", tx_buf->buf_addr);
+	//DiagPrintf("buf_addr = %x\n", tx_buf->buf_addr);
 	// copy data 
 	memcpy((void*)tx_buf->buf_addr, pdata, size);
 	
@@ -194,7 +194,7 @@ int spi_transfer(uint8_t* buf, uint32_t buf_len)
 	while((!txbusIdle) || (!rxDone)){
 		      wait_us(20);
 		if (++i > 2000) {
-			DBG_8195A("SPI write and read Timeout...\r\n");
+			DiagPrintf("SPI write and read Timeout...\r\n");
 		              ret = -1;
 			break;
 		}
@@ -525,7 +525,7 @@ static int gspi_write_tx_fifo(u8 *buf, u32 len, _gspi_conf_t gspi_conf)
 
 	while (NumOfFreeSpace * (PACK_SIZE+SIZE_TX_DESC) < len) {
 		if((++wait_num) >= 4){
-			DBG_8195A("%s(): wait_num is >= 4\n", __FUNCTION__);
+			DiagPrintf("%s(): wait_num is >= 4\n", __FUNCTION__);
 			return -1;
 		}
 		rtw_udelay_os(100); //delay 100us
@@ -593,7 +593,7 @@ retry:
 	if(conf != gspi_conf){
 		if(++ retry_t <= 3)
 			goto retry;
-		DBG_8195A("%s: config fail@ 0x%x\n", __FUNCTION__, conf);
+		DiagPrintf("%s: config fail@ 0x%x\n", __FUNCTION__, conf);
 		return 1;
 	}
 
@@ -610,7 +610,7 @@ retry:
 		default:
 			s = "UNKNOW CONFIGURATION"; break;
 	};
-	DBG_8195A("%s: Current configuration:%s\n", __FUNCTION__, s);
+	DiagPrintf("%s: Current configuration:%s\n", __FUNCTION__, s);
 	return 0;
 }
 
@@ -632,7 +632,7 @@ void spi_interrupt_thread(){
 	u32 rx_cnt = 0;
 	while(1){
 		if (rtw_down_sema(&pspiIrqSemaphore) == _FAIL){
-			DBG_8195A("%s, Take Semaphore Fail\n", __FUNCTION__);
+			DiagPrintf("%s, Take Semaphore Fail\n", __FUNCTION__);
 			goto exit;
 		}
 
@@ -674,7 +674,7 @@ void spi_interrupt_thread(){
 
 						prxdesc = (PINIC_RX_DESC)rx_buf;
 						
-						DBG_8195A("Receive Data lenth = %d (cnt = %d)\n",prxdesc->pkt_len, ++rx_cnt);
+						DiagPrintf("Receive Data lenth = %d (cnt = %d)\n",prxdesc->pkt_len, ++rx_cnt);
 
 						payload = rx_buf + prxdesc->offset;
 						rx_buf += rx_len;
@@ -697,7 +697,7 @@ exit:
 // external GSPI interrupt handler
 void gspi_irq_handler (uint32_t id, gpio_irq_event event)
 {
-//DBG_8195A("gspi_irq_handler....\n");
+//DiagPrintf("gspi_irq_handler....\n");
 	if(!pspiIrqSemaphore)
 		return;
 	rtw_up_sema_from_isr(&pspiIrqSemaphore);
@@ -714,7 +714,7 @@ void spi_tx_rx_intr_callback(void *pdata, SpiIrq event){
 			txDone = TRUE;
 			break;
 		default:
-			DBG_8195A("unknown interrput evnent!\n");
+			DiagPrintf("unknown interrput evnent!\n");
 	} 
 }
 
@@ -741,7 +741,7 @@ void spi_init_master(){
 	spi_init(&spi0_master, SPI0_MOSI, SPI0_MISO, SPI0_SCLK, SPI0_CS);
 	spi_format(&spi0_master, SPI_BITS, 0, 0);
 	spi_frequency(&spi0_master, SPI0_FREQUENCY);
-	printf("spi master frequency %d Hz\n",SPI0_FREQUENCY);
+	DiagPrintf("spi master frequency %d Hz\n",SPI0_FREQUENCY);
 	
 	gpio_init(&gpio_cs, GPIO_CS);
 	gpio_mode(&gpio_cs, PullDown);
@@ -756,7 +756,7 @@ void gspi_demo(void)
 #if CONFIG_GSPI_SLAVE
     int i;
 
-	DBG_8195A("Init GSPI slave....\n"); 
+	DiagPrintf("Init GSPI slave....\n"); 
 
 	spdio_dev.priv = NULL;
 	spdio_dev.rx_bd_num = SPDIO_RX_BD_NUM;
@@ -768,7 +768,7 @@ void gspi_demo(void)
 	for(i=0;i<SPDIO_RX_BD_NUM;i++){
 		spdio_dev.rx_buf[i].buf_allocated = (u32)rtw_malloc(SPDIO_RX_BUFSZ + SPDIO_DMA_ALIGN_4);
 		if(!spdio_dev.rx_buf[i].buf_allocated){
-			printf("malloc failed for spdio buffer!\n");
+			DiagPrintf("malloc failed for spdio buffer!\n");
 			return;
 		}
 		spdio_dev.rx_buf[i].size_allocated = SPDIO_RX_BUFSZ + SPDIO_DMA_ALIGN_4;
@@ -784,9 +784,9 @@ void gspi_demo(void)
 	DBG_ERR_MSG_ON(_DBG_SDIO_);
 	
 	spdio_init(&spdio_dev);
-	DBG_8195A("Init GSPI slave Done,Ready for TRx....\n"); 
+	DiagPrintf("Init GSPI slave Done,Ready for TRx....\n"); 
 #else
-	DBG_8195A("Init SPI master....\n");	
+	DiagPrintf("Init SPI master....\n");	
 	u32 spi_himr = 0;
 	u32 spi_hisr = 0;
 	u32 spi_ictlr = 0;
@@ -804,14 +804,14 @@ void gspi_demo(void)
 	rtw_mutex_init(&SPIbusbusy);
 	
 	if( xTaskCreate( (TaskFunction_t)spi_interrupt_thread, "SPI INTERRUPT", (TASK_STACK_SIZE/4), NULL, TASK_PRIORITY+2, NULL) != pdPASS) {
-		DBG_8195A("Cannot create SPI INTERRUPT task\n\r");
+		DiagPrintf("Cannot create SPI INTERRUPT task\n\r");
 		goto err;
 	}
 
 	//1 GSPI slave configuration
 	res = gspi_configuration(GSPI_CONFIG);
 	if(res){
-		DBG_8195A("gspi configure error....\n");
+		DiagPrintf("gspi configure error....\n");
 		while(1);
 	}
 
@@ -837,7 +837,7 @@ void gspi_demo(void)
 	gspi_write32(SPI_LOCAL_OFFSET | SPI_REG_RX_AGG_CTL, rx_agg_ctrl, NULL);
 #endif
 
-	DBG_8195A("Loopback Test Start...\n"); 
+	DiagPrintf("Loopback Test Start...\n"); 
 	// prepare test data (0x00-0xFF, 0x00-0xFF......)
 	for(int i=0;i<PACK_SIZE;i++)
 		memset(TX_DATA+i, i%256, 1);
@@ -845,7 +845,7 @@ void gspi_demo(void)
 	do{
 		res = gspi_write_page(TX_DATA, PACK_SIZE, 1);
 		if(res) {
-			DBG_8195A("spi_write_page: Error!\n");
+			DiagPrintf("spi_write_page: Error!\n");
 			// handle error msg here
 		}
 		counter=0;
@@ -853,16 +853,16 @@ void gspi_demo(void)
 			counter++;
 			rtw_mdelay_os(10);
 			if(counter==100){
-			DBG_8195A("Master Rx data Timeout... test aborted!\n");	
+			DiagPrintf("Master Rx data Timeout... test aborted!\n");	
 				goto err;
 			}
 		}
 		rx_done=0;
 		
 		if(check_trx_data(TX_DATA,RX_DATA+SIZE_RX_DESC,PACK_SIZE))
-			DBG_8195A("loop %d Test Succeed!\n",1000-test_loop);
+			DiagPrintf("loop %d Test Succeed!\n",1000-test_loop);
 		else {
-			DBG_8195A("loop %d Test Failed!\n",1000-test_loop);
+			DiagPrintf("loop %d Test Failed!\n",1000-test_loop);
 			goto err;
 		}
 		rtw_mdelay_os(500);
@@ -883,7 +883,7 @@ void main(void)
 {
 	// create demo Task
 	if( xTaskCreate( (TaskFunction_t)gspi_demo, "GSPI DEMO", (TASK_STACK_SIZE/4), NULL, TASK_PRIORITY, NULL) != pdPASS) {
-		DBG_8195A("Cannot create demo task\n\r");
+		DiagPrintf("Cannot create demo task\n\r");
 	}
 	
 #if defined(CONFIG_KERNEL) && !TASK_SCHEDULER_DISABLED

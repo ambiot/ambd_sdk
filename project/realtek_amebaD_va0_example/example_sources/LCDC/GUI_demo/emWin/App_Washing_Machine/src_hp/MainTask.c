@@ -1683,14 +1683,14 @@ static void _cbDialog3(WM_MESSAGE * pMsg)
 		{
 			Count1++;
 			if(Count1<=36) {
-				sprintf(buf, "%02d", 36-Count1);
+				sDiagPrintf(buf, "%02d", 36-Count1);
 				TEXT_SetText(WM_GetDialogItem(pMsg->hWin,ID_TEXT_23), (const char *)buf);
 				//TEXT_SetText(hItem, (const char *)buf);
 				WM_RestartTimer(pMsg->Data.v, 60000);
 			}
 			else
 			{
-				sprintf(buf, "%02d", 0);
+				sDiagPrintf(buf, "%02d", 0);
 				TEXT_SetText(WM_GetDialogItem(pMsg->hWin,ID_TEXT_23), (const char *)buf);
 				//TEXT_SetText(hItem, (const char *)buf);
 				WM_DeleteTimer(pMsg->Data.v);
@@ -1700,20 +1700,20 @@ static void _cbDialog3(WM_MESSAGE * pMsg)
 		{
 			Count2++;
 			if(Count2<=60) {
-				sprintf(buf, "%02d", 60-Count2);
+				sDiagPrintf(buf, "%02d", 60-Count2);
 				TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_25), (const char*)buf);
 				//TEXT_SetText(hItem, (const char *)buf);
 				WM_RestartTimer(pMsg->Data.v, 1000);
 			}
 			else if(Count1<=36) {
 				//Count2=0;
-				sprintf(buf, "%02d", 60*Count1-Count2);
+				sDiagPrintf(buf, "%02d", 60*Count1-Count2);
 				TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_25), (const char*)buf);
 				//TEXT_SetText(hItem, (const char *)buf);
 				WM_RestartTimer(pMsg->Data.v, 1000);
 			}
 			else {
-				sprintf(buf, "%02d", 0);
+				sDiagPrintf(buf, "%02d", 0);
 				TEXT_SetText(WM_GetDialogItem(pMsg->hWin,ID_TEXT_25), (const char *)buf);
 				//TEXT_SetText(hItem, (const char *)buf);
 				WM_DeleteTimer(pMsg->Data.v);
@@ -1909,7 +1909,7 @@ static void _cbDialog4(WM_MESSAGE * pMsg)
 		{
 			Count3++;
 			if(Count3<=6) {
-				sprintf(buf, "%02d", 6-Count3);
+				sDiagPrintf(buf, "%02d", 6-Count3);
 				TEXT_SetText(WM_GetDialogItem(pMsg->hWin,ID_TEXT_23), (const char *)buf);
 				//TEXT_SetText(hItem, (const char *)buf);
 				WM_RestartTimer(pMsg->Data.v, 60000);
@@ -1917,7 +1917,7 @@ static void _cbDialog4(WM_MESSAGE * pMsg)
 			}
 			else
 			{
-				sprintf(buf, "%02d", 0);
+				sDiagPrintf(buf, "%02d", 0);
 				TEXT_SetText(WM_GetDialogItem(pMsg->hWin,ID_TEXT_23), (const char *)buf);
 				//TEXT_SetText(hItem, (const char *)buf);
 				WM_DeleteTimer(pMsg->Data.v);
@@ -1928,7 +1928,7 @@ static void _cbDialog4(WM_MESSAGE * pMsg)
 		{
 			Count4++;
 			if(Count4<=60) {
-				sprintf(buf, "%02d", 60-Count4);
+				sDiagPrintf(buf, "%02d", 60-Count4);
 				TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_25), (const char*)buf);
 				//TEXT_SetText(hItem, (const char *)buf);
 				WM_RestartTimer(pMsg->Data.v, 1000);
@@ -1936,13 +1936,13 @@ static void _cbDialog4(WM_MESSAGE * pMsg)
 			}
 			else if(Count3<=6) {
 				//Count4=0;
-				sprintf(buf, "%02d", 60*Count3-Count4);
+				sDiagPrintf(buf, "%02d", 60*Count3-Count4);
 				TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_25), (const char*)buf);
 				//TEXT_SetText(hItem, (const char *)buf);
 				WM_RestartTimer(pMsg->Data.v, 1000);
 			}
 			else {
-				sprintf(buf, "%02d", 0);
+				sDiagPrintf(buf, "%02d", 0);
 				TEXT_SetText(WM_GetDialogItem(pMsg->hWin,ID_TEXT_25), (const char *)buf);
 				//TEXT_SetText(hItem, (const char *)buf);
 				WM_DeleteTimer(pMsg->Data.v);
@@ -2128,14 +2128,14 @@ static void _cbDialog5(WM_MESSAGE * pMsg)
 		{
 			Count5++;
 			if(Count5<=48) {
-				sprintf(buf, "%02d", 48-Count5);
+				sDiagPrintf(buf, "%02d", 48-Count5);
 				TEXT_SetText(WM_GetDialogItem(pMsg->hWin,ID_TEXT_23), (const char *)buf);
 				//TEXT_SetText(hItem, (const char *)buf);
 				WM_RestartTimer(pMsg->Data.v, 60000);
 			}
 			else
 			{
-				sprintf(buf, "%02d", 0);
+				sDiagPrintf(buf, "%02d", 0);
 				TEXT_SetText(WM_GetDialogItem(pMsg->hWin,ID_TEXT_23), (const char *)buf);
 				//TEXT_SetText(hItem, (const char *)buf);
 				WM_DeleteTimer(pMsg->Data.v);
@@ -2145,20 +2145,20 @@ static void _cbDialog5(WM_MESSAGE * pMsg)
 		{
 			Count6++;
 			if(Count6<=60) {
-				sprintf(buf, "%02d", 60-Count6);
+				sDiagPrintf(buf, "%02d", 60-Count6);
 				TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_25), (const char*)buf);
 				//TEXT_SetText(hItem, (const char *)buf);
 				WM_RestartTimer(pMsg->Data.v, 1000);
 			}
 			else if(Count5<=48) {
 				//Count6=0;
-				sprintf(buf, "%02d", 60*Count5-Count6);
+				sDiagPrintf(buf, "%02d", 60*Count5-Count6);
 				TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_25), (const char*)buf);
 				//TEXT_SetText(hItem, (const char *)buf);
 				WM_RestartTimer(pMsg->Data.v, 1000);
 			}
 			else {
-				sprintf(buf, "%02d", 0);
+				sDiagPrintf(buf, "%02d", 0);
 				TEXT_SetText(WM_GetDialogItem(pMsg->hWin,ID_TEXT_25), (const char *)buf);
 				//TEXT_SetText(hItem, (const char *)buf);
 				WM_DeleteTimer(pMsg->Data.v);
@@ -2342,12 +2342,12 @@ static void _cbDialog6(WM_MESSAGE * pMsg)
 	case WM_TIMER:
 		Count7++;
 		if(Count7<30) {
-			sprintf(buf, "%02d", 30-Count7);
+			sDiagPrintf(buf, "%02d", 30-Count7);
 			TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_25), (const char*)buf);
 			WM_RestartTimer(pMsg->Data.v, 1000);
 		}
 		else {
-			sprintf(buf, "%02d",0);
+			sDiagPrintf(buf, "%02d",0);
 			TEXT_SetText(WM_GetDialogItem(pMsg->hWin,ID_TEXT_25), (const char *)buf);
 			WM_DeleteTimer(pMsg->Data.v);
 		}

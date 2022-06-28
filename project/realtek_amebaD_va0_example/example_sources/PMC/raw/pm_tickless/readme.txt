@@ -2,15 +2,6 @@ Example Description
 
 This example describes how to use freertos tickless with uart interruptable interface
 
-Requirement Components:
-	USBtoTTL adapter
-
-Connect to PC
- - Connect Ground: connect to GND pin via USBtoTTL adapter
- - Use KM0 LOGUART
-	_PA_8 as LOGUART_RX connect to TX of USBtoTTL adapter
-	_PA_7 as LOGUART_TX connect to RX of USBtoTTL adapter
-
 Procedure
 (1) Freertos will enter/leave tickless automatically.
 (2) User can type "Enter" in log uart to wake KM0 and KM4.

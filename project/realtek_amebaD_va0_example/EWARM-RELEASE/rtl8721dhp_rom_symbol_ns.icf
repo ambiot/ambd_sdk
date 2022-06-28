@@ -142,7 +142,6 @@ define exported symbol RSIP_OTF_Mask = 0x1010ce81;
 define exported symbol RSIP_KEY_Request = 0x1010cec9;
 define exported symbol RSIP_MMU_Config = 0x1010cf0d;
 define exported symbol RSIP_MMU_Cmd = 0x1010cf31;
-define exported symbol PAD_DrvStrength = 0x1010cf51;
 define exported symbol PAD_PullCtrl = 0x1010cf6d;
 define exported symbol PAD_CMD = 0x1010cf99;
 define exported symbol Pinmux_Config = 0x1010cfb9;

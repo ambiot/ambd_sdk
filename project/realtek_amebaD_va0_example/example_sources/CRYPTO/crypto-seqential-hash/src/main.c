@@ -33,12 +33,12 @@ void test_md5_seq_hash(void)
 
 	ret = rtl_crypto_md5_init();
 	if (ret != SUCCESS) {
-		DBG_8195A("init failed!, ret=%d\n", ret);
+		DiagPrintf("init failed!, ret=%d\n", ret);
 	}
 
 	ret = rtl_crypto_md5_update(md5_test_buf[0], strlen(md5_test_buf[0]));
 	if (ret != SUCCESS) {
-		DBG_8195A("failed-1!, ret=%d\n", ret);
+		DiagPrintf("failed-1!, ret=%d\n", ret);
 	}
 	
 	ret = rtl_crypto_md5_update(md5_test_buf[1], strlen(md5_test_buf[1]));

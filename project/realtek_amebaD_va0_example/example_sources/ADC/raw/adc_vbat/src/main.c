@@ -34,7 +34,7 @@ void adc_irq_handle(void)
 		while(cnt--) {
 			value = ADC_Read();
 			vol = AD2MV(value, OFFSET, GAIN_DIV);
-			DBG_8195A("ADC_Vbat: 0x%x = %d mv\n", value, vol);
+			DiagPrintf("ADC_Vbat: 0x%x = %d mv\n", value, vol);
 		}
 	}
 
@@ -43,7 +43,7 @@ void adc_irq_handle(void)
 
 void adc_vbat_demo(void)
 {
-	DBG_8195A("adc vbat init start\n");
+	DiagPrintf("adc vbat init start\n");
 
 	ADC_InitTypeDef ADC_InitStruct;
 
@@ -61,7 +61,7 @@ void adc_vbat_demo(void)
 	ADC_Cmd(ENABLE);
 	ADC_TimerTrigCmd(ADC_TIM_IDX, PERIOD_MS, ENABLE);
 
-	DBG_8195A("adc vbat init done\n");
+	DiagPrintf("adc vbat init done\n");
 	
 	vTaskDelete(NULL);
 }
@@ -86,19 +86,19 @@ VOID main (VOID)
 
 	if (OFFSET == 0xFFFF) {
 		OFFSET = 0x9C4;
-		DBG_8195A("Default OFFSET!\n");
+		DiagPrintf("Default OFFSET!\n");
 	}
 
 	if (GAIN_DIV == 0xFFFF) {
 		GAIN_DIV = 7860;
-		DBG_8195A("Default GAIN_DIV!\n");
+		DiagPrintf("Default GAIN_DIV!\n");
 	}
 
-	DBG_8195A("OFFSET = %x\n", OFFSET);
-	DBG_8195A("GAIN_DIV = %x\n", GAIN_DIV);
+	DiagPrintf("OFFSET = %x\n", OFFSET);
+	DiagPrintf("GAIN_DIV = %x\n", GAIN_DIV);
 	
 	if(xTaskCreate( (TaskFunction_t)adc_vbat_demo, "ADC VBAT DEMO", (2048/4), NULL, (tskIDLE_PRIORITY + 1), NULL)!= pdPASS) {
-			DBG_8195A("Cannot create ADC Vbat demo task\n\r");
+			DiagPrintf("Cannot create ADC Vbat demo task\n\r");
 	}
 
 	vTaskStartScheduler();

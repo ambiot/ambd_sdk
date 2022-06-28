@@ -452,6 +452,9 @@
                     <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_beacon</state>
                     <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_breeze</state>
                     <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_config</state>
+                    <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_tag_scanner</state>
+                    <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_ancs</state>
+                    <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_distance_detector</state>
                     <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\inc</state>
                     <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\inc\app</state>
                     <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\inc\bluetooth\gap</state>
@@ -9016,6 +9019,27 @@
                 </file>
             </group>
             <group>
+                <name>bt_ancs</name>
+                <excluded>
+                    <configuration>is</configuration>
+                    <configuration>is (mp)</configuration>
+                    <configuration>tz</configuration>
+                    <configuration>tz (mp)</configuration>
+                </excluded>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_ancs\bt_ancs.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_ancs\bt_ancs_app.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_ancs\bt_ancs_app_task.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_ancs\bt_ancs_main.c</name>
+                </file>
+            </group>
+            <group>
                 <name>bt_beacon</name>
 <excluded>
 	<configuration>is</configuration>
@@ -9034,6 +9058,9 @@
                 <name>bt_breeze</name>
                 <excluded>
                     <configuration>is</configuration>
+                    <configuration>is (mp)</configuration>
+                    <configuration>tz</configuration>
+                    <configuration>tz (mp)</configuration>
                 </excluded>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\component\common\application\breeze\ref-impl\aes.c</name>
@@ -9103,6 +9130,30 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_config\bt_config_wifi.c</name>
+                </file>
+            </group>
+            <group>
+                <name>bt_distance_detector</name>
+                <excluded>
+                    <configuration>is</configuration>
+                    <configuration>is (mp)</configuration>
+                    <configuration>tz</configuration>
+                    <configuration>tz (mp)</configuration>
+                </excluded>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_distance_detector\bt_distance_detector_app.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_distance_detector\bt_distance_detector_app_task.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_distance_detector\bt_distance_detector_handle_message.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_distance_detector\bt_distance_detector_main.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_distance_detector\bt_distance_detector_mode.c</name>
                 </file>
             </group>
             <group>
@@ -9504,6 +9555,27 @@
                     </file>
                 </group>
             </group>
+            <group>
+                <name>bt_tag_scanner</name>
+                <excluded>
+                    <configuration>is</configuration>
+                    <configuration>is (mp)</configuration>
+                    <configuration>tz</configuration>
+                    <configuration>tz (mp)</configuration>
+                </excluded>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_tag_scanner\bt_tag_scanner_app.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_tag_scanner\bt_tag_scanner_app_task.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_tag_scanner\bt_tag_scanner_keep_message.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_tag_scanner\bt_tag_scanner_main.c</name>
+                </file>
+            </group>
         </group>
         <group>
             <name>src</name>
@@ -9513,6 +9585,9 @@
                     <name>profile</name>
                     <group>
                         <name>client</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\src\ble\profile\client\ancs_client.c</name>
+                        </file>
                         <file>
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\src\ble\profile\server\bas.c</name>
                         </file>
@@ -20980,6 +21055,7 @@
             <file>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\eap\example_eap.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\component\common\example\example_entry.c</name>
@@ -23992,6 +24068,8 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\common\utilities\tcptest.c</name>
+        </file>
+        <file>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\common\utilities\xml.c</name>

@@ -233,5 +233,5 @@ extern int  freertos_ready_to_sleep(void);
 #define configUSE_WAKELOCK_PMU                  		1
 	
 #endif /* __IASMARM__ */
-
+#define configASSERT( x )         //do { if (!(x)) {printf("FreeRTOS Assert %s Line %d \n", __FILE__, __LINE__); while(1){}; }} while (0)
 #endif /* FREERTOS_CONFIG_H */

@@ -26,18 +26,18 @@ static void flash_test_task(void *param)
     {
 		device_mutex_lock(RT_DEV_LOCK_FLASH);
         flash_read_word(&flash, address, &val32_to_read);
-        DBG_8195A("Read Data 0x%x\n", val32_to_read);
+        DiagPrintf("Read Data 0x%x\n", val32_to_read);
         flash_erase_sector(&flash, address);
         flash_write_word(&flash, address, val32_to_write);
         flash_read_word(&flash, address, &val32_to_read);
 		device_mutex_unlock(RT_DEV_LOCK_FLASH);
 
-        DBG_8195A("Read Data 0x%x\n", val32_to_read);
+        DiagPrintf("Read Data 0x%x\n", val32_to_read);
 
         // verify result
         result = (val32_to_write == val32_to_read) ? 1 : 0;
-        //printf("\r\nResult is %s\r\n", (result) ? "success" : "fail");
-        DBG_8195A("\r\nResult is %s\r\n", (result) ? "success" : "fail");
+        //DiagPrintf("\r\nResult is %s\r\n", (result) ? "success" : "fail");
+        DiagPrintf("\r\nResult is %s\r\n", (result) ? "success" : "fail");
         result = 0;
     }
 
@@ -63,7 +63,7 @@ static void flash_test_task(void *param)
 			device_mutex_lock(RT_DEV_LOCK_FLASH);
             flash_erase_sector(&flash, address);
 			device_mutex_unlock(RT_DEV_LOCK_FLASH);
-            //DBG_8195A("Address = %x \n", address);
+            //DiagPrintf("Address = %x \n", address);
             for(loop = 0; loop < SECTOR_SIZE; loop++){
                 for(index = 0; index < VERIFY_SIZE; index++)
                 {
@@ -76,31 +76,31 @@ static void flash_test_task(void *param)
 				
                 for(index = 0; index < VERIFY_SIZE; index++)
                 {
-                    //DBG_8195A("Address = %x, Writedata = %x, Readdata = %x \n",address,writedata[index],readdata[index]);
+                    //DiagPrintf("Address = %x, Writedata = %x, Readdata = %x \n",address,writedata[index],readdata[index]);
                     if(readdata[index] != writedata[index]){
-                        DBG_8195A("Error: Loop = %d, Address = %x, Writedata = %x, Readdata = %x \n",testloop,address,writedata[index],readdata[index]);
+                        DiagPrintf("Error: Loop = %d, Address = %x, Writedata = %x, Readdata = %x \n",testloop,address,writedata[index],readdata[index]);
                     }
                     else{
                         result++;
-                        //DBG_8195A(ANSI_COLOR_BLUE"Correct: Loop = %d, Address = %x, Writedata = %x, Readdata = %x \n"ANSI_COLOR_RESET,testloop,address,writedata[index],readdata[index]);
+                        //DiagPrintf(ANSI_COLOR_BLUE"Correct: Loop = %d, Address = %x, Writedata = %x, Readdata = %x \n"ANSI_COLOR_RESET,testloop,address,writedata[index],readdata[index]);
                     }
                 }
                 address += VERIFY_SIZE;
             }
             if(result == VERIFY_SIZE * SECTOR_SIZE){
-                //DBG_8195A("Sector %d Success \n", sectorindex);
+                //DiagPrintf("Sector %d Success \n", sectorindex);
                 resultsector++;
             }
         }
         if(resultsector == 0x300){
-            DBG_8195A("Test Loop %d Success \n", testloop);    
+            DiagPrintf("Test Loop %d Success \n", testloop);    
         }
         resultsector = 0;
         verifydata++;
     }
-    //DBG_8195A("%d Sector Success \n", resultsector);
+    //DiagPrintf("%d Sector Success \n", resultsector);
 
-    DBG_8195A("Test Done");
+    DiagPrintf("Test Done");
 
 #endif
     vTaskDelete(NULL);
@@ -109,7 +109,7 @@ static void flash_test_task(void *param)
 void main(void)
 {
 	if(xTaskCreate(flash_test_task, ((const char*)"flash_test_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(flash_test_task) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(flash_test_task) failed", __FUNCTION__);
 
         vTaskStartScheduler();
 	while(1){

@@ -29,7 +29,7 @@ void main(void)
     {
         // JTAG enable pin is disabled
         sys_jtag_off();
-        DBG_8195A("jtag off\r\n");
+        DiagPrintf("jtag off\r\n");
 
         // Now you can use jtag pin for other gpio usage
         // ex. use PE_0 to blink led
@@ -48,7 +48,7 @@ void main(void)
     else
     {
         // JTAG enable pin is enabled
-        DBG_8195A("jtag on\r\n");
+        DiagPrintf("jtag on\r\n");
     }
 
     for (;;);

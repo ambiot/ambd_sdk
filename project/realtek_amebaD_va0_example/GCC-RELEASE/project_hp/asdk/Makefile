@@ -47,9 +47,11 @@ endif
 RAM_OBJS_LIST = ./build/ram/*.o
 ROM_OBJS_LIST = ./build/rom/*.o
 ROM_OBJS_LIST_NS = ./build/rom_ns/*.o
+ROM2_OBJS_LIST = ./build/rom2/*.o
 
 LINK_ROM_LIB = $(ROOTDIR)/lib/rom_acut/rom.a
 LINK_ROM_LIB_NS = $(ROOTDIR)/lib/rom_acut/rom_ns.a
+LINK_BOOT_LIB = -Wl,--whole-archive $(ROOTDIR)/lib/application/lib_bootloader_hp.a -Wl,--no-whole-archive
 
 LINK_ROM_SYMBOL_NS = ./ld/rlx8721d_rom_symbol_empty.ld
 LINK_ROM_SYMBOL_S = ./ld/rlx8721d_rom_symbol_empty.ld
@@ -116,7 +118,6 @@ endif
 LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_cmsis_dsp.a
 LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_application_hp.a
 
-
 ifeq ($(CONFIG_TRUSTZONE), y)
 LINK_APP_LIB += $(IMAGE_TARGET_FOLDER)/cmse_implib.lib
 endif
@@ -170,6 +171,7 @@ image3_s: build_target_folder copy_ld_img3 check_toolchain build_info.h make_sub
 mp_image3_s: build_target_folder copy_ld_img3 check_toolchain build_info.h make_subdirs_secure linker_image3
 bootloader: build_target_folder copy_ld_img1 check_toolchain build_info.h make_subdirs_bootloader linker_loader gen_rom_symbol
 lib_all: build_target_folder copy_ld_img2 check_toolchain build_info.h make_subdirs_lib  
+rom2: build_target_folder copy_ld_rom2 check_toolchain build_info.h make_subdirs_rom2 linker_rom2
 
 #*****************************************************************************#
 #                      RULES TO CREATE DIRECTORY                              #
@@ -187,6 +189,7 @@ endif
 	@if [ -d $(BUILD_TARGET_RAM_FOLDER) ]; then echo "$(BUILD_TARGET_RAM_FOLDER) exist"; else $(MKDIR) $(BUILD_TARGET_RAM_FOLDER); fi
 	@if [ -d $(BUILD_TARGET_ROM_FOLDER) ]; then echo "$(BUILD_TARGET_ROM_FOLDER) exist"; else $(MKDIR) $(BUILD_TARGET_ROM_FOLDER); fi
 	@if [ -d $(BUILD_TARGET_ROM_FOLDER_NS) ]; then echo "$(BUILD_TARGET_ROM_FOLDER_NS) exist"; else $(MKDIR) $(BUILD_TARGET_ROM_FOLDER_NS); fi
+	@if [ -d $(BUILD_TARGET_ROM2_FOLDER) ]; then echo "$(BUILD_TARGET_ROM2_FOLDER) exist"; else $(MKDIR) $(BUILD_TARGET_ROM2_FOLDER); fi
 	@$(ROM_SYMBOL_GEN_PYTHON) 
 	@$(ROM_SYMBOL_S_GEN_PYTHON) 
 
@@ -202,6 +205,9 @@ make_subdirs_rom_ns:
 	@echo > $(ROOTDIR)/rom_size.txt
 	@make -C make_rom/make_ns all
 	@$(MOVE) $(ROOTDIR)/rom_size.txt $(ROOTDIR)/lib/rom_acut/rom_size_ns.txt
+make_subdirs_rom2:
+	@ rm -f $(RAM_OBJS_LIST)
+	@make -C make_rom/rom2 all
 
 make_subdirs:
 	@ rm -f $(RAM_OBJS_LIST)
@@ -230,6 +236,8 @@ make_subdirs_lib:
 	#@make -C make/wlan lib_mp
 	#@make -C make/wlan clean
 	#@make -C make/wlan lib_lp	
+	#@make -C make/wlan clean
+	#@make -C make/wlan lib_lt		
 	@make -C make/cmsis-dsp all
 	@make -C make/wps all
 	@make -C make/network/httpc all
@@ -412,15 +420,15 @@ endif
 		$(MOVE) $(IMAGE_TARGET_FOLDER)/km0_km4_image2.bin $(IMAGE_TARGET_FOLDER)/km0_km4_image2_mp.bin; \
 	fi
 
-	#@if [ -f $(IMAGE_TARGET_FOLDER)/km0_km4_image2.bin ]; then \
-		#$(OTAPREPENDTOOL) $(IMAGE_TARGET_FOLDER)/km0_km4_image2.bin $(KM0_BUILDDIR)/asdk/image; \
-	#fi
+	@if [ -f $(IMAGE_TARGET_FOLDER)/km0_km4_image2.bin ]; then \
+		$(OTAPREPENDTOOL) $(IMAGE_TARGET_FOLDER)/km0_km4_image2.bin $(KM0_BUILDDIR)/asdk/image; \
+	fi
 
 	@echo "========== Image manipulating end =========="
 
 linker_loader:
 	@echo "========= linker loader start ========="
-	$(LD) $(LD_ARG) target_loader.axf $(RAM_OBJS_LIST) $(LINK_ROM_LIB)  -Wl,--whole-archive -lbootloader_hp -Wl,--no-whole-archive
+	$(LD) $(LD_ARG) target_loader.axf $(RAM_OBJS_LIST) $(LINK_ROM_LIB) $(LINK_BOOT_LIB)
 
 	$(MOVE) text.map $(IMAGE_TARGET_FOLDER)/text_loader.map
 	$(MOVE) target_loader.axf $(IMAGE_TARGET_FOLDER)
@@ -459,6 +467,47 @@ linker_loader:
 
 	@echo "========== Image manipulating end =========="
 
+linker_rom2:
+	@echo "========= linker rom2 start ========="
+	$(LD) $(LD_ARG) target_rom2.axf $(ROM2_OBJS_LIST)
+
+	$(MOVE) text.map $(IMAGE_TARGET_FOLDER)/text_rom2.map
+	$(MOVE) target_rom2.axf $(IMAGE_TARGET_FOLDER)
+	$(NM) $(IMAGE_TARGET_FOLDER)/target_rom2.axf | sort > $(IMAGE_TARGET_FOLDER)/target_rom2.map
+	$(OBJDUMP) -d $(IMAGE_TARGET_FOLDER)/target_rom2.axf > $(IMAGE_TARGET_FOLDER)/target_rom2.asm
+	#$(OBJDUMP) -h -S --disassemble-all $(IMAGE_TARGET_FOLDER)/target_stdlib.axf > $(IMAGE_TARGET_FOLDER)/target_stdlib.txt
+	$(COPY) $(IMAGE_TARGET_FOLDER)/target_rom2.axf $(IMAGE_TARGET_FOLDER)/target_pure_rom2.axf
+	$(STRIP) $(IMAGE_TARGET_FOLDER)/target_pure_rom2.axf
+	$(NM) $(IMAGE_TARGET_FOLDER)/target_pure_rom2.axf | sort > $(IMAGE_TARGET_FOLDER)/target_pure_rom2.map
+
+	$(FROMELF) -j .rom2.data \
+	-Obinary $(IMAGE_TARGET_FOLDER)/target_pure_rom2.axf $(IMAGE_TARGET_FOLDER)/rom2_data.bin
+
+	$(FROMELF) -j .rom2.text \
+	-Obinary $(IMAGE_TARGET_FOLDER)/target_pure_rom2.axf $(IMAGE_TARGET_FOLDER)/rom2_text.bin
+
+
+	@echo "========== Image Info HEX =========="
+	$(CC_SIZE) -A --radix=16 $(IMAGE_TARGET_FOLDER)/target_rom2.axf
+	$(CC_SIZE) -t --radix=16 $(IMAGE_TARGET_FOLDER)/target_rom2.axf
+	@echo "========== Image Info HEX =========="
+
+	@echo "========== Image Info DEC =========="
+	$(CC_SIZE) -A --radix=10 $(IMAGE_TARGET_FOLDER)/target_rom2.axf
+	$(CC_SIZE) -t --radix=10 $(IMAGE_TARGET_FOLDER)/target_rom2.axf
+	@echo "========== Image Info DEC =========="
+	
+	$(RM) -f $(ROM2_OBJS_LIST)
+	@echo "========== linker rom2 end =========="
+
+	@echo "========== Image manipulating start =========="
+	$(CODE_ANALYZE_PYTHON)
+
+	cat   $(IMAGE_TARGET_FOLDER)/rom2_text.bin > $(IMAGE_TARGET_FOLDER)/rom2_text_data.bin
+	cat   $(IMAGE_TARGET_FOLDER)/rom2_data.bin >> $(IMAGE_TARGET_FOLDER)/rom2_text_data.bin
+	@$(COPY) $(IMAGE_TARGET_FOLDER)/rom2_text_data.bin $(ROOTDIR)/lib/rom_acut/km4_irom2.bin
+
+	@echo "========== Image manipulating end =========="
 #*****************************************************************************#
 #                      RULES TO SET MENUCONFIG                                #
 #*****************************************************************************#
@@ -738,4 +787,6 @@ copy_ld_img3:
 	cat $(LINK_ROM_SYMBOL_S) >> $(BUILD_TARGET_FOLDER)/rlx8721d.ld
 copy_ld_rom_ns:
 	$(COPY) ./ld_ns/rlx8721d_rom_bin.ld  $(BUILD_TARGET_FOLDER)/rlx8721d.ld
-
+copy_ld_rom2:
+	$(COPY) ./ld_ns/rlx8721d_rom2.ld  $(BUILD_TARGET_FOLDER)/rlx8721d.ld
+	cat ./ld/rlx8721d_rom_symbol_acut_s.ld >> $(BUILD_TARGET_FOLDER)/rlx8721d.ld

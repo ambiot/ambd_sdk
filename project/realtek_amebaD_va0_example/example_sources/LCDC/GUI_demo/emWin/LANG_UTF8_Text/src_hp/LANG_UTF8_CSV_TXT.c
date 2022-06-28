@@ -777,8 +777,8 @@ static void _CreateLanguageResources(void) {
   GetModuleFileName(NULL, acPath, FILENAME_MAX);
   _splitpath(acPath, acDrive, acDir, acFileName, acExt);
   for (FileCnt = 0; FileCnt < NUM_FILES; FileCnt++) {
-    sprintf(acFileName, _ResFileName[FileCnt].pFileName);
-    sprintf(acExt,      _ResFileName[FileCnt].pExt);
+    sDiagPrintf(acFileName, _ResFileName[FileCnt].pFileName);
+    sDiagPrintf(acExt,      _ResFileName[FileCnt].pExt);
     _makepath(acPath, acDrive, acDir, acFileName, acExt);
     hFile = CreateFile(acPath, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
     if (hFile == INVALID_HANDLE_VALUE) {

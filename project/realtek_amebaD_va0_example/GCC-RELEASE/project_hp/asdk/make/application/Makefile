@@ -20,6 +20,7 @@ ifeq ($(CONFIG_LINKKIT_AWSS),y)
 	@make -C linkkit all
 endif
 	@make -C xmodem all
+	#@make -C azure all
 	#@make -C azure_emb all
 	#@make -C airkiss all
 #*****************************************************************************#
@@ -30,6 +31,7 @@ clean:
 	@make -C mqtt clean
 	@make -C xmodem clean
 	#@make -C airkiss clean
-	@make -C linkkit clean
+	#@make -C linkkit clean
+	#@make -C azure clean
 	@make -C azure_emb clean
 -include $(DEPS)

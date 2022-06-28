@@ -327,17 +327,17 @@ static void _cbDialogOrder(WM_MESSAGE* pMsg) {
       switch (Id) {
       case GUI_ID_BUTTON0:
         hDlg = GUI_CreateDialogBox(_aDialogSelect, GUI_COUNTOF(_aDialogSelect), &_cbDialogSelect, WM_HBKWIN, 0, 0); 
-	DBG_8195A("2  ");
+	DiagPrintf("2  ");
         WM_MakeModal(hDlg);
-		DBG_8195A("3  ");
+		DiagPrintf("3  ");
         GUI_ExecCreatedDialog(hDlg);
-		DBG_8195A("4  ");
+		DiagPrintf("4  ");
         WM_MakeModal(hWin);
-		DBG_8195A("5  ");
+		DiagPrintf("5  ");
         WM_SetFocus(hWin);
-		DBG_8195A("6  ");
+		DiagPrintf("6  ");
         hDlg = WM_GetDialogItem(hWin, GUI_ID_EDIT0);
-		DBG_8195A("7  ");
+		DiagPrintf("7  ");
         EDIT_SetText(hDlg, _acVehicle);
         break;
       case GUI_ID_OK:

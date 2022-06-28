@@ -327,6 +327,9 @@ if [ "$CONFIG_BT_EN" = "y" ]; then
 	bool "BT_Simple_Config"		CONFIG_BT_CONFIG
 	bool "BT_Airsync_Config"	CONFIG_BT_AIRSYNC_CONFIG
 	bool "BT_Breeze"			CONFIG_BT_BREEZE
+	bool "BT_Tag_Scanner"		CONFIG_BT_TAG_SCANNER
+	bool "BT_Ancs"				CONFIG_BT_ANCS
+	bool "BT_Distance_Detector" CONFIG_BT_DISTANCE_DETECTOR
 	bool "BT_Mesh_Provisioner"	CONFIG_BT_MESH_PROVISIONER
 	if [ "$CONFIG_BT_MESH_PROVISIONER" = "y" ]; then
 		bool "BT_Mesh_Provisioner_RTK_Demo"	CONFIG_BT_MESH_PROVISIONER_RTK_DEMO
@@ -369,6 +372,9 @@ else
 	define_bool CONFIG_BT_CONFIG n
 	define_bool CONFIG_BT_AIRSYNC_CONFIG n
 	define_bool CONFIG_BT_BREEZE n
+	define_bool CONFIG_BT_TAG_SCANNER n
+	define_bool CONFIG_BT_ANCS n
+	define_bool CONFIG_BT_DISTANCE_DETECTOR n
 	define_bool CONFIG_BT_MESH_PROVISIONER n
 	define_bool CONFIG_BT_MESH_PROVISIONER_RTK_DEMO n
 	define_bool CONFIG_BT_MESH_DEVICE n

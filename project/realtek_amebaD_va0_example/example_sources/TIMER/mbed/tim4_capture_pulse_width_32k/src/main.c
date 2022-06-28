@@ -40,7 +40,7 @@ void tim4_capture_ISR(u32 data)
 
 	if(cnt == 10000){
 		u32 value = TIM4->CCMRx[0] & 0xFFFF;
-		DBG_8195A("Pulse width: %d, %s\n", value, ((value == PWM_PERIOD / 2) ? "success" : "fail"));
+		DiagPrintf("Pulse width: %d, %s\n", value, ((value == PWM_PERIOD / 2) ? "success" : "fail"));
 		cnt = 0;
 	}
 	RTIM_INTClear(TIMx[4]);
@@ -88,7 +88,7 @@ void tim4_capture_pulse_width_32k(void)
 void main(void)
 {
 	if(xTaskCreate( (TaskFunction_t)tim4_capture_pulse_width_32k, "TIM4 CAPTURE PULSE WIDTH DEMO", (2048/4), NULL, (tskIDLE_PRIORITY + 1), NULL)!= pdPASS) {
-			DBG_8195A("Cannot create tim4 capture pulse width demo task\n\r");
+			DiagPrintf("Cannot create tim4 capture pulse width demo task\n\r");
 	}
 
 	vTaskStartScheduler();

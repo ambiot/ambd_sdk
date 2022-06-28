@@ -294,7 +294,6 @@ void I2C_SetSlaveAddress(I2C_TypeDef *I2Cx, u16 Address)
   * @param  I2Cx: where I2Cx can be I2C0_DEV .
   * @param  I2C_FLAG: specifies the flag to check. 
   *   This parameter can be one of the following values:
-  *     @arg BIT_IC_STATUS_BUS_BUSY: 
   *     @arg I2C_FLAG_SLV_ACTIVITY: 
   *     @arg I2C_FLAG_MST_ACTIVITY:  
   *     @arg I2C_FLAG_RFF:  
@@ -735,9 +734,11 @@ void I2C_SlaveWrite(I2C_TypeDef *I2Cx, u8* pBuf, u32 len)
 		
 		I2Cx->IC_DATA_CMD = (*pBuf++);
 	}
+	
 	while(((I2C_CheckFlagState(I2Cx, BIT_IC_STATUS_TFE)) == 0) &&((I2Cx->IC_RAW_INTR_STAT & BIT_IC_RAW_INTR_STAT_RX_DONE) == 0));
 	I2Cx->IC_CLR_INTR;
 }
+
 /**
   * @brief  Read data with special length in slave mode through the I2Cx peripheral.
   * @param  I2Cx: where I2Cx can be I2C0_DEV.

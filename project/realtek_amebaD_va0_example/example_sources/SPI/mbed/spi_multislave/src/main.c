@@ -94,7 +94,7 @@ void dump_data(const u8 *start, u32 size, char * strHeader)
     16 bytes per line
     */
     if (strHeader)
-       DBG_8195A ("%s", strHeader);
+       DiagPrintf ("%s", strHeader);
 
     column = size % 16;
     row = (size / 16) + 1;
@@ -105,27 +105,27 @@ void dump_data(const u8 *start, u32 size, char * strHeader)
         max = (index == row - 1) ? column : 16;
         if ( max==0 ) break; /* If we need not dump this line, break it. */
 
-        DBG_8195A ("\n[%08x] ", line);
+        DiagPrintf ("\n[%08x] ", line);
         
         //Hex
         for (index2 = 0; index2 < max; index2++)
         {
             if (index2 == 8)
-            DBG_8195A ("  ");
-            DBG_8195A ("%02x ", (u8) buf[index2]);
+            DiagPrintf ("  ");
+            DiagPrintf ("%02x ", (u8) buf[index2]);
         }
 
         if (max != 16)
         {
             if (max < 8)
-                DBG_8195A ("  ");
+                DiagPrintf ("  ");
             for (index2 = 16 - max; index2 > 0; index2--)
-                DBG_8195A ("   ");
+                DiagPrintf ("   ");
         }
 
     }
 
-    DBG_8195A ("\n");
+    DiagPrintf ("\n");
     return;
 }
 
@@ -158,7 +158,7 @@ void spi_multislave_task(void* param)
 
 
     while (Counter < TEST_LOOP) {
-        DBG_8195A("======= Test Loop %d =======\r\n", Counter);
+        DiagPrintf("======= Test Loop %d =======\r\n", Counter);
 
         if(Counter % 2){
             for (i=0;i<TEST_BUF_SIZE;i++) {
@@ -181,18 +181,18 @@ void spi_multislave_task(void* param)
         }
 
         spi_irq_hook(&spi_master, (spi_irq_handler)master_tr_done_callback, (uint32_t)&spi_master);
-        DBG_8195A("SPI Master Write Test==>\r\n");
+        DiagPrintf("SPI Master Write Test==>\r\n");
         TrDone = 0;
 
         spi_master_write_stream(&spi_master, TestBuf, TEST_BUF_SIZE);
 
         i=0;
-        DBG_8195A("SPI Master Wait Write Done...\r\n");
+        DiagPrintf("SPI Master Wait Write Done...\r\n");
         while(TrDone == 0) {
             wait_ms(10);
             i++;
         }
-        DBG_8195A("SPI Master Write Done!!\r\n");
+        DiagPrintf("SPI Master Write Done!!\r\n");
 		if(Counter % 2){
 		gpio_write(&spi_cs0, 1);
 		gpio_write(&spi_cs1, 0);
@@ -205,7 +205,7 @@ void spi_multislave_task(void* param)
 		Counter++;
 	}
 	spi_free(&spi_master);
-	DBG_8195A("SPI Master Test <==\r\n");
+	DiagPrintf("SPI Master Test <==\r\n");
 
 #else
 	spi_slave.spi_idx=MBED_SPI0;
@@ -213,14 +213,14 @@ void spi_multislave_task(void* param)
     spi_format(&spi_slave, 8, (SPI_SCLK_IDLE_LOW|SPI_SCLK_TOGGLE_START) , 1);
 
     while (spi_busy(&spi_slave)) {
-        DBG_8195A("Wait SPI Bus Ready...\r\n");
+        DiagPrintf("Wait SPI Bus Ready...\r\n");
         wait_ms(1000);
     }
 
     while (Counter < TEST_LOOP) {
-        DBG_8195A("======= Test Loop %d =======\r\n", Counter);
+        DiagPrintf("======= Test Loop %d =======\r\n", Counter);
         _memset(TestBuf, 0, TEST_BUF_SIZE);
-        DBG_8195A("SPI Slave Read Test ==>\r\n");
+        DiagPrintf("SPI Slave Read Test ==>\r\n");
         spi_irq_hook(&spi_slave, (spi_irq_handler)slave_tr_done_callback, (uint32_t)&spi_slave);
         TrDone = 0;
         spi_flush_rx_fifo(&spi_slave);
@@ -228,12 +228,12 @@ void spi_multislave_task(void* param)
         spi_slave_read_stream(&spi_slave, TestBuf, TEST_BUF_SIZE);
 
         i=0;
-        DBG_8195A("SPI Slave Wait Read Done...\r\n");
+        DiagPrintf("SPI Slave Wait Read Done...\r\n");
         while(TrDone == 0) {
             wait_ms(100);
             i++;
             if (i>150) {
-                DBG_8195A("SPI Slave Wait Timeout\r\n");
+                DiagPrintf("SPI Slave Wait Timeout\r\n");
                 break;
             }
         }
@@ -244,7 +244,7 @@ void spi_multislave_task(void* param)
     spi_free(&spi_slave);
 #endif
 
-    DBG_8195A("SPI Demo finished.\n");
+    DiagPrintf("SPI Demo finished.\n");
 
     vTaskDelete(NULL);
 }
@@ -257,7 +257,7 @@ void spi_multislave_task(void* param)
 void main(void)
 {
 	if(xTaskCreate(spi_multislave_task, ((const char*)"spi_multislave_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(spi_multislave_task) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(spi_multislave_task) failed", __FUNCTION__);
 
         vTaskStartScheduler();
 	while(1){

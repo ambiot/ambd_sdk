@@ -147,7 +147,7 @@ bool IR_learning_data_init(T_IR_PACKET_TYPEDEF *p_ir_packet)
 		p_ir_packet->queue = pvPortMalloc(LOOP_QUEUE_MAX_SIZE * sizeof(uint32_t));
     	}
     	if (p_ir_packet->queue == NULL) {
-        	DBG_8195A("[ir_learn_data_init]Memory allocation failed.\n");
+        	DiagPrintf("[ir_learn_data_init]Memory allocation failed.\n");
        	return FALSE;
     	}
 
@@ -214,7 +214,7 @@ bool IR_learning_begin(void)
 	/* add IR Learn Init here*/
 	if (IR_learning_data_init(&g_ir_learn_packet) == FALSE)
 	{
-        	DBG_8195A("[ir_learn_begin]IR Learn ERR: data init failed");
+        	DiagPrintf("[ir_learn_begin]IR Learn ERR: data init failed");
        	return FALSE;
 	}
 	IR_learning_driver_init();
@@ -236,7 +236,7 @@ uint8_t ir_decode_packet(T_IR_PACKET_TYPEDEF *p_ir_packet)
 	uint32_t current_time = 0;
     	uint32_t idx = 0;
 
-	DBG_8195A("read index:%d, write index:%d\n", p_ir_packet->read_index, p_ir_packet->write_index);
+	DiagPrintf("read index:%d, write index:%d\n", p_ir_packet->read_index, p_ir_packet->write_index);
 
     	/* Begin to learn waveform */
        while (p_ir_packet->read_index != p_ir_packet->write_index) {
@@ -247,7 +247,7 @@ uint8_t ir_decode_packet(T_IR_PACKET_TYPEDEF *p_ir_packet)
                 	current_time &= 0x7fffffff;
 			p_ir_packet->square_wave_num++;
            	}
-		//DBG_8195A("data of FIFO:%d\n",current_time);
+		//DiagPrintf("data of FIFO:%d\n",current_time);
             	p_ir_packet->read_index &= QUEUE_CAPABILITY;
 
             	/* Record total time of high wave ,may contain several cycles of carrier frequency*/
@@ -284,14 +284,14 @@ uint8_t ir_decode_packet(T_IR_PACKET_TYPEDEF *p_ir_packet)
                     		p_ir_packet->is_high_level = FALSE;
                 	}
                 	else {
-                    		DBG_8195A("[ir_decode_packet] Pelase consider resetting the trigger threshold!\n");
+                    		DiagPrintf("[ir_decode_packet] Pelase consider resetting the trigger threshold!\n");
                     		return IR_LEARN_ERR;
                 	}
             	}
         }        
 
-	DBG_8195A("idx:%d\n", idx);
-	DBG_8195A("the number of IR data:%d\n", p_ir_packet->detect_time_num);	
+	DiagPrintf("idx:%d\n", idx);
+	DiagPrintf("the number of IR data:%d\n", p_ir_packet->detect_time_num);	
         /*to reserve the space of learn data header to be stored in flash*/
 	if (idx >= LEARN_WAVE_MAX_SIZE - 4)
 		return IR_LEARN_ERR;
@@ -346,7 +346,7 @@ uint32_t ir_decode_frequency(T_IR_PACKET_TYPEDEF *p_ir_packet)
 #endif
 
 #if (IR_DEBUG == 1)
-    	DBG_8195A("[ir_decode_frequency]frequency = %d Hz \n", (uint32_t)frequency);
+    	DiagPrintf("[ir_decode_frequency]frequency = %d Hz \n", (uint32_t)frequency);
 #endif
     	return frequency;
 }
@@ -397,7 +397,7 @@ void IR_learning_wave_capture(u32 key_index, uint32_t *rev_buf)
 #ifdef AMEBAD_TODO
     	/* check if in 9 keys defined in  IrKeyAddrMap[]*/
     	if (INVALID_KEY_ADDR_INDEX == addr_index) {
-        	DBG_8195A("[ir_learn_wave_capture]The Key cann't be IR Learn Key!!!\n");
+        	DiagPrintf("[ir_learn_wave_capture]The Key cann't be IR Learn Key!!!\n");
         	return;
     	}
 #endif
@@ -405,13 +405,13 @@ void IR_learning_wave_capture(u32 key_index, uint32_t *rev_buf)
     	/*start capture the IR wave*/
         ret = ir_decode_packet(&g_ir_learn_packet);
 	 if (IR_LEARN_ERR == ret) {
-            DBG_8195A("[ir_learn_wave_capture]IR wave err, wait wave!!!\n");
+            DiagPrintf("[ir_learn_wave_capture]IR wave err, wait wave!!!\n");
             return;
         }
   
     	/* get frequency data */
     	frequency = ir_decode_frequency(&g_ir_learn_packet);
-	//DBG_8195A("frequency:%d\n", frequency_float);
+	//DiagPrintf("frequency:%d\n", frequency_float);
 	
     	rev_buf[0] = addr_index;
     	rev_buf[1] = frequency;
@@ -424,14 +424,14 @@ void IR_learning_wave_capture(u32 key_index, uint32_t *rev_buf)
                 		rev_buf[index + 3] = ((uint32_t)(g_ir_learn_packet.detect_time[index] * frequency /
                                                  IR_FREQ)) | 0x80000000;
 #if (IR_DEBUG == 1)
-                		DBG_8195A("[ir_learn_wave_capture]data %d = 0x%x\n", index, rev_buf[index + 3]);
+                		DiagPrintf("[ir_learn_wave_capture]data %d = 0x%x\n", index, rev_buf[index + 3]);
 #endif
             		}
             		else {
                		rev_buf[index + 3] = (uint32_t)(g_ir_learn_packet.detect_time[index] * frequency /
                                                 IR_FREQ);
 #if (IR_DEBUG == 1)
-                		DBG_8195A("[ir_learn_wave_capture]data %d = 0x%x\n", index, rev_buf[index + 3]);
+                		DiagPrintf("[ir_learn_wave_capture]data %d = 0x%x\n", index, rev_buf[index + 3]);
 #endif
             		}
         	}
@@ -442,7 +442,7 @@ void IR_learning_wave_capture(u32 key_index, uint32_t *rev_buf)
 	//storage related data to flash
 	
 	#endif
-    //DBG_8195A("[ir_learn_wave_capture]save data flag: %d, 0 success, or failed, frequency: %d."
+    //DiagPrintf("[ir_learn_wave_capture]save data flag: %d, 0 success, or failed, frequency: %d."
                   //  , return_flag, rev_buf[1]);	
 }
 
@@ -485,14 +485,14 @@ void IR_learning_wave_capture(u32 key_index, uint32_t *rev_buf)
 			if (g_ir_learn_packet.data_receive_completed) {
 				//TODO: receive complete
 				IR_learning_wave_capture(g_ir_learn_key_index, (uint32_t *)&recv_buf);
-				DBG_8195A("the number of IR data:%d\n", recv_buf[2]);	
+				DiagPrintf("the number of IR data:%d\n", recv_buf[2]);	
 			}
 			else {
-				DBG_8195A("exit key pressing IR learning exit \n");
+				DiagPrintf("exit key pressing IR learning exit \n");
 			}
 		}
 		else {
-			DBG_8195A("IR learning timeout\n");
+			DiagPrintf("IR learning timeout\n");
 		}
 	} while (1);
 
@@ -511,7 +511,7 @@ void IR_learning_wave_capture(u32 key_index, uint32_t *rev_buf)
 	}	
 
 	if (pdTRUE != xTaskCreate( IR_learning_thread, (const char * const)"IR_learning_THREAD", 256, NULL, tskIDLE_PRIORITY + 5 , NULL)) {
-		DBG_8195A("create IR RX thread error\n");
+		DiagPrintf("create IR RX thread error\n");
 
 		vSemaphoreDelete(IR_learn_sema);
 		IR_learn_sema = NULL;

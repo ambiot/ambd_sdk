@@ -718,10 +718,27 @@ int NetworkConnect(Network* n, char* addr, int port)
 		mbedtls_ssl_set_bio(n->ssl, &n->my_socket, mbedtls_net_send, mbedtls_net_recv, NULL);
 		mbedtls_ssl_conf_rng(n->conf, my_random, NULL);	
 
+#if MBEDTLS_SSL_MAX_CONTENT_LEN == 512
+		if(mbedtls_ssl_conf_max_frag_len(n->conf, MBEDTLS_SSL_MAX_FRAG_LEN_512) < 0) {
+			printf("ssl conf max frag len failed!");
+			goto err;
+		}
+#elif MBEDTLS_SSL_MAX_CONTENT_LEN == 1024
+		if(mbedtls_ssl_conf_max_frag_len(n->conf, MBEDTLS_SSL_MAX_FRAG_LEN_1024) < 0) {
+			printf("ssl conf max frag len failed!");
+			goto err;
+		}
+#elif MBEDTLS_SSL_MAX_CONTENT_LEN == 2048
+		if(mbedtls_ssl_conf_max_frag_len(n->conf, MBEDTLS_SSL_MAX_FRAG_LEN_2048) < 0) {
+			printf("ssl conf max frag len failed!");
+			goto err;
+		}
+#elif MBEDTLS_SSL_MAX_CONTENT_LEN == 4096
 		if(mbedtls_ssl_conf_max_frag_len(n->conf, MBEDTLS_SSL_MAX_FRAG_LEN_4096) < 0) {
 			printf("ssl conf max frag len failed!");
 			goto err;
 		}
+#endif
 
 		if((mbedtls_ssl_setup(n->ssl, n->conf)) != 0) {
 			mqtt_printf(MQTT_DEBUG,"mbedtls_ssl_setup failed!");

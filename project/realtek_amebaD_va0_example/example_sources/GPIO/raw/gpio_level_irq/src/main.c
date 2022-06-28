@@ -24,13 +24,13 @@ void gpio_level_irq_handler (uint32_t id, u32 event)
 
 	// make some software de-bounce here if the signal source is not stable.
 	if (level == GPIO_INT_POLARITY_ACTIVE_LOW) {
-		DBG_8195A("low level event\r\n");
+		DiagPrintf("low level event\r\n");
 
         	// Change to listen to high level event
 		gpio_id->GPIO_ITPolarity = GPIO_INT_POLARITY_ACTIVE_HIGH;
 		GPIO_INTMode(GPIO_IRQ_LEVEL_PIN, ENABLE, gpio_id->GPIO_ITTrigger, gpio_id->GPIO_ITPolarity, GPIO_INT_DEBOUNCE_ENABLE);
 	} else  if (level == GPIO_INT_POLARITY_ACTIVE_HIGH) {
-		DBG_8195A("high level event\r\n");
+		DiagPrintf("high level event\r\n");
 
 		// Change to listen to low level event
 		gpio_id->GPIO_ITPolarity = GPIO_INT_POLARITY_ACTIVE_LOW;

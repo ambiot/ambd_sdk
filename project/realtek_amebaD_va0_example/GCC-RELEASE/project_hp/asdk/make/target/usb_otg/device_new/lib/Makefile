@@ -15,12 +15,14 @@ IFLAGS += -I$(LIB_DIR)
 GLOBAL_CFLAGS += -DCONFIG_USB_NEW_STACK_EN
 TARGET_LIB = lib_usbd_new
 
-vpath %.c $(HAL_DIR) $(LIB_DIR)
+vpath %.c $(HAL_DIR) $(COM_DIR) $(LIB_DIR)
 
 #*****************************************************************************#
 #                               Source FILE LIST                              #
 #*****************************************************************************#
 CSRC += $(HAL_DIR)/rtl8721dhp_usb.c \
+	$(COM_DIR)/usb_hal.c \
+	$(COM_DIR)/usb_os.c \
 	$(LIB_DIR)/usbd.c \
 	$(LIB_DIR)/usbd_core.c \
 	$(LIB_DIR)/usbd_hal.c \

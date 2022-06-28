@@ -323,7 +323,7 @@ static void _cbClient(WM_MESSAGE * pMsg) {
       //
       // This message is send only if an enabled item has been selected
       //
-      sprintf(acBuffer, "ID of the selected\nitem is 0x%X", pData->ItemId);
+      sDiagPrintf(acBuffer, "ID of the selected\nitem is 0x%X", pData->ItemId);
       _MessageBox(acBuffer, "Message");
       break;
     }

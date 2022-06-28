@@ -113,7 +113,7 @@ UINT JpgDec_out_func(JDEC* jd, void* bitmap, JRECT* rect)
 
     /* Put progress indicator */
     if (rect->left == 0) {
-        //printf("\r%d%%", (rect->top << jd->scale) * 100UL / jd->height);
+        //DiagPrintf("\r%d%%", (rect->top << jd->scale) * 100UL / jd->height);
     }
 
 	RgbLcdShowBitmap(rect->left, 
@@ -139,7 +139,7 @@ void JpgDec_task(void)
 	devid.fptr = 0;
 	
 	if(HAL_READ32(SPI_FLASH_BASE, devid.flash_addr) == 0xFFFFFFFF) {
-		printf("JPG doesn't exist. Please download JPG file to address 0x%x !!\n", SPI_FLASH_BASE + devid.flash_addr);
+		DiagPrintf("JPG doesn't exist. Please download JPG file to address 0x%x !!\n", SPI_FLASH_BASE + devid.flash_addr);
 		goto exit;
 	}
 
@@ -162,18 +162,18 @@ void JpgDec_task(void)
 	
     if (res == JDR_OK) {
         /* Ready to dcompress. Image info is available here. */
-        printf("Image dimensions: %d by %d.\n", jdec.width, jdec.height);
+        DiagPrintf("Image dimensions: %d by %d.\n", jdec.width, jdec.height);
         devid.wfbuf = jdec.width;
 
 		/* Start to decompress with 1/1 scaling */
         res = jd_decomp(&jdec, JpgDec_out_func, 0);
         if (res == JDR_OK) {
-            printf("Decompression succeeded\n");
+            DiagPrintf("Decompression succeeded\n");
         } else {
-            printf("Failed to decompress: rc=%d\n", res);
+            DiagPrintf("Failed to decompress: rc=%d\n", res);
         }
     } else {
-        printf("Failed to prepare: rc=%d\n", res);
+        DiagPrintf("Failed to prepare: rc=%d\n", res);
     }
 
 exit:

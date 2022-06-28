@@ -428,8 +428,9 @@ void app_start(void)
 	OSC2M_Calibration(OSC2M_CAL_CYC_128, 30000); /* PPM=30000=3% *//* 0.5 */
 	SYSTIMER_Init(); /* 0.2ms */
 
+#ifndef AmebaD_Dcut
 	app_gen_random_seed();
-	
+#endif
 	SOCPS_InitSYSIRQ();
 	km4_pm_init();
 
