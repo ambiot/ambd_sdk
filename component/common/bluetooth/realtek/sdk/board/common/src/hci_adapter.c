@@ -7,16 +7,14 @@
 #include <string.h>
 
 #include "os_mem.h"
+#include "os_sched.h"
 #include "hci_tp.h"
 #include "hci_process.h"
 #include "bt_types.h"
-
 #include "hci_uart.h"
 #include "bt_board.h"
 #include "hci_board.h"
-
 #include "trace_app.h"
-
 
 typedef struct
 {
@@ -45,6 +43,9 @@ bool hci_rtk_tx_cb(void)
 //=================================external==========================
 bool hci_adapter_send(uint8_t *p_buf, uint16_t len)
 {
+    while (p_hci_rtk->tx_buf != NULL) {
+        os_delay(1);
+    }
     p_hci_rtk->tx_buf  = p_buf;
     return hci_tp_send(p_buf, len, hci_rtk_tx_cb);
 }

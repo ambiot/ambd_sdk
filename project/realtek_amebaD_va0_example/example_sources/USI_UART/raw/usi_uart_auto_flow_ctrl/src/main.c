@@ -60,7 +60,7 @@ void main(void)
 
 	for (i=0;i<128;i++) {
 		// Tide Break
-		DBG_8195A("Wait peer ready...\r\n");
+		DiagPrintf("Wait peer ready...\r\n");
 		USI_UARTCharPut(USI_DEV, i+1);
 		if (USI_UARTReadable( USI_DEV)) {
 			USI_UARTCharGet(USI_DEV,&rc);
@@ -79,7 +79,7 @@ void main(void)
 	Pinmux_Config(UART_CTS, PINMUX_FUNCTION_UART_RTSCTS);	//CTS
 
 	if (rx_side) {
-		DBG_8195A("UART Flow Control: RX ==>\r\n");
+		DiagPrintf("UART Flow Control: RX ==>\r\n");
 		_memset(buffer, 0, UART_BUF_SIZE);	
 		i = 0;
 		j = 0;
@@ -93,20 +93,20 @@ void main(void)
 				if ((i&0xf) == 0) {
 					// Make some delay to cause the RX FIFO full and then trigger flow controll
 					DelayMs(100);
-                    			DBG_8195A("UART RX got %d bytes\r\n", i);
+                    			DiagPrintf("UART RX got %d bytes\r\n", i);
                 		}
 				j=0;
 			} else {
 				DelayMs(10);
 				j++;
 				if (j== 1000) {
-					DBG_8195A("UART RX Failed, Got %d bytes\r\n", i);
+					DiagPrintf("UART RX Failed, Got %d bytes\r\n", i);
 					break;
 				}
 			}            
 		}
 	} else {
-		DBG_8195A("UART Flow Control: TX ==>\r\n");
+		DiagPrintf("UART Flow Control: TX ==>\r\n");
 		DelayMs(400);
 		/*send large number to make peer device be rx side */
 		USI_UARTCharPut(USI_DEV, 255);
@@ -121,7 +121,7 @@ void main(void)
 			USI_UARTCharPut(USI_DEV, buffer[i]);
 		}
 	}
-	DBG_8195A("UART Flow Control Test Done!\r\n");
+	DiagPrintf("UART Flow Control Test Done!\r\n");
 	while (1);
 }
 

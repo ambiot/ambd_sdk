@@ -93,7 +93,7 @@ void IR_TX_thread(void* param)
 			}
 		}
 			
-		DBG_8195A("TX %2x%2x%2x\n",GRB[2], GRB[1], GRB[0]);
+		DiagPrintf("TX %2x%2x%2x\n",GRB[2], GRB[1], GRB[0]);
 
 		/* Encode by LED protocol */
 		IR_LEDEncode(IR_InitStruct.IR_Freq, (uint8_t *)&GRB, &IR_DataStruct, 0);
@@ -139,9 +139,9 @@ int main (void)
 {
 
 	Board_IR_Init();
-	DBG_8195A("ir tx led \n");
+	DiagPrintf("ir tx led \n");
 	if (pdTRUE != xTaskCreate( IR_TX_thread, (const char * const)"IR_TX_THREAD", 256, NULL, tskIDLE_PRIORITY + 5 , NULL))
-		DBG_8195A("creat IR TX thread error\n");
+		DiagPrintf("creat IR TX thread error\n");
 
 	vTaskStartScheduler();
 }

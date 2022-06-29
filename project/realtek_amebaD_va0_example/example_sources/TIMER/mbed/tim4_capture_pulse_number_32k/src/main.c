@@ -36,7 +36,7 @@ void tim5_gen_pwm_32k()
 void tim4_capture_ISR(u32 data)
 {
 	u32 value = TIM4->CCMRx[0] & 0xFFFF;
-	DBG_8195A("Pulse number: %d, %s\n", value, (value == 3276 || value == 3277) ? "success" : "fail");
+	DiagPrintf("Pulse number: %d, %s\n", value, (value == 3276 || value == 3277) ? "success" : "fail");
 	RTIM_INTClear(TIMx[4]);
 }
 
@@ -84,7 +84,7 @@ void tim4_capture_pulse_number_32k(void)
 void main(void)
 {
 	if(xTaskCreate( (TaskFunction_t)tim4_capture_pulse_number_32k, "TIM4 CAPTURE PULSE NUM DEMO", (2048/4), NULL, (tskIDLE_PRIORITY + 1), NULL)!= pdPASS) {
-			DBG_8195A("Cannot create tim4 capture pulse num demo task\n\r");
+			DiagPrintf("Cannot create tim4 capture pulse num demo task\n\r");
 	}
 
 	vTaskStartScheduler();

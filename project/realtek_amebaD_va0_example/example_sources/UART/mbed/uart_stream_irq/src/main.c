@@ -48,7 +48,7 @@ void uart_send_string(serial_t *sobj, char *pstr)
 	tx_busy = 1;
 	ret = serial_send_stream(sobj, pstr, _strlen(pstr));
 	if (ret != 0) {
-		DBG_8195A("%s Error(%d)\n", __FUNCTION__, ret);        
+		DiagPrintf("%s Error(%d)\n", __FUNCTION__, ret);        
 		tx_busy = 0;
 	}
 }
@@ -67,7 +67,7 @@ void main(void)
 
 	ret = serial_recv_stream(&sobj, rx_buf, 8);
 	if (ret) {
-		DBG_8195A(" %s: Recv Error(%d)\n", __FUNCTION__, ret);        
+		DiagPrintf(" %s: Recv Error(%d)\n", __FUNCTION__, ret);        
 		rx_done = 1;
 	}
 
@@ -82,7 +82,7 @@ void main(void)
 			rx_done = 0;
 			ret = serial_recv_stream(&sobj, rx_buf, 8);
             		if (ret) {
-               		DBG_8195A(" %s: Recv Error(%d)\n", __FUNCTION__, ret);        
+               		DiagPrintf(" %s: Recv Error(%d)\n", __FUNCTION__, ret);        
                 		rx_done = 1;
             		}
 		}

@@ -16,31 +16,31 @@ static void app_dslp_wake(void)
 {
 	u32 aon_wake_event = SOCPS_AONWakeReason();
 
-	DBG_8195A("hs app_dslp_wake %x \n", aon_wake_event);
+	DiagPrintf("hs app_dslp_wake %x \n", aon_wake_event);
 
 	if(BIT_GPIO_WAKE_STS & aon_wake_event) {
-		DBG_8195A("DSLP AonWakepin wakeup, wakepin %x\n", SOCPS_WakePinCheck());
+		DiagPrintf("DSLP AonWakepin wakeup, wakepin %x\n", SOCPS_WakePinCheck());
 	}
 
 	if(BIT_AON_WAKE_TIM0_STS & aon_wake_event) {
 		SOCPS_AONTimerCmd(DISABLE);
-		DBG_8195A("DSLP Aontimer wakeup \n");
+		DiagPrintf("DSLP Aontimer wakeup \n");
 	}
 
 	if(BIT_RTC_WAKE_STS & aon_wake_event) {
-		DBG_8195A("DSLP RTC wakeup \n");
+		DiagPrintf("DSLP RTC wakeup \n");
 	}
 
 	if(BIT_DLPS_TSF_WAKE_STS & aon_wake_event) {
-		DBG_8195A("DSLP TSF wakeup \n");
+		DiagPrintf("DSLP TSF wakeup \n");
 	}
 	
 	if(BIT_KEYSCAN_WAKE_STS & aon_wake_event) {
-		DBG_8195A("DSLP KS wakeup\n");
+		DiagPrintf("DSLP KS wakeup\n");
 	}
 
 	if(BIT_CAPTOUCH_WAKE_STS & aon_wake_event) {
-		DBG_8195A("DSLP Touch wakeup\n");
+		DiagPrintf("DSLP Touch wakeup\n");
 	}
 
 	SOCPS_AONWakeClear(BIT_ALL_WAKE_STS);
@@ -56,15 +56,17 @@ void main(void)
 	shell_init_ram();
 	ipc_table_init();
 
-	/*open log of DBG_8195A()*/
+	/*open log of DiagPrintf()*/
 	DBG_ERR_MSG_ON(MODULE_MISC);
 
 	if(TRUE == SOCPS_DsleepWakeStatusGet()) {
 		app_dslp_wake();
 	}
 
-	app_keyscan_init(FALSE); /* 5uA */
-	app_captouch_init(); /* 1uA */
+	if ((BKUP_Read(0) & BIT_KEY_ENABLE))
+		app_keyscan_init(FALSE); /* 5uA */
+	if ((BKUP_Read(0) & BIT_CAPTOUCH_ENABLE))
+		app_captouch_init(); /* 1uA */
 
 	DSLP_Para.sleep_time = 0;
 
@@ -72,34 +74,34 @@ void main(void)
 
 		case AON_TIMER_WAKEUP:
 			/* enable aontimer to wakeup in rtl8721dlp_sleepcfg.c */
-			DBG_8195A("set aon timer to wakeup\n");
+			DiagPrintf("set aon timer to wakeup\n");
 			DSLP_Para.sleep_time = dslptime;
 			break;
 
 		case AON_WAKEPIN_WAKEUP:
 			/* enable aon wakepin to wakeup in rtl8721dlp_sleepcfg.c */
 			/* choose the wakepin and polarity you want in rtl8721dlp_sleepcfg.c */
-			DBG_8195A("set aon wakepin to wakeup\n");
+			DiagPrintf("set aon wakepin to wakeup\n");
 			break;
 
 		case RTC_WAKEUP:
 			/* enable rtc to wakeup in rtl8721dlp_sleepcfg.c */
-			DBG_8195A("set rtc to wakeup\n ");
+			DiagPrintf("set rtc to wakeup\n ");
 			RTC_AlarmCmd(ENABLE);
 			break;
 
 		case KYESCAN_WAKEUP:
 			/*enable keyscan to wakeup in rtl8721dlp_sleepcfg.c and keyscan should be initialized*/
-			DBG_8195A("set keyscan to wakeup\n");
+			DiagPrintf("set keyscan to wakeup\n");
 			break;
 
 		case CAPTOUCH_WAKEUP:
 			/*enable captouch to wakeup in rtl8721dlp_sleepcfg.c and captouch should be initialized*/
-			DBG_8195A("set captouch to wakeup\n");
+			DiagPrintf("set captouch to wakeup\n");
 			break;
 
 		default:
-			DBG_8195A("Unknown wakeup source\n");
+			DiagPrintf("Unknown wakeup source\n");
 			break;
 	}
 	DSLP_Para.dlps_enable = TRUE;

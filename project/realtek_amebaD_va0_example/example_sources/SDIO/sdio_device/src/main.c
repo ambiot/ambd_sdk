@@ -48,7 +48,7 @@ char ex_spdio_tx(u8 *pdata, u16 size, u8 type){
 
 	tx_buf->buf_size = size;
 	tx_buf->type = SPDIO_RX_DATA_USER; // you can define your own data type in spdio_rx_data_t and spdio_tx_data_t
-	printf("loopback package, size = %d (cnt = %d) heap=%d\n", size, ++loop_cnt, xPortGetFreeHeapSize());
+	DiagPrintf("loopback package, size = %d (cnt = %d) heap=%d\n", size, ++loop_cnt, xPortGetFreeHeapSize());
 	// loopback
 	spdio_tx(&spdio_dev, tx_buf);
 	return SUCCESS;
@@ -91,6 +91,19 @@ void ex_spdio_thread(void* param){
 
 	int i;
 
+	PAD_PullCtrl(_PB_18, GPIO_PuPd_UP);
+	PAD_PullCtrl(_PB_19, GPIO_PuPd_UP);
+	PAD_PullCtrl(_PB_20, GPIO_PuPd_UP);
+	PAD_PullCtrl(_PB_21, GPIO_PuPd_NOPULL);
+	PAD_PullCtrl(_PB_22, GPIO_PuPd_UP);
+	PAD_PullCtrl(_PB_23, GPIO_PuPd_UP);
+	Pinmux_Config(_PB_18, PINMUX_FUNCTION_SDIOD);
+	Pinmux_Config(_PB_19, PINMUX_FUNCTION_SDIOD);
+	Pinmux_Config(_PB_20, PINMUX_FUNCTION_SDIOD);
+	Pinmux_Config(_PB_21, PINMUX_FUNCTION_SDIOD);
+	Pinmux_Config(_PB_22, PINMUX_FUNCTION_SDIOD);
+	Pinmux_Config(_PB_23, PINMUX_FUNCTION_SDIOD);
+
 	spdio_dev.priv = NULL;
 	spdio_dev.rx_bd_num = EX_SPDIO_RX_BD_NUM;
 	spdio_dev.tx_bd_num = EX_SPDIO_TX_BD_NUM;
@@ -98,14 +111,14 @@ void ex_spdio_thread(void* param){
   
         spdio_dev.rx_buf = (struct spdio_buf_t *)malloc(spdio_dev.rx_bd_num*sizeof(struct spdio_buf_t));
         if(!spdio_dev.rx_buf){
-                printf("malloc failed for spdio buffer structure!\n");
+                DiagPrintf("malloc failed for spdio buffer structure!\n");
                 return;
         }
         
 	for(i=0;i<spdio_dev.rx_bd_num;i++){
 		spdio_dev.rx_buf[i].buf_allocated = (u32)malloc(spdio_dev.rx_bd_bufsz + SPDIO_DMA_ALIGN_4);
 		if(!spdio_dev.rx_buf[i].buf_allocated){
-			printf("malloc failed for spdio buffer!\n");
+			DiagPrintf("malloc failed for spdio buffer!\n");
 			return;
 		}
 		spdio_dev.rx_buf[i].size_allocated = spdio_dev.rx_bd_bufsz + SPDIO_DMA_ALIGN_4;
@@ -117,14 +130,14 @@ void ex_spdio_thread(void* param){
 	spdio_dev.tx_done_cb = ex_spdio_tx_done_cb;
 	
 	spdio_init(&spdio_dev);
-	printf("SDIO device starts loopback!\n");
+	DiagPrintf("SDIO device starts loopback!\n");
 	vTaskDelete(NULL);
 }
 
 void main(void)
 {
 	if(xTaskCreate(ex_spdio_thread, ((const char*)"ex_spdio_thread"), EX_SPDIO_STACKSIZE, NULL, tskIDLE_PRIORITY + 5, NULL) != pdPASS) {
-		printf("xTaskCreate(ex_spdio_thread) failed\r\n");
+		DiagPrintf("xTaskCreate(ex_spdio_thread) failed\r\n");
 	}
 
     //3 3)Enable Schedule, Start Kernel

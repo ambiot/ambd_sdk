@@ -9,6 +9,9 @@ include $(MAKE_INCLUDE_GEN)
 DIR = $(BASEDIR)/component/soc/realtek/amebad/wifi_fw/ram
 DIR_TEST = $(BASEDIR)/component/soc/realtek/amebad/wifi_fw/test
 
+GLOBAL_CFLAGS += -DCONFIG_LONGPERIOD_TICKLESS=0
+GLOBAL_CFLAGS += -DCONFIG_1FIRELINE_PowerProtect=0
+
 vpath %.c $(DIR)
 vpath %.c $(DIR_TEST)
 
@@ -52,6 +55,7 @@ CSRC =$(DIR)/RTL8721D_BTConCurr_RAM.c \
 	   $(DIR)/RTL8721D_Normal_Dbg.c	\
 	   $(DIR)/RTL8721D_CP_FT_TEST_RAM.c	\
        $(DIR)/RTL8721D_WoWLAN_RAM.c     \
+       $(DIR)/RTL8721D_Phydm_Offload_RAM.c     \
        $(DIR)/RTL8721D_RegConfig_RAM.c
 #ifeq ($(CONFIG_WIFI_FW_VERIFY),y)
 CSRC +=	$(DIR_TEST)/RTL8721D_Serial_IO_Test.c \

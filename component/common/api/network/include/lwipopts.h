@@ -426,6 +426,12 @@ Certain platform allows computing and verifying the IP, UDP, TCP and ICMP checks
 #endif
 #endif 
 
+
+#if (defined(CONFIG_EXAMPLE_AZURE_IOTHUB_TELEMETRY) && (CONFIG_EXAMPLE_AZURE_IOTHUB_TELEMETRY)) \
+      || (defined(CONFIG_EXAMPLE_AZURE_IOTHUB_X509) && (CONFIG_EXAMPLE_AZURE_IOTHUB_X509))
+#define ERRNO                           1
+#endif
+      
 #include "lwip/init.h"                  //for version control
 
 #endif /* LWIP_HDR_LWIPOPTS_H */

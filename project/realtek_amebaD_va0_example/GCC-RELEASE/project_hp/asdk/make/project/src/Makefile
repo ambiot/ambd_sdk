@@ -12,7 +12,7 @@ include $(MAKE_INCLUDE_GEN)
 #*****************************************************************************#
 all:
 	@make -C $(SRCDIR) all
-	@if [ "$(COMPILEOS)" != "$(DARWIN)" ]; then \
+	@if [ "$(COMPILEOS)" != "$(DARWIN_OS)" ]; then \
 		find $(SRCDIR) -type f -regex '.*\(\.i\|\.d\|\.s\|\.su\|\.o\)' |xargs -i mv {} ./; \
 	else \
 		find $(SRCDIR) -type f -regex '.*\(\.i\|\.d\|\.s\|\.su\|\.o\)' |xargs -I mv {} ./; \

@@ -58,7 +58,7 @@ Requirements: WindowManager - (x)
 static const char * _apMonths[] = {
   "Januar",
   "Februar",
-  "März",
+  "Mrz",
   "April",
   "Mai",
   "Juni",

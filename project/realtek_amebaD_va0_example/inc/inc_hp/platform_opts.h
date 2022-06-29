@@ -89,6 +89,7 @@
 #define CONFIG_TRANSPORT	0//on or off the at command for transport socket
 #define CONFIG_ALINK			0//on or off for alibaba alink
 #define CONFIG_HILINK			0//on or off for huawei hilink
+#define CONFIG_RIC			0//on or off for RICloud
 
 //#define CONFIG_BAIDU_DUER	1
 #define CONFIG_DMIC_SEL	0
@@ -230,6 +231,9 @@
 /* For HTTP2 CLIENT example */
 #define CONFIG_EXAMPLE_HTTP2_CLIENT	0
 
+/* For HTTP2 SSL CLIENT example */
+#define CONFIG_EXAMPLE_HTTP2_SSL_CLIENT 0
+
 /* For HTTPC example */
 #define CONFIG_EXAMPLE_HTTPC	0
 
@@ -241,6 +245,13 @@
 
 /* for CoAP example*/
 #define CONFIG_EXAMPLE_COAP		0
+
+/* for CoAP DTLS client example */
+#define CONFIG_EXAMPLE_COAP_DTLS_CLIENT		0
+
+/* for CoAP DTLS server example */
+#define CONFIG_EXAMPLE_COAP_DTLS_SERVER		0
+
 
 /* for lib CoAP example*/ 
 #define CONFIG_EXAMPLE_COAP_SERVER        0
@@ -579,6 +590,12 @@ in lwip_opt.h for support uart adapter*/
 
 /* For rarp example */
 #define CONFIG_EXAMPLE_RARP				0
+
+/* For rtp server example */
+#define CONFIG_EXAMPLE_RTP_SERVER				0
+
+/* For rtp client example */
+#define CONFIG_EXAMPLE_RTP_CLIENT				0
 
 /* For ssl server example */
 #define CONFIG_EXAMPLE_SSL_SERVER		0

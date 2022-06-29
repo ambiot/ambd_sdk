@@ -50,6 +50,9 @@ endif
 	make -C ble_peripheral all
 	make -C ble_central all
 	make -C ble_scatternet all
+	make -C bt_tag_scanner all
+	make -C bt_ancs all
+	make -C bt_distance_detector all
 endif
 
 #*****************************************************************************#
@@ -83,13 +86,16 @@ ifeq ($(CONFIG_BT_MESH_DEVICE_RTK_DEMO),y)
 	make -C bt_mesh_device_rtk_demo clean
 endif
 endif
-#	make -C bt_beacon clean
+	make -C bt_beacon clean
 	make -C bt_config clean
-#	make -C bt_airsync_config clean
-#	make -C bt_breeze clean
+	make -C bt_airsync_config clean
+	make -C bt_breeze clean
 	make -C ble_peripheral clean
 	make -C ble_central clean
 	make -C ble_scatternet clean
+	make -C bt_tag_scanner clean
+	make -C bt_ancs clean
+	make -C bt_distance_detector clean
 endif
 
 -include $(DEPS)

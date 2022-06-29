@@ -144,7 +144,6 @@ SECTIONS
     RSIP_KEY_Request = 0x1010cec9;
     RSIP_MMU_Config = 0x1010cf0d;
     RSIP_MMU_Cmd = 0x1010cf31;
-    PAD_DrvStrength = 0x1010cf51;
     PAD_PullCtrl = 0x1010cf6d;
     PAD_CMD = 0x1010cf99;
     Pinmux_Config = 0x1010cfb9;

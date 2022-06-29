@@ -78,6 +78,7 @@
 #define CONFIG_TRANSPORT	0//on or off the at command for transport socket
 #define CONFIG_ALINK			0//on or off for alibaba alink
 #define CONFIG_HILINK			0//on or off for huawei hilink
+#define CONFIG_RIC			0//on or off for RICloud
 
 /* For WPS and P2P */
 #define CONFIG_ENABLE_WPS		0
@@ -307,11 +308,12 @@
 #define CONFIG_ENABLE_PEAP	0
 #define CONFIG_ENABLE_TLS	0
 #define CONFIG_ENABLE_TTLS	0
+#define CONFIG_ENABLE_FAST	0
 
 // optional feature: whether to verify the cert of radius server
 #define ENABLE_EAP_SSL_VERIFY_SERVER	0
 
-#if CONFIG_ENABLE_PEAP || CONFIG_ENABLE_TLS || CONFIG_ENABLE_TTLS
+#if CONFIG_ENABLE_PEAP || CONFIG_ENABLE_TLS || CONFIG_ENABLE_TTLS || CONFIG_ENABLE_FAST
 #define CONFIG_ENABLE_EAP
 #define CONFIG_EXAMPLE_WLAN_FAST_CONNECT 0
 #endif

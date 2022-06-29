@@ -24,18 +24,22 @@ char rx_buf[SRX_BUF_SZ]__attribute__((aligned(32)))={0};  /*note that dma mode b
 
 volatile uint32_t tx_busy=0;
 volatile uint32_t rx_done=0;
+volatile uint32_t wait_rx=0;
 
 void uart_send_string_done(uint32_t id)
 {
 	serial_t    *sobj = (void*)id;
 	tx_busy = 0;
+	_memset((void *) rx_buf, 0, SRX_BUF_SZ);
 }
 
 void uart_recv_string_done(uint32_t id)
 {
+	DCache_Invalidate((u32) rx_buf, SRX_BUF_SZ);   /*this is required if using uart as dma flow control*/
 	serial_t    *sobj = (void*)id;
 	rx_done = 1;
-	DBG_8195A("recv timeout\n");
+	wait_rx = 0;
+	DiagPrintf("recv timeout\n");
 }
 
 void uart_send_string(serial_t *sobj, char *pstr)
@@ -49,7 +53,7 @@ void uart_send_string(serial_t *sobj, char *pstr)
 	tx_busy = 1;
 	ret = serial_send_stream_dma(sobj, pstr, _strlen(pstr));
 	if (ret != 0) {
-		DBG_8195A("%s Error(%d)\n", __FUNCTION__, ret);        
+		DiagPrintf("%s Error(%d)\n", __FUNCTION__, ret);        
 		tx_busy = 0;
 	}
 }
@@ -68,18 +72,17 @@ void maintask(void)
 	serial_send_comp_handler(&sobj, (void*)uart_send_string_done, (uint32_t) &sobj);
 	serial_recv_comp_handler(&sobj, (void*)uart_recv_string_done, (uint32_t) &sobj);
 
-	for(i=0;i<SRX_BUF_SZ;i++){
-		rx_buf[i]=0;
-    	}
+	_memset((void *) rx_buf, 0, SRX_BUF_SZ);
+	
 	while (1) {
 		if (rx_done) {
-			uart_send_string(&sobj, rx_buf);            
+			uart_send_string(&sobj, rx_buf); 
 			rx_done = 0;
-  
 		}
-		if(!tx_busy){
+		if(0 == wait_rx && 0 == tx_busy){
 			/*uart is flow controller and you can set rx timeout (unit is ms)*/
-			ret = serial_recv_stream_dma_timeout(&sobj, rx_buf, 0,500,NULL);
+			ret = serial_recv_stream_dma_timeout(&sobj, rx_buf, 0, 500 ,NULL);
+			wait_rx = 1;
 		}
 	}
 }

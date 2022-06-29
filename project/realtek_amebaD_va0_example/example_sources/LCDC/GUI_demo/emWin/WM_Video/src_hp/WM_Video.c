@@ -80,7 +80,7 @@ static void _CreateWindow(void) {
   for (i = 0; i < MAX_WINDOWS; i++) {
     if (_ahWin[i] == 0) {
       j = i + 1;
-      sprintf(ac, "Test window %d", j);
+      sDiagPrintf(ac, "Test window %d", j);
       hWin = FRAMEWIN_CreateEx(5 + 10 * i, 135 + 10 * i, 120, 60, 0, WM_CF_SHOW, FRAMEWIN_CF_MOVEABLE, 0, ac, _cbFrameWinTest);
       FRAMEWIN_SetClientColor(hWin, GUI_INVALID_COLOR);
       _ahWin[i] = hWin;

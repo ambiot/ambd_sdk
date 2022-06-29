@@ -71,6 +71,7 @@ BUILD_TARGET_FOLDER     = $(ROOTDIR)/build
 BUILD_TARGET_RAM_FOLDER = $(ROOTDIR)/build/ram
 BUILD_TARGET_ROM_FOLDER = $(ROOTDIR)/build/rom
 BUILD_TARGET_ROM_FOLDER_NS = $(ROOTDIR)/build/rom_ns
+BUILD_TARGET_ROM2_FOLDER = $(ROOTDIR)/build/rom2
 
 IMAGE_TARGET_FOLDER     = $(ROOTDIR)/image
 
@@ -401,7 +402,6 @@ endif
 
 LD_ARG = -L$(ASDK_TOOLCHAIN)/lib/
 LD_ARG += -L$(ROOTDIR)/lib/
-LD_ARG += -L$(ROOTDIR)/lib/application
 LD_ARG += -T$(BUILD_TARGET_FOLDER)/rlx8721d.ld 
 
 LD_ARG += -Os
@@ -483,6 +483,13 @@ COPY_ROM_OBJS:
 #	@-$(COPY) -f *.o $(BUILD_TARGET_ROM_FOLDER)
 #	$(REMOVE) *.o
 
+COPY_ROM2_OBJS:
+	echo "=============================================================" \
+	       >> $(ROOTDIR)/rom2_size.txt;\
+	$(CC_SIZE) -t $(OBJS) $(ASM_OBJS) >> $(ROOTDIR)/rom2_size.txt;\
+	for i in  $(OBJS) $(ASM_OBJS); do \
+		 $(COPY)  $$i $(BUILD_TARGET_ROM2_FOLDER) -f;\
+		done \
 
 #*****************************************************************************#
 #              RENAME OBJECT FILES SECTION                                    #

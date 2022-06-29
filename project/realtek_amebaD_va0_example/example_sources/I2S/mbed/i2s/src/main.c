@@ -211,11 +211,11 @@ void test_tx_complete(void *data, char *pbuf)
     
     i2s_t *obj = (i2s_t *)data;
     static u32 count=0;
-    //DBG_8195A_I2S_LVL(VERI_I2S_LVL, "I2S%d %s\n",pI2SDemoHnd->DevNum,__func__);
+    //DiagPrintf_I2S_LVL(VERI_I2S_LVL, "I2S%d %s\n",pI2SDemoHnd->DevNum,__func__);
     count++;
     if ((count&1023) == 1023)
     {
-         DBG_8195A("%s \n", __func__);
+         DiagPrintf("%s \n", __func__);
     }
 
     ptx_buf = i2s_get_tx_page(obj);
@@ -245,7 +245,7 @@ void test_rx_complete(void *data, char* pbuf)
     count++;
     if ((count&1023) == 1023)
     {
-         DBG_8195A("%s \n", __func__);
+         DiagPrintf("%s \n", __func__);
     }
 
     //ptx_buf = i2s_get_tx_page(obj);

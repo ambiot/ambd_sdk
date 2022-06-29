@@ -100,7 +100,7 @@ void Gdma_multiblock_irq(VOID *Data)
 	DCache_Invalidate((u32)pDstData, BLOCK_SIZE);
 
 //	for(int num = 0;num < BLOCK_SIZE; num++){
-//		DBG_8195A( "\r\src: %d\n" ,*(pSrcData+num));  
+//		DiagPrintf( "\r\src: %d\n" ,*(pSrcData+num));  
 //		}
 
 	DCache_Clean((u32)pDstData, BLOCK_SIZE);
@@ -109,14 +109,14 @@ void Gdma_multiblock_irq(VOID *Data)
 	IsrTypeMap = GDMA_ClearINT(0, GDMA_InitStruct->GDMA_ChNum);
 
 	if (IsrTypeMap & BlockType) {
-//		DBG_8195A("DMA Block %d\n",GDMA_InitStruct->MuliBlockCunt);
+//		DiagPrintf("DMA Block %d\n",GDMA_InitStruct->MuliBlockCunt);
 		GDMA_InitStruct->MuliBlockCunt++;
 	}
 
 	//last IRQ is TransferType in multi-block
 	if (IsrTypeMap & TransferType) {
-//		DBG_8195A("DMA Block %d\n",GDMA_InitStruct->MuliBlockCunt);
-//		DBG_8195A("DMA data complete MaxMuliBlock:%d \n", GDMA_InitStruct->MaxMuliBlock);
+//		DiagPrintf("DMA Block %d\n",GDMA_InitStruct->MuliBlockCunt);
+//		DiagPrintf("DMA data complete MaxMuliBlock:%d \n", GDMA_InitStruct->MaxMuliBlock);
 		if (!If_single) {
 			MasterTxDone = 1;
 		} else {
@@ -174,7 +174,7 @@ BOOL SSI_Multi_TXGDMA_Init(PGDMA_InitTypeDef GDMA_InitStruct, void *CallbackData
 			GDMA_InitStruct->GDMA_DstMsize  = MsizeEight;
 			GDMA_InitStruct->GDMA_DstDataWidth = TrWidthTwoBytes;
 		} else {
-			DBG_8195A("SSI_TXGDMA_Init: Aligment Err: pTxData=0x%x,  Length=%d\n", pTxData, Length);
+			DiagPrintf("SSI_TXGDMA_Init: Aligment Err: pTxData=0x%x,  Length=%d\n", pTxData, Length);
 			return _FALSE;
 		}
 	} else {
@@ -193,7 +193,7 @@ BOOL SSI_Multi_TXGDMA_Init(PGDMA_InitTypeDef GDMA_InitStruct, void *CallbackData
 	GDMA_InitStruct->GDMA_BlockSize = BLOCK_SIZE  >> GDMA_InitStruct->GDMA_SrcDataWidth; //based on src width
 	assert_param(GDMA_InitStruct->GDMA_BlockSize <= 4096);
 
-//	DBG_8195A("BlockSize = %d\n", GDMA_InitStruct->GDMA_BlockSize);
+//	DiagPrintf("BlockSize = %d\n", GDMA_InitStruct->GDMA_BlockSize);
 
 	GDMA_ChnlRegister(0, GDMA_InitStruct->GDMA_ChNum);
 	GDMA_InitStruct->MuliBlockCunt = 0;
@@ -258,7 +258,7 @@ void spi_multiblock_task(void* param)
 		*((u8*)MasterTxBuf + i) = i;
 	}
 	
-	DBG_8195A("----------------------------------------\n");
+	DiagPrintf("----------------------------------------\n");
 
 	MasterTxDone = 0;
 	MultiTxDone  = 0;
@@ -274,7 +274,7 @@ void spi_multiblock_task(void* param)
 			DelayMs(5);
 			i++;
 			if (i>3000) {
-				DBG_8195A("SPI Multi Block Timeout\r\n");
+				DiagPrintf("SPI Multi Block Timeout\r\n");
 			break;
 			}
 		}
@@ -287,14 +287,14 @@ void spi_multiblock_task(void* param)
 		DelayMs(100);
 		i++;
 		if (i>150) {
-		    DBG_8195A("SPI Timeout\r\n");
+		    DiagPrintf("SPI Timeout\r\n");
 		    break;
 		}
 	}
 	
 	Spi_free(spi_master);
 
-	DBG_8195A("SPI Demo finished.\n");
+	DiagPrintf("SPI Demo finished.\n");
 
 	vTaskDelete(NULL);
 
@@ -308,7 +308,7 @@ void spi_multiblock_task(void* param)
 void main(void)
 {
 	if(xTaskCreate(spi_multiblock_task, ((const char*)"spi_multiblock_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(spi_multiblock_task) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(spi_multiblock_task) failed", __FUNCTION__);
 
 	vTaskStartScheduler();
 	while(1){

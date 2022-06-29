@@ -11,7 +11,6 @@ COM_DIR = $(DRV_DIR)/common_new
 DEV_DIR = $(DRV_DIR)/device_new
 IFLAGS += -I$(COM_DIR)
 IFLAGS += -I$(DEV_DIR)/core
-GLOBAL_CFLAGS += -DCONFIG_USB_NEW_STACK_EN
 ifeq ($(CONFIG_USBD_CDC_ACM),y)
 DIR = $(DEV_DIR)/cdc_acm
 endif

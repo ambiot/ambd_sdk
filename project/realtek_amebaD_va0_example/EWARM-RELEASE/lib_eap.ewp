@@ -290,7 +290,7 @@
                 </option>
                 <option>
                     <name>CCDebugInfo</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>IEndianMode</name>
@@ -2170,6 +2170,15 @@
         <name>$PROJ_DIR$\..\..\..\component\common\api\wifi\rtw_wpa_supplicant\src\eap_common\eap_common.c</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\..\..\..\component\common\api\wifi\rtw_wpa_supplicant\src\eap_peer\eap_fast.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\..\..\..\component\common\api\wifi\rtw_wpa_supplicant\src\eap_common\eap_fast_common.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\..\..\..\component\common\api\wifi\rtw_wpa_supplicant\src\eap_peer\eap_fast_pac.c</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\..\..\..\component\common\api\wifi\rtw_wpa_supplicant\src\eap_peer\eap_methods.c</name>
     </file>
     <file>
@@ -2207,5 +2216,8 @@
     </file>
     <file>
         <name>$PROJ_DIR$\..\..\..\component\common\api\wifi\rtw_wpa_supplicant\src\crypto\sha1-internal.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\..\..\..\component\common\api\wifi\rtw_wpa_supplicant\src\crypto\sha1-tprf.c</name>
     </file>
 </project>

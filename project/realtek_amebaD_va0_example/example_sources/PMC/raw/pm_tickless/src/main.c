@@ -8,7 +8,7 @@ extern VOID wlan_network(VOID);
 static u32 app_loguart_suspend(u32 expected_idle_time, void *param)
 {
 	// For peripherals that need turned off before sleep, call disable or deinit peripheral here
-	DBG_8195A("app_loguart_suspend\n");
+	DiagPrintf("app_loguart_suspend\n");
 
 	return TRUE;
 }
@@ -16,7 +16,7 @@ static u32 app_loguart_suspend(u32 expected_idle_time, void *param)
 static u32 app_loguart_resume(u32 expected_idle_time, void *param)
 {
 	// For peripherals that are turned off before sleep, call enable or init peripheral here
-	DBG_8195A("app_loguart_resume\n");
+	DiagPrintf("app_loguart_resume\n");
 	/*set km4 active time*/
 	pmu_set_sysactive_time(5000);
 	return TRUE;

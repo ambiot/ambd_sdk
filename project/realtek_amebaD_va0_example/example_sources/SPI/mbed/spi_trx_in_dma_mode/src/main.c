@@ -80,7 +80,7 @@ void Master_tr_done_callback(void *pdata, SpiIrq event)
 			MasterTxDone = 1;
 			break;
 		default:
-			DBG_8195A("unknown interrput evnent!\n");
+			DiagPrintf("unknown interrput evnent!\n");
 	}
 }
 
@@ -94,7 +94,7 @@ void Slave_tr_done_callback(void *pdata, SpiIrq event)
 			SlaveTxDone = 1;
 			break;
 		default:
-			DBG_8195A("unknown interrput evnent!\n");
+			DiagPrintf("unknown interrput evnent!\n");
 	}
 }
 BOOL SsiDataCompare(u16 *pSrc, u16 *pDst, u32 Length)
@@ -128,9 +128,9 @@ void SsiPrint(u16 *pSrc, u16 *pDst, u32 Length)
 
 	for(Index = 0;Index < Length; Index++){
 		if(DataFrameSize > 8)
-			DBG_8195A("%x: %x ---- %x\n",Index, pSrc[Index] & dfs_mask, pDst[Index]);
+			DiagPrintf("%x: %x ---- %x\n",Index, pSrc[Index] & dfs_mask, pDst[Index]);
 		else
-			DBG_8195A("%x: %x ---- %x\n",Index, PSrc_8[Index] & dfs_mask, PDst_8[Index]);
+			DiagPrintf("%x: %x ---- %x\n",Index, PSrc_8[Index] & dfs_mask, PDst_8[Index]);
 	}
 }
 
@@ -179,7 +179,7 @@ void spi_dma_task(void* param)
 	/**
 	* Master write/read, Slave read/write
 	*/
-	DBG_8195A("------Master write/read, Slave read/write-------\n");
+	DiagPrintf("------Master write/read, Slave read/write-------\n");
 	
 		spi_irq_hook(&spi_master,(spi_irq_handler) Master_tr_done_callback, (uint32_t)&spi_master);
 		spi_irq_hook(&spi_slave,(spi_irq_handler) Slave_tr_done_callback, (uint32_t)&spi_slave);
@@ -196,7 +196,7 @@ void spi_dma_task(void* param)
 			wait_ms(100);
 			i++;
 			if (i>150) {
-				DBG_8195A("SPI Wait Timeout\r\n");
+				DiagPrintf("SPI Wait Timeout\r\n");
 				break;
 			}
 		}
@@ -210,7 +210,7 @@ void spi_dma_task(void* param)
 	/**
 	* Master read, Slave write
 	*/
-	DBG_8195A("-----------Master read, Slave write------------\n");
+	DiagPrintf("-----------Master read, Slave write------------\n");
 	
 		spi_irq_hook(&spi_master,(spi_irq_handler) Master_tr_done_callback, (uint32_t)&spi_master);
 
@@ -226,7 +226,7 @@ void spi_dma_task(void* param)
 			wait_ms(100);
 			i++;
 			if (i>150) {
-				DBG_8195A("SPI Master Wait Timeout\r\n");
+				DiagPrintf("SPI Master Wait Timeout\r\n");
 				break;
 			}
 		}
@@ -234,12 +234,12 @@ void spi_dma_task(void* param)
 		SsiPrint(SlaveTxBuf, MasterRxBuf, TEST_BUF_SIZE);
 		result3 = SsiDataCompare(SlaveTxBuf, MasterRxBuf, TEST_BUF_SIZE);
 		
-	DBG_8195A("\r\nResult is %s\r\n", (result1 && result2 && result3) ? "success" : "fail");
+	DiagPrintf("\r\nResult is %s\r\n", (result1 && result2 && result3) ? "success" : "fail");
 	
 	spi_free(&spi_master);
 	spi_free(&spi_slave);
 
-	DBG_8195A("SPI Demo finished.\n");
+	DiagPrintf("SPI Demo finished.\n");
 
 	vTaskDelete(NULL);
 }
@@ -252,7 +252,7 @@ void spi_dma_task(void* param)
 void main(void)
 {
 	if(xTaskCreate(spi_dma_task, ((const char*)"spi_dma_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(spi_dma_task) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(spi_dma_task) failed", __FUNCTION__);
 
         vTaskStartScheduler();
 	while(1){

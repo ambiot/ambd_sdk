@@ -26,11 +26,11 @@
 #define FW_DL_DEBUG	0
 
 #if	FW_DL_DEBUG
-#define FW_INFO(fmt, args...)		          DBG_8195A("\n\r%s: " fmt, __FUNCTION__, ## args)
-#define FW_ERR(fmt, args...)		          DBG_8195A("\n\r%s: " fmt, __FUNCTION__, ## args)
+#define FW_INFO(fmt, args...)		          DiagPrintf("\n\r%s: " fmt, __FUNCTION__, ## args)
+#define FW_ERR(fmt, args...)		          DiagPrintf("\n\r%s: " fmt, __FUNCTION__, ## args)
 #else
 #define FW_INFO(fmt, args...)
-#define FW_ERR(fmt, args...)		          DBG_8195A("\n\r%s: " fmt, __FUNCTION__, ## args)
+#define FW_ERR(fmt, args...)		          DiagPrintf("\n\r%s: " fmt, __FUNCTION__, ## args)
 #endif
 
 #define PACK_SIZE	2048
@@ -3179,7 +3179,7 @@ int spi_transfer(uint8_t* buf, uint32_t buf_len)
 		while((!txbusIdle) || (!txDone)){
 			wait_us(20);
 			if (++i > 2000) {
-				DBG_8195A("SPI write and read Timeout...\r\n");
+				DiagPrintf("SPI write and read Timeout...\r\n");
 				ret = -1;
 				break;
 			}
@@ -3453,7 +3453,7 @@ static int gspi_write_tx_fifo(u8 *buf, u32 len, _gspi_conf_t gspi_conf)
 	NumOfFreeSpace = gspi_read32(LOCAL_REG_FREE_TX_SPACE, NULL);
 	while (NumOfFreeSpace * (PACK_SIZE+SIZE_TX_DESC) < len) {
 		if((++wait_num) >= 4){
-			DBG_8195A("%s(): wait_num is >= 4\n", __FUNCTION__);
+			DiagPrintf("%s(): wait_num is >= 4\n", __FUNCTION__);
 			return -1;
 		}
 		udelay(100); //delay 100us
@@ -3494,7 +3494,7 @@ retry:
 	if(conf != gspi_conf){
 		if(++ retry_t <= 3)
 			goto retry;
-		DBG_8195A("%s: config fail@ 0x%x\n", __FUNCTION__, conf);
+		DiagPrintf("%s: config fail@ 0x%x\n", __FUNCTION__, conf);
 		return 1;
 	}
 
@@ -3511,7 +3511,7 @@ retry:
 		default:
 			s = "UNKNOW CONFIGURATION"; break;
 	};
-	DBG_8195A("%s: Current configuration:%s\n", __FUNCTION__, s);
+	DiagPrintf("%s: Current configuration:%s\n", __FUNCTION__, s);
 	return 0;
 }
 
@@ -3525,7 +3525,7 @@ void spi_tx_rx_intr_callback(void *pdata, SpiIrq event){
 			txDone = TRUE;
 			break;
 		default:
-			DBG_8195A("unknown interrput evnent!\n");
+			DiagPrintf("unknown interrput evnent!\n");
 	} 
 }
 
@@ -3545,7 +3545,7 @@ void spi_init_master(){
 	spi_init(&spi0_master, SPI0_MOSI, SPI0_MISO, SPI0_SCLK, SPI0_CS);
 	spi_format(&spi0_master, SPI_BITS, 0, 0);
 	spi_frequency(&spi0_master, SPI0_FREQUENCY);
-	DBG_8195A("spi master frequency %d Hz\n", SPI0_FREQUENCY);
+	DiagPrintf("spi master frequency %d Hz\n", SPI0_FREQUENCY);
 	
 	gpio_init(&gpio_cs, GPIO_CS);
 	gpio_mode(&gpio_cs, PullDown);
@@ -3582,7 +3582,7 @@ static s32 _FWFreeToGo(u32	FirmwareEntryFun, u32 min_cnt)
 	ret = gspi_write_tx_fifo(tx_buff, SIZE_TX_DESC, GSPI_CONFIG);
 
 	if(ret){
-		DBG_8195A("gspi write tx fifo fail!!\n");
+		DiagPrintf("gspi write tx fifo fail!!\n");
 		ret = _FAIL;
 		goto exit;
 	}
@@ -3723,10 +3723,10 @@ static s32 check_firmware_status(){
 	s32 ret = _FAIL;
 	
 	fw_ready = gspi_read8(SPI_LOCAL_OFFSET|SPI_REG_CPU_IND,NULL); 
-	DBG_8195A("%s: cpu_ind @ 0x%02x\n", __FUNCTION__, fw_ready);
+	DiagPrintf("%s: cpu_ind @ 0x%02x\n", __FUNCTION__, fw_ready);
 	if (fw_ready & SPI_CPU_RDY_IND) {
 		ret = _SUCCESS;
-		DBG_8195A("%s: firmware is already running!\n", __FUNCTION__);
+		DiagPrintf("%s: firmware is already running!\n", __FUNCTION__);
 	}
 	return ret;
 }
@@ -3745,7 +3745,7 @@ void gspi_demo(void)
 	u8 i;
 	u8 fw_ready;
 	
-	DBG_8195A("Init SPI master....\n"); 
+	DiagPrintf("Init SPI master....\n"); 
 	
 	//1 SPI host init
 	spi_init_master();
@@ -3754,7 +3754,7 @@ void gspi_demo(void)
 	//1 GSPI slave configuration
 	res = gspi_configuration(GSPI_CONFIG);
 	if(res){
-		DBG_8195A("gspi configure error....\n");
+		DiagPrintf("gspi configure error....\n");
 		while(1);
 	}
 
@@ -3775,7 +3775,7 @@ void gspi_demo(void)
 	gspi_write32(SPI_LOCAL_OFFSET | SPI_REG_HIMR, spi_himr, NULL);
 
 	//1 Firmware download 
-	DBG_8195A( "Firmware downloading.....\r\n");
+	DiagPrintf( "Firmware downloading.....\r\n");
 	
 	//wait until the firmware get ready
 	for (i=0;i<100;i++) {
@@ -3786,7 +3786,7 @@ void gspi_demo(void)
 		rtw_msleep_os(10);
 	}
 	if (i==100) {
-		DBG_8195A("%s: Wait Device Firmware Ready Timeout!!SDIO_REG_HCPWM2 @ 0x%04x\n", __FUNCTION__, fw_ready);
+		DiagPrintf("%s: Wait Device Firmware Ready Timeout!!SDIO_REG_HCPWM2 @ 0x%04x\n", __FUNCTION__, fw_ready);
 		goto err;
 	}
 
@@ -3833,10 +3833,10 @@ void gspi_demo(void)
 	if (_SUCCESS != rtStatus)
 		goto fwdl_stat;
 
-	DBG_8195A("leave %s\n", __FUNCTION__);
+	DiagPrintf("leave %s\n", __FUNCTION__);
 	
 fwdl_stat:
-	DBG_8195A("FWDL %s. write_fw:%d, %dms\n"
+	DiagPrintf("FWDL %s. write_fw:%d, %dms\n"
 		, (rtStatus == _SUCCESS)?"success":"fail"
 		, write_fw  
 		, rtw_get_passing_time_ms(fwdl_start_time)
@@ -3850,7 +3850,7 @@ err:
 void main(void)
 {
 	if( xTaskCreate( (TaskFunction_t)gspi_demo, "GSPI DEMO", (TASK_STACK_SIZE/4), NULL, TASK_PRIORITY, NULL) != pdPASS) {
-		DBG_8195A("Cannot create demo task\n\r");
+		DiagPrintf("Cannot create demo task\n\r");
 	}
 	
 #if defined(CONFIG_KERNEL) && !TASK_SCHEDULER_DISABLED

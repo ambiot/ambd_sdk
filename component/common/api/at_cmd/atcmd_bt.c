@@ -9,6 +9,9 @@
 #if defined(CONFIG_BT) && CONFIG_BT
 #include "os_msg.h"
 #include "app_msg.h"
+#include "gap_le.h"
+#include "gap_msg.h"
+#include "gap_customer.h"
 
 #if defined(CONFIG_BT_PERIPHERAL) && CONFIG_BT_PERIPHERAL
 #include "app_flags.h"
@@ -73,53 +76,53 @@ uint8_t bt_command_type(uint16_t command_type)
 {
 	switch (command_type) {
 	case BT_COMMAND_CENTRAL: {
-		if (!((bt_cmd_type & CENTRAL_BIT) >> 7)) {
-			return 0;
+			if (!((bt_cmd_type & CENTRAL_BIT) >> 7)) {
+				return 0;
+			}
 		}
-	}
-	break;
+		break;
 	case BT_COMMAND_PERIPHERAL: {
-		if (!((bt_cmd_type & PERIPHERAL_BIT) >> 6)) {
-			return 0;
+			if (!((bt_cmd_type & PERIPHERAL_BIT) >> 6)) {
+				return 0;
+			}
 		}
-	}
-	break;
+		break;
 	case BT_COMMAND_SCATTERNET: {
-		if (!((bt_cmd_type & SCATTERNET_BIT) >> 5)) {
-			return 0;
+			if (!((bt_cmd_type & SCATTERNET_BIT) >> 5)) {
+				return 0;
+			}
 		}
-	}
-	break;
+		break;
 	case BT_COMMAND_BEACON: {
-		if (!((bt_cmd_type & BEACON_BIT) >> 4)) {
-			return 0;
+			if (!((bt_cmd_type & BEACON_BIT) >> 4)) {
+				return 0;
+			}
 		}
-	}
-	break;
+		break;
 	case BT_COMMAND_CONFIG: {
-		if (!((bt_cmd_type & CONFIG_BIT) >> 3)) {
-			return 0;
+			if (!((bt_cmd_type & CONFIG_BIT) >> 3)) {
+				return 0;
+			}
 		}
-	}
-	break;
+		break;
 	case BT_COMMAND_AIRSYNC_CONFIG: {
-		if (!((bt_cmd_type & AIRSYNC_CONFIG_BIT) >> 2)) {
-			return 0;
+			if (!((bt_cmd_type & AIRSYNC_CONFIG_BIT) >> 2)) {
+				return 0;
+			}
 		}
-	}
-	break;
+		break;
 	case BT_COMMAND_MESH: {
-		if (!((bt_cmd_type & MESH_BIT) >> 1)) {
-			return 0;
+			if (!((bt_cmd_type & MESH_BIT) >> 1)) {
+				return 0;
+			}
 		}
-	}
-	break;
+		break;
 	case BT_COMMAND_STACK: {
-		if (!(bt_cmd_type & STACK_BIT)) {
-			return 0;
+			if (!(bt_cmd_type & STACK_BIT)) {
+				return 0;
+			}
 		}
-	}
-	break;
+		break;
 	case BT_COMMAND_SCAN:
 	case BT_COMMAND_CONNECT:
 	case BT_COMMAND_DISCONNECT:
@@ -130,40 +133,28 @@ uint8_t bt_command_type(uint16_t command_type)
 	case BT_COMMAND_MODIFY_WHITELIST:
 	case BT_COMMAND_SET_SCAN_PARAM:
 	case BT_COMMAND_SET_PHY: {
-		if (!((bt_cmd_type & CENTRAL_BIT) >> 7) && !((bt_cmd_type & SCATTERNET_BIT) >> 5) && !((bt_cmd_type & MESH_BIT) >> 1)) {
-			return 0;
+			if (!((bt_cmd_type & CENTRAL_BIT) >> 7) && !((bt_cmd_type & SCATTERNET_BIT) >> 5) && !((bt_cmd_type & MESH_BIT) >> 1)) {
+				return 0;
+			}
 		}
-	}
-	break;
+		break;
 	case BT_COMMAND_SEND_INDI_NOTI:
 	case BT_COMMAND_MODIFY_ADV_INTERVAL: {
-		if (!((bt_cmd_type & PERIPHERAL_BIT) >> 6) && !((bt_cmd_type & SCATTERNET_BIT) >> 5) && !((bt_cmd_type & MESH_BIT) >> 1)) {
-			return 0;
+			if (!((bt_cmd_type & PERIPHERAL_BIT) >> 6) && !((bt_cmd_type & SCATTERNET_BIT) >> 5) && !((bt_cmd_type & MESH_BIT) >> 1)) {
+				return 0;
+			}
 		}
-	}
-	break;
+		break;
 	case BT_COMMAND_AUTH:
 	case BT_COMMAND_SEND_USERCONF:
 	case BT_COMMAND_UPDATE_CONN_REQUEST:
 	case BT_COMMAND_BOND_INFORMATION: {
-		if (!((bt_cmd_type & CENTRAL_BIT) >> 7) && !((bt_cmd_type & PERIPHERAL_BIT) >> 6) && !((bt_cmd_type & SCATTERNET_BIT) >> 5) &&
-			!((bt_cmd_type & MESH_BIT) >> 1)) {
-			return 0;
+			if (!((bt_cmd_type & CENTRAL_BIT) >> 7) && !((bt_cmd_type & PERIPHERAL_BIT) >> 6) && !((bt_cmd_type & SCATTERNET_BIT) >> 5) &&
+				!((bt_cmd_type & MESH_BIT) >> 1)) {
+				return 0;
+			}
 		}
-	}
-	break;
-	case BT_COMMAND_RECONFIG: {
-		if (!((bt_cmd_type & SCATTERNET_BIT) >> 5)) {
-			return 0;
-		}
-	}
-	break;
-	case BT_COMMAND_MESH_RECONFIG: {
-		if (!((bt_cmd_type & SCATTERNET_BIT) >> 5) && !((bt_cmd_type & MESH_BIT) >> 1)) {
-			return 0;
-		}
-	}
-	break;
+		break;
 	default:
 		break;
 	}
@@ -378,7 +369,7 @@ void fATBI(void *arg)
 	return;
 
 exit:
-	AT_PRINTK("[ATBI] Get all connected device information, ATBI");
+	AT_PRINTK("[ATBI] Get all connected device information: ATBI");
 	AT_PRINTK("[ATBI] eg:ATBI");
 }
 
@@ -396,7 +387,7 @@ void fATBG(void *arg)
 		goto exit;
 	}
 
-	if (argc < 3) {
+	if ((argc != 3) && (argc != 5) && (argc != 7)) {
 		AT_PRINTK("[AT_PRINTK] ERROR: input parameter error!\n\r");
 		goto exit;
 	}
@@ -413,7 +404,7 @@ exit:
 	AT_PRINTK("[ATBG] Get all services: ATBG=ALL,connect_id");
 	AT_PRINTK("[ATBG] Discover services by uuid: ATBG=SRV,connect_id,uuid_type,uuid");
 	AT_PRINTK("[ATBG] Discover characteristic: ATBG=CHARDIS,connect_id,start_handle,end_handle");
-	AT_PRINTK("[ATBG] Discover characteristic by uuid: ATBG=CHARUUID,connect_id,start_handle,end_handle, type, uuid");
+	AT_PRINTK("[ATBG] Discover characteristic by uuid: ATBG=CHARUUID,connect_id,start_handle,end_handle,type,uuid");
 	AT_PRINTK("[ATBG] Discover characteristic descriptor: ATBG=CHARDDIS,connect_id,start_handle,end_handle");
 	AT_PRINTK("[ATBG] eg:ATBG=ALL,0");
 	AT_PRINTK("[ATBG] eg(uuid16):ATBG=SRV,0,0,1803");
@@ -450,7 +441,7 @@ void fATBS(void *arg)
 
 exit:
 	AT_PRINTK("[ATBS] Scan:ATBS=scan_enable,filter_policy,filter_duplicate");
-	AT_PRINTK("[ATBS] [scan_enable]:0-(start scan),1(stop scan)");
+	AT_PRINTK("[ATBS] [scan_enable]:0-(stop scan), 1(start scan)");
 	AT_PRINTK("[ATBS] [filter_policy]: 0-(any), 1-(whitelist), 2-(any RPA), 3-(whitelist RPA)");
 	AT_PRINTK("[ATBS] [filter_duplicate]: 0-(disable), 1-(enable)");
 	AT_PRINTK("[ATBS] eg:ATBS=1");
@@ -489,7 +480,7 @@ void fATBR(void *arg)
 exit:
 	AT_PRINTK("[ATBR] Read characteristic: ATBR=conn_id,handle");
 	AT_PRINTK("[ATBR] Read characterristic value by uuid: ATBR=conn_id,start_handle,end_handle,uuid_type,uuid");
-	AT_PRINTK("[ATBR] eg(uuid16):ATBR=0,0xa");
+	AT_PRINTK("[ATBR] eg:ATBR=0,0xa");
 	AT_PRINTK("[ATBR] eg(uuid16):ATBR=0,0x1,0xFFFF,0,B001");
 	AT_PRINTK("[ATBR] eg(uuid128):ATBR=0,0x1,0xFFFF,1,00112233445566778899aabbccddeeff");
 }
@@ -681,6 +672,55 @@ exit:
 	AT_PRINTK("[ATBp] Start BLE Peripheral: ATBp=1");
 	AT_PRINTK("[ATBp] Stop  BLE Peripheral: ATBp=0");
 }
+
+#if (LEGACY_ADV_CONCURRENT == 1)
+extern void legacy_adv_concurrent_init(uint32_t adv_interval_0, uint32_t adv_interval_1);
+extern void legacy_adv_concurrent_start(void);
+extern void legacy_adv_concurrent_stop(void);
+extern void legacy_adv_concurrent_deinit(void);
+#endif
+void fATBP(void *arg)
+{
+#if (LEGACY_ADV_CONCURRENT == 1)
+	int argc = 0;
+	int param = 0;
+	char *argv[MAX_ARGC] = {0};
+
+	if (arg) {
+		argc = parse_param(arg, argv);
+	} else {
+		goto exit;
+	}
+
+	if ((argc != 2) && (argc != 4)) {
+		AT_PRINTK("[AT_PRINTK] ERROR: input parameter error!\n\r");
+		goto exit;
+	}
+
+	param = atoi(argv[1]);
+	if (param == 1 && argc == 4) {
+		uint32_t adv_int_0 = atoi(argv[2]);
+		uint32_t adv_int_1 = atoi(argv[3]);
+		legacy_adv_concurrent_init(adv_int_0, adv_int_1);
+	} else if (param == 0) {
+		legacy_adv_concurrent_deinit();
+	} else if (param == 2) {
+		legacy_adv_concurrent_start();
+	} else if (param == 3) {
+		legacy_adv_concurrent_stop();
+	} else {
+		goto exit;
+	}
+
+	return;
+
+exit:
+	AT_PRINTK("[ATBP] Init   legacy adv concurrent: ATBP=1,adv_int_0(ms),adv_int_1(ms)");
+	AT_PRINTK("[ATBP] Deinit legacy adv concurrent: ATBP=0");
+	AT_PRINTK("[ATBP] Start  legacy adv concurrent: ATBP=2");
+	AT_PRINTK("[ATBP] Stop   legacy adv concurrent: ATBP=3");
+#endif
+}
 #endif
 
 void fATBA(void *arg)
@@ -726,7 +766,7 @@ void fATBe(void *arg)
 		goto exit;
 	}
 
-	if (argc < 7) {
+	if (argc < 6) {
 		AT_PRINTK("[AT_PRINTK] ERROR: input parameter error!\n\r");
 		goto exit;
 	}
@@ -746,7 +786,6 @@ exit:
 	AT_PRINTK("[ATBe] simple ble service send notification:ATBe=0,1,0x7,1,0x2,0x1,0x2");
 	AT_PRINTK("[ATBe] bas service send notification:ATBe=0,2,0x2,1,0x1,0x1");
 }
-
 #endif
 
 #if ((defined(CONFIG_BT_CENTRAL) && CONFIG_BT_CENTRAL) || \
@@ -1210,6 +1249,151 @@ exit:
 }
 #endif
 
+#if defined(CONFIG_BT_TAG_SCANNER) && CONFIG_BT_TAG_SCANNER
+extern int bt_tag_scanner_app_init(void);
+extern void bt_tag_scanner_app_deinit(void);
+extern void *bt_tag_scanner_evt_queue_handle;  //!< Event queue handle
+extern void *bt_tag_scanner_io_queue_handle;   //!< IO queue handle
+
+void fATBt(void *arg)
+{
+	int argc = 0;
+	int param = 0;
+	char *argv[MAX_ARGC] = {0};
+
+	if (arg) {
+		argc = parse_param(arg, argv);
+	} else {
+		goto exit;
+	}
+
+	if (argc != 2) {
+		AT_PRINTK("[AT_PRINTK] ERROR: input parameter error!\n\r");
+		goto exit;
+	}
+
+	param = atoi(argv[1]);
+
+	if (param == 1) {
+		AT_PRINTK("[ATBt]:_AT_BT_TAG_SCANNER_[ON]\n\r");
+		bt_tag_scanner_app_init();
+	
+	} else if (param == 0) {
+		AT_PRINTK("[ATBt]:_AT_BT_TAG_SCANNER_[OFF]\n\r");
+		bt_tag_scanner_app_deinit();
+
+	} else if (param == 2){
+		uint8_t event = EVENT_IO_TO_APP;
+		T_IO_MSG io_msg;
+		io_msg.type = IO_MSG_TYPE_QDECODE;
+
+		if (bt_tag_scanner_evt_queue_handle != NULL && bt_tag_scanner_io_queue_handle != NULL) {
+			if (os_msg_send(bt_tag_scanner_io_queue_handle, &io_msg, 0) == false) {
+				AT_PRINTK("bt at cmd send msg fail");
+			} else if (os_msg_send(bt_tag_scanner_evt_queue_handle, &event, 0) == false) {
+				AT_PRINTK("bt at cmd send event fail");
+			}
+		}
+
+	} else {
+		goto exit;
+	}
+
+	return;
+
+exit:
+	AT_PRINTK("[ATBt] Start BT Tag Scanner: ATBt=1");
+	AT_PRINTK("[ATBt] Clear records: ATBt=2");
+	AT_PRINTK("[ATBt] Stop  BT Tag Scanner: ATBt=0");
+}
+#endif
+
+#if defined(CONFIG_BT_ANCS) && CONFIG_BT_ANCS
+extern int bt_ancs_app_init(void);
+extern void bt_ancs_app_deinit(void);
+void fATBN(void *arg)
+{
+	int argc = 0;
+	int param = 0;
+	char *argv[MAX_ARGC] = {0};
+
+	if (arg) {
+		argc = parse_param(arg, argv);
+	} else {
+		goto exit;
+	}
+
+	if (argc != 2) {
+		AT_PRINTK("[AT_PRINTK] ERROR: input parameter error!\n\r");
+		goto exit;
+	}
+
+	param = atoi(argv[1]);
+
+	if (param == 1) {
+		AT_PRINTK("[ATBN]:_AT_BT_ANCS_[ON]\n\r");
+		bt_ancs_app_init();
+
+	} else if (param == 0) {
+		AT_PRINTK("[ATBN]:_AT_BT_ANCS_[OFF]\n\r");
+		bt_ancs_app_deinit();
+
+	} else {
+		goto exit;
+	}
+
+	return;
+
+exit:
+	AT_PRINTK("[ATBN] Start BT ANCS: ATBN=1");
+	AT_PRINTK("[ATBN] Stop	BT ANCS: ATBN=0");
+}
+#endif
+
+#if defined(CONFIG_BT_DISTANCE_DETECTOR) && CONFIG_BT_DISTANCE_DETECTOR
+extern int bt_distance_detector_app_init(void);
+extern void bt_distance_detector_app_deinit(void);
+extern bool bt_distance_detector_send_msg_to_apptask(uint16_t subtype);
+extern void *bt_distance_detector_evt_queue_handle;  //!< Event queue handle
+extern void *bt_distance_detector_io_queue_handle;   //!< IO queue handle
+void fATBd(void *arg)
+{
+	int argc = 0;
+	int param = 0;
+	char *argv[MAX_ARGC] = {0};
+
+	if (arg)
+		argc = parse_param(arg, argv);
+	else
+		goto exit;
+
+	if (argc != 2) {
+		AT_PRINTK("[AT_PRINTK] ERROR: input parameter error!\n\r");
+		goto exit;
+	}
+
+	param = atoi(argv[1]);
+	if (param == 1) {
+		AT_PRINTK("[ATBd]:_AT_BT_DISTANCE_DETECTOR_[ON]\n\r");
+		bt_distance_detector_app_init();
+	} else if (param == 0) {
+		AT_PRINTK("[ATBd]:_AT_BT_DISTANCE_DETECTOR_[OFF]\n\r");
+		bt_distance_detector_app_deinit();
+	} else if (param == 2) {
+		bt_distance_detector_send_msg_to_apptask(4); //subtype=4 for clearing all records
+	} else
+		goto exit;
+
+	return;
+
+exit:
+	AT_PRINTK("[ATBd] Start BT DISTANCE DETECTOR: ATBd=1");
+	AT_PRINTK("[ATBd] Stop	BT DISTANCE DETECTOR: ATBd=0");
+	AT_PRINTK("[ATBd] Clear	all records: ATBd=2");
+
+}
+#endif
+
 #if ((defined(CONFIG_BT_MESH_PROVISIONER) && CONFIG_BT_MESH_PROVISIONER) || \
 	(defined(CONFIG_BT_MESH_DEVICE) && CONFIG_BT_MESH_DEVICE) || \
 	(defined(CONFIG_BT_MESH_PROVISIONER_MULTIPLE_PROFILE) && CONFIG_BT_MESH_PROVISIONER_MULTIPLE_PROFILE) || \
@@ -1415,18 +1599,30 @@ exit:
 }
 #endif
 
-#if ((defined(CONFIG_BT_CENTRAL) && CONFIG_BT_CENTRAL) || \
-	(defined(CONFIG_BT_PERIPHERAL) && CONFIG_BT_PERIPHERAL) || \
-	(defined(CONFIG_BT_SCATTERNET) && CONFIG_BT_SCATTERNET) || \
-	(defined(CONFIG_BT_BEACON) && CONFIG_BT_BEACON) || \
-	(defined(CONFIG_BT_CONFIG) && CONFIG_BT_CONFIG)	|| \
-	(defined(CONFIG_BT_AIRSYNC_CONFIG) && CONFIG_BT_AIRSYNC_CONFIG) || \
-	(defined(CONFIG_BT_BREEZE) && CONFIG_BT_BREEZE) || \
-	(defined(CONFIG_BT_MESH_PROVISIONER) && CONFIG_BT_MESH_PROVISIONER) || \
-	(defined(CONFIG_BT_MESH_DEVICE) && CONFIG_BT_MESH_DEVICE) || \
-	(defined(CONFIG_BT_MESH_PROVISIONER_MULTIPLE_PROFILE) && CONFIG_BT_MESH_PROVISIONER_MULTIPLE_PROFILE) || \
-	(defined(CONFIG_BT_MESH_DEVICE_MULTIPLE_PROFILE) && CONFIG_BT_MESH_DEVICE_MULTIPLE_PROFILE) || \
-	(defined(CONFIG_EXAMPLE_BT_MESH_DEMO) && CONFIG_EXAMPLE_BT_MESH_DEMO))
+void fATBV(void *arg)
+{
+	bool ret;
+	T_GAP_DEV_STATE state;
+	T_BT_VERSION_INFO bt_version;
+
+	le_get_gap_param(GAP_PARAM_DEV_STATE, &state);
+	if (state.gap_init_state != GAP_INIT_STATE_STACK_READY) {
+		AT_PRINTK("[ATBV] BT stack version can be got after BT init!\r\n");
+		return;
+	}
+
+	ret = gap_get_bt_version_info(&bt_version);
+	if (ret == false) {
+		AT_PRINTK("[ATBV] gap_get_bt_version_info fail!\r\n");
+		return;
+	}
+
+	AT_PRINTK("[ATBV] hci_version = 0x%x", bt_version.hci_revision);
+	AT_PRINTK("[ATBV] lmp_subversion = 0x%x", bt_version.lmp_subversion);
+	AT_PRINTK("[ATBV] btgap_revision = %d", bt_version.btgap_revision);
+	AT_PRINTK("[ATBV] btgap_buildnum = %d", bt_version.btgap_buildnum);
+}
+
 log_item_t at_bt_items[ ] = {
 #if ((defined(CONFIG_BT_CENTRAL) && CONFIG_BT_CENTRAL) || \
 	(defined(CONFIG_BT_MESH_CENTRAL) && CONFIG_BT_MESH_CENTRAL) || \
@@ -1450,9 +1646,10 @@ log_item_t at_bt_items[ ] = {
 	(defined(CONFIG_BT_MESH_SCATTERNET) && CONFIG_BT_MESH_SCATTERNET))
 #if defined(CONFIG_BT_PERIPHERAL) && CONFIG_BT_PERIPHERAL
 	{"ATBp", fATBp, {NULL, NULL}}, // Start/stop BLE peripheral
+	{"ATBP", fATBP, {NULL, NULL}}, // Legacy ADV concurrent test
 #endif
 	{"ATBA", fATBA, {NULL, NULL}}, // Modify adv interval
-	{"ATBe", fATBe, {NULL, NULL}}, //BLE send indiaction/notification
+	{"ATBe", fATBe, {NULL, NULL}}, // BLE send indiaction/notification
 #endif
 #if ((defined(CONFIG_BT_CENTRAL) && CONFIG_BT_CENTRAL) || \
 	(defined(CONFIG_BT_PERIPHERAL) && CONFIG_BT_PERIPHERAL) || \
@@ -1464,11 +1661,8 @@ log_item_t at_bt_items[ ] = {
 	{"ATBU", fATBU, {NULL, NULL}}, // Update connection request
 	{"ATBO", fATBO, {NULL, NULL}}, // Get/clear bond information
 #endif
-#if ((defined(CONFIG_BT_SCATTERNET) && CONFIG_BT_SCATTERNET) || \
-	(defined(CONFIG_BT_MESH_SCATTERNET) && CONFIG_BT_MESH_SCATTERNET))
 #if defined(CONFIG_BT_SCATTERNET) && CONFIG_BT_SCATTERNET
 	{"ATBf", fATBf, {NULL, NULL}}, // Start/stop BLE scatternet
-#endif
 #endif
 #if defined(CONFIG_BT_BEACON) && CONFIG_BT_BEACON
 	{"ATBJ", fATBJ, {NULL, NULL}}, // Start/stop BT beacon
@@ -1482,7 +1676,15 @@ log_item_t at_bt_items[ ] = {
 #if defined(CONFIG_BT_BREEZE) && CONFIG_BT_BREEZE
 	{"ATBi", fATBi, {NULL, NULL}}, // BT breeze
 #endif
-
+#if defined(CONFIG_BT_TAG_SCANNER) && CONFIG_BT_TAG_SCANNER
+	{"ATBt", fATBt, {NULL, NULL}}, // Start/stop BT tag scanner
+#endif
+#if defined(CONFIG_BT_ANCS) && CONFIG_BT_ANCS
+	{"ATBN", fATBN, {NULL, NULL}}, // Start/stop BT ancs
+#endif
+#if defined(CONFIG_BT_DISTANCE_DETECTOR) && CONFIG_BT_DISTANCE_DETECTOR
+	{"ATBd", fATBd, {NULL, NULL}}, // Start/stop BT distance detector
+#endif
 #if ((defined(CONFIG_BT_MESH_PROVISIONER) && CONFIG_BT_MESH_PROVISIONER) || \
 	(defined(CONFIG_BT_MESH_DEVICE) && CONFIG_BT_MESH_DEVICE) || \
 	(defined(CONFIG_EXAMPLE_BT_MESH_DEMO) && CONFIG_EXAMPLE_BT_MESH_DEMO) || \
@@ -1491,25 +1693,12 @@ log_item_t at_bt_items[ ] = {
 	{"ATBM", fATBM, {NULL, NULL}},
 	{"ATBm", fATBm, {NULL, NULL}}, // Start/stop BLE mesh
 #endif
+	{"ATBV", fATBV, {NULL, NULL}}, // Get BT stack version
 };
-#endif
 
 void at_bt_init(void)
 {
-#if ((defined(CONFIG_BT_CENTRAL) && CONFIG_BT_CENTRAL) || \
-	(defined(CONFIG_BT_PERIPHERAL) && CONFIG_BT_PERIPHERAL) || \
-	(defined(CONFIG_BT_SCATTERNET) && CONFIG_BT_SCATTERNET) || \
-	(defined(CONFIG_BT_BEACON) && CONFIG_BT_BEACON) || \
-	(defined(CONFIG_BT_CONFIG) && CONFIG_BT_CONFIG) || \
-	(defined(CONFIG_BT_AIRSYNC_CONFIG) && CONFIG_BT_AIRSYNC_CONFIG) || \
-	(defined(CONFIG_BT_BREEZE) && CONFIG_BT_BREEZE) || \
-	(defined(CONFIG_BT_MESH_PROVISIONER) && CONFIG_BT_MESH_PROVISIONER) || \
-	(defined(CONFIG_BT_MESH_DEVICE) && CONFIG_BT_MESH_DEVICE) || \
-	(defined(CONFIG_BT_MESH_PROVISIONER_MULTIPLE_PROFILE) && CONFIG_BT_MESH_PROVISIONER_MULTIPLE_PROFILE) || \
-	(defined(CONFIG_BT_MESH_DEVICE_MULTIPLE_PROFILE) && CONFIG_BT_MESH_DEVICE_MULTIPLE_PROFILE) || \
-	(defined(CONFIG_EXAMPLE_BT_MESH_DEMO) && CONFIG_EXAMPLE_BT_MESH_DEMO))
 	log_service_add_table(at_bt_items, sizeof(at_bt_items) / sizeof(at_bt_items[0]));
-#endif
 }
 
 #if SUPPORT_LOG_SERVICE
@@ -1517,4 +1706,3 @@ log_module_init(at_bt_init);
 #endif
 
 #endif
-

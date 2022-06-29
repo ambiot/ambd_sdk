@@ -36,7 +36,8 @@ extern void at_qr_code_init(void);
 extern void at_isp_init(void);
 #if (CONFIG_JOYLINK || CONFIG_GAGENT || CONFIG_QQ_LINK || 	\
 	(defined(CONFIG_AIRKISS_CLOUD) && CONFIG_AIRKISS_CLOUD) || CONFIG_ALINK || \
-	(defined(CONFIG_HILINK) && CONFIG_HILINK) || (defined(CONFIG_MIIO) && CONFIG_MIIO) || (defined(CONFIG_LINKKIT_AWSS) && CONFIG_LINKKIT_AWSS))
+	(defined(CONFIG_HILINK) && CONFIG_HILINK) || (defined(CONFIG_MIIO) && CONFIG_MIIO) || (defined(CONFIG_LINKKIT_AWSS) && CONFIG_LINKKIT_AWSS) || \
+	(defined(CONFIG_RIC) && CONFIG_RIC))
 extern void at_cloud_init(void);
 #endif
 void at_log_init(void);
@@ -104,7 +105,8 @@ log_init_t log_init_table[] = {
 #endif
 
 #if (CONFIG_JOYLINK || CONFIG_GAGENT || CONFIG_QQ_LINK || (defined(CONFIG_AIRKISS_CLOUD) && \
-	CONFIG_AIRKISS_CLOUD) || CONFIG_ALINK || (defined(CONFIG_HILINK) && CONFIG_HILINK) || (defined(CONFIG_MIIO) && CONFIG_MIIO) || (defined(CONFIG_LINKKIT_AWSS) && CONFIG_LINKKIT_AWSS))
+	CONFIG_AIRKISS_CLOUD) || CONFIG_ALINK || (defined(CONFIG_HILINK) && CONFIG_HILINK) || (defined(CONFIG_MIIO) && CONFIG_MIIO) || (defined(CONFIG_LINKKIT_AWSS) && CONFIG_LINKKIT_AWSS) || \
+	(defined(CONFIG_RIC) && CONFIG_RIC))
 	at_cloud_init,
 #endif	
 };

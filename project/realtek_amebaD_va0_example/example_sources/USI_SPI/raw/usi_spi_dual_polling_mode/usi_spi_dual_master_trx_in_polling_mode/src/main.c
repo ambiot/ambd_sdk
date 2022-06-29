@@ -59,7 +59,7 @@ void usi_spi_task(void* param)
 	/**
 	* Master write/read
 	*/
-	DBG_8195A("----------- Master write/read -----------\n");
+	DiagPrintf("----------- Master write/read -----------\n");
 	for(Counter = 0, TestData = 0x01; Counter < TestingTimes; Counter++)
 	{
 
@@ -71,7 +71,7 @@ void usi_spi_task(void* param)
 		while (!USI_SSI_Readable(USI0_DEV));
 		ReadData = (int)USI_SSI_ReadData(USI0_DEV);
 
-		DBG_8195A("Master write: %x, read: %x\n", TestData, ReadData);
+		DiagPrintf("Master write: %x, read: %x\n", TestData, ReadData);
 		if (TestData != ReadData) {
 			result = 0;
 		}
@@ -81,8 +81,8 @@ void usi_spi_task(void* param)
 	/* free USI_SPI */
 	USI_SSI_Cmd(USI0_DEV, DISABLE);
 
-	DBG_8195A("USI SPI Master Demo Finished.\n");
-	DBG_8195A("\r\nMaster Result is %s\r\n", (result) ? "success" : "fail");
+	DiagPrintf("USI SPI Master Demo Finished.\n");
+	DiagPrintf("\r\nMaster Result is %s\r\n", (result) ? "success" : "fail");
 
 	vTaskDelete(NULL);
 
@@ -96,7 +96,7 @@ void usi_spi_task(void* param)
 void main(void)
 {
 	if(xTaskCreate(usi_spi_task, ((const char*)"usi_spi_task"), 1024, NULL, tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(usi_spi_task) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(usi_spi_task) failed", __FUNCTION__);
 
 	vTaskStartScheduler();
 	while(1){

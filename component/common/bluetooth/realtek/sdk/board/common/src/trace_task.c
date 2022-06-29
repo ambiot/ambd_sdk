@@ -7,25 +7,21 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdint.h>
-
-#include "os_msg.h"
-#include "os_task.h"
-
 #include "trace_app.h"
 #include "cycle_queue.h"
 #include "bt_board.h"
 #include "trace_uart.h"
+#include "osif.h"
 
 #define TRACE_QUEUE_LENGTH_EVENT      0x80
 
 #define TRACE_EVENT_TX                0
-#define TRACE_EVENT_TX_COMPLETED      1
 #define TRACE_EVENT_DEINIT            0xFF
 
 typedef struct _TTraceTaskBuffer
 {
     uint8_t     *Pointer;
-    uint16_t Length;
+    uint16_t    Length;
 } TTraceTaskBuffer;
 
 typedef struct
@@ -40,19 +36,18 @@ static uint8_t flag_trace_deinit = 0;
 
 bool traceuart_tx_cb(void)
 {
-    uint8_t Event = TRACE_EVENT_TX_COMPLETED;
-    if (flag_trace_deinit == 0) {
-        os_msg_send(trace.QueueHandleEvent, &Event, 0);
-        return true;
-    }
-    return false;
+    trace.Buffer.Pointer = NULL;
+    UpdateQueueRead(trace.Buffer.Length);
+    trace.Buffer.Length = 0;
+
+    return true;
 }
 
 static void traceStartTransmit(void)
 {
     uint16_t queueSize = CycQueueSize();
 
-    if (trace.Buffer.Pointer == (uint8_t *)0 && (queueSize > 0))
+    if (queueSize > 0)
     {
         trace.Buffer.Pointer = (uint8_t *)(cyc_buffer + pRead);
 
@@ -71,36 +66,30 @@ static void traceStartTransmit(void)
 static void trace_task(void *pParameters)
 {
     (void)pParameters;
+    uint8_t Event;
     uint8_t flag_to_break = 0;
+
     while (1)
     {
-        uint8_t Event;
-
-        if (os_msg_recv(trace.QueueHandleEvent, &Event, 0xFFFFFFFF) == true)
+        if (osif_msg_recv(trace.QueueHandleEvent, &Event, 0xFFFFFFFF) == true)
         {
             switch (Event)
             {
-            case TRACE_EVENT_TX:            /* new trace output */
-                traceStartTransmit();
-                break;
+                case TRACE_EVENT_TX:
+                    traceStartTransmit();
+                    break;
 
-            case TRACE_EVENT_TX_COMPLETED:  /* transmit completed */
-                if (trace.Buffer.Pointer != (uint8_t *)0)
-                {
-                    trace.Buffer.Pointer = (uint8_t *)0;
-                    UpdateQueueRead(trace.Buffer.Length);
-                    trace.Buffer.Length = 0;
-                }
-                traceStartTransmit();
-                break;
+                case TRACE_EVENT_DEINIT:
+                    traceStartTransmit();       //Send the remaining trace log
+                    flag_to_break = 1;
+                    break;
 
-            case TRACE_EVENT_DEINIT:
-                flag_to_break = 1;
-                break;
-
-            default:
-                break;
+                default:
+                    printf("trace_task recv msg %d\r\n", Event);
+                    break;
             }
+        } else {
+            printf("trace_task recv msg fail\r\n");
         }
         if (flag_to_break)
             break;
@@ -108,11 +97,10 @@ static void trace_task(void *pParameters)
     FreeCycQueue();
     trace_uart_deinit();
     if (trace.QueueHandleEvent != NULL)
-        os_msg_queue_delete(trace.QueueHandleEvent);
-    trace.handle = NULL;
-    trace.QueueHandleEvent = NULL;
+        osif_msg_queue_delete(trace.QueueHandleEvent);
+    memset(&trace, 0, sizeof(trace));
     flag_trace_deinit = 2;
-    os_task_delete(NULL);
+    osif_task_delete(NULL);
 }
 
 bool bt_trace_init(void)
@@ -125,8 +113,8 @@ bool bt_trace_init(void)
         return false;
     }
 
-    os_msg_queue_create(&trace.QueueHandleEvent, TRACE_QUEUE_LENGTH_EVENT, sizeof(uint8_t));
-    os_task_create(&trace.handle, "trace_task", trace_task, NULL, 0x200, TRACE_TASK_PRIO);   /*need up priority */
+    osif_msg_queue_create(&trace.QueueHandleEvent, TRACE_QUEUE_LENGTH_EVENT, sizeof(uint8_t));
+    osif_task_create(&trace.handle, "trace_task", trace_task, NULL, TRACE_TASK_STACK_SIZE, TRACE_TASK_PRIO);
 
     return true;
 }
@@ -135,9 +123,9 @@ bool bt_trace_uninit(void)
 {
     uint8_t event = TRACE_EVENT_DEINIT;
     flag_trace_deinit = 1;
-    os_msg_send(trace.QueueHandleEvent, &event, 0xFFFFFFFF);
+    osif_msg_send(trace.QueueHandleEvent, &event, 0xFFFFFFFF);
     while (flag_trace_deinit != 2) {
-        os_delay(10);
+        osif_delay(1);
     }
     flag_trace_deinit = 0;
     return true;
@@ -147,20 +135,20 @@ bool trace_print(void *pData, uint16_t Length)
 {
     if (trace.handle == NULL)
     {
-        printf("trace task is deleted, not work\r\n");
+        printf("trace task is needed to print trace log\r\n");
         return false;
     }
 
     if (flag_trace_deinit == 0 && CycQueueWrite(pData, Length))
     {
         uint32_t pending_msg_count = 0;
-        os_msg_queue_peek(trace.QueueHandleEvent, &pending_msg_count);
+        osif_msg_queue_peek(trace.QueueHandleEvent, &pending_msg_count);
         if (pending_msg_count >= TRACE_QUEUE_LENGTH_EVENT) {
             return false;
         }
 
         uint8_t Event = TRACE_EVENT_TX;
-        os_msg_send(trace.QueueHandleEvent, &Event, 0);
+        osif_msg_send(trace.QueueHandleEvent, &Event, 0);
         return true;
     }
     else

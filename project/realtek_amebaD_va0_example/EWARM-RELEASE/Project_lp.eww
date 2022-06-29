@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspace>
+    <project>
+        <path>$WS_DIR$\km0_application.ewp</path>
+    </project>
+    <project>
+        <path>$WS_DIR$\km0_bootloader.ewp</path>
+    </project>
+    <project>
+        <path>$WS_DIR$\lib_wifi_fl_fw.ewp</path>
+    </project>
+    <project>
+        <path>$WS_DIR$\lib_wifi_fw.ewp</path>
+    </project>
+    <project>
+        <path>$WS_DIR$\lib_wifi_lt_fw.ewp</path>
+    </project>
+    <batchBuild />
+</workspace>

@@ -516,7 +516,7 @@ void LCD_ShowString(u16 x,u16 y,u16 width,u16 height,u8 size,u8 *p)
 
 void ILI9488_Init(void)
 {
-	DBG_8195A("ILI9488 Init\n");
+	DiagPrintf("ILI9488 Init\n");
 
 	GPIO_InitTypeDef GPIO_InitStruct_Timer;
 	GPIO_InitStruct_Timer.GPIO_Pin = _PA_12;
@@ -621,7 +621,7 @@ void ILI9488_Init(void)
 
 void ILI9341_Init(void)
 {
-	DBG_8195A("ILI9341 Init\n");
+	DiagPrintf("ILI9341 Init\n");
 
 	if(lcddev.McuLcdBitMode == MCU_LCD_16BIT_IF) {
 
@@ -841,7 +841,7 @@ void ILI9341_Init(void)
 		LCD_WR_DATA(0x3c);
 		LCD_WR_DATA(0x0F);
 		LCD_WR_REG(0x11); //Exit Sleep
-		delay_ms(200);//此处必须要延时80ms或者更多
+		delay_ms(200);//舜要时80ms吒
 		LCD_WR_REG(0x29); //display on
 		#endif		
 	} else {
@@ -951,7 +951,7 @@ void ILI9341_Init(void)
 		LCD_WR_DATAX(0x3c);
 		LCD_WR_DATAX(0x0F);
 		LCD_WR_REG(0x11); //Exit Sleep
-		delay_ms(80);//此处必须要延时80ms或者更多
+		delay_ms(80);//舜要时80ms吒
 		LCD_WR_REG(0x29); //display on		
 	}
 }

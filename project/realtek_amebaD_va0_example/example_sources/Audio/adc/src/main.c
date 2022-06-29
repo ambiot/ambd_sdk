@@ -218,7 +218,7 @@ static void sp_init_hal(pSP_OBJ psp_obj)
 			div = 48;
 			break;
 		default:
-			DBG_8195A("sample rate not supported!!\n");
+			DiagPrintf("sample rate not supported!!\n");
 			break;
 	}
 	PLL_Div(div);
@@ -288,7 +288,7 @@ void example_audio_adc_thread(void* param)
 	u32 rx_length;
 	pSP_OBJ psp_obj = (pSP_OBJ)param;
 	
-	printf("Audio adc demo begin......\n");
+	DiagPrintf("Audio adc demo begin......\n");
 
 	sp_init_hal(psp_obj);
 	
@@ -337,7 +337,7 @@ void main(void)
 	sp_obj.mono_stereo = CH_MONO;
 	sp_obj.direction = APP_AMIC_IN|APP_LINE_OUT;
 	if(xTaskCreate(example_audio_adc_thread, ((const char*)"example_audio_adc_thread"), 512, (void *)(&sp_obj), tskIDLE_PRIORITY + 1, NULL) != pdPASS)
-		printf("\n\r%s xTaskCreate(example_audio_adc_thread) failed", __FUNCTION__);
+		DiagPrintf("\n\r%s xTaskCreate(example_audio_adc_thread) failed", __FUNCTION__);
 
 	vTaskStartScheduler();
 	while(1){

@@ -69,28 +69,28 @@ main (
 
 	if (OFFSET == 0xFFFF) {
 		OFFSET = 0x9B0;
-		DBG_8195A("Default OFFSET!\n");
+		DiagPrintf("Default OFFSET!\n");
 	}
 
 	if (GAIN_DIV == 0xFFFF) {
 		GAIN_DIV = 0x2F12;
-		DBG_8195A("Default GAIN_DIV!\n");
+		DiagPrintf("Default GAIN_DIV!\n");
 	}
 
-	DBG_8195A("OFFSET = %x\n", OFFSET);
-	DBG_8195A("GAIN_DIV = %x\n", GAIN_DIV);
+	DiagPrintf("OFFSET = %x\n", OFFSET);
+	DiagPrintf("GAIN_DIV = %x\n", GAIN_DIV);
 	
 	analogin_init(&adc0, AD_1);
 	analogin_init(&adc2, AD_3);
 #if ADC_CALIBRATION
 	sys_adc_calibration(0, &offset, &gain);
-	DBG_8195A("ADC:offset = 0x%x, gain = 0x%x\n", offset, gain);
+	DiagPrintf("ADC:offset = 0x%x, gain = 0x%x\n", offset, gain);
 	if((offset==0xFFFF) || (gain==0xFFFF))
 #endif
 	{
 		offset = OFFSET;
 		gain = GAIN_DIV;
-		DBG_8195A("ADC:offset = 0x%x, gain = 0x%x\n", offset, gain);
+		DiagPrintf("ADC:offset = 0x%x, gain = 0x%x\n", offset, gain);
 	}
 	for (;;){
 		adcdat0 = analogin_read_u16(&adc0);
@@ -99,7 +99,7 @@ main (
 		v_mv0 = AD2MV(adcdat0, offset, gain);
 		v_mv2 = AD2MV(adcdat2, offset, gain);
 
-		DBG_8195A("AD0:%x = %d mv, AD2:%x = %d mv\n", adcdat0, v_mv0, adcdat2, v_mv2); 
+		DiagPrintf("AD0:%x = %d mv, AD2:%x = %d mv\n", adcdat0, v_mv0, adcdat2, v_mv2); 
 		adc_delay();
 	}
 	analogin_deinit(&adc0);

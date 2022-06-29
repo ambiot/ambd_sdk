@@ -56,6 +56,14 @@ extern u8  __rom_entry_ns_start__[];
 
 extern u8 __retention_entry_func__[];
 
+/* symbol for Amazon patch */
+extern u8 __rom2_data_start__[];
+extern u8 __rom2_data_end__[];
+extern u8 __rom2_text_start__[];
+extern u8 __rom2_text_end__[];
+extern u8 __rom2_bss_start__[];
+extern u8 __rom2_bss_end__[];
+extern u8 __rom_verify_addr_start__[];
 enum _BOOT_TYPE_ {
 	BOOT_FROM_FLASH = 0,
 	BOOT_FROM_SDIO  = 1,        
@@ -110,6 +118,15 @@ typedef struct {
 
 #define OTA_INDEX_1			0
 #define OTA_INDEX_2			1
+
+#define SECURE_BOOT_CHECK	0x28
+
+/* CHECK STATUS */
+#define BIT_KM0_SIGN_OK					BIT(0) /* KM0 signature check OK */
+#define BIT_KM0_SIGN_FAIL					BIT(1)
+#define BIT_KM4_RUN							BIT(2)
+
+//#define AmebaD_Dcut
 
 typedef struct {
 	u32 MaskAddr; /*start address for RSIP Mask, should be 4KB aligned*/

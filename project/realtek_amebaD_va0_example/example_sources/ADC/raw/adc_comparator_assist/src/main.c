@@ -32,7 +32,7 @@ void CMPIrqHandle(void)
 	data = value & BIT_MASK_DAT_GLOBAL;
 	vol = AD2MV(data, OFFSET, GAIN_DIV);
 
-	DBG_8195A("AD%d:%x = %d mv\n", ch_idx, data, vol);
+	DiagPrintf("AD%d:%x = %d mv\n", ch_idx, data, vol);
 
 	CMP_INTClearPendingBit(sts);
 }
@@ -59,16 +59,16 @@ VOID main (VOID)
 
 	if (OFFSET == 0xFFFF) {
 		OFFSET = 0x9B0;
-		DBG_8195A("Default OFFSET!\n");
+		DiagPrintf("Default OFFSET!\n");
 	}
 
 	if (GAIN_DIV == 0xFFFF) {
 		GAIN_DIV = 0x2F12;
-		DBG_8195A("Default GAIN_DIV!\n");
+		DiagPrintf("Default GAIN_DIV!\n");
 	}
 
-	DBG_8195A("OFFSET = %x\n", OFFSET);
-	DBG_8195A("GAIN_DIV = %x\n", GAIN_DIV);
+	DiagPrintf("OFFSET = %x\n", OFFSET);
+	DiagPrintf("GAIN_DIV = %x\n", GAIN_DIV);
 
 	ADC_InitTypeDef ADC_InitStruct;
 	CMP_InitTypeDef CMP_InitStruct;

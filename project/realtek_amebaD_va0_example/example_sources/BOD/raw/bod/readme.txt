@@ -2,9 +2,6 @@ Example Description
 
 This example describes how to use Bod Brown-Out interrupt mode or reset mode.
 
-Requirement Components:
-    a USB to TTL Adapter
-
 Operating process: 
    For BOD interrupt mode (#define BOD_INTR_MODE in line 13 of main.c)
  - Remove R43 on the demo board
