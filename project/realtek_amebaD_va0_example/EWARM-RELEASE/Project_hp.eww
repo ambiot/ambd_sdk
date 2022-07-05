@@ -99,5 +99,7 @@
     <project>
         <path>$WS_DIR$\lib_dct.ewp</path>
     </project>
-    <batchBuild />
+    <project>
+        <path>$WS_DIR$\lib_pmc_hp.ewp</path>
+    </project>    <batchBuild />
 </workspace>

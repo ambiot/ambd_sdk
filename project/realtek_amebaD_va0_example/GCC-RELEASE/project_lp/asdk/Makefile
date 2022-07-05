@@ -60,7 +60,8 @@ endif
 ROM_LD = $(ROOTDIR)/ld/rlx8721d_rom.ld
 
 .PHONY: all build_target_folder menuconfig clean build_libraries package_prebuilt_rom_objs ucps_image2
-LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_application_lp.a
+
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_pmc_lp.a
 
 image2:LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_wifi_fw.a
 ucps_image2:LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_wifi_ucps_fw.a
@@ -132,6 +133,7 @@ make_subdirs_lib:
 	@make -C make/target/wifi_lt_fw all
 	@make -C make/target/wifi_fl_fw all
 	@make -C make/target/wifi_rcu_fw all
+	@make -C make/pmc_lp all
 	@ rm -f $(RAM_OBJS_LIST)
 
 #*****************************************************************************#

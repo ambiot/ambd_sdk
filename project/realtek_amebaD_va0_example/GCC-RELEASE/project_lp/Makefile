@@ -35,7 +35,7 @@ debug:
 	
 xip: CORE_TARGETS
 	make -C asdk lib_all
-	make -C asdk flashloader
+#	make -C asdk flashloader
 	make -C asdk bootloader
 ifeq ($(CONFIG_USER_CTRL_PS),y)
 	make -C asdk ucps_image2
