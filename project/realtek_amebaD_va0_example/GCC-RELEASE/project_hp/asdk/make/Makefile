@@ -41,6 +41,7 @@ endif
 	@make -C cmsis all
 	@make -C mbed all
 	#@make -C audio all
+	#@make -C audio test
 #	@make -C graphic all
 	#@make -C media all
 	@make -C utilities_example all

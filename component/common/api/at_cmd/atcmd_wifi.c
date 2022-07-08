@@ -39,6 +39,7 @@
 #define	_AT_WLAN_AP_SET_SEC_KEY_    "ATW4"
 #define	_AT_WLAN_AP_SET_CHANNEL_    "ATW5"
 #define _AT_WLAN_SET_BSSID_         "ATW6"
+#define _AT_WLAN_SET_WPA_MODE_      "ATW8"
 #define	_AT_WLAN_AP_ACTIVATE_       "ATWA"
 #define _AT_WLAN_AP_STA_ACTIVATE_   "ATWB"
 #define	_AT_WLAN_JOIN_NET_          "ATWC"
@@ -823,6 +824,52 @@ exit:
 	return;
 }
 #endif
+
+void fATW8(void *arg){
+	if(!arg){
+		printf("[ATW8]Usage: ATW8=[WPA_MODE]\n\r");
+		printf("        0 : WPA_AUTO_MODE\n\r");
+		printf("        1 : WPA_ONLY_MODE\n\r");
+		printf("        2 : WPA2_ONLY_MODE\n\r");
+		printf("        3 : WPA3_ONLY_MODE\n\r");
+		printf("        4 : WPA_WPA2_MIXED_MODE\n\r");
+		printf("        5 : WPA2_WPA3_MIXED_MODE\n\r");
+		return;
+	}
+	u32 wpa_mode = (u32) atoi((const char *)arg);
+
+	if(wpa_mode<=WPA2_WPA3_MIXED_MODE){
+		wifi_set_wpa_mode(wpa_mode);
+		switch(wpa_mode){
+			case 0:
+				printf("[ATW8]: _AT_WLAN_AP_SET_WPA_MODE_ [WPA_AUTO_MODE]\n\r");
+				break;
+			case 1:
+				printf("[ATW8]: _AT_WLAN_AP_SET_WPA_MODE_ [WPA_ONLY_MODE]\n\r");
+				break;
+			case 2:
+				printf("[ATW8]: _AT_WLAN_AP_SET_WPA_MODE_ [WPA2_ONLY_MODE]\n\r");
+				break;
+			case 3:
+				printf("[ATW8]: _AT_WLAN_AP_SET_WPA_MODE_ [WPA3_ONLY_MODE]\n\r");
+				break;
+			case 4:
+				printf("[ATW8]: _AT_WLAN_AP_SET_WPA_MODE_ [WPA_WPA2_MIXED_MODE]\n\r");
+				break;
+			case 5:
+				printf("[ATW8]: _AT_WLAN_AP_SET_WPA_MODE_ [WPA2_WPA3_MIXED_MODE]\n\r");
+				break;
+			default:
+				printf("[ATW8]: _AT_WLAN_AP_SET_WPA_MODE_ [WRONG WPA MODE]\n\r");
+				break;
+		}
+	}
+	else{
+		printf("[ATW8] Wrong parameter\n\r");
+	}
+
+	return;
+}
 
 void fATWA(void *arg){
 	/* To avoid gcc warnings */
@@ -3306,6 +3353,7 @@ log_item_t at_wifi_items[ ] = {
 	{"ATW4", fATW4,{NULL,NULL}},
 	{"ATW5", fATW5,{NULL,NULL}},
 	{"ATW6", fATW6,{NULL,NULL}},	
+	{"ATW8", fATW8,{NULL,NULL}},
 #ifdef CONFIG_FPGA	
 	{"ATW7", fATW7,},
 #endif	

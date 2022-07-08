@@ -448,8 +448,67 @@ fi
 endmenu
 
 mainmenu_option next_comment
-comment '< Audio Config '
-bool "Enable Audio"                    		CONFIG_AUDIO_EN
+comment '< Audio Config'
+
+bool "Enable Audio"             CONFIG_AUDIO_EN
+bool "Enable Audio HAL"		CONFIG_AUDIO_HAL
+bool "Enable Audio HAL AFE"		CONFIG_AUDIO_HAL_AFE
+if [ "$CONFIG_AUDIO_HAL_AFE" = "y" ]; then
+	choice 'Select AFE Mode' "	Local	CONFIG_AUDIO_HAL_LOCAL_AFE \
+								RPC		CONFIG_AUDIO_HAL_RPC_AFE"
+	if [ "$CONFIG_AUDIO_HAL_RPC_AFE" = "y" ]; then
+		if [ "$CONFIG_AUDIO_RPC" = "n" ]; then
+			define_bool CONFIG_AUDIO_RPC y
+		fi
+		define_bool CONFIG_AUDIO_RPC_AFE y
+	fi
+	if [ "$CONFIG_AUDIO_HAL_LOCAL_AFE" = "y" ]; then
+			define_bool CONFIG_AUDIO_LOCAL_AFE y
+	fi
+	if [ "$CONFIG_AUDIO_HAL" = "n" ]; then
+		define_bool CONFIG_AUDIO_HAL y
+	fi
+fi
+
+bool "Enable Audio RPC"		CONFIG_AUDIO_RPC
+if [ "$CONFIG_AUDIO_RPC" = "y" ]; then
+	if [ "$CONFIG_IMQ_EN" = "n" ]; then
+		define_bool CONFIG_IMQ_EN y
+	fi
+fi
+
+choice 'Select Audio Framework' "	None		CONFIG_AUDIO_FWK_NONE \
+									PassThrough	CONFIG_AUDIO_PASSTHROUGH_INTERFACE \
+									Mixer		CONFIG_AUDIO_MIXER_SERVICE"
+if [ "$CONFIG_AUDIO_PASSTHROUGH_INTERFACE" = "y" ] || [ "$CONFIG_AUDIO_MIXER_SERVICE" = "y" ]; then
+	if [ "$CONFIG_AUDIO_HAL" = "n" ]; then
+		define_bool CONFIG_AUDIO_HAL y
+	fi
+fi
+
+bool "Enable Media Framework"		CONFIG_MEDIA_PLAYER
+if [ "$CONFIG_MEDIA_PLAYER" = "y" ]; then
+	if [ "$CONFIG_AUDIO_FWK_NONE" = "y" ]; then
+		define_bool CONFIG_AUDIO_FWK_NONE n
+		define_bool CONFIG_AUDIO_MIXER_SERVICE y
+	fi
+	if [ "$CONFIG_AUDIO_HAL" = "n" ]; then
+		define_bool CONFIG_AUDIO_HAL y
+	fi
+	mainmenu_option next_comment
+	comment '< Demux'
+		bool "Demux WAV"	CONFIG_MEDIA_DEMUX_WAV
+		bool "Demux MP3"	CONFIG_MEDIA_DEMUX_MP3
+		bool "Demux AAC"	CONFIG_MEDIA_DEMUX_AAC
+		bool "Demux M4A"	CONFIG_MEDIA_DEMUX_MP4
+	endmenu
+	mainmenu_option next_comment
+	comment '< Codec'
+		bool "Codec PCM"	CONFIG_MEDIA_CODEC_SW_RAW
+		bool "Codec MP3"	CONFIG_MEDIA_CODEC_SW_MP3
+		bool "Codec AAC"	CONFIG_MEDIA_CODEC_SW_HELIX_AAC
+	endmenu
+fi
 endmenu
 
 comment '--------------Application Config End--------------'

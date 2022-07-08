@@ -131,7 +131,7 @@ MOVE      = mv
 #*****************************************************************************#
 
 IFLAGS               = -I.
-IFLAGS               += -I$(OSDIR)/
+IFLAGS               += -I$(OSDIR)
 IFLAGS               += -I$(OSDIR)/freertos
 IFLAGS               += -I$(FREERTOSDIR)/include/
 IFLAGS               += -I$(FREERTOSDIR)/portable/GCC/RTL8721D_HP/non_secure
@@ -195,7 +195,7 @@ IFLAGS               += -I$(BASEDIR)/component/common/drivers/wlan/realtek/wlan_
 IFLAGS               += -I$(BASEDIR)/component/common/drivers/wlan/realtek/src/core/option
 IFLAGS               += -I$(BASEDIR)/component/common/network
 IFLAGS               += -I$(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/src/include
-IFLAGS               += -I$(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/src/include/lwip
+IFLAGS               += -idirafter $(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/src/include/lwip
 IFLAGS               += -I$(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/src/include/netif
 #IFLAGS               += -I$(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/src/include/ipv4
 IFLAGS               += -I$(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/port/realtek
@@ -419,6 +419,11 @@ LD_ARG += -Wl,-Map=text.map
 LD_ARG += -Wl,--cref
 LD_ARG += -Wl,--build-id=none
 LD_ARG += -save-temps 
+
+#
+#LD_ARG += -Wl,-wrap,malloc -Wl,-wrap,realloc
+#LD_ARG += -Wl,-wrap,calloc -Wl,-wrap,free
+
 
 #LD_ARG += -Wl,--entry=Reset_Handler
 LD_ARG += -Wl,--no-enum-size-warning 

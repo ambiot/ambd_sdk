@@ -13024,8 +13024,6 @@
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_common\rtl8721d_ram_libc.c</name>
         </file>
         <file>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_common\rtl8721d_rtc.c</name>
         </file>
         <file>
@@ -13075,12 +13073,6 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_hp\rtl8721dhp_ota_ram.c</name>
-        </file>
-        <file>
-        </file>
-        <file>
-        </file>
-        <file>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_hp\rtl8721dhp_sd.c</name>
@@ -13258,6 +13250,9 @@
             </excluded>
         </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_pmc_hp.a</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_rtp_codec.a</name>
             <excluded>
                 <configuration>is</configuration>
@@ -13399,8 +13394,6 @@
     </group>
     <group>
         <name>misc</name>
-        <file>
-        </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\rtl8721d_ota.c</name>
         </file>

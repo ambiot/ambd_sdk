@@ -70,6 +70,7 @@ int rltk_wlan_rf_off(void);
 int rltk_wlan_check_bus(void);
 int rltk_wlan_wireless_mode(unsigned char mode);
 int rltk_wlan_get_wireless_mode(unsigned char *pmode);
+int rltk_wlan_set_wpa_mode(const char *ifname, unsigned int wpa_mode);
 int rltk_wlan_set_wps_phase(unsigned char is_trigger_wps);
 void rltk_wlan_PRE_SLEEP_PROCESSING(void);
 int rtw_ps_enable(int enable);

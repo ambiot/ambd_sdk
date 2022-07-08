@@ -15,5 +15,8 @@
     <project>
         <path>$WS_DIR$\lib_wifi_lt_fw.ewp</path>
     </project>
+    <project>
+        <path>$WS_DIR$\lib_pmc_lp.ewp</path>
+    </project>
     <batchBuild />
 </workspace>
