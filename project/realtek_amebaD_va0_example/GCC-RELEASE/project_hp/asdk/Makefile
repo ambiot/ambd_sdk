@@ -116,7 +116,6 @@ endif
 # LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_haac.a
 # LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_faac.a
 LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_cmsis_dsp.a
-LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_application_hp.a
 
 ifeq ($(CONFIG_TRUSTZONE), y)
 LINK_APP_LIB += $(IMAGE_TARGET_FOLDER)/cmse_implib.lib
@@ -137,6 +136,7 @@ LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_eap.a
 #LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_http2.a
 #LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_rt_airkiss_algo.a
 #LINK_APP_LIB += $(BASEDIR)/component/common/application/airkiss/2.0.0-26515/lib/libairkiss.a
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_pmc_hp.a
 
 image2_ns:LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_wlan.a $(ROOTDIR)/lib/application/lib_wps.a 
 mp_image2_ns:LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_wlan_mp.a $(ROOTDIR)/lib/application/lib_wps.a
@@ -162,6 +162,32 @@ endif
 ifeq ($(CONFIG_EMWIN_EN),y)
 LINK_APP_LIB += $(BASEDIR)/component/common/ui/emwin/emWinLibrary/lib/rtl8721d/lib_emwin.a
 endif
+
+
+#audio
+ifeq ($(CONFIG_MEDIA_PLAYER),y)
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_playback.a
+ifeq ($(CONFIG_MEDIA_CODEC_SW_AAC),y)
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_fdkaac.a
+endif
+ifeq ($(CONFIG_MEDIA_CODEC_SW_HELIX_AAC),y)
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_haac.a
+endif
+endif
+
+ifneq ($(findstring $(CONFIG_AUDIO_PASSTHROUGH_INTERFACE)$(CONFIG_AUDIO_MIXER_SERVICE), y y),)
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_audio_fwk.a
+endif
+
+ifeq ($(CONFIG_AUDIO_HAL),y)
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_audio_hal.a
+endif
+
+
+ifneq ($(findstring y, $(CONFIG_AUDIO_PASSTHROUGH_INTERFACE)$(CONFIG_AUDIO_MIXER_SERVICE)),)
+LINK_APP_LIB += $(ROOTDIR)/lib/application/lib_base.a
+endif
+
 
 rom: build_target_folder copy_ld_rom check_toolchain build_info.h make_subdirs_rom package_prebuilt_rom_objs rom_linker 
 rom_ns: build_target_folder copy_ld_rom_ns check_toolchain build_info.h make_subdirs_rom_ns package_prebuilt_rom_objs rom_linker_ns 
@@ -261,7 +287,11 @@ make_subdirs_lib:
 #	@make -C make/target/usb_otg/host/lib all
 #	@make -C make/target/usb_otg/device_new/lib all
 #	@make -C make/ui/emwin/emWinLibrary/GUI lib
+	@make -C make/pmc_hp all
+# build audio libs
+	@+$(MAKE) -C make/audio lib
 
+	
 #*****************************************************************************#
 #                      RULES TO LINKER IMAGE                                  #
 #*****************************************************************************#
@@ -388,8 +418,8 @@ linker_image2_ns:
 ifeq ($(CONFIG_BT_EN), y) 
 	$(FROMELF) -j .bluetooth_trace.text \
 	-Obinary $(IMAGE_TARGET_FOLDER)/target_pure_img2.axf $(IMAGE_TARGET_FOLDER)/APP.trace
-	 $(COPY) $(IMAGE_TARGET_FOLDER)/APP.trace $(BASEDIR)/tools/bluetooth/DebugAnalyzer/APP.trace
-	 $(COPY) -f $(IMAGE_TARGET_FOLDER)/APP.trace $(BASEDIR)/tools/bluetooth/DebugAnalyzer/"APP_`date +%Y%m%d_%H%M%S`".trace
+#	 $(COPY) $(IMAGE_TARGET_FOLDER)/APP.trace $(BASEDIR)/tools/bluetooth/DebugAnalyzer/APP.trace
+#	 $(COPY) -f $(IMAGE_TARGET_FOLDER)/APP.trace $(BASEDIR)/tools/bluetooth/DebugAnalyzer/"APP_`date +%Y%m%d_%H%M%S`".trace
 endif
 
 	@echo "========== Image Info HEX =========="

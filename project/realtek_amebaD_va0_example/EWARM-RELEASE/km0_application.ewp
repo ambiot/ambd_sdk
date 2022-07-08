@@ -2212,10 +2212,6 @@
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\usrcfg\rtl8721dlp_pinmapcfg.c</name>
         </file>
         <file>
-        </file>
-        <file>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_lp\rtl8721dlp_simulation.c</name>
         </file>
         <file>
@@ -2234,13 +2230,14 @@
 	<name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_application_lp.a</name>
 </file>
         <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_pmc_lp.a</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_wifi_fw.a</name>
         </file>
     </group>
     <group>
         <name>misc</name>
-        <file>
-        </file>
     </group>
     <group>
         <name>os</name>
