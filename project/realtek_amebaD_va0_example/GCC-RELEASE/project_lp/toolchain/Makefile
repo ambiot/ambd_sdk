@@ -20,6 +20,7 @@ ifneq ($(CONFIG_TOOLCHAIN_ARM_GCC), y)
 ifeq ($(COMPILEOS),$(LINUX_OS))
 	if [ ! -f $(KM4_BUILDDIR)/toolchain/asdk/asdk-6.4.1-linux-newlib-build-2773-i686.tar.bz2 ] ; then cat $(KM4_BUILDDIR)/toolchain/asdk/asdk-6.4.1-linux-newlib-build-2773-i686.tar.bz2* > $(KM4_BUILDDIR)/toolchain/asdk/asdk-6.4.1-linux-newlib-build-2773-i686.tar.bz2; fi
 ifeq ($(shell uname -p),x86_64)
+	if [ ! -f $(KM4_BUILDDIR)/toolchain/asdk/asdk-6.4.1-linux-newlib-build-3026-x86_64.tar.bz2 ] ; then cat $(KM4_BUILDDIR)/toolchain/asdk/asdk-6.4.1-linux-newlib-build-3026-x86_64.tar.bz2* > $(KM4_BUILDDIR)/toolchain/asdk/asdk-6.4.1-linux-newlib-build-3026-x86_64.tar.bz2; fi
 	$(MKDIR) -p linux
 	tar -jxvf $(KM4_BUILDDIR)/toolchain/asdk/asdk-6.4.1-linux-newlib-build-3026-x86_64.tar.bz2 -C linux/
 else
