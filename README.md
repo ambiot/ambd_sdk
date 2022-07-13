@@ -72,6 +72,13 @@ KM0 project For KM0 project, if the terminal contains ``km0_image2_all.bin`` and
 ![image4](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_5.png)
 
 > If somehow it is built failed, type ``$ make clean`` to clean and then redo the make procedure. 
+
+> If you encountered any error message like: 
+"make[1]: execvp: /{path}/ambd_sdk/project/realtek_amebaD_va0_example/GCC-RELEASE/project_lp/asdk/gnu_utility/prepend_header.sh: **Permission denied**
+Makefile:198: recipe for target 'linker_loader' failed"
+in Linux OS. 
+Please run ``chmod -R 777 {path}/project/realtek_amebaD_va0_example/GCC-RELEASE/`` to grant the execution permission for the all corresponding files.
+
 > After successfully built, the image file is located in ``project/realtek_amebaD_va0_example/GCC-RELEASE/project_lp/asdk/image`` , as below shows.
 
 ![image5](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_6.png)
