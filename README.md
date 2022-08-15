@@ -1,25 +1,24 @@
 
 ![Realtek-logo](https://logos-download.com/wp-content/uploads/2016/05/Realtek_logo_logotype.png)
 
-For any questions, please visit our [website](https://www.amebaiot.com/en/) and [forum](https://forum.amebaiot.com/) to get more information.
+For any questions, please visit [AmebaIoT officail website](https://www.amebaiot.com/en/) and AmebaIoT [forum](https://forum.amebaiot.com/) to get more information.
+
+Table of Content
+=================
+
+* [Getting Started](#getting-started)
+  * [Knowledge about Ameba-D Demo Board](#knowledge-about-ameba-d-demo-board)
+  * [Environment Setup](#environment-setup)
+      * [Windows](#windows)
+      * [Linux](#linux)
+  * [Connection to Log Console](#connection-to-log-console)
+* [Building the First Project on Ameba-D](#building-the-first-project-on-ameba-d)
+   * [Windows: build GCC project](#windows-gcc)
+   * [Linux: Terminal](#linux-terminal)
+* [Downloading Images to Ameba-D](#downloading-images-to-ameba-d)
+* [Release Notes](#release-notes)
 
 # Getting Started
-
-## Setup of the GCC Development Environment
-
-
-> On Windows, you can use ``Cygwin`` as the GCC development environment. ``Cygwin`` is a large collection of GNU and open source tools which provide functionality similar to a Linux distribution on Windows.
-Click [http://cygwin.com](http://cygwin.com/) and download the ``Cygwin`` package [setup-x86.exe](http://cygwin.com/setup-x86_64.exe) for your Windows platform. 
-
-1. 32-bit ``Cygwin`` is supported both for 32-bit Windows and 64-bit Windows. 
-2. During the installation of ``Cygwin`` package, include `Devel -> make` and `Math -> bc` utilities on the Select Packages page, as below shows.
-
-   ![getstart0](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_1.png)
-
-   ![getstart1](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_2.png)
-
-> Note:
-   For Linux, refer to [AN0400 Realtek Ameba-D Application Note.pdf](https://www.amebaiot.com/en/sdk-download-manual-8722dm/) to build the GCC development environment.  
 
 ## Knowledge about Ameba-D Demo Board
 
@@ -35,16 +34,40 @@ The hardware block diagram of Ameba-D demo board is shown below.
 
    ![image2](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_3.png)
 
+## Environment Setup 
+
+### Windows
+
+> Note: 
+   On Windows, you can use ``Cygwin`` as the GCC development environment. ``Cygwin`` is a large collection of GNU and open source tools which provide functionality similar to a Linux distribution on Windows.
+
+> Click [http://cygwin.com](http://cygwin.com/) and download the ``Cygwin`` package [setup-x86.exe](http://cygwin.com/setup-x86_64.exe) for your Windows platform. 
+
+1. 32-bit ``Cygwin`` is supported both for 32-bit Windows and 64-bit Windows. 
+2. During the installation of ``Cygwin`` package, include `Devel -> make` and `Math -> bc` utilities on the Select Packages page, as below shows.
+
+   ![getstart0](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_1.png)
+
+   ![getstart1](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_2.png)
+
+### Linux
+
+> Note:
+   For Linux, refer to [AN0400 Realtek Ameba-D Application Note.pdf](https://www.amebaiot.com/en/sdk-download-manual-8722dm/) on AmebaIoT officail website to build the GCC development environment.  
+
 ## Connection to Log Console
 
-> On Ameba-D board, FTDI Chip and FT232 can be used for the log console and debugger. To view the log console, make use of the terminal tool, such as ``SecureCRT``/``teraterm``/``putty`` and etc. We will take our internal tool as an example. 
+> On Ameba-D board, FTDI Chip and FT232 can be used for the log console and debugger. To view the log console, make use of the terminal tool, such as ``SecureCRT``/``TeraTerm``/``Putty`` and etc. We will take our internal tool as an example. 
 
 1) Select the corresponding serial uart configure communicate parameter and then open it. 
 2) Press the Reset button on Ameba-D board. Some messages can be found in the terminal.
 
    ![image3](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_4.png)
 
-## Building the First GCC Project on Ameba-D
+
+# Building the First Project on Ameba-D
+
+## Windows GCC
 
 The following steps are for first-time developer to build GCC project, under existing RTK SDK. 
 
@@ -58,26 +81,13 @@ The following steps are for first-time developer to build GCC project, under exi
 cd /cygdrive/{path}/project/realtek_amebaD_va0_example/GCC-RELEASE/project_lp
 cd /cygdrive/{path}/project/realtek_amebaD_va0_example/GCC-RELEASE/project_hp
 ```
- 
-Linux, open its own terminal and use $ cd command to change directory to KM0 or KM4 project directory of Ameba-D SDK.
+To build SDK for normal image, simply use ``$ make all`` command under the corresponding project directories on Cygwin (Windows). 
 
-```bash
-cd /{path}/project/realtek_amebaD_va0_example/GCC-RELEASE/project_lp
-cd /{path}/project/realtek_amebaD_va0_example/GCC-RELEASE/project_hp
-```
-
-To build SDK for normal image, simply use ``$ make all`` command under the corresponding project directories on Cygwin (Windows) or terminal (Linux). 
 KM0 project For KM0 project, if the terminal contains ``km0_image2_all.bin`` and ``Image manipulating end`` output message, it means that the image has been built successfully, as below shows.
 
 ![image4](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_5.png)
 
 > If somehow it is built failed, type ``$ make clean`` to clean and then redo the make procedure. 
-
-> If you encountered any error message like: 
-"make[1]: execvp: /{path}/ambd_sdk/project/realtek_amebaD_va0_example/GCC-RELEASE/project_lp/asdk/gnu_utility/prepend_header.sh: **Permission denied**
-Makefile:198: recipe for target 'linker_loader' failed"
-in Linux OS. 
-Please run ``chmod -R 777 {path}/project/realtek_amebaD_va0_example/GCC-RELEASE/`` to grant the execution permission for the all corresponding files.
 
 > After successfully built, the image file is located in ``project/realtek_amebaD_va0_example/GCC-RELEASE/project_lp/asdk/image`` , as below shows.
 
@@ -88,6 +98,45 @@ KM4 project For KM4 project, if the terminal contains ``km0_image2_all.bin`` and
 ![image6](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_7.png)
 
 > If somehow it built failed, type ``$ make clean`` to clean and then redo the make procedure. 
+
+> After built successfully, the image file is located in ``project/realtek_amebaD_va0_example/GCC-RELEASE/project_hp/asdk/image``, as below shows.
+
+![image7](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_8.png)
+
+## Linux Terminal
+
+Linux, open its own terminal and use $ cd command to change directory to KM0 or KM4 project directory of Ameba-D SDK.
+
+```bash
+cd /{path}/project/realtek_amebaD_va0_example/GCC-RELEASE/project_lp
+cd /{path}/project/realtek_amebaD_va0_example/GCC-RELEASE/project_hp
+```
+
+To build SDK for normal image, simply use ``$ make all`` command under the corresponding project directories on Terminal (Linux).
+
+KM0 project For KM0 project, if the terminal contains ``km0_image2_all.bin`` and ``Image manipulating end`` output message, it means that the image has been built successfully.
+
+> If somehow it is built failed, type ``$ make clean`` to clean and then redo the make procedure. 
+
+If you encountered any error message like: 
+```bash
+make[1]: execvp: /{path}/ambd_sdk/project/realtek_amebaD_va0_example/GCC-RELEASE/project_lp/asdk/gnu_utility/prepend_header.sh: **Permission denied**
+Makefile:198: recipe for target 'linker_loader' failed
+```
+in Linux OS. 
+
+Please run 
+```bash 
+chmod -R 777 {path}/project/realtek_amebaD_va0_example/GCC-RELEASE/
+``` 
+to grant the execution permission for the all corresponding files.
+
+> After successfully built, the image file is located in ``project/realtek_amebaD_va0_example/GCC-RELEASE/project_lp/asdk/image``.
+
+KM4 project For KM4 project, if the terminal contains ``km0_image2_all.bin`` and ``Image manipulating end`` output message, it means that the image has been built successfully.
+
+> If somehow it built failed, type ``$ make clean`` to clean and then redo the make procedure. 
+
 > After built successfully, the image file is located in ``project/realtek_amebaD_va0_example/GCC-RELEASE/project_hp/asdk/image``, as below shows.
 
 ![image7](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_8.png)
@@ -128,3 +177,5 @@ Assuming that the ImageTool on PC is a server, it sends images files to Ameba (c
 
    ![image9](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_10.png)
 
+## Release Notes
+1. For Bluetooth Examples, currently we only support BT_Peripheral, BT_Central, BT_Scatternet, and BT_Simple_Config 4 examples.
