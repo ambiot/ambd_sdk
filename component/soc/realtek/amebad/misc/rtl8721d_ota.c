@@ -1616,7 +1616,7 @@ int http_read_socket( int socket, u8 *recevie_buf, int buf_len )
 	bytes_rcvd = recv(socket, recevie_buf, buf_len, 0 );
 
 	if(bytes_rcvd <= 0) {
-		printf("[%s], Close HTTP Socket[%d].\n", socket, __FUNCTION__);
+		printf("[%s], Close HTTP Socket.\n", __FUNCTION__);
 		return -2;
 	}
 	return bytes_rcvd;

@@ -168,7 +168,7 @@ void example_dct_thread(void* param){
 		{
 			memset(variable_name_array, 0 , VARIABLE_NAME_SIZE + 1);
 			dct_get_variable_name(&dct_handle, x, variable_name_array);
-			printf("dct_dump_variable[%d] = %s\n",__FUNCTION__, __LINE__,x,variable_name_array);
+            printf("dct_dump_variable[%d] = %s\n", x, variable_name_array);
 		}
 
 		// close module

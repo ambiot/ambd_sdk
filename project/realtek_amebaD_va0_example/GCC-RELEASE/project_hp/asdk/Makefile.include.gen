@@ -278,6 +278,10 @@ endif
 #BT config
 IFLAGS               += -I$(BASEDIR)/component/common/bluetooth/realtek/sdk/example/bt_config
 
+#CoAP
+IFLAGS               += -I$(BASEDIR)/component/common/example/coap
+IFLAGS               += -I$(BASEDIR)/component/common/network/coap
+IFLAGS               += -I$(BASEDIR)/component/common/network/coap/include
 
 #*****************************************************************************#
 #                             ARM ASSEMBLER FLAGS
