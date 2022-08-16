@@ -2226,9 +2226,6 @@
     </group>
     <group>
         <name>lib</name>
-<file>
-	<name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_application_lp.a</name>
-</file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_pmc_lp.a</name>
         </file>

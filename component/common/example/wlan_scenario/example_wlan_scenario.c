@@ -204,6 +204,9 @@ static void authentication(void){
 	printf("\n\r[WLAN_SCENARIO_EXAMPLE] Show Wi-Fi information\n");
 	rtw_wifi_setting_t setting;
 	wifi_get_setting(WLAN0_NAME,&setting);
+    if(wifi_get_setting(WLAN0_NAME,&setting) != -1) {
+        setting.security_type = rltk_get_security_mode_full(WLAN0_NAME);
+    }
 	wifi_show_setting(WLAN0_NAME,&setting);
 }
 

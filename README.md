@@ -17,6 +17,7 @@ Table of Content
    * [Linux Terminal](#linux-terminal)
 * [4 Downloading Images to Ameba-D](#4-downloading-images-to-ameba-d)
 * [5 Release Notes](#5-release-notes)
+   * [Known Issues](#known-issues) 
 
 
 # 1 Getting Started
@@ -180,4 +181,11 @@ Assuming that the ImageTool on PC is a server, it sends images files to Ameba (c
    ![image9](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_10.png)
 
 # 5 Release Notes
+
 1. For Bluetooth Examples, currently we only support BT_Peripheral, BT_Central, BT_Scatternet, and BT_Simple_Config 4 examples.
+
+## Known Issues
+
+1. Unable to receive remaining bytes in SSL big file transfer test
+2. `mbed_flash_winbond_block_protect` example expected result different from test plan
+3. Device hang after turning off AP on AP Lost Test

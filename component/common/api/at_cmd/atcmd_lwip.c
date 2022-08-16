@@ -4870,13 +4870,13 @@ void fATPP(void *arg){
 	AT_DBG_MSG(AT_FLAG_LWIP, AT_DBG_ALWAYS, 
 		"[ATPP]: _AT_TRANSPORT_PING");
 
-	if(!arg){
+	argc = parse_param(arg, argv);
+	
+	if(!arg || argc == 1){
 		AT_DBG_MSG(AT_FLAG_LWIP, AT_DBG_ERROR,"[ATPP] Usage: ATPP=xxxx.xxxx.xxxx.xxxx[y/loop] or ATPP=[con_id],[y/loop]\n\r");
 		error_no = 1;
 		goto exit;
 	}
-
-	argc = parse_param(arg, argv);
 
 	if( strlen(argv[1]) < 3 )
 	{
