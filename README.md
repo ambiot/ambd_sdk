@@ -6,21 +6,22 @@ For any questions, please visit [AmebaIoT officail website](https://www.amebaiot
 Table of Content
 =================
 
-* [Getting Started](#getting-started)
-  * [Knowledge about Ameba-D Demo Board](#knowledge-about-ameba-d-demo-board)
-  * [Environment Setup](#environment-setup)
-      * [Windows](#windows)
-      * [Linux](#linux)
+* [1 Getting Started](#1-getting-started)
+  * [Knowledge about AmebaD Demo Board](#knowledge-about-amebad-demo-board)
+* [2 Environment Setup](#2-environment-setup)
+  * [Windows](#windows)
+  * [Linux](#linux)
   * [Connection to Log Console](#connection-to-log-console)
-* [Building the First Project on Ameba-D](#building-the-first-project-on-ameba-d)
-   * [Windows: build GCC project](#windows-gcc)
-   * [Linux: Terminal](#linux-terminal)
-* [Downloading Images to Ameba-D](#downloading-images-to-ameba-d)
-* [Release Notes](#release-notes)
+* [3 Building the First Project on Ameba-D](#3-building-the-first-project-on-ameba-d)
+   * [Windows GCC](#windows-gcc)
+   * [Linux Terminal](#linux-terminal)
+* [4 Downloading Images to Ameba-D](#4-downloading-images-to-ameba-d)
+* [5 Release Notes](#5-release-notes)
 
-# Getting Started
 
-## Knowledge about Ameba-D Demo Board
+# 1 Getting Started
+
+## Knowledge about AmebaD Demo Board
 
 > For Ameba-D, there are many types of chipsets available, such as RTL8720CS, RTL8721CSM, RTL8722CSM, RTL8720DN, RTL8720DM, RTL8721DM, and RTL8722DM. 
 > In addition, the chipsets can be embedded on Ameba-D DEV demo board, which is extended to various I/O interfaces. The corresponding HDK (Hardware Development Kit) documents are available, please contact RTK for further details. 
@@ -34,9 +35,10 @@ The hardware block diagram of Ameba-D demo board is shown below.
 
    ![image2](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_3.png)
 
-## Environment Setup 
 
-### Windows
+# 2 Environment Setup 
+
+## Windows
 
 > Note: 
    On Windows, you can use ``Cygwin`` as the GCC development environment. ``Cygwin`` is a large collection of GNU and open source tools which provide functionality similar to a Linux distribution on Windows.
@@ -50,14 +52,14 @@ The hardware block diagram of Ameba-D demo board is shown below.
 
    ![getstart1](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_2.png)
 
-### Linux
+## Linux
 
 > Note:
-   For Linux, refer to [AN0400 Realtek Ameba-D Application Note.pdf](https://www.amebaiot.com/en/sdk-download-manual-8722dm/) on AmebaIoT officail website to build the GCC development environment.  
+   For Linux, please refer to [AN0400 Realtek Ameba-D Application Note.pdf](https://www.amebaiot.com/en/sdk-download-manual-8722dm/) on AmebaIoT officail website to build the GCC development environment.  
 
 ## Connection to Log Console
 
-> On Ameba-D board, FTDI Chip and FT232 can be used for the log console and debugger. To view the log console, make use of the terminal tool, such as ``SecureCRT``/``TeraTerm``/``Putty`` and etc. We will take our internal tool as an example. 
+> On AmebaD board, FTDI Chip and FT232 can be used for the log console and debugger. To view the log console, make use of the terminal tool, such as ``SecureCRT``/``TeraTerm``/``Putty`` and etc. We will take our internal tool as an example. 
 
 1) Select the corresponding serial uart configure communicate parameter and then open it. 
 2) Press the Reset button on Ameba-D board. Some messages can be found in the terminal.
@@ -65,7 +67,7 @@ The hardware block diagram of Ameba-D demo board is shown below.
    ![image3](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_4.png)
 
 
-# Building the First Project on Ameba-D
+# 3 Building the First Project on Ameba-D
 
 ## Windows GCC
 
@@ -105,43 +107,43 @@ KM4 project For KM4 project, if the terminal contains ``km0_image2_all.bin`` and
 
 ## Linux Terminal
 
-Linux, open its own terminal and use $ cd command to change directory to KM0 or KM4 project directory of Ameba-D SDK.
+To build SDK for normal image on Linux, 
+
+1. Set directory to KM0 or KM4 project by entering the following commands in Linux Terminal 
 
 ```bash
 cd /{path}/project/realtek_amebaD_va0_example/GCC-RELEASE/project_lp
 cd /{path}/project/realtek_amebaD_va0_example/GCC-RELEASE/project_hp
 ```
 
-To build SDK for normal image, simply use ``$ make all`` command under the corresponding project directories on Terminal (Linux).
+2. Under the corresponding directories, execute``$ make all`` to build images. You may start with ``project_lp`` first followed by ``project_hp``.
+   - **KM0 project (project_lp)**
+     - For KM0 project, if the terminal contains ``km0_image2_all.bin`` and ``Image manipulating end`` output message, it means that the image has been built successfully.
+     > If somehow it is built failed, type ``$ make clean`` to clean and then redo the make procedure. 
+     > After successfully built, the image file is located in ``project/realtek_amebaD_va0_example/GCC-RELEASE/project_lp/asdk/image``.
+   
+   - **KM4 project (project_hp)**
+     - For KM4 project, if the terminal contains ``km0_image2_all.bin`` and ``Image manipulating end`` output message, it means that the image has been built successfully.
+     > If somehow it built failed, type ``$ make clean`` to clean and then redo the make procedure. 
+     > After built successfully, the image file is located in ``project/realtek_amebaD_va0_example/GCC-RELEASE/project_hp/asdk/image``, as below shows.
+     ![image7](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_8.png)
 
-KM0 project For KM0 project, if the terminal contains ``km0_image2_all.bin`` and ``Image manipulating end`` output message, it means that the image has been built successfully.
-
-> If somehow it is built failed, type ``$ make clean`` to clean and then redo the make procedure. 
-
-If you encountered any error message like: 
+> Note:
+> If you encountered any error message like: 
+  
 ```bash
 make[1]: execvp: /{path}/ambd_sdk/project/realtek_amebaD_va0_example/GCC-RELEASE/project_lp/asdk/gnu_utility/prepend_header.sh: **Permission denied**
 Makefile:198: recipe for target 'linker_loader' failed
 ```
-in Linux OS. 
+ 
+> Please run the following command to grant the execution permission for the all corresponding files:
 
-Please run 
 ```bash 
 chmod -R 777 {path}/project/realtek_amebaD_va0_example/GCC-RELEASE/
 ``` 
-to grant the execution permission for the all corresponding files.
 
-> After successfully built, the image file is located in ``project/realtek_amebaD_va0_example/GCC-RELEASE/project_lp/asdk/image``.
 
-KM4 project For KM4 project, if the terminal contains ``km0_image2_all.bin`` and ``Image manipulating end`` output message, it means that the image has been built successfully.
-
-> If somehow it built failed, type ``$ make clean`` to clean and then redo the make procedure. 
-
-> After built successfully, the image file is located in ``project/realtek_amebaD_va0_example/GCC-RELEASE/project_hp/asdk/image``, as below shows.
-
-![image7](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_8.png)
-
-## Downloading Images to Ameba-D
+# 4 Downloading Images to Ameba-D
 
 Realtek provides an image tool to download images on windows.
 
@@ -177,5 +179,5 @@ Assuming that the ImageTool on PC is a server, it sends images files to Ameba (c
 
    ![image9](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_10.png)
 
-## Release Notes
+# 5 Release Notes
 1. For Bluetooth Examples, currently we only support BT_Peripheral, BT_Central, BT_Scatternet, and BT_Simple_Config 4 examples.
