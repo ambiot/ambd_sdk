@@ -182,10 +182,10 @@ Assuming that the ImageTool on PC is a server, it sends images files to Ameba (c
 
 # 5 Release Notes
 
-1. For Bluetooth Examples, currently we only support BT_Peripheral, BT_Central, BT_Scatternet, and BT_Simple_Config 4 examples.
+> Note: 
+> For Bluetooth Examples, currently we only support `BT_Peripheral` , `BT_Central` , `BT_Scatternet` , and `BT_Simple_Config` four examples.
 
 ## Known Issues
 
-1. Unable to receive remaining bytes in SSL big file transfer test
-2. `mbed_flash_winbond_block_protect` example expected result different from test plan
-3. Device hang after turning off AP on AP Lost Test
+1. `mbed_flash_winbond_block_protect` example result expected to be different from `readme.txt`. This is caused by the brand of flash chip might be different on different versions of module or dev board.
+2. Execute "Tickps a" command,  then connect  the baord to AP. Executes "Tickps r debug" command then shut down the AP. Upin connection to AP is lost, the log of "DBG: Sleep blocked because Dev 1 busy" will keep appearing multiple times until it stop. The board will hang and could not enter any command to connect another AP.
