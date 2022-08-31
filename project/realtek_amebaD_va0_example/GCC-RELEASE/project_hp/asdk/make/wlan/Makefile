@@ -1,7 +1,7 @@
 
 include $(MAKE_INCLUDE_GEN)
 
-.PHONY: all lib lib_mp clean
+.PHONY: all lib lib_mp lib_lp lib_lt clean
 
 
 #*****************************************************************************#
@@ -25,6 +25,11 @@ lib_mp: CORE_TARGETS
 lib_lp: CORE_TARGETS
 	make -C sram lib_lp
 	make -C xip lib_lp	
+
+lib_lt: CORE_TARGETS
+	make -C sram lib_lt
+	make -C xip lib_lt	
+	
 all:
 	make -C option all
 

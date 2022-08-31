@@ -91,6 +91,19 @@ void ex_spdio_thread(void* param){
 
 	int i;
 
+	PAD_PullCtrl(_PB_18, GPIO_PuPd_UP);
+	PAD_PullCtrl(_PB_19, GPIO_PuPd_UP);
+	PAD_PullCtrl(_PB_20, GPIO_PuPd_UP);
+	PAD_PullCtrl(_PB_21, GPIO_PuPd_NOPULL);
+	PAD_PullCtrl(_PB_22, GPIO_PuPd_UP);
+	PAD_PullCtrl(_PB_23, GPIO_PuPd_UP);
+	Pinmux_Config(_PB_18, PINMUX_FUNCTION_SDIOD);
+	Pinmux_Config(_PB_19, PINMUX_FUNCTION_SDIOD);
+	Pinmux_Config(_PB_20, PINMUX_FUNCTION_SDIOD);
+	Pinmux_Config(_PB_21, PINMUX_FUNCTION_SDIOD);
+	Pinmux_Config(_PB_22, PINMUX_FUNCTION_SDIOD);
+	Pinmux_Config(_PB_23, PINMUX_FUNCTION_SDIOD);
+
 	spdio_dev.priv = NULL;
 	spdio_dev.rx_bd_num = EX_SPDIO_RX_BD_NUM;
 	spdio_dev.tx_bd_num = EX_SPDIO_TX_BD_NUM;

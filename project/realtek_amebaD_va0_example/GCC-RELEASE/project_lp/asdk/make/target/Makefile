@@ -33,5 +33,7 @@ clean:
 	make -C fwlib clean
 	make -C misc clean
 	make -C wifi_fw clean
+	make -C wifi_lt_fw clean
+	make -C wifi_fl_fw clean
 	make -C wifi_rcu_fw clean
 

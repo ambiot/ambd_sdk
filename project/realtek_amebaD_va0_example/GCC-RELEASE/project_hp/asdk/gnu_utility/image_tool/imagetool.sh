@@ -68,7 +68,7 @@ CURR_PATH=$(dirname $1)
 if [ "$2" != "" ]; then
 	if [ "$COMPILEOS" == "GNU/Linux" ]; then
 		COPY_PATH=$2
-        elif [ "$COMPILEOS" == "Darwin" ]; then
+	elif [ "$COMPILEOS" == "Darwin" ]; then
 		COPY_PATH=$(relative_to_path $(pwd) $2)
 	else
 		COPY_PATH=$(realpath --relative-to=$(pwd) $2)
@@ -78,8 +78,8 @@ fi
 if [ "$3" != "" ]; then
 	if [ "$COMPILEOS" == "GNU/Linux" ]; then
 		BUILD_TYPE=$3
-        elif [ "$COMPILEOS" == "Darwin" ]; then
-		BUILD_TYPE=$(relative_to_path $(pwd) $3)
+	elif [ "$COMPILEOS" == "Darwin" ]; then
+		BUILD_TYPE=$3
 	else
 		BUILD_TYPE=$(realpath --relative-to=$(pwd) $3)
 	fi

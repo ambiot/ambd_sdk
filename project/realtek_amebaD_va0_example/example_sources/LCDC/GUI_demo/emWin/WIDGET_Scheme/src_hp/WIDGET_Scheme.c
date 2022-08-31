@@ -417,7 +417,7 @@ static void _cbCallbackWidgets(WM_MESSAGE * pMsg) {
       // Init dropdown widget
       //
       for (i = 0; i < 8; i++) {
-        sprintf(acBuffer, "Item x");
+        sDiagPrintf(acBuffer, "Item x");
         Len = strlen(acBuffer);
         acBuffer[Len - 1] = '1' + i;
         DROPDOWN_AddString(_ahWin[DROPDOWN0], acBuffer);
@@ -431,7 +431,7 @@ static void _cbCallbackWidgets(WM_MESSAGE * pMsg) {
       //
       LISTBOX_SetAutoScrollV(_ahWin[LISTBOX0], 1);
       for (i = 0; i < 4; i++) {
-        sprintf(acBuffer, "Item x");
+        sDiagPrintf(acBuffer, "Item x");
         Len = strlen(acBuffer);
         acBuffer[Len - 1] = '1' + i;
         LISTBOX_AddString(_ahWin[LISTBOX0], acBuffer);
@@ -440,7 +440,7 @@ static void _cbCallbackWidgets(WM_MESSAGE * pMsg) {
       // Init listview widget
       //
       for (i = 0; i < 2; i++) {
-        sprintf(acBuffer, "Col. x");
+        sDiagPrintf(acBuffer, "Col. x");
         Len = strlen(acBuffer);
         acBuffer[Len - 1] = '1' + i;
         LISTVIEW_AddColumn(_ahWin[LISTVIEW0], 60, acBuffer, GUI_TA_CENTER);
@@ -448,7 +448,7 @@ static void _cbCallbackWidgets(WM_MESSAGE * pMsg) {
       for (i = 0; i < 9; i++) {
         LISTVIEW_AddRow(_ahWin[LISTVIEW0], NULL);
         for (j = 0; j < (int)LISTVIEW_GetNumColumns(_ahWin[LISTVIEW0]); j++) {
-          sprintf(acBuffer, "Rx/Cx");
+          sDiagPrintf(acBuffer, "Rx/Cx");
           acBuffer[1] = '1' + i;
           acBuffer[4] = '1' + j;
           LISTVIEW_SetItemText(_ahWin[LISTVIEW0], j, i, acBuffer);

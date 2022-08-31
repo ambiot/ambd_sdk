@@ -342,7 +342,7 @@ void spi_multislave_task(void* param)
         DiagPrintf("SPI Master Write Test==>\r\n");
         TrDone = 0;
 
- 		Spi_master_write_stream(&spi_master, TestBuf, TEST_BUF_SIZE);
+ 		Spi_master_write_stream(&spi_master, (char*)TestBuf, TEST_BUF_SIZE);
 
 
         i=0;

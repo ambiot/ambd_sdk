@@ -99,13 +99,13 @@ static void _ShowSeveralFunctions(LISTBOX_Handle hListBox) {
   //
   GUI_DispStringAtCEOL("LISTBOX_AddString", 5, 55);
   GUI_Delay(SPEED);
-  LISTBOX_AddString(hListBox, "Français");
+  LISTBOX_AddString(hListBox, "Franais");
   GUI_Delay(SPEED / 6);
   LISTBOX_AddString(hListBox, "Japanese");
   GUI_Delay(SPEED / 6);
   LISTBOX_AddString(hListBox, "Italiano");
   GUI_Delay(SPEED / 6);
-  LISTBOX_AddString(hListBox, "Español");
+  LISTBOX_AddString(hListBox, "Espaol");
   GUI_Delay(SPEED / 6);
   LISTBOX_AddString(hListBox, "Other language ...");
   GUI_Delay(SPEED * 0.6);

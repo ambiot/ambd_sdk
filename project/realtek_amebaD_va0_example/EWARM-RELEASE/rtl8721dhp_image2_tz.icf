@@ -104,13 +104,11 @@ define block .ram_image2.bfsram.data with alignment = 32 {section .bfsram.data*}
 define block .ram_heap.data with fixed order { block .ram_image2.bfsram.data,
                                                section .heap.stdlib*,
                                              };
-define block RAMBSSHEAP with fixed order{zeroinit,
-                                    block .ram_image2.bss,
-                                    block .ram_image2.nocache.data,
-				    block .ram_heap.data,
-	                            section .heap*
-
-									};
+define block RAMBSSHEAP with fixed order{ block .ram_image2.bss,
+                                          block .ram_image2.nocache.data,
+                                          block .ram_heap.data,
+                                          section .heap*
+                                          };
 place at start of BD_RAM_NS_region   { readwrite, 
                                     block IMAGE2,
                                   };
@@ -159,6 +157,9 @@ define block .psram_heap.data with alignment = 32 {section .psram.heap};
 
 place at start of PSRAM_NS_region   {  readwrite,
 					block IMG2_PSRAM,
+					};
+
+place in PSRAM_NS_region  {  zeroinit,
 					block .psram_ns.bss,
 					block .psram_heap.data };
 

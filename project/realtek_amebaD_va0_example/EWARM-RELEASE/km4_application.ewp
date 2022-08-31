@@ -452,6 +452,9 @@
                     <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_beacon</state>
                     <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_breeze</state>
                     <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_config</state>
+                    <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_tag_scanner</state>
+                    <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_ancs</state>
+                    <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_distance_detector</state>
                     <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\inc</state>
                     <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\inc\app</state>
                     <state>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\inc\bluetooth\gap</state>
@@ -8836,9 +8839,9 @@
     </group>
     <group>
         <name>audio</name>
-<excluded>
-	<configuration>is</configuration>
-</excluded>
+	<excluded>
+		<configuration>is</configuration>
+	</excluded>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\common\audio\resample\resample_48khz.c</name>
         </file>
@@ -8984,9 +8987,9 @@
             </group>
             <group>
                 <name>bt_airsync_config</name>
-<excluded>
-	<configuration>is</configuration>
-</excluded>
+		<excluded>
+			<configuration>is</configuration>
+		</excluded>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\component\common\application\airsync\1.0.4\airsync_ble_service.c</name>
                 </file>
@@ -9016,10 +9019,31 @@
                 </file>
             </group>
             <group>
+                <name>bt_ancs</name>
+                <excluded>
+                    <configuration>is</configuration>
+                    <configuration>is (mp)</configuration>
+                    <configuration>tz</configuration>
+                    <configuration>tz (mp)</configuration>
+                </excluded>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_ancs\bt_ancs.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_ancs\bt_ancs_app.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_ancs\bt_ancs_app_task.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_ancs\bt_ancs_main.c</name>
+                </file>
+            </group>
+            <group>
                 <name>bt_beacon</name>
-<excluded>
-	<configuration>is</configuration>
-</excluded>
+		<excluded>
+			<configuration>is</configuration>
+		</excluded>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_beacon\bt_beacon_app.c</name>
                 </file>
@@ -9034,6 +9058,9 @@
                 <name>bt_breeze</name>
                 <excluded>
                     <configuration>is</configuration>
+                    <configuration>is (mp)</configuration>
+                    <configuration>tz</configuration>
+                    <configuration>tz (mp)</configuration>
                 </excluded>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\component\common\application\breeze\ref-impl\aes.c</name>
@@ -9103,6 +9130,30 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_config\bt_config_wifi.c</name>
+                </file>
+            </group>
+            <group>
+                <name>bt_distance_detector</name>
+                <excluded>
+                    <configuration>is</configuration>
+                    <configuration>is (mp)</configuration>
+                    <configuration>tz</configuration>
+                    <configuration>tz (mp)</configuration>
+                </excluded>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_distance_detector\bt_distance_detector_app.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_distance_detector\bt_distance_detector_app_task.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_distance_detector\bt_distance_detector_handle_message.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_distance_detector\bt_distance_detector_main.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_distance_detector\bt_distance_detector_mode.c</name>
                 </file>
             </group>
             <group>
@@ -9249,6 +9300,9 @@
                     </group>
                     <group>
                         <name>lib</name>
+			<excluded>
+				<configuration>is</configuration>
+			</excluded>
                         <file>
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\lib\amebad\btmesh_dev.a</name>
                         </file>
@@ -9384,6 +9438,9 @@
                     </group>
                     <group>
                         <name>lib</name>
+			<excluded>
+				<configuration>is</configuration>
+			</excluded>
                         <file>
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_mesh\lib\lib\amebad\btmesh_prov.a</name>
                         </file>
@@ -9504,6 +9561,27 @@
                     </file>
                 </group>
             </group>
+            <group>
+                <name>bt_tag_scanner</name>
+                <excluded>
+                    <configuration>is</configuration>
+                    <configuration>is (mp)</configuration>
+                    <configuration>tz</configuration>
+                    <configuration>tz (mp)</configuration>
+                </excluded>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_tag_scanner\bt_tag_scanner_app.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_tag_scanner\bt_tag_scanner_app_task.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_tag_scanner\bt_tag_scanner_keep_message.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\example\bt_tag_scanner\bt_tag_scanner_main.c</name>
+                </file>
+            </group>
         </group>
         <group>
             <name>src</name>
@@ -9513,6 +9591,9 @@
                     <name>profile</name>
                     <group>
                         <name>client</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\src\ble\profile\client\ancs_client.c</name>
+                        </file>
                         <file>
                             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\src\ble\profile\server\bas.c</name>
                         </file>
@@ -9843,16 +9924,16 @@
         </group>
         <group>
             <name>usb_class</name>
-<excluded>
-	<configuration>is</configuration>
-</excluded>
+            <excluded>
+            	<configuration>is</configuration>
+            </excluded>
             <group>
                 <name>device</name>
                 <group>
                     <name>audio</name>
-<excluded>
-	<configuration>is</configuration>
-</excluded>
+		    <excluded>
+		    	<configuration>is</configuration>
+		    </excluded>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\component\common\drivers\usb\device\audio\src\usb_f_uac1.c</name>
                     </file>
@@ -12949,8 +13030,6 @@
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_common\rtl8721d_ram_libc.c</name>
         </file>
         <file>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_common\rtl8721d_rtc.c</name>
         </file>
         <file>
@@ -13002,12 +13081,6 @@
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_hp\rtl8721dhp_ota_ram.c</name>
         </file>
         <file>
-        </file>
-        <file>
-        </file>
-        <file>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\fwlib\ram_hp\rtl8721dhp_sd.c</name>
         </file>
         <file>
@@ -13043,9 +13116,12 @@
     </group>
     <group>
         <name>lib</name>
-<file>
-	<name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_application_hp.a</name>
-</file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_application_hp.a</name>
+            <excluded>
+                <configuration>is</configuration>
+            </excluded>
+        </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\common\bluetooth\realtek\sdk\board\amebad\lib\btgap.a</name>
         </file>
@@ -13063,14 +13139,6 @@
                 <configuration>is</configuration>
                 <configuration>is (mp)</configuration>
                 <configuration>tz</configuration>
-            </excluded>
-        </file>
-        <file>
-            <excluded>
-                <configuration>is</configuration>
-                <configuration>is (mp)</configuration>
-                <configuration>tz</configuration>
-                <configuration>tz (mp)</configuration>
             </excluded>
         </file>
         <file>
@@ -13092,64 +13160,16 @@
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_eap.a</name>
         </file>
         <file>
-            <excluded>
-                <configuration>is</configuration>
-                <configuration>is (mp)</configuration>
-                <configuration>tz</configuration>
-                <configuration>tz (mp)</configuration>
-            </excluded>
-        </file>
-        <file>
-            <excluded>
-                <configuration>is</configuration>
-                <configuration>is (mp)</configuration>
-                <configuration>tz</configuration>
-                <configuration>tz (mp)</configuration>
-            </excluded>
-        </file>
-        <file>
-            <excluded>
-                <configuration>is</configuration>
-                <configuration>is (mp)</configuration>
-                <configuration>tz</configuration>
-                <configuration>tz (mp)</configuration>
-            </excluded>
-        </file>
-        <file>
-            <excluded>
-                <configuration>is</configuration>
-                <configuration>is (mp)</configuration>
-                <configuration>tz</configuration>
-                <configuration>tz (mp)</configuration>
-            </excluded>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_httpc.a</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_httpd.a</name>
         </file>
         <file>
-            <excluded>
-                <configuration>is</configuration>
-                <configuration>is (mp)</configuration>
-                <configuration>tz</configuration>
-                <configuration>tz (mp)</configuration>
-            </excluded>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_mdns.a</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_mmfv2.a</name>
-            <excluded>
-                <configuration>is</configuration>
-                <configuration>is (mp)</configuration>
-                <configuration>tz</configuration>
-                <configuration>tz (mp)</configuration>
-            </excluded>
-        </file>
-        <file>
             <excluded>
                 <configuration>is</configuration>
                 <configuration>is (mp)</configuration>
@@ -13167,31 +13187,10 @@
             </excluded>
         </file>
         <file>
-            <excluded>
-                <configuration>is</configuration>
-                <configuration>is (mp)</configuration>
-                <configuration>tz</configuration>
-                <configuration>tz (mp)</configuration>
-            </excluded>
-        </file>
-        <file>
-            <excluded>
-                <configuration>is</configuration>
-                <configuration>is (mp)</configuration>
-                <configuration>tz</configuration>
-                <configuration>tz (mp)</configuration>
-            </excluded>
+            <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_pmc_hp.a</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_rtp_codec.a</name>
-            <excluded>
-                <configuration>is</configuration>
-                <configuration>is (mp)</configuration>
-                <configuration>tz</configuration>
-                <configuration>tz (mp)</configuration>
-            </excluded>
-        </file>
-        <file>
             <excluded>
                 <configuration>is</configuration>
                 <configuration>is (mp)</configuration>
@@ -13325,8 +13324,6 @@
     <group>
         <name>misc</name>
         <file>
-        </file>
-        <file>
             <name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\rtl8721d_ota.c</name>
         </file>
     </group>
@@ -13356,18 +13353,6 @@
                 <name>usb_example</name>
                 <group>
                     <name>device</name>
-                    <file>
-                    </file>
-                    <file>
-                    </file>
-                    <file>
-                    </file>
-                    <file>
-                    </file>
-                    <file>
-                    </file>
-                    <file>
-                    </file>
                     <configuration>
                         <name>is</name>
                         <settings>
@@ -19380,14 +19365,6 @@
                 </excluded>
             </file>
             <file>
-                <excluded>
-                    <configuration>is</configuration>
-                    <configuration>is (mp)</configuration>
-                    <configuration>tz</configuration>
-                    <configuration>tz (mp)</configuration>
-                </excluded>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\..\..\component\common\example\audio_sport\audio_amr\example_audio_amr.c</name>
                 <excluded>
                     <configuration>is</configuration>
@@ -19398,38 +19375,6 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\component\common\example\audio_sport\audio_amr_flash\example_audio_amr_flash.c</name>
-                <excluded>
-                    <configuration>is</configuration>
-                    <configuration>is (mp)</configuration>
-                    <configuration>tz</configuration>
-                    <configuration>tz (mp)</configuration>
-                </excluded>
-            </file>
-            <file>
-                <excluded>
-                    <configuration>is</configuration>
-                    <configuration>is (mp)</configuration>
-                    <configuration>tz</configuration>
-                    <configuration>tz (mp)</configuration>
-                </excluded>
-            </file>
-            <file>
-                <excluded>
-                    <configuration>is</configuration>
-                    <configuration>is (mp)</configuration>
-                    <configuration>tz</configuration>
-                    <configuration>tz (mp)</configuration>
-                </excluded>
-            </file>
-            <file>
-                <excluded>
-                    <configuration>is</configuration>
-                    <configuration>is (mp)</configuration>
-                    <configuration>tz</configuration>
-                    <configuration>tz (mp)</configuration>
-                </excluded>
-            </file>
-            <file>
                 <excluded>
                     <configuration>is</configuration>
                     <configuration>is (mp)</configuration>
@@ -20976,10 +20921,10 @@
                 <name>$PROJ_DIR$\..\..\..\component\common\example\coap\example_coap.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\dct\example_dct.c</name>
             </file>
             <file>
-            </file>
-            <file>
+                <name>$PROJ_DIR$\..\..\..\component\common\example\eap\example_eap.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\component\common\example\example_entry.c</name>
@@ -22416,14 +22361,10 @@
                 <name>$PROJ_DIR$\..\..\..\component\common\example\ota_http\example_ota_http.c</name>
             </file>
             <file>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\..\..\component\common\example\ota_sdcard\example_ota_sdcard.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\component\common\example\rarp\example_rarp.c</name>
-            </file>
-            <file>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\component\common\example\sntp_showtime\example_sntp_showtime.c</name>
@@ -22453,8 +22394,6 @@
                 <name>$PROJ_DIR$\..\..\..\component\common\example\wifi_mac_monitor\example_wifi_mac_monitor.c</name>
             </file>
             <file>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\..\..\component\common\example\wifi_roaming\example_wifi_roaming.c</name>
             </file>
             <file>
@@ -22474,8 +22413,6 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\component\common\example\xml\example_xml.c</name>
-            </file>
-            <file>
             </file>
         </group>
         <group>
@@ -23992,9 +23929,6 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\common\utilities\tcptest.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\..\component\common\utilities\webserver.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\component\common\utilities\xml.c</name>

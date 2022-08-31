@@ -22,6 +22,7 @@
 #include <lwip_netconf.h>
 
 extern struct netif xnetif[NET_IF_NUM];
+extern u32 g_reconnect_delay;
 
 write_reconnect_ptr p_write_reconnect_ptr;
 
@@ -150,6 +151,7 @@ WIFI_RETRY_LOOP:
 			case RTW_SECURITY_WPA2_AES_PSK:
 #ifdef CONFIG_SAE_SUPPORT
 			case RTW_SECURITY_WPA3_AES_PSK:
+			case RTW_SECURITY_WPA2_WPA3_MIXED:
 #endif
 				wifi.password = (unsigned char*) psk_passphrase;
 				wifi.password_len = strlen((char*)psk_passphrase);
@@ -175,6 +177,10 @@ WIFI_RETRY_LOOP:
 				 * [RSWLANDIOT-1954].
 				 */
 				vTaskDelay(300);
+				if (g_reconnect_delay > 0) {
+					vTaskDelay(g_reconnect_delay);
+					g_reconnect_delay = 0;
+				}
 				printf("wifi retry\r\n");
 				goto WIFI_RETRY_LOOP;
 			}

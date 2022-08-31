@@ -50,6 +50,9 @@ endif
 	make -C ble_peripheral all
 	make -C ble_central all
 	make -C ble_scatternet all
+#	make -C bt_tag_scanner all
+#	make -C bt_ancs all
+#	make -C bt_distance_detector all
 endif
 
 #*****************************************************************************#
@@ -90,6 +93,9 @@ endif
 	make -C ble_peripheral clean
 	make -C ble_central clean
 	make -C ble_scatternet clean
+#	make -C bt_tag_scanner clean
+#	make -C bt_ancs clean
+#	make -C bt_distance_detector clean
 endif
 
 -include $(DEPS)

@@ -14,7 +14,6 @@
 #include "wdt_api.h"
 
 #define RUN_CALLBACK_IF_WATCHDOG_BARKS (0)
-#define DiagPrintf	DiagPrintf
 
 void dummy_task() {
     int i=0;

@@ -145,7 +145,6 @@ void bt_config_app_set_adv_data(void)
  * @param[in] cause GAP device state change cause
  * @return   void
  */
-extern void wifi_btcoex_set_bt_on(void);
 extern void set_bt_config_state(uint8_t state);
 void bt_config_app_handle_dev_state_evt(T_GAP_DEV_STATE new_state, uint16_t cause)
 {
@@ -158,7 +157,6 @@ void bt_config_app_handle_dev_state_evt(T_GAP_DEV_STATE new_state, uint16_t caus
             APP_PRINT_INFO0("GAP stack ready");
 			
             /*stack ready*/
-			wifi_btcoex_set_bt_on();
 			bt_config_app_set_adv_data();
             le_adv_start();
 			set_bt_config_state(BC_DEV_IDLE); // BT Config Ready

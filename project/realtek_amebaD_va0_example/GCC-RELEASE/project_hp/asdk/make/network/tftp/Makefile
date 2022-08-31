@@ -34,6 +34,7 @@ OBJS = $(notdir $(CSRC:.c=.o))
 #*****************************************************************************#
 all: CORE_TARGETS COPY_RAM_OBJS
 	$(AR) rvs lib_tftp.a $(OBJS)
+	$(FROMELF) --strip-debug lib_tftp.a
 	$(MOVE) -f lib_tftp.a $(ROOTDIR)/lib/application
 #*****************************************************************************#
 #              GENERATE OBJECT FILE 

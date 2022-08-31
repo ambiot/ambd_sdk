@@ -31,7 +31,7 @@ OBJS = $(notdir $(CSRC:.c=.o))
 #*****************************************************************************#
 
 # Define the Rules to build the core targets
-all: CORE_TARGETS NETWORK_RENAME_CODE2SRAM COPY_RAM_OBJS
+all: CORE_TARGETS COPY_RAM_OBJS
 
 #*****************************************************************************#
 #              GENERATE OBJECT FILE 
@@ -40,7 +40,8 @@ CORE_TARGETS: $(OBJS)
 
 %.o:%.c
 	$(CC) $(GLOBAL_CFLAGS) $(MODULE_IFLAGS) $<  -o $@
-
+	$(FROMELF) --prefix-sections .image2.net.ram $@
+	
 #*****************************************************************************#
 #                        RULES TO CLEAN TARGETS                               #
 #*****************************************************************************#

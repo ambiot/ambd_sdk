@@ -76,6 +76,10 @@
 #include <http2_client/example_http2_client.h>
 #endif
 
+#if defined(CONFIG_EXAMPLE_HTTP2_SSL_CLIENT) && CONFIG_EXAMPLE_HTTP2_SSL_CLIENT
+#include <http2_ssl_client/example_http2_ssl_client.h>
+#endif
+
 #if CONFIG_EXAMPLE_TCP_KEEPALIVE
 #include <tcp_keepalive/example_tcp_keepalive.h>
 #endif
@@ -86,6 +90,14 @@
 
 #if defined(CONFIG_EXAMPLE_PPPOE) && CONFIG_EXAMPLE_PPPOE
 #include <pppoe/example_pppoe.h>
+#endif
+
+#if defined(CONFIG_EXAMPLE_AZURE_IOTHUB_TELEMETRY) && CONFIG_EXAMPLE_AZURE_IOTHUB_TELEMETRY 
+#include <azure_iothub_telemetry/example_azure_iothub_telemetry.h>
+#endif
+
+#if defined(CONFIG_EXAMPLE_AZURE_IOTHUB_X509) && CONFIG_EXAMPLE_AZURE_IOTHUB_X509 
+#include <azure_iothub_x509/example_azure_iothub_x509.h>
 #endif
 
 #if defined(CONFIG_EXAMPLE_AZURE) && CONFIG_EXAMPLE_AZURE 
@@ -162,6 +174,14 @@
 
 #if defined(CONFIG_EXAMPLE_COAP) && CONFIG_EXAMPLE_COAP
 #include <coap/example_coap.h>
+#endif
+
+#if defined(CONFIG_EXAMPLE_COAP_DTLS_CLIENT) && CONFIG_EXAMPLE_COAP_DTLS_CLIENT
+#include <coap_dtls_client/example_coap_dtls_client.h>
+#endif
+
+#if defined(CONFIG_EXAMPLE_COAP_DTLS_SERVER) && CONFIG_EXAMPLE_COAP_DTLS_SERVER
+#include <coap_dtls_server/example_coap_dtls_server.h>
 #endif
 
 #if defined(CONFIG_EXAMPLE_COAP_CLIENT) && CONFIG_EXAMPLE_COAP_CLIENT
@@ -242,6 +262,14 @@
 
 #if defined(CONFIG_EXAMPLE_RARP) && CONFIG_EXAMPLE_RARP
 #include <rarp/example_rarp.h>
+#endif
+
+#if defined(CONFIG_EXAMPLE_RTP_CLIENT) && CONFIG_EXAMPLE_RTP_CLIENT
+#include <rtp/example_rtp_client.h>
+#endif
+
+#if defined(CONFIG_EXAMPLE_RTP_SERVER) && CONFIG_EXAMPLE_RTP_SERVER
+#include <rtp/example_rtp_server.h>
 #endif
 
 #if (defined(CONFIG_EXAMPLE_UART_ATCMD) && CONFIG_EXAMPLE_UART_ATCMD)
@@ -516,6 +544,11 @@ void example_entry(void)
     example_http2_client();
 #endif
 
+#if defined(CONFIG_EXAMPLE_HTTP2_SSL_CLIENT) && CONFIG_EXAMPLE_HTTP2_SSL_CLIENT
+		example_http2_ssl_client();
+#endif
+
+
 #if CONFIG_EXAMPLE_TCP_KEEPALIVE
 	example_tcp_keepalive();
 #endif
@@ -621,6 +654,7 @@ void example_entry(void)
 	example_eap("tls");
 	//example_eap("peap");
 	//example_eap("ttls");
+	//example_eap("fast");
 #endif
 
 #if defined(CONFIG_EXAMPLE_AJ_BASIC) && CONFIG_EXAMPLE_AJ_BASIC
@@ -633,6 +667,14 @@ void example_entry(void)
         
 #if defined(CONFIG_EXAMPLE_COAP) && CONFIG_EXAMPLE_COAP
     example_coap();
+#endif
+
+#if defined(CONFIG_EXAMPLE_COAP_DTLS_CLIENT) && CONFIG_EXAMPLE_COAP_DTLS_CLIENT
+	example_coap_dtls_client();
+#endif
+
+#if defined(CONFIG_EXAMPLE_COAP_DTLS_SERVER) && CONFIG_EXAMPLE_COAP_DTLS_SERVER
+	example_coap_dtls_server();
 #endif
 
 #if defined(CONFIG_EXAMPLE_COAP_CLIENT) && CONFIG_EXAMPLE_COAP_CLIENT
@@ -753,6 +795,15 @@ void example_entry(void)
 	example_rarp();
 #endif 
 
+#if defined(CONFIG_EXAMPLE_RTP_CLIENT) && CONFIG_EXAMPLE_RTP_CLIENT
+	example_rtp_client();
+#endif
+
+#if defined(CONFIG_EXAMPLE_RTP_SERVER) && CONFIG_EXAMPLE_RTP_SERVER
+	example_rtp_server();
+
+#endif
+
 #if CONFIG_EXAMPLE_SSL_SERVER
 	example_ssl_server();
 #endif  
@@ -777,6 +828,14 @@ void example_entry(void)
     example_amazon_awsiot();
 #endif
 
+#if defined(CONFIG_EXAMPLE_AZURE_IOTHUB_TELEMETRY) && CONFIG_EXAMPLE_AZURE_IOTHUB_TELEMETRY 
+    example_azure_iothub_telemetry();
+#endif
+
+#if defined(CONFIG_EXAMPLE_AZURE_IOTHUB_X509) && CONFIG_EXAMPLE_AZURE_IOTHUB_X509 
+    example_azure_iothub_x509();
+#endif
+    
 #if defined(CONFIG_EXAMPLE_AZURE) && CONFIG_EXAMPLE_AZURE 
     example_azure();
 #endif    
@@ -851,13 +910,6 @@ example_hilink();
 
 #if defined(CONFIG_BAIDU_DUER) && CONFIG_BAIDU_DUER
         example_duer();
-#endif
-
-#if defined(CONFIG_BT) && CONFIG_BT
-	// do not start example if defined BT MP or WIFI MP
-	#if !(defined(CONFIG_MP_INCLUDED))
-	bt_example_init();
-	#endif
 #endif
 
 #if defined(CONFIG_EXAMPLE_USB_MASS_STORAGE) && CONFIG_EXAMPLE_USB_MASS_STORAGE
@@ -941,6 +993,10 @@ example_hilink();
 
 #if defined(CONFIG_EXAMPLE_SW_PTA) && CONFIG_EXAMPLE_SW_PTA
 	example_sw_pta();
+#endif
+
+#if defined(CONFIG_RIC) && (CONFIG_RIC == 1)
+	example_ric();
 #endif
 
 }

@@ -129,6 +129,6 @@ if %build_type% equ "mp" (
 	rename %km4_dir%\km0_km4_image2.bin km0_km4_image2_mp.bin
 )
 
-%tooldir%\objcopy -I elf32-little -j "BTTRACE rw" -Obinary %km4_dir%\km4_application.dbg.axf %km4_dir%\APP.trace
+%tooldir%\objcopy -I elf32-little -j "BTTRACE*" -Obinary %km4_dir%\km4_application.dbg.axf %km4_dir%\APP.trace
 
 exit

@@ -9,7 +9,7 @@ We recommand the flow items:
 Patch List:
 	1. Full Patch:
 		sdk-amebad_v6.2C-RC.tar.gz
-		6.2_patch_integrated_210714_317d518b.zip
+		6.2_patch_integrated_211022_d994187c.zip
 		
 	2. Single Patch:
 		sdk-amebad_v6.2C-RC.tar.gz
@@ -28,7 +28,9 @@ Patch List:
 		6.2_critical_patch_210428_fe817a24_to_13a21db4.zip
 		6.2_critical_patch_210604_13a21db4_to_7d7d3c19.zip
 		6.2_critical_patch_210714_7d7d3c19_to_317d518b.zip
-		
+		6.2_critical_patch_210809_317d518b_to_a30eac93.zip
+		6.2_critical_patch_210902_a30eac93_to_a3971d65.zip
+		6.2_critical_patch_211022_a3971d65_to_d994187c.zip
 		
 Critical Patch List:
 	6.2c to Git 200529_aa1d394c:
@@ -543,5 +545,64 @@ Critical Patch List:
 		12,	Fix websocket corner case about endless loop in ws_poll 
 
 
-
+	Git 210714_317d518b to Git 210809_a30eac93:	
+		1,	Optimize WPA3 connection and reconnection
 		
+		2,	Support passphrase 128 Bytes in WPA3
+		
+		3,	Optimize BLE deinit flow
+		
+		4,	Support BLE DTM APIs
+		
+		5,	Fix Sleep mode tick overflow bug
+		
+		6,	BLE: Disable Scan for LPN when establish friendship
+		
+		7,	Optimize wifi security type and macro definition
+		
+		8,	Optimize IAR compile warnning
+		
+		9,	Fix logical error in ATSG command
+		
+		10,	BLE: remove unused BLE example init code
+		
+		11,	Optimize bt trace log to avoid stack overflow when send msg TRACE_EVENT_TX fail
+		
+		12,	Optimize GCC image size, change from compile option "-O2" to "-Os"
+		
+	Git 210809_a30eac93 to Git 210902_a3971d65:	
+		1,	Change Audio driver and PLL Driver
+		
+		2,	BLE: Fix Bug when receive illegal connection indication packet
+	
+		3,	Add API to set IGI value 
+		
+		4,	Optimize WIFI Tx throughput
+		
+		5,	Fix Wlan vulnerability about stack overflow
+		
+		6,	Fix PSRAM Heap alloc error
+		
+		7,	Modified data type from u16 to u32 to avoid overflow in random seed generation
+		
+		8,	Support HID class and example in New Usb driver
+		
+		9,	Fix spinlock error in softAP mode
+		
+		10,	Modify i2c data transfer type from u8 to u32 to avoid transfer data length can't be large than 255.
+		
+		11,	Add image header length to psram rsip mask size to avoid io driver error when psram image data size is 0.
+		
+	Git 210902_a3971d65 to Git 211022_d994187c:	
+		1, 	Fix bug when two client connect at same time and timeout at same time in softAP mode
+		2,	Add MSC and Vendor Class for USB new stack
+		3,	Fix RX frame refree issue when recv AMSDU packets
+		4,	Optimize TX throughput
+		5,	Update BT uplayer stack
+		6,	Fix WPS Failed due to double spinlock
+		7,	BLE Fix default setting of PHY but BT controller still has bug on set PHY
+		8,	Support EAP Fast
+		9,	Optimize IAR debug flow
+		10,	Add new API in websocket to support send large streams
+		11,	Update Aduio lib and Hardware setting
+		12,	Fix some compile warning

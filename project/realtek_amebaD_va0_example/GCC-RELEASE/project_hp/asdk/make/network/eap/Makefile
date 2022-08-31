@@ -24,6 +24,9 @@ CSRC +=	$(DIR)/src/eap_peer/eap.c\
 		$(DIR)/src/eap_peer/eap_tls.c\
 		$(DIR)/src/eap_peer/eap_tls_common.c\
 		$(DIR)/src/eap_peer/eap_ttls.c\
+		$(DIR)/src/eap_peer/eap_fast.c\
+		$(DIR)/src/eap_peer/eap_fast_common.c\
+		$(DIR)/src/eap_peer/eap_fast_pac.c\
 		$(DIR)/src/eap_peer/mschapv2.c\
 
 CSRC +=	$(DIR)/src/crypto/des-internal.c\
@@ -31,6 +34,7 @@ CSRC +=	$(DIR)/src/crypto/des-internal.c\
 		$(DIR)/src/crypto/ms_funcs.c\
 		$(DIR)/src/crypto/rc4.c\
 		$(DIR)/src/crypto/sha1-internal.c\
+		$(DIR)/src/crypto/sha1-tprf.c\
 
 CSRC +=	$(DIR)/src/utils/common.c\
 
@@ -52,6 +56,7 @@ OBJS = $(notdir $(CSRC:.c=.o))
 #*****************************************************************************#
 all: CORE_TARGETS COPY_RAM_OBJS
 	$(AR) rvs lib_eap.a $(OBJS)
+	$(FROMELF) --strip-debug lib_eap.a
 	$(MOVE) -f lib_eap.a $(ROOTDIR)/lib/application
 #*****************************************************************************#
 #              GENERATE OBJECT FILE 

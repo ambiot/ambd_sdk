@@ -4870,13 +4870,13 @@ void fATPP(void *arg){
 	AT_DBG_MSG(AT_FLAG_LWIP, AT_DBG_ALWAYS, 
 		"[ATPP]: _AT_TRANSPORT_PING");
 
-	if(!arg){
+	argc = parse_param(arg, argv);
+	
+	if(!arg || argc == 1){
 		AT_DBG_MSG(AT_FLAG_LWIP, AT_DBG_ERROR,"[ATPP] Usage: ATPP=xxxx.xxxx.xxxx.xxxx[y/loop] or ATPP=[con_id],[y/loop]\n\r");
 		error_no = 1;
 		goto exit;
 	}
-
-	argc = parse_param(arg, argv);
 
 	if( strlen(argv[1]) < 3 )
 	{
@@ -5275,12 +5275,26 @@ int atcmd_lwip_receive_data(node *curnode, u8 *buffer, u16 buffer_size, int *rec
 	tv.tv_sec = RECV_SELECT_TIMEOUT_SEC;
 	tv.tv_usec = RECV_SELECT_TIMEOUT_USEC;
 	ret = select(curnode->sockfd + 1, &readfds, NULL, NULL, &tv);
-	if(!((ret > 0)&&(FD_ISSET(curnode->sockfd, &readfds))))
-	{
-		//AT_DBG_MSG(AT_FLAG_LWIP, AT_DBG_ALWAYS, 
-		//	"[ATPR] No receive event for con_id %d", curnode->con_id);
-		goto exit;
-	}
+    if(!((ret > 0)&&(FD_ISSET(curnode->sockfd, &readfds))))
+    {
+    #if (ATCMD_VER == ATVER_2) && ATCMD_SUPPORT_SSL 
+        if(curnode->protocol == NODE_MODE_SSL)
+        {
+            if(mbedtls_ssl_get_bytes_avail((mbedtls_ssl_context *)curnode->context) == 0)
+            {
+                //AT_DBG_MSG(AT_FLAG_LWIP, AT_DBG_ALWAYS,
+                // "[ATPR] No receive event for con_id %d", curnode->con_id);
+                goto exit;
+            }
+        }
+        else
+    #endif // #if (ATCMD_VER == ATVER_2) && ATCMD_SUPPORT_SSL
+        {
+            //AT_DBG_MSG(AT_FLAG_LWIP, AT_DBG_ALWAYS,
+            // "[ATPR] No receive event for con_id %d", curnode->con_id);
+            goto exit;
+        }
+    }
 
 	if(curnode->protocol == NODE_MODE_UDP) //udp server receive from client
 	{

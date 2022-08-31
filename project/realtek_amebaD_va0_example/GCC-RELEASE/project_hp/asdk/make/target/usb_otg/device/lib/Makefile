@@ -38,6 +38,7 @@ OBJS = $(notdir $(CSRC:.c=.o))
 # Define the Rules to build the core targets
 all: CORE_TARGETS
 	$(AR) rvs lib_usbd.a $(OBJS)
+	$(FROMELF) --strip-debug lib_usbd.a
 	$(MOVE) -f lib_usbd.a $(ROOTDIR)/lib/application
 	
 #*****************************************************************************#

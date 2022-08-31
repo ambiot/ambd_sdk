@@ -36,8 +36,9 @@ void app_dslp_wake(void)
 		DBG_8195A("DSLP Touch wakeup\n");
 	}
 
+#ifndef AmebaD_Dcut
 	km4_boot_on();
-
+#endif
 	//SOCPS_AONWakeClear(BIT_ALL_WAKE_STS);
 }
 
@@ -230,12 +231,23 @@ int main(void)
 	if(SOCPS_DsleepWakeStatusGet() == TRUE) {
 		app_dslp_wake();
 	} else {
+#ifndef AmebaD_Dcut
 		km4_flash_highspeed_init();
 #if !defined(CONFIG_WIFI_FW_VERIFY)
 		km4_boot_on();
 #endif
+#else
+		flash_operation_config();
+#endif
 	}
 
+#ifdef AmebaD_Dcut
+	pmu_acquire_wakelock(PMU_KM4_RUN);
+	ipc_table_init();
+
+	/* let KM4 run */
+	HAL_WRITE32(SYSTEM_CTRL_BASE_LP, SECURE_BOOT_CHECK, (HAL_READ32(SYSTEM_CTRL_BASE_LP, SECURE_BOOT_CHECK)) | BIT_KM4_RUN);
+#endif
 	/* should init after SOCPS_AONWakeReason, or wake reason will be lost */
 	app_rtc_init();
 	

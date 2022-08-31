@@ -27,6 +27,9 @@ IFLAGS += \
    -I$(BLEDIR)/sdk/example/bt_beacon \
    -I$(BLEDIR)/sdk/example/bt_config \
    -I$(BLEDIR)/sdk/example/bt_airsync_config \
+   -I$(BLEDIR)/sdk/example/bt_tag_scanner \
+   -I$(BLEDIR)/sdk/example/bt_ancs \
+   -I$(BLEDIR)/sdk/example/bt_distance_detector \
    -I$(BLEDIR)/../../application/airsync/1.0.4 \
    -I$(BLEDIR)/sdk/example/bt_breeze \
    -I$(BLEDIR)/../../application/breeze/include \

@@ -37,9 +37,13 @@ endif
 endif
 
 ifeq ($(CONFIG_USB_DEVICE_NEW_EN),y)
+#GLOBAL_CFLAGS += -DCONFIG_USB_NEW_STACK_EN
 IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/common_new
 IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device_new/core
 IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device_new/cdc_acm
+#IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device_new/hid
+#IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device_new/msc
+#IFLAGS += -I$(BASEDIR)/component/common/drivers/usb/device_new/vendor
 endif
 
 .PHONY: all clean
@@ -59,7 +63,7 @@ vpath %.c $(DIRS)
 CSRC += $(DIR)/example_entry.c
 CSRC += $(DIR)/cm_backtrace/example_cm_backtrace.c
 CSRC += $(DIR)/bcast/example_bcast.c
-#CSRC += $(DIR)/eap/example_eap.c
+CSRC += $(DIR)/eap/example_eap.c
 CSRC += $(DIR)/get_beacon_frame/example_get_beacon_frame.c
 CSRC += $(DIR)/high_load_memory_use/example_high_load_memory_use.c
 CSRC += $(DIR)/http_client/example_http_client.c
@@ -82,7 +86,7 @@ CSRC += $(DIR)/websocket_client/example_wsclient.c
 CSRC += $(DIR)/websocket_server/example_ws_server.c
 CSRC += $(DIR)/xml/example_xml.c
 CSRC += $(DIR)/mqtt/example_mqtt.c
-CSRC += $(DIR)/coap/example_coap.c
+#CSRC += $(DIR)/coap/example_coap.c
 #CSRC += $(DIR)/coap_client/example_coap_client.c
 #CSRC += $(DIR)/coap_server/example_coap_server.c
 CSRC += $(DIR)/httpd/example_httpd.c
@@ -181,6 +185,9 @@ ifeq ($(CONFIG_USB_HOST_EN),y)
 endif
 ifeq ($(CONFIG_USB_DEVICE_NEW_EN),y)
 #CSRC += $(DIR)/usbd_cdc_acm_new/example_usbd_cdc_acm_new.c
+#CSRC += $(DIR)/usbd_hid_mouse_new/example_usbd_hid_mouse_new.c
+#CSRC += $(DIR)/usbd_msc_new/example_usbd_msc_new.c
+#CSRC += $(DIR)/usbd_vendor_new/example_usbd_vendor_new.c
 endif
 endif
 

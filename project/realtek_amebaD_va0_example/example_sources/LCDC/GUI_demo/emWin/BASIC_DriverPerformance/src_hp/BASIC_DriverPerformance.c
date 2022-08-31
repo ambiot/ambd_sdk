@@ -530,9 +530,9 @@ static void _LCDBench(void) {
   //
   // Log color depth, controller, orientation and cache
   //
-  sprintf(ac, "\nColor depth: %d", BitsPerPixel);
+  sDiagPrintf(ac, "\nColor depth: %d", BitsPerPixel);
   GUI_X_Log(ac);
-  sprintf(ac, "\nOrientation: LCD_MIRROR_X = %d, LCD_MIRROR_Y = %d, LCD_SWAP_XY = %d", MirrorX, MirrorY, SwapXY);
+  sDiagPrintf(ac, "\nOrientation: LCD_MIRROR_X = %d, LCD_MIRROR_Y = %d, LCD_SWAP_XY = %d", MirrorX, MirrorY, SwapXY);
   GUI_X_Log(ac);
   //
   // Measure filling
@@ -540,7 +540,7 @@ static void _LCDBench(void) {
   Point.x             = xSize;
   Point.y             = ySize;
   FillratePPS         = _Measure(&_ExecFill, &Point)  * (float)(2 * ((U32)xSize - 4) * ((U32)ySize - 4));
-  sprintf(ac, "\nFill: %f", (float)1E6 / FillratePPS);
+  sDiagPrintf(ac, "\nFill: %f", (float)1E6 / FillratePPS);
   GUI_X_Log(ac);
   //
   // Measure small font
@@ -550,7 +550,7 @@ static void _LCDBench(void) {
   xSizeString         = GUI_GetStringDistX(s);
   ySizeFont           = GUI_GetFontSizeY();
   PixelrateF6x8       = _Measure(&_ExecSmallFont, s)  * (float)2 * xSizeString * ySizeFont * 8;
-  sprintf(ac, "\nF6x8: %f", (float)1E6 / PixelrateF6x8);
+  sDiagPrintf(ac, "\nF6x8: %f", (float)1E6 / PixelrateF6x8);
   GUI_X_Log(ac);
   //
   // Measure big font
@@ -560,37 +560,37 @@ static void _LCDBench(void) {
   xSizeString         = GUI_GetStringDistX(s);
   ySizeFont           = GUI_GetFontSizeY();
   PixelrateBigFont    = _Measure(&_ExecBigFont, s)    * (float)2 * xSizeString * ySizeFont * 2;
-  sprintf(ac, "\nFBig: %f", (float)1E6 / PixelrateBigFont);
+  sDiagPrintf(ac, "\nFBig: %f", (float)1E6 / PixelrateBigFont);
   GUI_X_Log(ac);
   //
   // Measure 1bpp bitmap
   //
   aPixelrateBitmap[0] = _Measure(&_Exec1bpp, NULL)    * (float)2 * _bm_1bpp_58x8.XSize * 8;
-  sprintf(ac, "\n1bpp: %f", (float)1E6 / aPixelrateBitmap[0]);
+  sDiagPrintf(ac, "\n1bpp: %f", (float)1E6 / aPixelrateBitmap[0]);
   GUI_X_Log(ac);
   //
   // Measure 2bpp bitmap
   //
   aPixelrateBitmap[1] = _Measure(&_Exec2bpp, NULL)    * (float)2 * _bm_2bpp_32x11.XSize * 11;
-  sprintf(ac, "\n2bpp: %f", (float)1E6 / aPixelrateBitmap[1]);
+  sDiagPrintf(ac, "\n2bpp: %f", (float)1E6 / aPixelrateBitmap[1]);
   GUI_X_Log(ac);
   //
   // Measure 4bpp bitmap
   //
   aPixelrateBitmap[2] = _Measure(&_Exec4bpp, NULL)    * (float)2 * _bm_4bpp_32x11.XSize * 11;
-  sprintf(ac, "\n4bpp: %f", (float)1E6 / aPixelrateBitmap[2]);
+  sDiagPrintf(ac, "\n4bpp: %f", (float)1E6 / aPixelrateBitmap[2]);
   GUI_X_Log(ac);
   //
   // Measure 8bpp bitmap
   //
   aPixelrateBitmap[3] = _Measure(&_Exec8bpp, NULL)    * (float)2 * _bm_8bpp_32x11.XSize * 11;
-  sprintf(ac, "\n8bpp: %f", (float)1E6 / aPixelrateBitmap[3]);
+  sDiagPrintf(ac, "\n8bpp: %f", (float)1E6 / aPixelrateBitmap[3]);
   GUI_X_Log(ac);
   //
   // Measure device dependent bitmap
   //
   aPixelrateBitmap[4] = _Measure(&_ExecXbppDDP, NULL) * (float)2 * XSIZE_XBPP * YSIZE_XBPP;
-  sprintf(ac, "\nXDDP: %f", (float)1E6 / aPixelrateBitmap[4]);
+  sDiagPrintf(ac, "\nXDDP: %f", (float)1E6 / aPixelrateBitmap[4]);
   GUI_X_Log(ac);
   //
   // Show results on display

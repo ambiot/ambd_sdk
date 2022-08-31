@@ -281,6 +281,7 @@
 #define CONFIG_TLS	1
 #define CONFIG_PEAP	1
 #define CONFIG_TTLS	1
+#define CONFIG_FAST	1
 
 // DO NOT change the below config of EAP
 #ifdef PRE_CONFIG_EAP
@@ -290,15 +291,17 @@
 #define CONFIG_PEAP	1
 #undef CONFIG_TTLS
 #define CONFIG_TTLS	1
+#undef CONFIG_FAST
+#define CONFIG_FAST	1
 #endif
 
 // enable 1X code in lib_wlan as default (increase 380 bytes)
 #define CONFIG_EAP
 
-#if CONFIG_TLS || CONFIG_PEAP || CONFIG_TTLS
+#if CONFIG_TLS || CONFIG_PEAP || CONFIG_TTLS || CONFIG_FAST
 #define EAP_REMOVE_UNUSED_CODE 1
-#endif	     
-	     
+#endif
+
 #define EAP_SSL_VERIFY_SERVER
 
 #if CONFIG_TLS
@@ -531,6 +534,8 @@ extern unsigned int g_ap_sta_num;
 	#define CONFIG_WLAN_SWITCH_MODE         //save memory while switching mode without driver re-init
 	//#define LOW_POWER_WIFI_CONNECT
 	//#define LONG_PERIOD_TICKLESS
+
+	#define RA_ANTI_INTERF 0		// when set to 1, please also set CONFIG_TPBASE_RA to 1
 	#endif
 	#if defined(CONFIG_PLATFORM_8195BHP)
 		#define CONFIG_RTL8195B
@@ -860,9 +865,11 @@ extern unsigned int g_ap_sta_num;
 
 #define TIME_THRES	20
 
+#ifndef LONG_PERIOD_TICKLESS
 /* 80211 - K V R */
 #define CONFIG_IEEE80211K
 #define CONFIG_LAYER2_ROAMING
+#endif
 #ifdef CONFIG_LAYER2_ROAMING
     #define CONFIG_RTW_WNM
     #define CONFIG_IEEE80211R

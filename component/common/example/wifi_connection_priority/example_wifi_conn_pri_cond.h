@@ -44,7 +44,6 @@
 
 /* ---------------------------- Global Variables ---------------------------- */
 typedef bool (*rtw_conn_pri_cond_cb_t)(WLAN_BSSID_EX *old_ap, WLAN_BSSID_EX *new_ap);
-
 extern rtw_conn_pri_cond_cb_t pr_conn_pri_cond_cb;
 
 /* -------------------------- Function declaration -------------------------- */

@@ -67,16 +67,16 @@ u32 wifi_roaming_find_ap_from_scan_buf(char*buf, int buflen, char *target_ssid, 
 		// security_mode offset = 11
 		security_mode = (u8)*(buf + plen + 1 + 6 + 4);
 		switch(security_mode){
-			case IW_ENCODE_ALG_NONE:
+			case RTW_ENCODE_ALG_NONE:
 				security_type = RTW_SECURITY_OPEN;
 				break;
-			case IW_ENCODE_ALG_WEP:
+			case RTW_ENCODE_ALG_WEP:
 				security_type = RTW_SECURITY_WEP_PSK;
 				break;
-			case IW_ENCODE_ALG_TKIP:
+			case RTW_ENCODE_ALG_TKIP:
 				security_type = RTW_SECURITY_WPA_TKIP_PSK;
 				break;
-			case IW_ENCODE_ALG_CCMP:
+			case RTW_ENCODE_ALG_CCMP:
 				security_type = RTW_SECURITY_WPA2_AES_PSK;
 				break;
 			default:

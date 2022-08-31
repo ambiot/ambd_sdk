@@ -73,6 +73,14 @@ execUserFlashInit()  // Called by debugger before loading flash loader in RAM.
 		//tmp = __readMemory32(0x480003f8, "Memory")|(1<<26);
 		//__writeMemory32(tmp, 0x480003f8, "Memory");
 
+		// disable WDT to prevent download failure
+		tmp = __readMemory32(0x48002800, "Memory");
+		tmp = tmp & ~(0x1 << 16);
+		__writeMemory32(tmp, 0x48002800, "Memory");
+		tmp = __readMemory32(0x40002800, "Memory");
+		tmp = tmp & ~(0x1 << 16);
+		__writeMemory32(tmp, 0x40002800, "Memory");
+
 		setup();
 		__message "----- execUserFlashInit done -----\n";	
 }

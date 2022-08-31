@@ -919,15 +919,15 @@ static void _ShowAboutBox(void) {
   //
   // Exec modal dialog
   //
-  DBG_8195A("92 ");
+  DiagPrintf("92 ");
   WM_SetFocus(hFrame);
-  DBG_8195A("93 ");
+  DiagPrintf("93 ");
   WM_MakeModal(hFrame);
-  DBG_8195A("94 ");
+  DiagPrintf("94 ");
   GUI_ExecCreatedDialog(hFrame);
-  DBG_8195A("95 ");
+  DiagPrintf("95 ");
   WM_SetFocus(_hFrame);
-  DBG_8195A("\n----------------=======--96----------==========-----------------\n ");
+  DiagPrintf("\n----------------=======--96----------==========-----------------\n ");
 }
 
 /*********************************************************************
@@ -1121,9 +1121,9 @@ static void _SetPlayer(int Player) {
       _Board.ActPlayer = 1;
       Score            = _CalcScore(&_Board);
       if (Score > 0) {
-        sprintf(ac, "Red wins by %d stones!\nDo you want to start a new game?", Score);
+        sDiagPrintf(ac, "Red wins by %d stones!\nDo you want to start a new game?", Score);
       } else if (Score) {
-        sprintf(ac, "Blue wins by %d stones!\nDo you want to start a new game?", -Score);
+        sDiagPrintf(ac, "Blue wins by %d stones!\nDo you want to start a new game?", -Score);
       } else {
         strcpy (ac, "The game ends in a draw!\nDo you want to start a new game?");
       }
@@ -1411,9 +1411,9 @@ static void _StartReversi(void) {
   _StartNewGame();
   WM_SetFocus(_hFrame);
   while (_hFrame) {
-  	DBG_8195A("77\n");
+  	DiagPrintf("77\n");
     GUI_Delay(100);
-	DBG_8195A("66\n");
+	DiagPrintf("66\n");
   }
 }
 
@@ -1433,7 +1433,7 @@ static void _StartReversi(void) {
 void MainTask(void) {
 
 u32 task_id =xTaskGetCurrentTaskHandle();
-	DBG_8195A("task_id2:%d\n",task_id);
+	DiagPrintf("task_id2:%d\n",task_id);
 
   if (GUI_ALLOC_GetNumFreeBytes() < RECOMMENDED_MEMORY) {
     GUI_ErrorOut("Not enough memory available."); 
@@ -1444,10 +1444,10 @@ u32 task_id =xTaskGetCurrentTaskHandle();
   WM_SetDesktopColor(DESKTOP_COLOR);
   _pPlayerAI[1] = AI_FUNC;
   while (1) {
-  	DBG_8195A("88  ");
+  	DiagPrintf("88  ");
     _StartReversi();
     GUI_Delay(1000);
-	DBG_8195A("99  ");
+	DiagPrintf("99  ");
   }
 }
 

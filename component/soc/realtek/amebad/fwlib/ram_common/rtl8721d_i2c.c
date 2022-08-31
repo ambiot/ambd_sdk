@@ -294,7 +294,6 @@ void I2C_SetSlaveAddress(I2C_TypeDef *I2Cx, u16 Address)
   * @param  I2Cx: where I2Cx can be I2C0_DEV .
   * @param  I2C_FLAG: specifies the flag to check. 
   *   This parameter can be one of the following values:
-  *     @arg BIT_IC_STATUS_BUS_BUSY: 
   *     @arg I2C_FLAG_SLV_ACTIVITY: 
   *     @arg I2C_FLAG_MST_ACTIVITY:  
   *     @arg I2C_FLAG_RFF:  
@@ -676,9 +675,9 @@ void I2C_MasterReadDW(I2C_TypeDef *I2Cx, u8* pBuf, u8 len)
   * @param  len: the length of data that to be received.
   * @retval The length of data that have received from rx fifo.
   */
-u8 I2C_MasterRead(I2C_TypeDef *I2Cx, u8* pBuf, u8 len)
+u32 I2C_MasterRead(I2C_TypeDef *I2Cx, u8* pBuf, u32 len)
 {
-	u8 cnt = 0;
+	u32 cnt = 0;
 	
 	/* Check the parameters */
 	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
@@ -716,9 +715,9 @@ u8 I2C_MasterRead(I2C_TypeDef *I2Cx, u8* pBuf, u8 len)
   * @param  len: the length of data that to be transmitted.
   * @retval None
   */
-void I2C_SlaveWrite(I2C_TypeDef *I2Cx, u8* pBuf, u8 len)
+void I2C_SlaveWrite(I2C_TypeDef *I2Cx, u8* pBuf, u32 len)
 {
-	u8 cnt = 0;
+	u32 cnt = 0;
 	
 	/* Check the parameters */
 	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
@@ -731,11 +730,13 @@ void I2C_SlaveWrite(I2C_TypeDef *I2Cx, u8* pBuf, u8 len)
 			I2Cx->IC_CLR_RD_REQ;
 		}
 		/* Check I2C TX FIFO status */
-		while((I2C_CheckFlagState(I2Cx, BIT_IC_STATUS_TFNF)) == 0);
+		while(((I2C_CheckFlagState(I2Cx, BIT_IC_STATUS_TFNF)) == 0) && ((I2Cx->IC_RAW_INTR_STAT & BIT_IC_RAW_INTR_STAT_RX_DONE) == 0));
 		
 		I2Cx->IC_DATA_CMD = (*pBuf++);
 	}
-	while((I2C_CheckFlagState(I2Cx, BIT_IC_STATUS_TFE)) == 0);
+	
+	while(((I2C_CheckFlagState(I2Cx, BIT_IC_STATUS_TFE)) == 0) &&((I2Cx->IC_RAW_INTR_STAT & BIT_IC_RAW_INTR_STAT_RX_DONE) == 0));
+	I2Cx->IC_CLR_INTR;
 }
 
 /**
@@ -745,9 +746,9 @@ void I2C_SlaveWrite(I2C_TypeDef *I2Cx, u8* pBuf, u8 len)
   * @param  len: the length of data that to be received.
   * @retval None
   */
-void I2C_SlaveRead(I2C_TypeDef *I2Cx, u8* pBuf, u8 len)
+void I2C_SlaveRead(I2C_TypeDef *I2Cx, u8* pBuf, u32 len)
 {
-	u8 cnt = 0;
+	u32 cnt = 0;
 	
 	/* Check the parameters */
 	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
@@ -768,10 +769,10 @@ void I2C_SlaveRead(I2C_TypeDef *I2Cx, u8* pBuf, u8 len)
   * @param  Readlen: Byte number to be received.
   * @retval None
   */
-void I2C_MasterRepeatRead(I2C_TypeDef* I2Cx, u8* pWriteBuf, u8 Writelen, u8* pReadBuf, u8 Readlen)
+void I2C_MasterRepeatRead(I2C_TypeDef* I2Cx, u8* pWriteBuf, u32 Writelen, u8* pReadBuf, u32 Readlen)
 {
 
-	u8 cnt = 0;
+	u32 cnt = 0;
 
 	/* Check the parameters */
 	assert_param(IS_I2C_ALL_PERIPH(I2Cx));

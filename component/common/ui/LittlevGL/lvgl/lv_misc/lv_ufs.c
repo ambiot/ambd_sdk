@@ -15,6 +15,11 @@
 #include <stdio.h>
 #include <errno.h>
 
+/* To avoid compile error because free is member of __lv_fs_drv_t.
+   It can only undef here.*/
+#undef free
+
+
 /*********************
  *      DEFINES
  *********************/

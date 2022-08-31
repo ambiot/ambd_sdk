@@ -170,6 +170,84 @@ USAGE:
 }
 #endif
 
+#if (defined(CONFIG_RIC) && CONFIG_RIC)
+#include "ric/ric_device.h"
+void fATCR(void *arg)
+{
+#if 0
+	int argc;
+	unsigned char len1, len2;
+	unsigned char *argv[MAX_ARGC] = {0};
+	
+	argv[0] = "ricloud";
+	argc = parse_param(arg, argv);
+	if(argc == 2 && !strcmp("ota", argv[1])) {
+		ric_ota_v v = {0};
+		v.loop = 0;
+		ric_dev_msg_dump(MSG_OTA_REQ, (void *)&v);
+	}else if(argc == 3 && !strcmp("ota", argv[1]) && (!strcmp("0", argv[2]) || !strcmp("1", argv[2]))) {
+		ric_ota_v v = {0};
+		v.loop = *argv[2] - '0';
+		ric_dev_msg_dump(MSG_OTA_REQ, (void *)&v);
+	}else if(argc == 3 && !strcmp("ota", argv[1]) && !strcmp("s", argv[2])) {
+		ric_dev_msg_dump(MSG_OTA_STP, NULL);	
+	}else if(argc == 4 && !strcmp("ota", argv[1]) && (!strcmp("0", argv[2]) || !strcmp("1", argv[2]))) {
+		ric_ota_v v = {0};
+		v.loop = *argv[2] - '0';
+		if(strlen(argv[3]) > sizeof(v.nv_num) -1) {
+			printf("\r\n[ATCR] error: the new version num should no longer than %d !", sizeof(v.nv_num) - 1);
+		}else {
+			strcpy(v.nv_num, argv[3]);
+			ric_dev_msg_dump(MSG_OTA_REQ, (void *)&v);
+		}
+	}else {
+		goto USAGE;
+	}
+	return;
+
+USAGE:	
+	printf("\r\n[ATCR] Control ameba operation to RICloud");
+	printf("\r\n[ATCR] Usage: ATCR=ota[,loop]  ==>ota with default expected fw version num for one time [or one(loop:0) / infinite(loop:1) time(s)]");
+	printf("\r\n[ATCR] Usage: ATCR=ota,loop,version  ==>ota with specified fw version num(version) for one(loop:0) or  infinite(loop:1) time(s)");
+	printf("\r\n[ATCR] Usage: ATCR=ota,s  ==>stop the infinite ota if it's started before");
+	return;
+#endif	
+}
+extern int ric_set_userid(char *);
+extern int ric_set_server_ip(char *);
+extern void  ric_flash_erase_sector(uint32_t address);
+
+void fATUS(void *arg)
+{
+	int argc;
+	char *argv[MAX_ARGC] = {0};
+	
+	argv[0] = "ricloud";
+	argc = parse_param(arg,argv);
+	if(argc == 3){
+		if(!strcmp("userid",argv[1]))
+		{
+			ric_set_userid(argv[2]);	
+		}else if(!strcmp("svrip",argv[1])){
+			ric_set_server_ip(argv[2]);
+		}
+	}else if(argc == 2){
+          if(!strcmp("erase",argv[1])){
+            ric_flash_erase_sector(CONFIG_USER_INFO);
+          }
+    }else{
+		goto USAGE;
+	}
+	return;
+USAGE:	
+	printf("\r\n[ATUS] Setup User and Server info RICloud");
+	printf("\r\n[ATUS] Usage: ATUS=userid,xxxx  ==>set registed user id");
+	printf("\r\n[ATUS] Usage: ATUS=svrip,xxx.xxx.xxx.xxx ==>set ricloud server ip address");
+	printf("\r\n[ATUS] Usage: ATUS=erase ==>erase user id and server ip address");
+	return;		
+}
+#endif
+
 void fATCx(void *arg)
 {	
 }
@@ -190,6 +268,10 @@ log_item_t at_cloud_items[ ] = {
 #endif
 #if CONFIG_ALINK
 	{"ATCA", fATCA,},
+#endif
+#if (defined(CONFIG_RIC) && CONFIG_RIC)
+	{"ATCR", fATCR,},
+	{"ATUS", fATUS,},
 #endif
 	{"ATC?", fATCx,},
 };

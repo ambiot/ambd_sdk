@@ -69,6 +69,7 @@ CONFIG_SEPERATE_MAKEFILE=y
 BUILD_TARGET_FOLDER     = $(ROOTDIR)/build
 BUILD_TARGET_RAM_FOLDER = $(ROOTDIR)/build/ram
 BUILD_TARGET_ROM_FOLDER = $(ROOTDIR)/build/rom
+BUILD_TARGET_ROM2_FOLDER = $(ROOTDIR)/build/rom2
 
 IMAGE_TARGET_FOLDER     = $(ROOTDIR)/image
 
@@ -224,7 +225,7 @@ endif
 #*****************************************************************************#
 #                           ARM COMPILATION FLAGS
 #*****************************************************************************#
-GLOBAL_CFLAGS += -O2 -g 
+GLOBAL_CFLAGS += -Os -g 
 #GLOBAL_CFLAGS += -specs nosys.specs 
 GLOBAL_CFLAGS += -march=armv8-m.base 
 GLOBAL_CFLAGS += -mthumb 
@@ -276,11 +277,10 @@ GLOBAL_CFLAGS += -DCONFIG_PLATFORM_8721D
 
 LD_ARG = -L$(ASDK_TOOLCHAIN)/lib/
 LD_ARG += -L$(ROOTDIR)/lib/
-LD_ARG += -L$(ROOTDIR)/lib/application
 LD_ARG += -T$(BUILD_TARGET_FOLDER)/rlx8721d.ld 
 
 #LD_ARG += -u _printf_float -u _scanf_float 
-LD_ARG += -O2  
+LD_ARG += -Os  
 LD_ARG += -march=armv8-m.base 
 LD_ARG += -mthumb 
 #LD_ARG += -mcmse 
@@ -341,7 +341,13 @@ COPY_ROM_OBJS:
 
 #	@-$(COPY) *.o $(BUILD_TARGET_ROM_FOLDER) -f
 #	$(REMOVE) *.o
-
+COPY_ROM2_OBJS:
+	echo "=============================================================" \
+	       >> $(ROOTDIR)/rom_size.txt;\
+	$(CC_SIZE) -t $(OBJS) $(ASM_OBJS) >> $(ROOTDIR)/rom_size.txt;\
+	for i in  $(OBJS) $(ASM_OBJS); do \
+		 $(COPY)  $$i $(BUILD_TARGET_ROM2_FOLDER) -f;\
+		done \
 
 #*****************************************************************************#
 #              RENAME OBJECT FILES SECTION                                    #
@@ -358,6 +364,7 @@ RENAME_LOADER_OBJS:
 	OBJ_LIST=$(ls *.o)
 	for obj_file in $(OBJS) $(ASM_OBJS); do \
 		$(FROMELF) --rename-section .rodata.str1.4=.boot.rodata.str1.4 $$obj_file $$obj_file; \
+		$(FROMELF) --rename-section .rodata.str1.1=.boot.rodata.str1.1 $$obj_file $$obj_file; \
 	done \
 #*****************************************************************************#
 #              RULES TO GENERATE OBJECT FILE FROM .C FILE                     #

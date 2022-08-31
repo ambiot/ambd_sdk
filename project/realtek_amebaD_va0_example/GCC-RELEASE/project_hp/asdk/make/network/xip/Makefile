@@ -35,11 +35,11 @@ OBJS +=	\
 		$(NETWORK)/mDNS/mDNSPlatform.o\
 		$(LWIPDIR)/src/core/stats.o \
 		$(LWIPDIR)/src/core/sys.o \
-		$(NETWORK)/coap/sn_coap_ameba_port.o\
-		$(NETWORK)/coap/sn_coap_builder.o\
-		$(NETWORK)/coap/sn_coap_header_check.o\
-		$(NETWORK)/coap/sn_coap_parser.o\
-		$(NETWORK)/coap/sn_coap_protocol.o
+		#$(NETWORK)/coap/sn_coap_ameba_port.o\
+		#$(NETWORK)/coap/sn_coap_builder.o\
+		#$(NETWORK)/coap/sn_coap_header_check.o\
+		#$(NETWORK)/coap/sn_coap_parser.o\
+		#$(NETWORK)/coap/sn_coap_protocol.o
 
 
 #ifeq ($(CONFIG_HIGH_TP),y)

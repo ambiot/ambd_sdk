@@ -28,6 +28,7 @@
 #include <gap_conn_le.h>
 #include <gcs_client.h>
 #include <stdio.h>
+#include <ble_scatternet_app_flags.h>
 /** @defgroup  CENTRAL_CLIENT_CMD Central Client User Command
     * @brief This file handles Central Client User Command.
     * @{

@@ -32,6 +32,7 @@ endif
 
 ifeq ($(CONFIG_LINKKIT_AWSS),y)
 #	@make -C linkkit all
+	@make -C linkkit all
 endif
 	#@make -C bootloader all
 	@make -C app all
@@ -40,6 +41,7 @@ endif
 	@make -C cmsis all
 	@make -C mbed all
 	#@make -C audio all
+	#@make -C audio test
 #	@make -C graphic all
 	#@make -C media all
 	@make -C utilities_example all

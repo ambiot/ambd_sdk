@@ -266,7 +266,7 @@ int main(void)
 	app_init_debug();
 	
 	/* register a suspend function to get km4 sleep time and check if enter dslp or not */
-	pmu_register_sleep_callback(PMU_DEV_USER_BASE, test_suspend, NULL, NULL, NULL);
+	pmu_register_sleep_callback(PMU_DEV_USER_BASE, (PSM_HOOK_FUN)test_suspend, NULL, NULL, NULL);
 
 	//Enable Schedule
 	vTaskStartScheduler();

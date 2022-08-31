@@ -22,6 +22,8 @@ CSRC = $(DIR)/Config/GUIConf.c \
 #	$(DIR)/hal/ft6236.c \
 #	$(DIR)/hal/hal_mcu_lcd.c \
 #	$(DIR)/Config/LCDConf_MCU_8bit_eval.c \
+#	$(DIR)/hal/hal_spi_lcd.c \
+#	$(DIR)/Config/LCDConf_SPI_eval.c \
 
 
 
