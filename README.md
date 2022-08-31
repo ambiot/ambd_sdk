@@ -192,4 +192,4 @@ Assuming that the ImageTool on PC is a server, it sends images files to Ameba (c
 
 ## Vesion Sync
 
-GitHub `ambd_sdk` is currently sync with Git SDK 15b75ad881f45ba32c546f1da029d3fafb7aaf5a
+GitHub `ambd_sdk` is currently sync with 6.2 Git 220620_fb7aaf5a
