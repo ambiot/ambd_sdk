@@ -188,4 +188,3 @@ Assuming that the ImageTool on PC is a server, it sends images files to Ameba (c
 ## Known Issues
 
 1. `mbed_flash_winbond_block_protect` example result expected to be different from `readme.txt`. This is caused by the brand of flash chip might be different on different versions of module or dev board.
-2. Execute "Tickps a" command,  then connect  the baord to AP. Executes "Tickps r debug" command then shut down the AP. Upin connection to AP is lost, the log of "DBG: Sleep blocked because Dev 1 busy" will keep appearing multiple times until it stop. The board will hang and could not enter any command to connect another AP.
