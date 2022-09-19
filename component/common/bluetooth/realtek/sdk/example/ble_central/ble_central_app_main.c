@@ -155,16 +155,13 @@ void ble_central_app_le_gap_init(void)
 	le_scan_set_param(GAP_PARAM_SCAN_LOCAL_ADDR_TYPE, sizeof(local_bd_type), &local_bd_type);
 #endif
 #if F_BT_LE_5_0_SET_PHY_SUPPORT
-	uint8_t  phys_prefer = GAP_PHYS_PREFER_ALL;
-	uint8_t  tx_phys_prefer = GAP_PHYS_PREFER_1M_BIT | GAP_PHYS_PREFER_2M_BIT |
-							  GAP_PHYS_PREFER_CODED_BIT;
-	uint8_t  rx_phys_prefer = GAP_PHYS_PREFER_1M_BIT | GAP_PHYS_PREFER_2M_BIT |
-							  GAP_PHYS_PREFER_CODED_BIT;
+	uint8_t phys_prefer = GAP_PHYS_PREFER_ALL;
+	uint8_t tx_phys_prefer = GAP_PHYS_PREFER_1M_BIT | GAP_PHYS_PREFER_2M_BIT;
+	uint8_t rx_phys_prefer = GAP_PHYS_PREFER_1M_BIT | GAP_PHYS_PREFER_2M_BIT;
 	le_set_gap_param(GAP_PARAM_DEFAULT_PHYS_PREFER, sizeof(phys_prefer), &phys_prefer);
 	le_set_gap_param(GAP_PARAM_DEFAULT_TX_PHYS_PREFER, sizeof(tx_phys_prefer), &tx_phys_prefer);
 	le_set_gap_param(GAP_PARAM_DEFAULT_RX_PHYS_PREFER, sizeof(rx_phys_prefer), &rx_phys_prefer);
 #endif
-
 }
 
 /**
@@ -205,7 +202,6 @@ int ble_central_app_main(void)
     return 0;
 }
 
-extern void wifi_btcoex_set_bt_on(void);
 int ble_central_app_init(void)
 {
 	//int bt_stack_already_on = 0;
@@ -235,10 +231,7 @@ int ble_central_app_init(void)
 		le_get_gap_param(GAP_PARAM_DEV_STATE , &new_state);
 	}while(new_state.gap_init_state != GAP_INIT_STATE_STACK_READY);
 
-	/*Start BT WIFI coexistence*/
-	wifi_btcoex_set_bt_on();
 	return 0;
-
 }
 
 extern void gcs_delete_client(void);

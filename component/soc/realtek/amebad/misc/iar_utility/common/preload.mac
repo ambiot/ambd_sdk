@@ -8,6 +8,16 @@ __setup_system()
 execUserPreload()
 {
     __message "User execUserPreload....";
+
+    // disable WDT to prevent download failure
+    __var tmp;
+    tmp = __readMemory32(0x48002800, "Memory");
+    tmp = tmp & ~(0x1 << 16);
+    __writeMemory32(tmp, 0x48002800, "Memory");
+    tmp = __readMemory32(0x40002800, "Memory");
+    tmp = tmp & ~(0x1 << 16);
+    __writeMemory32(tmp, 0x40002800, "Memory");
+
     __setup_system();
 }
 

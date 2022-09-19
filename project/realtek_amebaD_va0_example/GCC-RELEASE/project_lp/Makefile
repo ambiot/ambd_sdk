@@ -21,6 +21,8 @@ else
 	make -C asdk image2
 endif
 	
+rom2: CORE_TARGETS
+	make -C asdk rom2
 
 setup:
 	make -C asdk $(MAKECMDGOALS)

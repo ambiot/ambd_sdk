@@ -113,8 +113,8 @@ int main(void) {
 #define DMA_DST_OFFSET  0
 
 gdma_t gdma;
-uint8_t SRAM_NOCACHE_DATA_SECTION TestBuf1[512];
-uint8_t SRAM_NOCACHE_DATA_SECTION TestBuf2[512];
+SRAM_NOCACHE_DATA_SECTION uint8_t TestBuf1[512];
+SRAM_NOCACHE_DATA_SECTION uint8_t TestBuf2[512];
 volatile uint8_t dma_done;
 
 

@@ -1,6 +1,7 @@
 include $(MAKE_INCLUDE_GEN)
+IFLAGS               += -I$(BASEDIR)/component/common/network/libcoap/include
 
-.PHONY: lib lib_mp lib_lp clean
+.PHONY: lib lib_mp lib_lp lib_lt clean
 
 #*****************************************************************************#
 #                               VARIABLES	                              #
@@ -8,6 +9,7 @@ include $(MAKE_INCLUDE_GEN)
 DIR = $(BASEDIR)/component/common/drivers/wlan/realtek/src
 lib_mp:GLOBAL_CFLAGS += -DCONFIG_MP_INCLUDED
 lib_lp:GLOBAL_CFLAGS += -DLOW_POWER_WIFI_CONNECT
+lib_lt:GLOBAL_CFLAGS += -DLONG_PERIOD_TICKLESS
 #*****************************************************************************#
 #                               Object FILE LIST                              #
 #*****************************************************************************#
@@ -45,9 +47,10 @@ OBJS += $(DIR)/hal/rtl8721d/src/rtl8721d_rf_onoff.o
 #*****************************************************************************#
 
 # Define the Rules to build the core targets
-lib: CORE_TARGETS NETWORK_RENAME_CODE2SRAM COPY_RAM_OBJS
-lib_mp: CORE_TARGETS NETWORK_RENAME_CODE2SRAM COPY_RAM_OBJS
-lib_lp: CORE_TARGETS NETWORK_RENAME_CODE2SRAM COPY_RAM_OBJS
+lib: CORE_TARGETS COPY_RAM_OBJS
+lib_mp: CORE_TARGETS COPY_RAM_OBJS
+lib_lp: CORE_TARGETS COPY_RAM_OBJS
+lib_lt: CORE_TARGETS COPY_RAM_OBJS
 #*****************************************************************************#
 #              GENERATE OBJECT FILE 
 #*****************************************************************************#
@@ -55,7 +58,8 @@ CORE_TARGETS:	$(OBJS)
 
 %.o:%.c
 	$(CC) $(GLOBAL_CFLAGS) $(MODULE_IFLAGS) $<  -o $@
-
+	$(FROMELF) --prefix-sections .image2.net.ram $@
+	
 #*****************************************************************************#
 #                        RULES TO CLEAN TARGETS                               #
 #*****************************************************************************#

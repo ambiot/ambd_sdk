@@ -40,6 +40,7 @@ OBJS_LIB = $(notdir $(CSRC_LIB:.c=.o))
 #*****************************************************************************#
 lib: CORE_TARGETS_LIB
 	$(AR) rvs lib_emwin.a $(OBJS_LIB) 
+	$(FROMELF) --strip-debug lib_emwin.a
 	$(MOVE) -f lib_emwin.a $(BASEDIR)/component/common/ui/emwin/emWinLibrary/lib/rtl8721d
 
 #*****************************************************************************#

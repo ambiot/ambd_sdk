@@ -125,6 +125,7 @@ u32 app_mpu_s_nocache_init(void)
 #if defined (configENABLE_TRUSTZONE) && (configENABLE_TRUSTZONE == 1U)
 		mpu_s_no_cache_init();
 #endif
+        return 0;
 }
 
 VOID app_vdd1833_detect(VOID)
@@ -289,7 +290,7 @@ u32 app_psram_resume(u32 expected_idle_time, void *param)
 	( void ) expected_idle_time;
 	( void ) param;
 
-	u32 temp;
+    u32 temp;
 
 	if((SLEEP_PG == pmu_get_sleep_type()) || (FALSE == psram_dev_config.psram_dev_retention)) {
 		app_init_psram();
@@ -363,6 +364,7 @@ static void* app_psram_load_ns()
 
 		_memcpy((void*)PsramHdr->image_addr, (void*)(PsramHdr + 1), PsramHdr->image_size);
 	}
+    return NULL;
 }
 
 static void* app_psram_load_s()
@@ -370,6 +372,7 @@ static void* app_psram_load_s()
 #if defined (configENABLE_TRUSTZONE) && (configENABLE_TRUSTZONE == 1U)
 	load_psram_image_s();
 #endif
+    return NULL;
 }
 
 /*initialize driver call os_function map*/
@@ -409,6 +412,10 @@ void app_start(void)
 	}
 
 	/* configure FreeRTOS interrupt and heap region */
+#if (defined(configUSE_PSRAM_FOR_HEAP_REGION) && ( configUSE_PSRAM_FOR_HEAP_REGION == 1 ))
+	/* psram should be enabled */
+	assert_param(TRUE == psram_dev_config.psram_dev_enable);
+#endif
 	os_heap_init();
 	__NVIC_SetVector(SVCall_IRQn, (u32)(VOID*)vPortSVCHandler);
 	__NVIC_SetVector(PendSV_IRQn, (u32)(VOID*)xPortPendSVHandler);

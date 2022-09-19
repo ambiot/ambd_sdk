@@ -12,41 +12,6 @@ PSRAM_BSS_SECTION
 __attribute__ ((aligned (64)))
 u16 RgbFrameBuffer[RGB_LCD_HEIGHT][RGB_LCD_WIDTH];
 
-void app_init_psram(void)
-{
-	u32 temp;
-	PCTL_InitTypeDef  PCTL_InitStruct;
-
-	/*set rwds pull down*/
-	temp = HAL_READ32(PINMUX_REG_BASE, 0x104);
-	temp &= ~(PAD_BIT_PULL_UP_RESISTOR_EN | PAD_BIT_PULL_DOWN_RESISTOR_EN);
-	temp |= PAD_BIT_PULL_DOWN_RESISTOR_EN;
-	HAL_WRITE32(PINMUX_REG_BASE, 0x104, temp);
-
-	PSRAM_CTRL_StructInit(&PCTL_InitStruct);
-	PSRAM_CTRL_Init(&PCTL_InitStruct);
-
-	PSRAM_PHY_REG_Write(REG_PSRAM_CAL_PARA, 0x02030310);
-
-	/*check psram valid*/
-	HAL_WRITE32(PSRAM_BASE, 0, 0);
-	assert_param(0 == HAL_READ32(PSRAM_BASE, 0));
-
-	if(SYSCFG_CUT_VERSION_A != SYSCFG_CUTVersion()) {
-		if(_FALSE == PSRAM_calibration())
-			return;
-
-		if(FALSE == psram_dev_config.psram_dev_cal_enable) {
-			temp = PSRAM_PHY_REG_Read(REG_PSRAM_CAL_CTRL);
-			temp &= (~BIT_PSRAM_CFG_CAL_EN);
-			PSRAM_PHY_REG_Write(REG_PSRAM_CAL_CTRL, temp);
-		}
-	}
-
-	/*init psram bss area*/
-	memset(__psram_bss_start__, 0, __psram_bss_end__ - __psram_bss_start__);
-}
-
 void RgbLcdDisplaySwitch(u32 State)
 {
 	if(State == RGB_LCD_CLOSE) {
@@ -60,7 +25,14 @@ void RgbLcdInit(void)
 {
 	LCDC_RGBInitTypeDef LCDC_RGBInitStruct;
 
-	app_init_psram();
+	GPIO_InitTypeDef LCD_RST;
+
+	/*LCD RST pin output high level to make LCD display*/
+	LCD_RST.GPIO_Mode = GPIO_Mode_OUT;
+	LCD_RST.GPIO_Pin = _PA_16;
+	LCD_RST.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(&LCD_RST);
+	GPIO_WriteBit(_PA_16, 1);
 
 	/* Enable LCDC pinmux, default 16bit I/F */
 	Pinmux_Config(_PA_19, PINMUX_FUNCTION_LCD);  /*D0*/
@@ -289,7 +261,7 @@ void RgbLcdColorFill(u16 sx,u16 sy,u16 ex,u16 ey, u16 color)
  	for(i=0;i<height;i++)
 	{
 		for(j=0;j<width;j++) {
-			//DBG_8195A("%s: %d, %d\n", __func__, i, j);
+			//DiagPrintf("%s: %d, %d\n", __func__, i, j);
 			RgbLcdDrawPointColor(sx+j, sy+i, color);
 		}
 	}	  	

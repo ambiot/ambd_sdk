@@ -71,6 +71,7 @@ BUILD_TARGET_FOLDER     = $(ROOTDIR)/build
 BUILD_TARGET_RAM_FOLDER = $(ROOTDIR)/build/ram
 BUILD_TARGET_ROM_FOLDER = $(ROOTDIR)/build/rom
 BUILD_TARGET_ROM_FOLDER_NS = $(ROOTDIR)/build/rom_ns
+BUILD_TARGET_ROM2_FOLDER = $(ROOTDIR)/build/rom2
 
 IMAGE_TARGET_FOLDER     = $(ROOTDIR)/image
 
@@ -130,7 +131,7 @@ MOVE      = mv
 #*****************************************************************************#
 
 IFLAGS               = -I.
-IFLAGS               += -I$(OSDIR)/
+IFLAGS               += -I$(OSDIR)
 IFLAGS               += -I$(OSDIR)/freertos
 IFLAGS               += -I$(FREERTOSDIR)/include/
 IFLAGS               += -I$(FREERTOSDIR)/portable/GCC/RTL8721D_HP/non_secure
@@ -194,7 +195,7 @@ IFLAGS               += -I$(BASEDIR)/component/common/drivers/wlan/realtek/wlan_
 IFLAGS               += -I$(BASEDIR)/component/common/drivers/wlan/realtek/src/core/option
 IFLAGS               += -I$(BASEDIR)/component/common/network
 IFLAGS               += -I$(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/src/include
-IFLAGS               += -I$(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/src/include/lwip
+IFLAGS               += -idirafter $(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/src/include/lwip
 IFLAGS               += -I$(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/src/include/netif
 #IFLAGS               += -I$(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/src/include/ipv4
 IFLAGS               += -I$(BASEDIR)/component/common/network/lwip/lwip_v2.0.2/port/realtek
@@ -220,11 +221,6 @@ IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/ssl_ram_map/ro
 IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/mbedtls-2.4.0/include
 IFLAGS               += -I$(BASEDIR)/component/common/network/ssl/mbedtls_ram_map/rom
 IFLAGS               += -I$(BASEDIR)/component/common/application/amazon/amazon-freertos/lib/include/private
-
-#CoAP
-IFLAGS               += -I$(BASEDIR)/component/common/example/coap
-IFLAGS               += -I$(BASEDIR)/component/common/network/coap
-IFLAGS               += -I$(BASEDIR)/component/common/network/coap/include
 
 #AZURE
 IFLAGS               += -I$(BASEDIR)/component/common/application/azure/azure-iot-sdk/c-utility/inc
@@ -282,6 +278,10 @@ endif
 #BT config
 IFLAGS               += -I$(BASEDIR)/component/common/bluetooth/realtek/sdk/example/bt_config
 
+#CoAP
+IFLAGS               += -I$(BASEDIR)/component/common/example/coap
+IFLAGS               += -I$(BASEDIR)/component/common/network/coap
+IFLAGS               += -I$(BASEDIR)/component/common/network/coap/include
 
 #*****************************************************************************#
 #                             ARM ASSEMBLER FLAGS
@@ -346,13 +346,13 @@ GLOBAL_CFLAGS += -gdwarf-3
 GLOBAL_CFLAGS += -nostartfiles
 GLOBAL_CFLAGS += -nodefaultlibs
 GLOBAL_CFLAGS += -nostdlib
-GLOBAL_CFLAGS += -O2
+GLOBAL_CFLAGS += -Os
 GLOBAL_CFLAGS += -D__FPU_PRESENT
 
 GLOBAL_CFLAGS += -gdwarf-3
 GLOBAL_CFLAGS += -fstack-usage
 GLOBAL_CFLAGS += -fdata-sections
-#GLOBAL_CFLAGS += -ffunction-sections
+GLOBAL_CFLAGS += -ffunction-sections
 GLOBAL_CFLAGS += -nostartfiles
 GLOBAL_CFLAGS += -nostdlib
 GLOBAL_CFLAGS += -Wall
@@ -406,10 +406,9 @@ endif
 
 LD_ARG = -L$(ASDK_TOOLCHAIN)/lib/
 LD_ARG += -L$(ROOTDIR)/lib/
-LD_ARG += -L$(ROOTDIR)/lib/application
 LD_ARG += -T$(BUILD_TARGET_FOLDER)/rlx8721d.ld 
 
-LD_ARG += -O2
+LD_ARG += -Os
 LD_ARG += -march=armv8-m.main+dsp
 LD_ARG += -mthumb
 LD_ARG += -mcmse
@@ -424,6 +423,11 @@ LD_ARG += -Wl,-Map=text.map
 LD_ARG += -Wl,--cref
 LD_ARG += -Wl,--build-id=none
 LD_ARG += -save-temps 
+
+#
+#LD_ARG += -Wl,-wrap,malloc -Wl,-wrap,realloc
+#LD_ARG += -Wl,-wrap,calloc -Wl,-wrap,free
+
 
 #LD_ARG += -Wl,--entry=Reset_Handler
 LD_ARG += -Wl,--no-enum-size-warning 
@@ -488,6 +492,13 @@ COPY_ROM_OBJS:
 #	@-$(COPY) -f *.o $(BUILD_TARGET_ROM_FOLDER)
 #	$(REMOVE) *.o
 
+COPY_ROM2_OBJS:
+	echo "=============================================================" \
+	       >> $(ROOTDIR)/rom2_size.txt;\
+	$(CC_SIZE) -t $(OBJS) $(ASM_OBJS) >> $(ROOTDIR)/rom2_size.txt;\
+	for i in  $(OBJS) $(ASM_OBJS); do \
+		 $(COPY)  $$i $(BUILD_TARGET_ROM2_FOLDER) -f;\
+		done \
 
 #*****************************************************************************#
 #              RENAME OBJECT FILES SECTION                                    #
@@ -504,6 +515,7 @@ RENAME_LOADER_OBJS:
 	OBJ_LIST=$(ls *.o)
 	for obj_file in $(OBJS) $(ASM_OBJS); do \
 		$(FROMELF) --rename-section .rodata.str1.4=.boot.rodata.str1.4 $$obj_file $$obj_file; \
+		$(FROMELF) --rename-section .rodata.str1.1=.boot.rodata.str1.1 $$obj_file $$obj_file; \
 	done \
 
 RENAME_CODE2SRAM:
@@ -523,7 +535,7 @@ NETWORK_RENAME_CODE2SRAM:
 #*****************************************************************************#
 
 %.o:%.c
-	$(CC) -ffunction-sections $(GLOBAL_CFLAGS) $(MODULE_IFLAGS) $<  -o $@
+	$(CC) $(GLOBAL_CFLAGS) $(MODULE_IFLAGS) $<  -o $@
 
 #*****************************************************************************#
 #              RULES TO GENERATE OBJECT FILE FROM .CPP FILE                   #

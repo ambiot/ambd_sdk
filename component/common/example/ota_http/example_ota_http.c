@@ -16,6 +16,7 @@
 #include <task.h>
 #endif
 #include <wifi_constants.h>
+#include "wifi_conf.h"
 
 #define PORT	80
 #define HOST	"192.168.1.53"  //"m-apps.oss-cn-shenzhen.aliyuncs.com"

@@ -63,8 +63,10 @@ void main(void)
 		app_dslp_wake();
 	}
 
-	app_keyscan_init(FALSE); /* 5uA */
-	app_captouch_init(); /* 1uA */
+	if ((BKUP_Read(0) & BIT_KEY_ENABLE))
+		app_keyscan_init(FALSE); /* 5uA */
+	if ((BKUP_Read(0) & BIT_CAPTOUCH_ENABLE))
+		app_captouch_init(); /* 1uA */
 
 	DSLP_Para.sleep_time = 0;
 

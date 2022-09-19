@@ -68,6 +68,7 @@ OBJS = $(notdir $(CSRC:.c=.o))
 #*****************************************************************************#
 all: CORE_TARGETS COPY_RAM_OBJS
 	$(AR) rvs lib_wps.a $(OBJS)
+	$(FROMELF) --strip-debug lib_wps.a
 	$(MOVE) -f lib_wps.a $(ROOTDIR)/lib/application
 #*****************************************************************************#
 #              GENERATE OBJECT FILE 

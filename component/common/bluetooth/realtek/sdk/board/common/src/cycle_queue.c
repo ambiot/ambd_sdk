@@ -11,12 +11,11 @@
  * @version v0.1
  */
 
+#include <stdio.h>
 #include <string.h>
-#include "os_sync.h"
 #include "cycle_queue.h"
 #include "trace_app.h"
-#include "os_mem.h"
-
+#include "osif.h"
 
 /** @detailed  cyc_buffer stores all the printing information which will be print in the PrintTask */
 uint8_t *cyc_buffer = NULL;
@@ -93,16 +92,15 @@ bool CycQueueWrite(uint8_t *pWriteBuf, uint16_t length)
     bool     ret = true;
     uint32_t s;
 
-    s = os_lock();
-	
+    s = osif_lock();
+
     if (cyc_buffer == NULL)
     {
-       // DiagPutChar("cyc_buffer is init\r\n");
         MallocCycQueue();
-        if(cyc_buffer == NULL)
+        if (cyc_buffer == NULL)
         {
-            APP_PRINT_ERROR0("cyc_buffer is NULL, malloc fail");
-            os_unlock(s);
+            printf("cyc_buffer is NULL, malloc fail\r\n");
+            osif_unlock(s);
             return false;
         }
     }
@@ -127,7 +125,7 @@ bool CycQueueWrite(uint8_t *pWriteBuf, uint16_t length)
         ret = false;
     }
 
-    os_unlock(s);
+    osif_unlock(s);
 
     return ret;
 }
@@ -143,14 +141,13 @@ void UpdateQueueRead(uint16_t SendSize)
 {
     uint32_t s;
 
-    s     = os_lock();
+    s = osif_lock();
     pRead = (pRead + SendSize) & (MAX_BUFFER_SIZE - 1);
-    os_unlock(s);
+    osif_unlock(s);
 }
 
-
 /**
- * @brief malloc the buffer 
+ * @brief malloc the buffer
  *
  * @param malloc the cycle
  *
@@ -158,29 +155,28 @@ void UpdateQueueRead(uint16_t SendSize)
  */
 bool MallocCycQueue()
 {
-    if(cyc_buffer != NULL)
-    {
-        APP_PRINT_ERROR0("cyc_buffer is not free");
-        FreeCycQueue();
+    cyc_buffer = osif_mem_alloc(RAM_TYPE_DATA_ON, MAX_BUFFER_SIZE);
+    if (cyc_buffer == NULL) {
+        printf("cyc_buffer is NULL, malloc fail\r\n");
     }
-    cyc_buffer = os_mem_zalloc(RAM_TYPE_DATA_ON, MAX_BUFFER_SIZE);
+    memset(cyc_buffer, 0, MAX_BUFFER_SIZE);
     pRead = 0;
     pWrite = 0;
     return true;
 }
 
 /**
- * @brief free the buffer 
+ * @brief free the buffer
  *
- * @param free the buffer 
+ * @param free the buffer
  *
  * @return
  */
 void FreeCycQueue()
 {
-	if (cyc_buffer != NULL) {
-    	os_mem_free(cyc_buffer);
-	}
+    if (cyc_buffer != NULL) {
+        osif_mem_free(cyc_buffer);
+    }
     pRead = 0;
     pWrite = 0;
     cyc_buffer = NULL;

@@ -113,7 +113,8 @@ static void acm_tx_thread(void *param)
 				printf("\ncdc_bulk_in_handler fail: %d\n", acm_bulk_xfer_status);
 			}
 		} else {
-			printf("\nFail to transmit async data: %d\n", ret);
+			rtw_mdelay_os(1);
+			//printf("\nFail to transmit async data: %d\n", ret);
 		}
 #endif
 	}

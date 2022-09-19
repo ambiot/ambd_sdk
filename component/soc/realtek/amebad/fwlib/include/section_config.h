@@ -52,7 +52,16 @@
 
 #define BOOT_RAM_END_BSS_SECTION                         \
         SECTION(".boot.ram.end.bss")
-        
+
+//Amazon patch
+#define HAL_ROM2_ENTRY_TEXT_SECTION                         \
+        SECTION(".hal.rom2.entry.text")
+
+#define HAL_ROM2_TEXT_SECTION                         \
+        SECTION(".hal.rom2.text")
+
+#define HAL_ROM2_DATA_SECTION                         \
+        SECTION(".hal.rom2.rodata")
 
 //3 Shell
 #if defined (ARM_CORE_CM0)

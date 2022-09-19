@@ -224,16 +224,16 @@ void ble_scatternet_app_handle_conn_state_evt(uint8_t conn_id, T_GAP_CONN_STATE 
 
             data_uart_print("Disconnect conn_id %d, cause 0x%x\r\n", conn_id, disc_cause);
 ///judge the type of disconnect is central or peripheral,if peripheral,start ADV	
-			if (ble_scatternet_app_link_table[conn_id].role == 2){
+			if (ble_scatternet_app_link_table[conn_id].role == GAP_LINK_ROLE_SLAVE){
 				data_uart_print("As peripheral,recieve disconncect,please start ADV\r\n");
 				ret = le_adv_start();
 				if(ret == GAP_CAUSE_SUCCESS)
 					data_uart_print("\n\rSTART ADV!!\n");
 			}
 				
-			if (ble_scatternet_app_link_table[conn_id].role == 1)
+			if (ble_scatternet_app_link_table[conn_id].role == GAP_LINK_ROLE_MASTER)
 				ble_scatternet_central_app_max_links --;
-			else
+			else if (ble_scatternet_app_link_table[conn_id].role == GAP_LINK_ROLE_SLAVE)
 				ble_scatternet_peripheral_app_max_links --;
 
             memset(&ble_scatternet_app_link_table[conn_id], 0, sizeof(T_APP_LINK));
@@ -247,9 +247,9 @@ void ble_scatternet_app_handle_conn_state_evt(uint8_t conn_id, T_GAP_CONN_STATE 
             //get device role
             if (le_get_conn_info(conn_id, &conn_info)){
 				ble_scatternet_app_link_table[conn_id].role = conn_info.role;
-				if (ble_scatternet_app_link_table[conn_id].role == 1)
+				if (ble_scatternet_app_link_table[conn_id].role == GAP_LINK_ROLE_MASTER)
 					ble_scatternet_central_app_max_links ++;
-				else
+				else if (ble_scatternet_app_link_table[conn_id].role == GAP_LINK_ROLE_SLAVE)
 					ble_scatternet_peripheral_app_max_links ++;
             }
 	        data_uart_print("Connected success conn_id %d\r\n", conn_id);
@@ -265,24 +265,20 @@ void ble_scatternet_app_handle_conn_state_evt(uint8_t conn_id, T_GAP_CONN_STATE 
                             conn_id, local_bd_type, remote_bd_type);
 #if F_BT_LE_5_0_SET_PHY_SUPPORT
 			{
-			uint8_t tx_phy;
-			uint8_t rx_phy;
-			le_get_conn_param(GAP_PARAM_CONN_RX_PHY_TYPE, &rx_phy, conn_id);
-			le_get_conn_param(GAP_PARAM_CONN_TX_PHY_TYPE, &tx_phy, conn_id);
-			APP_PRINT_INFO2("GAP_CONN_STATE_CONNECTED: tx_phy %d, rx_phy %d\n", tx_phy, rx_phy);
-			data_uart_print("GAP_CONN_STATE_CONNECTED: tx_phy %d, rx_phy %d\n", tx_phy, rx_phy);
+				uint8_t tx_phy;
+				uint8_t rx_phy;
+				le_get_conn_param(GAP_PARAM_CONN_RX_PHY_TYPE, &rx_phy, conn_id);
+				le_get_conn_param(GAP_PARAM_CONN_TX_PHY_TYPE, &tx_phy, conn_id);
+				APP_PRINT_INFO2("GAP_CONN_STATE_CONNECTED: tx_phy %d, rx_phy %d\n", tx_phy, rx_phy);
+				data_uart_print("GAP_CONN_STATE_CONNECTED: tx_phy %d, rx_phy %d\n", tx_phy, rx_phy);
 			}
 #endif
-
-
         }
         break;
 
     default:
         break;
-
     }
-    
 }
 
 /**
@@ -462,7 +458,7 @@ void ble_scatternet_app_handle_gap_msg(T_IO_MSG *p_gap_msg)
             APP_PRINT_INFO2("GAP_MSG_LE_BOND_PASSKEY_DISPLAY: conn_id %d, passkey %d",
                             conn_id, display_value);
             le_bond_passkey_display_confirm(conn_id, GAP_CFM_CAUSE_ACCEPT);
-            data_uart_print("GAP_MSG_LE_BOND_PASSKEY_DISPLAY: conn_id %d, passkey %d\r\n",
+            printf("GAP_MSG_LE_BOND_PASSKEY_DISPLAY: conn_id %d, passkey %06d\r\n",
                             conn_id,
                             display_value);
         }
@@ -475,7 +471,7 @@ void ble_scatternet_app_handle_gap_msg(T_IO_MSG *p_gap_msg)
             le_bond_get_display_key(conn_id, &display_value);
             APP_PRINT_INFO2("GAP_MSG_LE_BOND_USER_CONFIRMATION: conn_id %d, passkey %d",
                             conn_id, display_value);
-            data_uart_print("GAP_MSG_LE_BOND_USER_CONFIRMATION: conn_id %d, passkey %d\r\n",
+            printf("GAP_MSG_LE_BOND_USER_CONFIRMATION: conn_id %d, passkey %06d\r\n",
                             conn_id,
                             display_value);
             //le_bond_user_confirm(conn_id, GAP_CFM_CAUSE_ACCEPT);
@@ -1212,7 +1208,7 @@ T_APP_RESULT ble_scatternet_gcs_client_callback(T_CLIENT_ID client_id, uint8_t c
                                              p_gcs_cb_data->cb_content.read_result.p_value));
                 data_uart_print("READ VALUE: ");
                 for(int i=0; i< p_gcs_cb_data->cb_content.read_result.value_size; i++)
-                    data_uart_print("0x%2x ", *(p_gcs_cb_data->cb_content.read_result.p_value + i));
+                    data_uart_print("0x%02x ", *(p_gcs_cb_data->cb_content.read_result.p_value + i));
                 data_uart_print("\n\r");
             }
             break;
@@ -1232,15 +1228,15 @@ T_APP_RESULT ble_scatternet_gcs_client_callback(T_CLIENT_ID client_id, uint8_t c
                 APP_PRINT_INFO2("INDICATION: handle 0x%x, value_size %d",
                                 p_gcs_cb_data->cb_content.notif_ind.handle,
                                 p_gcs_cb_data->cb_content.notif_ind.value_size);
-                APP_PRINT_INFO1("INDICATION VALUE: %b",
+                APP_PRINT_INFO1("INDICATION: value %b",
                                 TRACE_BINARY(p_gcs_cb_data->cb_content.notif_ind.value_size,
                                              p_gcs_cb_data->cb_content.notif_ind.p_value));
                 data_uart_print("INDICATION: handle 0x%x, value_size %d\r\n",
                                 p_gcs_cb_data->cb_content.notif_ind.handle,
                                 p_gcs_cb_data->cb_content.notif_ind.value_size);
-                data_uart_print("INDICATION VALUE: ");
+                data_uart_print("INDICATION: value ");
                 for (int i = 0; i < p_gcs_cb_data->cb_content.notif_ind.value_size; i++) {
-                    data_uart_print("0x%2x ", *(p_gcs_cb_data->cb_content.notif_ind.p_value+ i));
+                    data_uart_print("0x%02x ", *(p_gcs_cb_data->cb_content.notif_ind.p_value+ i));
                 }
                 data_uart_print("\n\r");
             }
@@ -1249,15 +1245,15 @@ T_APP_RESULT ble_scatternet_gcs_client_callback(T_CLIENT_ID client_id, uint8_t c
                 APP_PRINT_INFO2("NOTIFICATION: handle 0x%x, value_size %d",
                                 p_gcs_cb_data->cb_content.notif_ind.handle,
                                 p_gcs_cb_data->cb_content.notif_ind.value_size);
-                APP_PRINT_INFO1("NOTIFICATION VALUE: %b",
+                APP_PRINT_INFO1("NOTIFICATION: value %b",
                                 TRACE_BINARY(p_gcs_cb_data->cb_content.notif_ind.value_size,
                                              p_gcs_cb_data->cb_content.notif_ind.p_value));
                 data_uart_print("NOTIFICATION: handle 0x%x, value_size %d\r\n",
                                 p_gcs_cb_data->cb_content.notif_ind.handle,
                                 p_gcs_cb_data->cb_content.notif_ind.value_size);
-                data_uart_print("NOTIFICATION VALUE: ");
+                data_uart_print("NOTIFICATION: value ");
                 for (int i = 0; i < p_gcs_cb_data->cb_content.notif_ind.value_size; i++) {
-                    data_uart_print("0x%2x ", *(p_gcs_cb_data->cb_content.notif_ind.p_value+ i));
+                    data_uart_print("0x%02x ", *(p_gcs_cb_data->cb_content.notif_ind.p_value+ i));
                 }
                 data_uart_print("\n\r");
             }

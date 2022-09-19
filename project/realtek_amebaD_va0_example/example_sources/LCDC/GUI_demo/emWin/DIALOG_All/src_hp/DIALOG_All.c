@@ -102,7 +102,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 *              Initializers for listbox
 */
 static const GUI_ConstString _apListBox[] = {
-  "English", "Deutsch", "Français", "Japanese", "Italiano", NULL
+  "English", "Deutsch", "Franais", "Japanese", "Italiano", NULL
 };
 
 /*******************************************************************

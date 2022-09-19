@@ -237,7 +237,7 @@ void RgbLcdColorFill(u16 sx,u16 sy,u16 ex,u16 ey, u16 color)
  	for(i=0;i<height;i++)
 	{
 		for(j=0;j<width;j++) {
-			//DBG_8195A("%s: %d, %d\n", __func__, i, j);
+			//DiagPrintf("%s: %d, %d\n", __func__, i, j);
 			RgbLcdDrawPointColor(sx+j, sy+i, color);
 		}
 	}	  	

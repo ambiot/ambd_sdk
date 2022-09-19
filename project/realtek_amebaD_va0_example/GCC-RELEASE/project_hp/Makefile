@@ -44,6 +44,9 @@ rom_debug_if_need: CORE_TARGETS
 	make -C asdk rom
 	make -C asdk copy_rom
 
+rom2: CORE_TARGETS
+	make -C asdk rom2
+
 clean: CORE_TARGETS
 	make -C asdk clean
 

@@ -356,10 +356,10 @@ static void _cbCallback(WM_MESSAGE * pMsg) {
   switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:
       LISTBOX_SetText(hListBox, _ListBox);
-      LISTBOX_AddString(hListBox, "Français");
+      LISTBOX_AddString(hListBox, "Franais");
       LISTBOX_AddString(hListBox, "Japanese");
       LISTBOX_AddString(hListBox, "Italiano");
-      LISTBOX_AddString(hListBox, "Español");
+      LISTBOX_AddString(hListBox, "Espaol");
       LISTBOX_AddString(hListBox, "Greek");
       LISTBOX_AddString(hListBox, "Hebrew");
       LISTBOX_AddString(hListBox, "Dutch");

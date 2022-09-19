@@ -21,7 +21,6 @@
 i2c_t   alc5651_i2c;
 #else
 volatile i2c_t   alc5651_i2c;
-#define printf  DBG_8195A
 #endif
 
 static void alc5651_delay(void)
@@ -81,13 +80,13 @@ void alc5651_reg_dump(void)
 	int i;
 	unsigned int value;
   
-	printf("alc5651 codec reg dump\n\r");
-	printf("------------------------\n\r");
+	DiagPrintf("alc5651 codec reg dump\n\r");
+	DiagPrintf("------------------------\n\r");
 	for(i=0;i<=0xff;i++){
 		alc5651_reg_read(i, &value);
-		printf("%02x : %04x\n\r", i, (unsigned short)value);
+		DiagPrintf("%02x : %04x\n\r", i, (unsigned short)value);
 	}
-	printf("------------------------\n\r");
+	DiagPrintf("------------------------\n\r");
 }
 
 void alc5651_index_dump(void)
@@ -95,13 +94,13 @@ void alc5651_index_dump(void)
 	int i;
 	unsigned int value;
   
-	printf("alc5651 codec index dump\n\r");
-	printf("------------------------\n\r");
+	DiagPrintf("alc5651 codec index dump\n\r");
+	DiagPrintf("------------------------\n\r");
 	for(i=0;i<=0xff;i++){
 		alc5651_index_read(i, &value);
-		printf("%02x : %04x\n\r", i, (unsigned short)value);
+		DiagPrintf("%02x : %04x\n\r", i, (unsigned short)value);
 	}
-	printf("------------------------\n\r");
+	DiagPrintf("------------------------\n\r");
 }
 
 void alc5651_init(void)

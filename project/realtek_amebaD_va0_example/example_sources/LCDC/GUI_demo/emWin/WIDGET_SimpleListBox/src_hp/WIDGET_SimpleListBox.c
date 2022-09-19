@@ -68,7 +68,7 @@ Requirements: WindowManager - (x)
 ********************************************************************
 */
 static const GUI_ConstString _ListBox[] = {
-  "English", "Deutsch", "Français", "Japanese", "Italiano", NULL
+  "English", "Deutsch", "Franais", "Japanese", "Italiano", NULL
 };
 
 /*******************************************************************

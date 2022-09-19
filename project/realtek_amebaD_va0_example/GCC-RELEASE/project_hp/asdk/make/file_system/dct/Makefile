@@ -28,6 +28,7 @@ OBJS = $(CSRC:.c=.o)
 # Define the Rules to build the core targets
 all: CORE_TARGETS COPY_RAM_OBJS
 	$(AR) rvs lib_dct.a $(OBJS)
+	$(FROMELF) --strip-debug lib_dct.a
 	$(MOVE) -f lib_dct.a $(ROOTDIR)/lib/application	
 #*****************************************************************************#
 #              GENERATE OBJECT FILE 

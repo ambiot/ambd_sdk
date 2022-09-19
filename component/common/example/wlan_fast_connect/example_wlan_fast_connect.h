@@ -12,7 +12,9 @@
 #include <autoconf.h>
 #include "main.h"
 
-#define IW_PASSPHRASE_MAX_SIZE 64
+#define IW_WPA2_PASSPHRASE_MAX_SIZE 64
+#define IW_WPA3_PASSPHRASE_MAX_SIZE 128
+#define IW_PASSPHRASE_MAX_SIZE IW_WPA3_PASSPHRASE_MAX_SIZE
 //#define FAST_RECONNECT_DATA (0x80000 - 0x1000)
 #define NDIS_802_11_LENGTH_SSID         32
 #define A_SHA_DIGEST_LEN		20
@@ -42,7 +44,7 @@ typedef int (*write_reconnect_ptr)(uint8_t *data, uint32_t len);
 extern unsigned char psk_essid[NET_IF_NUM][NDIS_802_11_LENGTH_SSID+4];
 extern unsigned char psk_passphrase[NET_IF_NUM][IW_PASSPHRASE_MAX_SIZE + 1];
 extern unsigned char wpa_global_PSK[NET_IF_NUM][A_SHA_DIGEST_LEN * 2];
-extern unsigned char psk_passphrase64[IW_PASSPHRASE_MAX_SIZE + 1];
+extern unsigned char psk_passphrase64[IW_WPA2_PASSPHRASE_MAX_SIZE + 1];
 
 //Function
 extern wlan_init_done_ptr p_wlan_init_done_callback;

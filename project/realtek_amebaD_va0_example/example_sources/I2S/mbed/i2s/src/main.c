@@ -211,7 +211,7 @@ void test_tx_complete(void *data, char *pbuf)
     
     i2s_t *obj = (i2s_t *)data;
     static u32 count=0;
-    //DBG_8195A_I2S_LVL(VERI_I2S_LVL, "I2S%d %s\n",pI2SDemoHnd->DevNum,__func__);
+    //DiagPrintf_I2S_LVL(VERI_I2S_LVL, "I2S%d %s\n",pI2SDemoHnd->DevNum,__func__);
     count++;
     if ((count&1023) == 1023)
     {

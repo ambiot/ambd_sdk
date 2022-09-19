@@ -91,12 +91,15 @@ extern uint32_t SystemCoreClock;
 #endif
 #define  CONFIG_DYNAMIC_HEAP_SIZE                       0
 
+/* Configure PSRAM usage. Set 0 to default, set 1 to include psram into heap. */
+#define configUSE_PSRAM_FOR_HEAP_REGION					0
+
 #define secureconfigTOTAL_SRAM_HEAP_SIZE			( ( ( size_t ) ( 6 * 1024 ) ) )
 #define secureconfigTOTAL_PSRAM_HEAP_SIZE			( ( ( size_t ) ( 128 * 1024 ) ) )
 
 /* Constants that build features in or out. */
 #define configUSE_MUTEXES								1
-#define configUSE_APPLICATION_TASK_TAG					0
+#define configUSE_APPLICATION_TASK_TAG					1
 #define configUSE_NEWLIB_REENTRANT						0
 #define configUSE_CO_ROUTINES							1 ///
 #define configMAX_CO_ROUTINE_PRIORITIES 				( 2 )
@@ -119,7 +122,7 @@ extern uint32_t SystemCoreClock;
 /* Software timer definitions. */
 #define configUSE_TIMERS								1
 #define configTIMER_TASK_PRIORITY						1
-#define configTIMER_QUEUE_LENGTH						( 10 + 32 )
+#define configTIMER_QUEUE_LENGTH						( 10 + 64 )
 #define configTIMER_TASK_STACK_DEPTH					( 512  )
 
 /* Set the following definitions to 1 to include the API function, or zero
@@ -233,5 +236,5 @@ extern int  freertos_ready_to_sleep(void);
 #define configUSE_WAKELOCK_PMU                  		1
 	
 #endif /* __IASMARM__ */
-
+#define configASSERT( x )         //do { if (!(x)) {printf("FreeRTOS Assert %s Line %d \n", __FILE__, __LINE__); while(1){}; }} while (0)
 #endif /* FREERTOS_CONFIG_H */

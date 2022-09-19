@@ -35,6 +35,7 @@ OBJS = $(notdir $(CSRC:.c=.o))
 #*****************************************************************************#
 all: CORE_TARGETS COPY_RAM_OBJS
 	$(AR) rvs lib_httpd.a $(OBJS)
+	$(FROMELF) --strip-debug lib_httpd.a
 	$(MOVE) -f lib_httpd.a $(ROOTDIR)/lib/application
 #*****************************************************************************#
 #              GENERATE OBJECT FILE 

@@ -172,29 +172,20 @@ extern uint32_t bt_flatk_8721d(uint16_t txgain_flatk);
         case 0x0030:
             if (entry_len == 6)
             {
-                if ((efuse_buf[0] != 0xff) && (efuse_buf[1] != 0xff))
+                if ((efuse_buf[0] != 0xff) || (efuse_buf[1] != 0xff) || (efuse_buf[2] != 0xff) || \
+                    (efuse_buf[3] != 0xff) || (efuse_buf[4] != 0xff) || (efuse_buf[5] != 0xff))
                 {
-                    //memcpy(p,&efuse_buf[0],6);
-                    /*
-                    hci_board_debug("\r\nBT ADDRESS:\r\n");
-                    for(int i = 0 ;i <6;i ++)
-                    {
-						p[i] = efuse_buf[5-i];
-                        hci_board_debug("%02x:",efuse_buf[i]);
-                    }
-                    hci_board_debug("\r\n");*/
-                    for(int i = 0 ;i <6;i ++)
+                    for (int i = 0; i < 6; i++)
                     { 
                         p[i] = efuse_buf[5-i]; 
                     }
 
-                    hci_board_debug("\nBT ADDRESS: %02x:%02x:%02x:%02x:%02x:%02x\r\n",
-                        efuse_buf[0], efuse_buf[1], efuse_buf[2],
-                        efuse_buf[3], efuse_buf[4], efuse_buf[5]);
-				}
+                    hci_board_debug("BT ADDRESS: %02x:%02x:%02x:%02x:%02x:%02x\r\n",
+                        efuse_buf[0], efuse_buf[1], efuse_buf[2], efuse_buf[3], efuse_buf[4], efuse_buf[5]);
+                }
                 else
                 {
-                    hci_board_debug("hci_rtk_parse_config: BT ADDRESS  %02x %02x %02x %02x %02x %02x, use the defaut config\n",
+                    hci_board_debug("hci_rtk_parse_config: BT ADDRESS %02x %02x %02x %02x %02x %02x, use the default config\r\n",
                               p[0], p[1], p[2], p[3], p[4], p[5]);
                 }
             }
@@ -363,7 +354,7 @@ uint8_t *hci_rtk_combine_config(void)
 
     HCI_PRINT_WARN1("hci_rtk_combine_config: invalid len, calculated %u",   config_length);
 
-    LE_UINT16_TO_STREAM(p_len, config_length);  //just avoid the length is not coreect
+    LE_UINT16_TO_STREAM(p_len, config_length - HCI_CONFIG_HEAD);  //just avoid the length is not coreect
     if(!CHECK_SW(EFUSE_SW_DRIVER_DEBUG_LOG))
     {
         hci_board_debug("hci_rtk_combine_config: all config length is %x\r\n",config_length);
@@ -635,7 +626,7 @@ void bt_reset(void)
 
 bool hci_board_init()
 {
-    bool ret=false;
+
 	
     if(!(wifi_is_up(RTW_STA_INTERFACE) || wifi_is_up(RTW_AP_INTERFACE))) {
         hci_board_debug("\nWIFI is off !Please restart BT after WIFI on!\n");

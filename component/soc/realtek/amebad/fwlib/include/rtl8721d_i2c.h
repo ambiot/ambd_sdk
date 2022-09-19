@@ -320,8 +320,8 @@ _LONG_CALL_ void I2C_MasterSendNullData(I2C_TypeDef *I2Cx, u8* pBuf, u8  I2CCmd,
 _LONG_CALL_ void I2C_MasterSend(I2C_TypeDef *I2Cx, u8* pBuf, u8  I2CCmd, u8  I2CStop, u8  I2CReSTR);
 _LONG_CALL_ void I2C_MasterWrite(I2C_TypeDef *I2Cx, u8* pBuf, u8 len);
 _LONG_CALL_ void I2C_MasterReadDW(I2C_TypeDef *I2Cx, u8* pBuf, u8 len);
-_LONG_CALL_ u8 I2C_MasterRead(I2C_TypeDef *I2Cx, u8* pBuf, u8 len);
-_LONG_CALL_ void I2C_MasterRepeatRead(I2C_TypeDef* I2Cx, u8* pWriteBuf, u8 Writelen, u8* pReadBuf, u8 Readlen);
+_LONG_CALL_ u32 I2C_MasterRead(I2C_TypeDef *I2Cx, u8* pBuf, u32 len);
+_LONG_CALL_ void I2C_MasterRepeatRead(I2C_TypeDef* I2Cx, u8* pWriteBuf, u32 Writelen, u8* pReadBuf, u32 Readlen);
 _LONG_CALL_ void I2C_SetSlaveAddress(I2C_TypeDef *I2Cx, u16 Address);
 /**
   * @}
@@ -330,8 +330,8 @@ _LONG_CALL_ void I2C_SetSlaveAddress(I2C_TypeDef *I2Cx, u16 Address);
 /** @defgroup I2C_Exported_Slave_Functions I2C Exported Slave Functions
   * @{
   */
-_LONG_CALL_ void I2C_SlaveWrite(I2C_TypeDef *I2Cx, u8* pBuf, u8 len);
-_LONG_CALL_ void I2C_SlaveRead(I2C_TypeDef *I2Cx, u8* pBuf, u8 len);
+_LONG_CALL_ void I2C_SlaveWrite(I2C_TypeDef *I2Cx, u8* pBuf, u32 len);
+_LONG_CALL_ void I2C_SlaveRead(I2C_TypeDef *I2Cx, u8* pBuf, u32 len);
 _LONG_CALL_ void I2C_SlaveSend(I2C_TypeDef *I2Cx, u8 Data);
 /**
   * @}
@@ -483,7 +483,6 @@ _LONG_CALL_ void I2C_WakeUp(I2C_TypeDef *I2Cx);
  * @defgroup IC_STATUS
  * @{
  *****************************************************************************/
-#define BIT_IC_STATUS_BUS_BUSY            			((u32)0x00000001 << 7)
 #define BIT_IC_STATUS_SLV_ACTIVITY            			((u32)0x00000001 << 6)
 #define BIT_IC_STATUS_MST_ACTIVITY            			((u32)0x00000001 << 5)
 #define BIT_IC_STATUS_RFF                     				((u32)0x00000001 << 4)

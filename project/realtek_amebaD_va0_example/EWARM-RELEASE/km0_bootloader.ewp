@@ -2112,7 +2112,7 @@
     <group>
         <name>cmsis</name>
 <file>
-	<name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\libbootloader_lp.a</name>
+	<name>$PROJ_DIR$\..\..\..\component\soc\realtek\amebad\misc\bsp\lib\common\IAR\lib_bootloader_lp.a</name>
 </file>
         <file>
         </file>

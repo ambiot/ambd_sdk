@@ -46,6 +46,7 @@ OBJS = $(CSRC:.c=.o)
 #*****************************************************************************#
 all: CORE_TARGETS COPY_RAM_OBJS
 	$(AR) rvs lib_coap.a $(OBJS)
+	$(FROMELF) --strip-debug lib_coap.a
 	$(MOVE) -f lib_coap.a $(ROOTDIR)/lib/application
 
 #*****************************************************************************#
