@@ -13,8 +13,8 @@ OBJS =
 
 # Define the Rules to build the core targets
 all: CORE_TARGETS
-	make -C asdk copy_flashloader
 	make -C asdk bootloader
+	make -C asdk copy_flashloader
 ifeq ($(CONFIG_USER_CTRL_PS),y)
 	make -C asdk ucps_image2
 else
