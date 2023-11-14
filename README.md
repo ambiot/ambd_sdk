@@ -47,8 +47,8 @@ The hardware block diagram of Ameba-D demo board is shown below.
 > Click [http://cygwin.com](http://cygwin.com/) and download the ``Cygwin`` package [setup-x86.exe](http://cygwin.com/setup-x86_64.exe) for your Windows platform. 
 
 1. 32-bit ``Cygwin`` is supported both for 32-bit Windows and 64-bit Windows.
-   Refer to [Q: How can I install the last Cygwin version for an old, unsupported Windows?
-](https://cygwin.com/install.html) if you can not installed 32-bit Cygwin. Installation at CMD "setup-2.912.x86.exe --allow-unsupported-windows --site http://ctm.crouchingtigerhiddenfruitbat.org/pub/cygwin/circa/2022/11/23/063457"
+> Note: If you can not installed 32-bit Cygwin, refer to [Q: How can I install the last Cygwin version for an old, unsupported Windows?
+](https://cygwin.com/install.html). Installation at CMD "setup-2.912.x86.exe --allow-unsupported-windows --site http://ctm.crouchingtigerhiddenfruitbat.org/pub/cygwin/circa/2022/11/23/063457"
 3. During the installation of ``Cygwin`` package, include `Devel -> make` and `Math -> bc` utilities on the Select Packages page, as below shows.
 
    ![getstart0](https://www.amebaiot.com/wp-content/uploads/2020/02/guide_d_1.png)
